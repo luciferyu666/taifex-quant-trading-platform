@@ -3,12 +3,19 @@ import "../styles/global.css";
 
 const {
   title = "Taifex Quant Trading Platform",
-  description = "Enterprise-grade quantitative trading infrastructure for Taiwan Index Futures."
+  description = "Enterprise-grade quantitative trading infrastructure for Taiwan Index Futures.",
+  lang = "en",
+  canonicalPath = "/",
+  alternatePath = "/zh/"
 } = Astro.props;
+
+const siteUrl = Astro.site ?? new URL("https://taifex-quant-trading-platform.vercel.app");
+const canonicalUrl = new URL(canonicalPath, siteUrl).toString();
+const alternateUrl = new URL(alternatePath, siteUrl).toString();
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang={lang}>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -17,6 +24,10 @@ const {
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
     <meta property="og:image" content="/og-card.svg" />
+    <link rel="canonical" href={canonicalUrl} />
+    <link rel="alternate" hreflang="en" href={lang === "en" ? canonicalUrl : alternateUrl} />
+    <link rel="alternate" hreflang="zh-Hant" href={lang === "zh-Hant" ? canonicalUrl : alternateUrl} />
+    <link rel="alternate" hreflang="x-default" href={new URL("/", siteUrl).toString()} />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <title>{title}</title>
   </head>

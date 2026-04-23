@@ -1,0 +1,210 @@
+---
+import type { Locale } from "../i18n/content";
+import LanguageSwitch from "./LanguageSwitch.astro";
+
+interface Props {
+  locale: Locale;
+  page: typeof import("../i18n/content").content[Locale];
+}
+
+const { locale, page } = Astro.props;
+const defaults = ["TRADING_MODE=paper", "ENABLE_LIVE_TRADING=false", "BROKER_PROVIDER=paper"];
+const instruments = [
+  ["TX", "NTD 200"],
+  ["MTX", "NTD 50"],
+  ["TMF", "NTD 10"]
+];
+---
+
+<main>
+  <section class="hero section">
+    <div class="container topbar">
+      <a class="brand-mark" href={page.path}>{page.hero.title}</a>
+      <LanguageSwitch
+        locale={locale}
+        label={page.language.label}
+        english={page.language.english}
+        chinese={page.language.chinese}
+      />
+    </div>
+    <div class="container hero-grid">
+      <div class="hero-copy">
+        <p class="eyebrow">{page.hero.eyebrow}</p>
+        <h1>{page.hero.title}</h1>
+        <p class="subtitle">{page.hero.subtitle}</p>
+        <p class="hero-description">{page.hero.description}</p>
+        <div class="button-row">
+          <a class="button primary" href="#architecture">{page.hero.primaryCta}</a>
+          <a class="button secondary" href="#safety">{page.hero.secondaryCta}</a>
+        </div>
+      </div>
+      <div class="hero-panel" aria-label={page.hero.workflowLabel}>
+        {page.hero.workflow.map((item, index) => (
+          <div class:list={["workflow-row", { active: index === 0, guarded: index >= 4 }]}>
+            {item}
+          </div>
+        ))}
+        <p class="panel-note">{page.hero.note}</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="thesis">
+    <div class="container split-section">
+      <div>
+        <p class="eyebrow">{page.thesis.eyebrow}</p>
+        <h2>{page.thesis.title}</h2>
+      </div>
+      <div class="prose">
+        {page.thesis.paragraphs.map((paragraph) => <p>{paragraph}</p>)}
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="instruments">
+    <div class="container">
+      <div class="section-heading">
+        <p class="eyebrow">{page.instruments.eyebrow}</p>
+        <h2>{page.instruments.title}</h2>
+        <p>{page.instruments.body}</p>
+      </div>
+      <div class="instrument-grid">
+        {instruments.map(([symbol, value]) => (
+          <article class="card">
+            <h3>{symbol}</h3>
+            <p class="metric">{value}</p>
+            <p>{page.instruments.pointUnit}</p>
+          </article>
+        ))}
+      </div>
+      <div class="ratio-strip" aria-label={page.instruments.equivalenceLabel}>
+        <span>1 TX = 4 MTX = 20 TMF</span>
+        <span>1 MTX = 5 TMF</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="architecture">
+    <div class="container">
+      <div class="section-heading">
+        <p class="eyebrow">{page.architecture.eyebrow}</p>
+        <h2>{page.architecture.title}</h2>
+        <p>{page.architecture.body}</p>
+      </div>
+      <div class="architecture-map" aria-label={page.architecture.label}>
+        <div class="arch-layer">{page.architecture.layers.frontend}</div>
+        <div class="arch-connector"></div>
+        <div class="arch-layer">{page.architecture.layers.backend}</div>
+        <div class="arch-connector"></div>
+        <div class="arch-cluster">
+          <span>{page.architecture.layers.strategy}</span>
+          <span>{page.architecture.layers.data}</span>
+          <span>{page.architecture.layers.risk}</span>
+          <span>{page.architecture.layers.oms}</span>
+          <span>{page.architecture.layers.broker}</span>
+        </div>
+        <div class="arch-connector"></div>
+        <div class="arch-layer muted">{page.architecture.layers.event}</div>
+        <div class="arch-connector"></div>
+        <div class="arch-cluster storage">
+          <span>PostgreSQL</span>
+          <span>Redis</span>
+          <span>ClickHouse</span>
+          <span>{page.architecture.layers.dataLake}</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section safety-band" id="safety">
+    <div class="container safety-grid">
+      <div>
+        <p class="eyebrow">{page.safety.eyebrow}</p>
+        <h2>{page.safety.title}</h2>
+        <p>{page.safety.body}</p>
+      </div>
+      <div class="defaults-list" aria-label={page.safety.defaultsLabel}>
+        {defaults.map((item) => <code>{item}</code>)}
+      </div>
+    </div>
+    <div class="container rule-grid">
+      {page.safety.rules.map((rule) => (
+        <article class="rule-card">
+          <h3>{rule.title}</h3>
+          <p>{rule.body}</p>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <section class="section" id="modules">
+    <div class="container">
+      <div class="section-heading">
+        <p class="eyebrow">{page.modules.eyebrow}</p>
+        <h2>{page.modules.title}</h2>
+        <p>{page.modules.body}</p>
+      </div>
+      <div class="module-grid">
+        {page.modules.items.map(([title, body]) => (
+          <article class="card module-card">
+            <h3>{title}</h3>
+            <p>{body}</p>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section commercial-section" id="commercial">
+    <div class="container commercial-grid">
+      <div>
+        <p class="eyebrow">{page.commercial.eyebrow}</p>
+        <h2>{page.commercial.title}</h2>
+        <p>{page.commercial.body}</p>
+      </div>
+      <div class="model-list">
+        {page.commercial.models.map((model) => <span>{model}</span>)}
+      </div>
+    </div>
+    <div class="container">
+      <p class="notice">{page.commercial.note}</p>
+    </div>
+  </section>
+
+  <section class="section" id="roadmap">
+    <div class="container">
+      <div class="section-heading">
+        <p class="eyebrow">{page.roadmap.eyebrow}</p>
+        <h2>{page.roadmap.title}</h2>
+        <p>{page.roadmap.body}</p>
+      </div>
+      <ol class="roadmap-list">
+        {page.roadmap.phases.map((phase) => <li>{phase}</li>)}
+      </ol>
+    </div>
+  </section>
+
+  <section class="section compliance-section" id="compliance">
+    <div class="container">
+      <p class="eyebrow">{page.compliance.eyebrow}</p>
+      <h2>{page.compliance.title}</h2>
+      <div class="prose wide">
+        {page.compliance.paragraphs.map((paragraph) => <p>{paragraph}</p>)}
+      </div>
+    </div>
+  </section>
+
+  <section class="section final-cta">
+    <div class="container cta-inner">
+      <div>
+        <p class="eyebrow">{page.cta.eyebrow}</p>
+        <h2>{page.cta.title}</h2>
+        <p>{page.cta.body}</p>
+      </div>
+      <div class="button-row">
+        <a class="button primary" href="#">{page.cta.primary}</a>
+        <a class="button secondary" href="#safety">{page.cta.secondary}</a>
+      </div>
+    </div>
+  </section>
+</main>

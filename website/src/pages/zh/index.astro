@@ -1,0 +1,17 @@
+---
+import LocalizedHome from "../../components/LocalizedHome.astro";
+import { content } from "../../i18n/content";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+
+const page = content.zh;
+---
+
+<BaseLayout
+  title={page.meta.title}
+  description={page.meta.description}
+  lang={page.lang}
+  canonicalPath={page.path}
+  alternatePath={page.alternatePath}
+>
+  <LocalizedHome locale="zh" page={page} />
+</BaseLayout>

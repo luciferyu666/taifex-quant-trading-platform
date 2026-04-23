@@ -27,6 +27,12 @@ cd website
 npm run preview
 ```
 
+## Internationalization
+
+- English: `/`
+- Traditional Chinese: `/zh/`
+- Language switch links are static and do not require backend runtime.
+
 ## Safety Copy Rules
 
 - Keep `TRADING_MODE=paper`, `ENABLE_LIVE_TRADING=false`, and `BROKER_PROVIDER=paper` visible.

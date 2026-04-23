@@ -1,0 +1,21 @@
+---
+import type { Locale } from "../i18n/content";
+
+interface Props {
+  locale: Locale;
+  label: string;
+  english: string;
+  chinese: string;
+}
+
+const { locale, label, english, chinese } = Astro.props;
+---
+
+<nav class="language-switch" aria-label={label}>
+  <a class:list={["language-link", { active: locale === "en" }]} href="/" hreflang="en" lang="en">
+    {english}
+  </a>
+  <a class:list={["language-link", { active: locale === "zh" }]} href="/zh/" hreflang="zh-Hant" lang="zh-Hant">
+    {chinese}
+  </a>
+</nav>
