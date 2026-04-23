@@ -1,0 +1,34 @@
+---
+const models = [
+  "SaaS subscriptions",
+  "Professional trader plans",
+  "Enterprise licensing",
+  "Data services",
+  "Strategy marketplace",
+  "AI analysis add-ons",
+  "Broker or institutional partnerships",
+  "Compliance-dependent future performance-based models"
+];
+---
+
+<section class="section commercial-section" id="commercial">
+  <div class="container commercial-grid">
+    <div>
+      <p class="eyebrow">Commercial model</p>
+      <h2>Potential monetization paths</h2>
+      <p>
+        The platform can support multiple business models over time without depending on profitability claims.
+        Every regulated commercial activity must be reviewed with qualified legal and compliance advisors.
+      </p>
+    </div>
+    <div class="model-list">
+      {models.map((model) => <span>{model}</span>)}
+    </div>
+  </div>
+  <div class="container">
+    <p class="notice">
+      Performance fees, managed accounts, copy trading, signal subscriptions, or broker fee-sharing may require
+      legal, regulatory, or licensed partner review.
+    </p>
+  </div>
+</section>

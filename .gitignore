@@ -1,0 +1,51 @@
+# Environment and secrets
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+
+# Python
+.venv/
+backend/.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+.coverage
+coverage/
+htmlcov/
+*.egg-info/
+
+# Node / Next.js
+node_modules/
+frontend/node_modules/
+website/node_modules/
+.next/
+frontend/.next/
+website/.astro/
+out/
+dist/
+build/
+*.tsbuildinfo
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Logs and local runtime state
+logs/
+*.log
+*.pid
+*.sqlite
+*.sqlite3
+*.db
+data/
+
+# OS/editor junk
+.DS_Store
+Thumbs.db
+*.swp
+*.swo

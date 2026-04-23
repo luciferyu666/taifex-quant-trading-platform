@@ -1,0 +1,31 @@
+<section class="section safety-band" id="safety">
+  <div class="container safety-grid">
+    <div>
+      <p class="eyebrow">Safety-first trading design</p>
+      <h2>Paper-first by default</h2>
+      <p>
+        The repository is designed to keep execution risk constrained while the platform foundation is built.
+        Live trading requires explicit future approval, additional controls, and compliance review.
+      </p>
+    </div>
+    <div class="defaults-list" aria-label="Safe environment defaults">
+      <code>TRADING_MODE=paper</code>
+      <code>ENABLE_LIVE_TRADING=false</code>
+      <code>BROKER_PROVIDER=paper</code>
+    </div>
+  </div>
+  <div class="container rule-grid">
+    <article class="rule-card">
+      <h3>Strategy/execution separation</h3>
+      <p>Strategies emit signals only. They do not call broker SDKs directly.</p>
+    </article>
+    <article class="rule-card">
+      <h3>Risk before order execution</h3>
+      <p>Orders must pass through the Risk Engine and OMS before any broker gateway boundary.</p>
+    </article>
+    <article class="rule-card">
+      <h3>No secrets in source</h3>
+      <p>Broker credentials, account IDs, API keys, and certificates must not be committed.</p>
+    </article>
+  </div>
+</section>

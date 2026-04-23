@@ -1,0 +1,28 @@
+---
+const phases = [
+  "Phase 1: Development foundation",
+  "Phase 2: Strategy signal contract and TX/MTX/TMF risk sizing",
+  "Phase 3: Data pipeline and rollover engine",
+  "Phase 4: Backtesting and paper trading",
+  "Phase 5: Risk Engine and OMS skeleton",
+  "Phase 6: Broker gateway integration",
+  "Phase 7: Web command center",
+  "Phase 8: Enterprise controls, audit, observability, deployment"
+];
+---
+
+<section class="section" id="roadmap">
+  <div class="container">
+    <div class="section-heading">
+      <p class="eyebrow">Roadmap</p>
+      <h2>Realistic platform buildout</h2>
+      <p>
+        The current repository is a development skeleton. The roadmap progresses from foundation to governed
+        execution boundaries before any future live workflow.
+      </p>
+    </div>
+    <ol class="roadmap-list">
+      {phases.map((phase) => <li>{phase}</li>)}
+    </ol>
+  </div>
+</section>

@@ -1,0 +1,73 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "TQTP: Init Environment",
+      "type": "shell",
+      "command": "make init",
+      "group": "build",
+      "problemMatcher": []
+    },
+    {
+      "label": "TQTP: Dev Full Stack",
+      "type": "shell",
+      "command": "make dev",
+      "problemMatcher": []
+    },
+    {
+      "label": "TQTP: Infra Up",
+      "type": "shell",
+      "command": "make infra",
+      "problemMatcher": []
+    },
+    {
+      "label": "TQTP: Backend Dev",
+      "type": "shell",
+      "command": "make backend",
+      "problemMatcher": []
+    },
+    {
+      "label": "TQTP: Frontend Dev",
+      "type": "shell",
+      "command": "make frontend",
+      "problemMatcher": []
+    },
+    {
+      "label": "TQTP: Website Dev",
+      "type": "shell",
+      "command": "make website",
+      "problemMatcher": []
+    },
+    {
+      "label": "TQTP: Website Build",
+      "type": "shell",
+      "command": "make website-build",
+      "problemMatcher": []
+    },
+    {
+      "label": "TQTP: Website Check",
+      "type": "shell",
+      "command": "make website-check",
+      "problemMatcher": []
+    },
+    {
+      "label": "TQTP: Website Deploy Vercel",
+      "type": "shell",
+      "command": "make website-deploy",
+      "problemMatcher": []
+    },
+    {
+      "label": "TQTP: Check All",
+      "type": "shell",
+      "command": "make check",
+      "group": "test",
+      "problemMatcher": []
+    },
+    {
+      "label": "TQTP: Print Codex Start Prompt",
+      "type": "shell",
+      "command": "make codex-prompt",
+      "problemMatcher": []
+    }
+  ]
+}

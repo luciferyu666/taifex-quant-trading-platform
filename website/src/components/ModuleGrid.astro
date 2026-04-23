@@ -1,0 +1,68 @@
+---
+const modules = [
+  {
+    title: "Market Data Pipeline",
+    body: "Ingest, validate, store, and serve Taiwan futures market data for research and operations."
+  },
+  {
+    title: "Continuous Futures / Rollover Engine",
+    body: "Planned session-aware and rollover-aware datasets to reduce backtest/live drift."
+  },
+  {
+    title: "Strategy Research",
+    body: "A future workspace for signal generation, experiment tracking, and reproducible research."
+  },
+  {
+    title: "Backtesting",
+    body: "Planned historical simulation that respects futures sessions, contract multipliers, and risk limits."
+  },
+  {
+    title: "Paper and Shadow Trading",
+    body: "Paper-first execution workflows for validating behavior before any future live deployment."
+  },
+  {
+    title: "Risk Engine",
+    body: "Central policy enforcement for exposure, stale quotes, daily loss limits, and order eligibility."
+  },
+  {
+    title: "OMS",
+    body: "Order lifecycle management designed to sit between strategy signals and broker gateway access."
+  },
+  {
+    title: "Broker Gateway",
+    body: "A broker SDK isolation boundary for future integrations, never called directly by strategies."
+  },
+  {
+    title: "Web Command Center",
+    body: "Operational UI for monitoring health, mode, safety defaults, modules, and future workflows."
+  },
+  {
+    title: "Audit and Observability",
+    body: "Future logs, metrics, traces, and audit records for institutional review and incident response."
+  },
+  {
+    title: "AI-Assisted Analysis",
+    body: "Future-facing analysis support for research review, diagnostics, and operator workflows."
+  }
+];
+---
+
+<section class="section" id="modules">
+  <div class="container">
+    <div class="section-heading">
+      <p class="eyebrow">Core modules</p>
+      <h2>Modular services for the quant workflow</h2>
+      <p>
+        Each module is scoped to keep data, strategy signals, risk controls, and execution boundaries clear.
+      </p>
+    </div>
+    <div class="module-grid">
+      {modules.map((module) => (
+        <article class="card module-card">
+          <h3>{module.title}</h3>
+          <p>{module.body}</p>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>

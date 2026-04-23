@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" role="img" aria-label="Taifex Quant Trading Platform">
+  <defs>
+    <linearGradient id="bg" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0%" stop-color="#07111f"/>
+      <stop offset="55%" stop-color="#102033"/>
+      <stop offset="100%" stop-color="#0f2f2b"/>
+    </linearGradient>
+    <linearGradient id="line" x1="0" x2="1">
+      <stop offset="0%" stop-color="#7dd3fc"/>
+      <stop offset="100%" stop-color="#22c55e"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <rect x="70" y="72" width="1060" height="486" rx="18" fill="#0b1626" stroke="#254158" stroke-width="2"/>
+  <text x="118" y="180" fill="#e5f2ff" font-family="Arial, sans-serif" font-size="58" font-weight="700">Taifex Quant Trading Platform</text>
+  <text x="120" y="244" fill="#a8c3d8" font-family="Arial, sans-serif" font-size="30">Enterprise-grade quantitative trading infrastructure for TX / MTX / TMF.</text>
+  <path d="M120 410h112l72-90 72 52 94-132 82 74 88-58 68 90h272" fill="none" stroke="url(#line)" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="120" y="498" fill="#7dd3fc" font-family="Arial, sans-serif" font-size="24">Paper-first defaults · Risk before execution · Broker SDK isolation</text>
+</svg>

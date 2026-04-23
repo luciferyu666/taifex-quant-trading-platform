@@ -1,0 +1,26 @@
+{
+  "name": "Taifex Quant Trading Platform",
+  "build": {
+    "dockerfile": "Dockerfile",
+    "context": ".."
+  },
+  "features": {
+    "ghcr.io/devcontainers/features/docker-outside-of-docker:1": {}
+  },
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-python.python",
+        "ms-python.vscode-pylance",
+        "charliermarsh.ruff",
+        "dbaeumer.vscode-eslint",
+        "esbenp.prettier-vscode",
+        "ms-azuretools.vscode-docker",
+        "openai.chatgpt"
+      ]
+    }
+  },
+  "forwardPorts": [3000, 8000, 5432, 6379, 8123],
+  "postCreateCommand": "bash scripts/bootstrap.sh",
+  "remoteUser": "vscode"
+}

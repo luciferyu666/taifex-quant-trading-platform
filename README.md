@@ -1,0 +1,316 @@
+# Taifex Quant Trading Platform
+
+## Executive Summary
+
+Taifex Quant Trading Platform is a Web-based quantitative trading infrastructure platform for Taiwan Index Futures, focused on TX, MTX, and TMF workflows. It is not a simple trading bot. The platform vision is to combine data governance, strategy research, backtesting, paper trading, shadow trading, risk controls, OMS discipline, broker gateway isolation, monitoring, and enterprise controls into a coherent trading operating system for Taiwan futures quant teams.
+
+The current repository is a development foundation. It provides a full-stack skeleton and safety-first defaults, not a completed production trading system.
+
+## Investor Thesis
+
+Taiwan futures quantitative trading is a focused market with specialized operational needs. Individual traders, professional desks, and emerging quant teams often struggle with reliable market data, continuous futures and rollover handling, backtest-to-live consistency, broker API integration, risk controls, and auditability.
+
+Those workflows are commonly fragmented across local scripts, spreadsheets, vendor dashboards, and broker-specific SDKs. The opportunity is to turn those fragmented workflows into a scalable SaaS and enterprise platform with repeatable infrastructure, safer execution boundaries, and institutional-grade operational visibility.
+
+## Product Vision
+
+The product is positioned as a trading operating system for Taiwan futures quant workflows. It should help users move from research to execution through explicit gates:
+
+```text
+Research -> Backtest -> Paper -> Shadow -> Small Live -> Full Live
+```
+
+The current implementation is paper-first. Live trading is not enabled, not implemented as a default path, and must require explicit future implementation, review, approval, and additional controls.
+
+## Target Instruments
+
+The platform is designed around Taiwan Index Futures exposure normalization:
+
+| Instrument | Description | Point Value |
+| --- | --- | --- |
+| TX | Taiwan Stock Exchange Capitalization Weighted Stock Index Futures | NTD 200 per index point |
+| MTX | Mini Taiwan Stock Exchange Capitalization Weighted Stock Index Futures | NTD 50 per index point |
+| TMF | Micro Taiwan Stock Exchange Capitalization Weighted Stock Index Futures | NTD 10 per index point |
+
+Exposure equivalence:
+
+```text
+1 TX = 4 MTX = 20 TMF
+1 MTX = 5 TMF
+```
+
+This matters because risk-based sizing should be expressed in normalized exposure rather than only in contract count. A strategy that targets 0.25 TX-equivalent exposure should be sized consistently across TX, MTX, and TMF, subject to liquidity, slippage, margin, and risk controls.
+
+## Core Capabilities
+
+### Market Data Pipeline
+
+Future market data services should ingest raw Taifex and broker data, preserve immutable raw payloads, validate data quality, and produce research-ready datasets.
+
+### Continuous Futures and Rollover Handling
+
+Taiwan futures workflows require rollover-aware data handling. Research datasets may use adjusted continuous contracts, while live execution must map to real tradable contract symbols without look-ahead bias.
+
+### Strategy Research and Backtesting
+
+The platform is intended to support reproducible strategy research, parameter testing, and backtest results tied to data versions and code versions.
+
+### Paper Trading and Shadow Trading
+
+Paper trading is the default local mode. Shadow trading is a future validation stage where strategies observe live market data and theoretical execution without sending live orders.
+
+### Risk Engine
+
+The future Risk Engine should validate stale quotes, exposure limits, daily loss limits, order rates, and kill-switch conditions before any order reaches OMS.
+
+### OMS
+
+The future OMS should own idempotency, order lifecycle state, execution reports, reconciliation, and the transition from approved trading intent to broker-bound order requests.
+
+### Broker Gateway
+
+Broker SDK access must stay isolated behind `broker-gateway`. Strategies must never call broker SDKs directly.
+
+### Web Command Center
+
+The frontend is intended to become a command center for health, portfolio state, strategy status, paper trading, risk limits, and audit review.
+
+### Audit and Observability
+
+Enterprise users need logs, metrics, traces, audit records, and replayable state transitions. The current repository includes the development skeleton; production-grade observability is a future direction.
+
+### AI-Assisted Analysis
+
+The `ai-module` is future-facing. AI-assisted diagnostics, research summaries, and strategy review can be useful, but they must not bypass risk controls, OMS state, or broker gateway isolation.
+
+## Architecture Overview
+
+```text
+Web Frontend
+    |
+API Gateway / Backend
+    |
+Strategy Registry / Backtest / Risk / OMS / Broker Gateway
+    |
+Event-driven future layer
+    |
+PostgreSQL / Redis / ClickHouse / Data Lake future
+```
+
+Current repository modules:
+
+- `backend`: FastAPI service with health, manifest, and risk configuration endpoints.
+- `frontend`: Next.js, React, and TypeScript dashboard skeleton.
+- `strategy-engine`: Placeholder for future signal-only strategy runners.
+- `data-pipeline`: Placeholder for ingestion, data quality, and rollover-aware datasets.
+- `broker-gateway`: Placeholder for paper-first broker adapter boundaries.
+- `ai-module`: Placeholder for future AI-assisted analysis outside the execution path.
+- `infra`: Placeholder for future deployment, observability, and infrastructure assets.
+- `docs`: Architecture, development, runbook, trading safety, and archive documents.
+- `scripts`: Bootstrap, check, and Codex prompt helper scripts.
+
+## Safety-First Trading Design
+
+Default environment values are intentionally conservative:
+
+```text
+TRADING_MODE=paper
+ENABLE_LIVE_TRADING=false
+BROKER_PROVIDER=paper
+```
+
+Safety rules:
+
+- Strategies do not call broker SDKs directly.
+- Strategies must only emit signals or target exposure intent.
+- Orders must go through Risk Engine and OMS.
+- Broker credentials, account IDs, certificates, API keys, and private keys must not be committed.
+- This project is not financial advice.
+- Live trading requires explicit future approval, implementation, review, operational controls, and legal or regulatory assessment where applicable.
+
+## Technology Stack
+
+- Frontend: Next.js, React, TypeScript
+- Backend: FastAPI, Python, pydantic-settings
+- Local infrastructure: Docker Compose
+- Database: PostgreSQL / Timescale-compatible PostgreSQL
+- Cache: Redis
+- Analytics: ClickHouse
+- Developer workflow: VS Code Dev Container, Makefile, Codex prompts
+- Future production direction: Kubernetes, event bus, OpenTelemetry, centralized logging, metrics, secrets management, and isolated deployment environments
+
+## Commercial Model
+
+Potential monetization streams, subject to product maturity and compliance review:
+
+- SaaS subscriptions for individual traders and research users
+- Professional trader plans with higher compute, data, and workflow limits
+- Enterprise licensing for proprietary trading desks, family offices, or institutional teams
+- Data services built on cleaned Taiwan futures datasets
+- Strategy marketplace infrastructure
+- AI analysis add-ons for diagnostics, reporting, and research assistance
+- Broker or institutional partnerships
+- Compliance-dependent future performance-based models
+
+Performance fees, managed accounts, signal subscriptions, copy trading, or broker fee-sharing may require legal, regulatory, or licensed partner review.
+
+## Competitive Positioning
+
+The platform is differentiated by:
+
+- Taiwan futures specialization
+- TX/MTX/TMF exposure normalization
+- Rollover-aware data handling
+- Paper-to-live workflow discipline
+- Risk-first OMS design
+- Enterprise auditability
+- Local broker integration potential through broker gateway isolation
+
+## Long-Term Moat
+
+Potential long-term defensibility may come from:
+
+- Proprietary cleaned Taiwan futures datasets
+- Rollover and session-aware data models
+- Backtest-to-live performance history
+- Strategy marketplace network effects
+- Broker integrations
+- Enterprise workflow lock-in
+- Risk and audit data
+
+These are strategic directions, not current completed capabilities.
+
+## Current Repository Status
+
+This repository currently contains a full-stack development skeleton, not a completed trading platform.
+
+Implemented foundation:
+
+- FastAPI backend skeleton
+- Next.js frontend skeleton
+- Docker Compose local stack
+- PostgreSQL / Timescale-compatible database service
+- Redis service
+- ClickHouse service
+- VS Code Dev Container
+- Codex prompt templates
+- Safety-first environment defaults
+- Bootstrap and check scripts
+
+Not currently implemented:
+
+- Real broker integration
+- Live trading
+- Production OMS
+- Production Risk Engine
+- Production market data ingestion
+- Production backtesting engine
+- Production observability and secrets management
+
+## Marketing Website
+
+The investor-facing Astro marketing website lives in `website/`.
+
+- Local development: `make website`
+- Static build: `make website-build`
+- Deployment helper: `make website-deploy`
+- Deployment guide: `docs/website-vercel-deploy.md`
+
+## Quick Start
+
+```bash
+cd "/mnt/f/From C download/taifex-quant-trading-platform"
+cp .env.example .env
+make init
+make check
+make dev
+```
+
+Local URLs:
+
+- Frontend: http://localhost:3000
+- Backend: http://localhost:8000
+- API Docs: http://localhost:8000/docs
+- Health: http://localhost:8000/health
+- System Manifest: http://localhost:8000/api/system/manifest
+- Risk Config: http://localhost:8000/api/risk/config
+- ClickHouse HTTP: http://localhost:8123
+
+## Common Commands
+
+```bash
+make help           # Show available commands
+make init           # Bootstrap local dependencies
+make check          # Run available checks
+make backend        # Run the FastAPI backend locally
+make frontend       # Run the Next.js frontend locally
+make infra          # Start local infrastructure services
+make dev            # Start the full Docker Compose stack
+make test           # Run backend tests
+make codex-prompt   # Print the recommended Codex starting prompt
+```
+
+## Development Workflow
+
+1. Read `AGENTS.md` first.
+2. Use small vertical slices.
+3. Keep paper trading defaults.
+4. Add tests for backend APIs.
+5. Keep the frontend resilient when the backend is unavailable.
+6. Keep strategies signal-only.
+7. Keep broker access isolated behind `broker-gateway`.
+8. Run `make check` before committing or handing off work.
+
+## Roadmap
+
+### Phase 1: Development Foundation
+
+Stabilize monorepo structure, Dev Container, Docker Compose, backend skeleton, frontend skeleton, scripts, and checks.
+
+### Phase 2: Strategy Signal Contract and TX/MTX/TMF Risk Sizing
+
+Define signal schemas, target exposure models, TX-equivalent sizing, and paper-only validation.
+
+### Phase 3: Data Pipeline and Rollover Engine
+
+Build market data ingestion, quality gates, session alignment, and continuous futures rollover handling.
+
+### Phase 4: Backtesting and Paper Trading
+
+Implement reproducible backtests, paper execution simulation, strategy reporting, and data snapshot tracking.
+
+### Phase 5: Risk Engine and OMS Skeleton
+
+Introduce risk checks, order intent validation, OMS state transitions, idempotency, and reconciliation models.
+
+### Phase 6: Broker Gateway Integration
+
+Integrate broker adapters behind paper-first gateway boundaries, with no strategy-level broker SDK access.
+
+### Phase 7: Web Command Center
+
+Expand the dashboard for strategy status, risk limits, paper trading state, alerts, and audit review.
+
+### Phase 8: Enterprise Controls, Audit, Observability, and Deployment
+
+Add RBAC, secrets management, audit logs, traces, metrics, deployment manifests, and operational runbooks.
+
+## Compliance and Risk Notice
+
+This software is for research and engineering development. It is not investment advice and does not promise investment returns. Futures trading involves substantial risk, including the risk of loss greater than initial capital.
+
+Live trading, signal services, managed accounts, copy trading, broker fee-sharing, or performance-based services may require legal review, regulatory review, and proper licenses. Users are responsible for their own trading decisions and compliance obligations.
+
+## License
+
+License to be determined.
+
+## Appendix: Design Principles
+
+- Signal/execution separation
+- Paper-first operation
+- Risk before order execution
+- Auditability
+- Reproducibility
+- Modularity
+- No secrets in source code

@@ -1,0 +1,64 @@
+---
+import ArchitectureDiagram from "../components/ArchitectureDiagram.astro";
+import CallToAction from "../components/CallToAction.astro";
+import CommercialModel from "../components/CommercialModel.astro";
+import Hero from "../components/Hero.astro";
+import ModuleGrid from "../components/ModuleGrid.astro";
+import Roadmap from "../components/Roadmap.astro";
+import SafetyDefaults from "../components/SafetyDefaults.astro";
+import TargetInstruments from "../components/TargetInstruments.astro";
+import BaseLayout from "../layouts/BaseLayout.astro";
+---
+
+<BaseLayout>
+  <main>
+    <Hero />
+
+    <section class="section" id="thesis">
+      <div class="container split-section">
+        <div>
+          <p class="eyebrow">Platform thesis</p>
+          <h2>Trading infrastructure for a focused market</h2>
+        </div>
+        <div class="prose">
+          <p>
+            Taifex Quant Trading Platform is not a simple trading bot. It is a trading infrastructure platform
+            for Taiwan Index Futures workflows where data governance, backtesting, paper/shadow trading,
+            risk control, order management, broker integration, and auditability need to work as one system.
+          </p>
+          <p>
+            Individual traders and smaller desks often stitch these capabilities together manually. This project
+            aims to turn those fragmented workflows into a scalable SaaS and enterprise platform foundation.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <TargetInstruments />
+    <ArchitectureDiagram />
+    <SafetyDefaults />
+    <ModuleGrid />
+    <CommercialModel />
+    <Roadmap />
+
+    <section class="section compliance-section" id="compliance">
+      <div class="container">
+        <p class="eyebrow">Compliance and risk notice</p>
+        <h2>Research software, not investment advice</h2>
+        <div class="prose wide">
+          <p>
+            This website and repository are for research, engineering, and product development. They do not
+            provide investment advice, do not guarantee profit, and do not remove the substantial risk involved
+            in futures trading.
+          </p>
+          <p>
+            Live trading, signal services, managed accounts, copy trading, broker fee-sharing, or other regulated
+            services require separate legal and compliance review before any release or customer use.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <CallToAction />
+  </main>
+</BaseLayout>

@@ -1,0 +1,34 @@
+<section class="section" id="architecture">
+  <div class="container">
+    <div class="section-heading">
+      <p class="eyebrow">Architecture overview</p>
+      <h2>A platform, not a single trading bot</h2>
+      <p>
+        The system separates command surfaces, research workflows, risk decisions, order management,
+        broker access, and analytics storage so future live execution can be governed and audited.
+      </p>
+    </div>
+    <div class="architecture-map" aria-label="Platform architecture diagram">
+      <div class="arch-layer">Web Frontend</div>
+      <div class="arch-connector"></div>
+      <div class="arch-layer">API / Backend</div>
+      <div class="arch-connector"></div>
+      <div class="arch-cluster">
+        <span>Strategy Registry</span>
+        <span>Data Pipeline</span>
+        <span>Risk Engine</span>
+        <span>OMS</span>
+        <span>Broker Gateway</span>
+      </div>
+      <div class="arch-connector"></div>
+      <div class="arch-layer muted">Future Event Bus / Observability</div>
+      <div class="arch-connector"></div>
+      <div class="arch-cluster storage">
+        <span>PostgreSQL</span>
+        <span>Redis</span>
+        <span>ClickHouse</span>
+        <span>Data Lake Future</span>
+      </div>
+    </div>
+  </div>
+</section>
