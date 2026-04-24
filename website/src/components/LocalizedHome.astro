@@ -1,10 +1,10 @@
 ---
-import type { Locale } from "../i18n/content";
+import type { Locale, PageContent } from "../i18n/content";
 import LanguageSwitch from "./LanguageSwitch.astro";
 
 interface Props {
   locale: Locale;
-  page: typeof import("../i18n/content").content[Locale];
+  page: PageContent;
 }
 
 const { locale, page } = Astro.props;
@@ -57,6 +57,37 @@ const instruments = [
       </div>
       <div class="prose">
         {page.thesis.paragraphs.map((paragraph) => <p>{paragraph}</p>)}
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="business">
+    <div class="container">
+      <div class="section-heading">
+        <p class="eyebrow">{page.business.eyebrow}</p>
+        <h2>{page.business.title}</h2>
+        <p>{page.business.body}</p>
+      </div>
+      <div class="comparison-grid">
+        {page.business.rows.map((row) => (
+          <article class="comparison-card">
+            <div class="comparison-head">
+              <h3>{row.dimension}</h3>
+            </div>
+            <div class="comparison-item">
+              <p class="comparison-label">{page.business.labels.traditional}</p>
+              <p>{row.traditional}</p>
+            </div>
+            <div class="comparison-item">
+              <p class="comparison-label">{page.business.labels.platform}</p>
+              <p>{row.platform}</p>
+            </div>
+            <div class="comparison-item highlight">
+              <p class="comparison-label">{page.business.labels.impact}</p>
+              <p>{row.impact}</p>
+            </div>
+          </article>
+        ))}
       </div>
     </div>
   </section>
@@ -156,18 +187,107 @@ const instruments = [
   </section>
 
   <section class="section commercial-section" id="commercial">
-    <div class="container commercial-grid">
-      <div>
+    <div class="container">
+      <div class="section-heading">
         <p class="eyebrow">{page.commercial.eyebrow}</p>
         <h2>{page.commercial.title}</h2>
         <p>{page.commercial.body}</p>
       </div>
-      <div class="model-list">
-        {page.commercial.models.map((model) => <span>{model}</span>)}
+      <p class="commercial-disclaimer">{page.commercial.disclaimer}</p>
+      <h3 class="subsection-heading">{page.commercial.tiersTitle}</h3>
+      <div class="pricing-grid">
+        {page.commercial.plans.map((plan) => (
+          <article class="plan-card">
+            <div class="plan-top">
+              <div>
+                <h3>{plan.name}</h3>
+                <p class="plan-audience">{plan.audience}</p>
+              </div>
+              <p class="plan-price">{plan.price}</p>
+            </div>
+            <p class="plan-precision">{plan.precision}</p>
+            <ul class="feature-list">
+              {plan.features.map((feature) => <li>{feature}</li>)}
+            </ul>
+          </article>
+        ))}
+      </div>
+      <div class="detail-grid">
+        <div>
+          <h3 class="subsection-heading">{page.commercial.usageTitle}</h3>
+          <div class="phase-grid">
+            {page.commercial.usage.map((item) => (
+              <article class="card detail-card">
+                <h3>{item.title}</h3>
+                <p>{item.body}</p>
+              </article>
+            ))}
+          </div>
+        </div>
+        <div>
+          <h3 class="subsection-heading">{page.commercial.servicesTitle}</h3>
+          <div class="phase-grid">
+            {page.commercial.services.map((item) => (
+              <article class="card detail-card">
+                <h3>{item.title}</h3>
+                <p>{item.body}</p>
+              </article>
+            ))}
+          </div>
+        </div>
       </div>
     </div>
     <div class="container">
       <p class="notice">{page.commercial.note}</p>
+    </div>
+  </section>
+
+  <section class="section" id="segments">
+    <div class="container">
+      <div class="section-heading">
+        <p class="eyebrow">{page.segments.eyebrow}</p>
+        <h2>{page.segments.title}</h2>
+        <p>{page.segments.body}</p>
+      </div>
+      <div class="segment-grid">
+        {page.segments.items.map((item) => (
+          <article class="card">
+            <h3>{item.title}</h3>
+            <p>{item.body}</p>
+            <ul class="feature-list">
+              {item.bullets.map((bullet) => <li>{bullet}</li>)}
+            </ul>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="moat">
+    <div class="container">
+      <div class="section-heading">
+        <p class="eyebrow">{page.moat.eyebrow}</p>
+        <h2>{page.moat.title}</h2>
+        <p>{page.moat.body}</p>
+      </div>
+      <h3 class="subsection-heading">{page.moat.phasesTitle}</h3>
+      <div class="phase-grid">
+        {page.moat.phases.map((phase) => (
+          <article class="card detail-card">
+            <h3>{phase.title}</h3>
+            <p>{phase.body}</p>
+          </article>
+        ))}
+      </div>
+      <h3 class="subsection-heading">{page.moat.advantagesTitle}</h3>
+      <div class="advantage-grid">
+        {page.moat.advantages.map((item) => (
+          <article class="card detail-card">
+            <h3>{item.title}</h3>
+            <p>{item.body}</p>
+          </article>
+        ))}
+      </div>
     </div>
   </section>
 
@@ -181,6 +301,24 @@ const instruments = [
       <ol class="roadmap-list">
         {page.roadmap.phases.map((phase) => <li>{phase}</li>)}
       </ol>
+    </div>
+  </section>
+
+  <section class="section" id="governance">
+    <div class="container">
+      <div class="section-heading">
+        <p class="eyebrow">{page.governance.eyebrow}</p>
+        <h2>{page.governance.title}</h2>
+        <p>{page.governance.body}</p>
+      </div>
+      <div class="governance-grid">
+        {page.governance.items.map((item) => (
+          <article class="rule-card">
+            <h3>{item.title}</h3>
+            <p>{item.body}</p>
+          </article>
+        ))}
+      </div>
     </div>
   </section>
 
