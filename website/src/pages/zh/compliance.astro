@@ -1,0 +1,59 @@
+---
+import CommercialShell from "../../components/CommercialShell.astro";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+
+const prohibited = [
+  "保證獲利",
+  "零風險",
+  "全自動賺錢機器",
+  "我們替你交易",
+  "複製我們的訊號即可獲利",
+  "保證 alpha",
+  "本金保證",
+  "不會虧損",
+];
+---
+
+<BaseLayout title="合規邊界 | 台指期量化交易平台" description="台指期量化交易平台的合規安全商業邊界。" lang="zh-Hant" canonicalPath="/zh/compliance/" alternatePath="/compliance/">
+  <CommercialShell
+    locale="zh"
+    active="compliance"
+    title="合規邊界"
+    eyebrow="商業安全"
+    lead="平台定位為 SaaS 研究工具與基礎設施。受監管服務需獨立法律與監管審查。"
+    englishPath="/compliance/"
+    chinesePath="/zh/compliance/"
+  >
+    <section class="section">
+      <div class="container commercial-grid-2">
+        <article class="commercial-card">
+          <h2>安全定位</h2>
+          <ul class="feature-list">
+            <li>研究工具</li>
+            <li>紙上交易</li>
+            <li>基礎設施</li>
+            <li>風險控制與稽核能力</li>
+            <li>使用者自主控制的工作流</li>
+          </ul>
+        </article>
+        <article class="commercial-card">
+          <h2>受監管觸發點</h2>
+          <p>訊號訂閱、跟單交易、代操帳戶、績效費、券商分潤、全權委託交易與期貨顧問服務，皆屬未來合規依賴項。</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="section commercial-section">
+      <div class="container">
+        <div class="section-heading">
+          <p class="eyebrow">禁止宣稱</p>
+          <h2>應避免的行銷語言</h2>
+        </div>
+        <div class="model-list">
+          {prohibited.map((item) => <span>{item}</span>)}
+        </div>
+        <p class="notice">本網站與 repository 用於研究、工程、紙上交易與基礎設施工作流，不構成投資建議，也不保證獲利。</p>
+      </div>
+    </section>
+  </CommercialShell>
+</BaseLayout>

@@ -1,0 +1,21 @@
+# Placeholder only. Strategy runners emit signals and must not call broker SDKs.
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: strategy-runner-placeholder
+  namespace: tqtp-trading-data-plane
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: strategy-runner-placeholder
+  template:
+    metadata:
+      labels:
+        app: strategy-runner-placeholder
+    spec:
+      containers:
+        - name: strategy-runner
+          image: example.invalid/tqtp/strategy-runner:placeholder
+          ports:
+            - containerPort: 8000

@@ -1,0 +1,33 @@
+---
+import type { Locale } from "../i18n/content";
+
+interface Props {
+  locale: Locale;
+  active?: "business" | "pricing" | "go-to-market" | "compliance" | "home";
+}
+
+const { locale, active = "home" } = Astro.props;
+const isZh = locale === "zh";
+const links = [
+  { key: "business", href: isZh ? "/zh/business/" : "/business/", label: isZh ? "商業模式" : "Business" },
+  { key: "pricing", href: isZh ? "/zh/pricing/" : "/pricing/", label: isZh ? "定價策略" : "Pricing" },
+  {
+    key: "go-to-market",
+    href: isZh ? "/zh/go-to-market/" : "/go-to-market/",
+    label: isZh ? "市場進入" : "Go-to-Market",
+  },
+  {
+    key: "compliance",
+    href: isZh ? "/zh/compliance/" : "/compliance/",
+    label: isZh ? "合規邊界" : "Compliance",
+  },
+] as const;
+---
+
+<nav class="site-nav" aria-label={isZh ? "網站導覽" : "Site navigation"}>
+  {links.map((link) => (
+    <a class:list={["site-nav-link", { active: active === link.key }]} href={link.href}>
+      {link.label}
+    </a>
+  ))}
+</nav>

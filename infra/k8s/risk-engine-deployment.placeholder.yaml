@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tqtp-risk-engine
+  namespace: tqtp-paper
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: tqtp-risk-engine
+  template:
+    metadata:
+      labels:
+        app: tqtp-risk-engine
+    spec:
+      containers:
+        - name: risk-engine
+          image: tqtp/risk-engine:placeholder
+          env:
+            - name: TRADING_MODE
+              value: paper
+            - name: ENABLE_LIVE_TRADING
+              value: "false"

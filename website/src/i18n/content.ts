@@ -146,6 +146,73 @@ export const content = {
       tiersTitle: "Illustrative subscription tiers",
       usageTitle: "Usage-based expansion",
       servicesTitle: "Enterprise delivery",
+      pathsTitle: "Monetization paths with service logic",
+      paths: [
+        {
+          title: "SaaS subscriptions",
+          service: "Self-serve research, backtesting, paper trading, dashboards, alerts, and workflow storage.",
+          logic: "Recurring revenue is tied to workflow depth, data precision, compute capacity, and retained operating history rather than trading outcomes.",
+          scenarios: ["Beginner quant onboarding", "Individual research workspace", "Paper-trading workflow validation"],
+          value: "Creates predictable ARR while giving users a safe path from research to paper operation.",
+          compliance: "Research tooling and paper trading only by default."
+        },
+        {
+          title: "Professional trader plans",
+          service: "Higher-frequency data access, webhook risk alerts, strategy runner capacity, richer reporting, and production-like paper workflows.",
+          logic: "Pricing expands with operational maturity: second-level or tick workflows, more compute, higher retention, and better monitoring.",
+          scenarios: ["Active discretionary-plus-systematic traders", "Small teams validating strategies", "Shadow trading preparation"],
+          value: "Helps serious users reduce manual workflow gaps without promising investment performance.",
+          compliance: "No live order routing by default; broker access remains a reviewed future boundary."
+        },
+        {
+          title: "Enterprise licensing",
+          service: "Private cloud or on-prem deployment, RBAC/ABAC direction, WORM audit log direction, SLA, security review support, and custom integration scope.",
+          logic: "Enterprise revenue is based on governance, deployment control, auditability, support terms, and integration complexity.",
+          scenarios: ["Proprietary desks", "Family offices", "Broker innovation teams", "Institutional research groups"],
+          value: "Turns the platform into procurement-ready infrastructure with clearer risk ownership and operating boundaries.",
+          compliance: "Contracts should define platform responsibility, customer trading decisions, audit retention, and incident handling."
+        },
+        {
+          title: "Data services",
+          service: "Rollover-aware TX/MTX/TMF datasets, cleaned bars and ticks, data quality reports, research-only adjusted continuous futures, and data APIs.",
+          logic: "Cleaned and versioned Taiwan futures data can become a high-retention asset because research, backtests, and operations depend on consistent inputs.",
+          scenarios: ["Backtest data packs", "Data API subscriptions", "Enterprise data governance", "Rollover validation reports"],
+          value: "Improves reproducibility and reduces backtest-to-live drift for users who currently rely on scattered files.",
+          compliance: "Data licensing, redistribution rights, and exchange/vendor restrictions must be reviewed."
+        },
+        {
+          title: "Strategy marketplace",
+          service: "Future marketplace infrastructure for strategy authors, validation reports, risk labels, versioned strategy packages, and review workflows.",
+          logic: "Marketplace economics can create network effects once the platform has review, risk labeling, and clear author responsibility.",
+          scenarios: ["Strategy author distribution", "Research template library", "Institutional strategy review queue"],
+          value: "Connects developers and users around standardized signal contracts without letting strategies bypass risk or OMS.",
+          compliance: "Copy trading, signal subscriptions, or advisory-like distribution require separate legal and regulatory review."
+        },
+        {
+          title: "AI analysis add-ons",
+          service: "AI-assisted overfitting checks, parameter sensitivity summaries, anomaly review, strategy documentation, and operational diagnostics.",
+          logic: "Usage-based AI diagnostics can monetize compute-heavy review workflows while keeping human users in control.",
+          scenarios: ["Backtest review", "Strategy health reports", "Experiment comparison", "Incident postmortem summaries"],
+          value: "Speeds research review and operational learning without turning AI into an autonomous trading authority.",
+          compliance: "AI output must remain analytical tooling, not individualized investment advice."
+        },
+        {
+          title: "Broker or institutional partnerships",
+          service: "White-label infrastructure, co-branded research tools, broker adapter projects, training programs, and institutional workflow pilots.",
+          logic: "Partner revenue comes from integration, distribution, and operational enablement rather than unreviewed order-routing economics.",
+          scenarios: ["Broker developer portal", "Fintech sandbox", "Institutional pilot deployment", "Education and onboarding programs"],
+          value: "Gives partners a governed Taiwan futures quant stack while preserving broker-gateway isolation.",
+          compliance: "Broker fee-sharing, referrals, or order-routing monetization are compliance-dependent future options."
+        },
+        {
+          title: "Compliance-dependent performance models",
+          service: "Future-only structures such as performance fees, managed accounts, copy trading, signal subscriptions, or broker fee-sharing.",
+          logic: "These can only be considered after licensing, legal review, customer suitability, operational controls, disclosure, and conflict management are defined.",
+          scenarios: ["Licensed partner structure", "Reviewed signal distribution", "Approved managed-account framework"],
+          value: "Preserves optionality without marketing regulated services as currently available.",
+          compliance: "Not available in the current product; no profit guarantee and no live trading by default."
+        }
+      ],
       plans: [
         {
           name: "Basic",
@@ -457,6 +524,73 @@ export const content = {
       tiersTitle: "示意訂閱方案",
       usageTitle: "用量型擴充",
       servicesTitle: "企業導入服務",
+      pathsTitle: "變現路徑的服務邏輯",
+      paths: [
+        {
+          title: "SaaS 訂閱",
+          service: "提供自助式研究、回測、紙上交易、儀表板、告警與工作流保存。",
+          logic: "收入來自工作流深度、資料精度、運算容量與操作歷史保存，而不是交易結果。",
+          scenarios: ["量化初學者上手", "個人研究工作區", "紙上交易流程驗證"],
+          value: "建立可預測 ARR，並讓使用者以安全方式從研究走向紙上營運。",
+          compliance: "預設僅限研究工具與紙上交易。"
+        },
+        {
+          title: "專業交易者方案",
+          service: "提供較高頻資料、Webhook 風控告警、策略 runner 容量、進階報表與類生產環境的紙上工作流。",
+          logic: "定價隨營運成熟度提高：秒級或逐筆資料、更多運算、更長保存期與更完整監控。",
+          scenarios: ["活躍交易者", "小型策略團隊驗證", "影子交易前準備"],
+          value: "協助重度使用者降低手動流程落差，但不承諾投資績效。",
+          compliance: "預設不提供實盤下單；券商存取仍是未來審查後的邊界。"
+        },
+        {
+          title: "企業授權",
+          service: "提供私有雲或地端部署、RBAC/ABAC 方向、WORM 稽核方向、SLA、安全審查支援與客製整合範圍。",
+          logic: "企業收入來自治理、部署控制、稽核能力、支援條款與整合複雜度。",
+          scenarios: ["自營交易團隊", "家族辦公室", "券商創新部門", "機構研究團隊"],
+          value: "把平台轉化為可採購的基礎設施，讓責任歸屬與操作邊界更清楚。",
+          compliance: "契約需定義平台責任、客戶交易決策、稽核保存與事件處理。"
+        },
+        {
+          title: "資料服務",
+          service: "提供換月感知 TX/MTX/TMF 資料集、清洗後 bars/ticks、資料品質報告、研究用連續期貨與資料 API。",
+          logic: "清洗且版本化的台灣期貨資料具高留存價值，因為研究、回測與營運都依賴一致輸入。",
+          scenarios: ["回測資料包", "資料 API 訂閱", "企業資料治理", "換月驗證報告"],
+          value: "提升可重現性，降低使用者目前以零散檔案回測到營運的落差。",
+          compliance: "資料授權、轉售權與交易所/供應商限制需另行審查。"
+        },
+        {
+          title: "策略市集",
+          service: "未來提供策略作者分發、驗證報告、風險標籤、版本化策略套件與審查流程。",
+          logic: "只有在具備審查、風險標籤與作者責任邊界後，市集經濟才適合建立網路效應。",
+          scenarios: ["策略作者分發", "研究模板庫", "機構策略審查佇列"],
+          value: "以標準化訊號契約連接開發者與使用者，同時不允許策略繞過風控或 OMS。",
+          compliance: "跟單、訊號訂閱或近似顧問的分發模式需獨立法律與監管審查。"
+        },
+        {
+          title: "AI 分析加值服務",
+          service: "提供 AI 輔助過度擬合檢查、參數敏感度摘要、異常檢視、策略文件化與營運診斷。",
+          logic: "以用量型 AI 診斷變現高運算量的研究審查流程，同時保留人為決策控制。",
+          scenarios: ["回測審查", "策略健康報告", "實驗比較", "事件復盤摘要"],
+          value: "加速研究審查與營運學習，但不讓 AI 成為自動交易決策者。",
+          compliance: "AI 輸出必須維持分析工具定位，不構成個別化投資建議。"
+        },
+        {
+          title: "券商或機構合作",
+          service: "提供白標基礎設施、共同品牌研究工具、券商適配專案、教育訓練與機構工作流試點。",
+          logic: "合作收入來自整合、分發與營運賦能，而不是未審查的下單導流經濟。",
+          scenarios: ["券商開發者入口", "Fintech sandbox", "機構試點部署", "教育與上線計畫"],
+          value: "讓合作夥伴取得受治理的台灣期貨量化堆疊，同時維持券商閘道隔離。",
+          compliance: "券商分潤、轉介或訂單導流變現皆屬合規依賴的未來選項。"
+        },
+        {
+          title: "依合規審查而定的未來績效型模式",
+          service: "僅作未來選項：績效費、代操帳戶、跟單交易、訊號訂閱或券商分潤。",
+          logic: "必須先完成牌照、法律審查、客戶適合度、營運控制、揭露與利益衝突管理後，才可評估。",
+          scenarios: ["持牌合作夥伴架構", "審查後訊號分發", "核准後代管框架"],
+          value: "保留長期選項，但不把受監管服務包裝成目前已可使用的產品。",
+          compliance: "目前產品不提供；不保證獲利，且 Live Trading 預設關閉。"
+        }
+      ],
       plans: [
         {
           name: "Basic",

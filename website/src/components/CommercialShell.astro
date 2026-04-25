@@ -1,0 +1,46 @@
+---
+import type { Locale } from "../i18n/content";
+import LanguageSwitch from "./LanguageSwitch.astro";
+import SiteNav from "./SiteNav.astro";
+
+interface Props {
+  locale: Locale;
+  active: "business" | "pricing" | "go-to-market" | "compliance";
+  title: string;
+  eyebrow: string;
+  lead: string;
+  englishPath: string;
+  chinesePath: string;
+}
+
+const { locale, active, title, eyebrow, lead, englishPath, chinesePath } = Astro.props;
+const isZh = locale === "zh";
+const homePath = isZh ? "/zh/" : "/";
+---
+
+<main>
+  <section class="subpage-hero section">
+    <div class="container topbar">
+      <a class="brand-mark" href={homePath}>
+        {isZh ? "台指期量化交易平台" : "Taifex Quant Trading Platform"}
+      </a>
+      <div class="topbar-actions">
+        <SiteNav locale={locale} active={active} />
+        <LanguageSwitch
+          locale={locale}
+          label={isZh ? "語言" : "Language"}
+          english="EN"
+          chinese="繁中"
+          englishPath={englishPath}
+          chinesePath={chinesePath}
+        />
+      </div>
+    </div>
+    <div class="container subpage-hero-copy">
+      <p class="eyebrow">{eyebrow}</p>
+      <h1>{title}</h1>
+      <p class="hero-description">{lead}</p>
+    </div>
+  </section>
+  <slot />
+</main>

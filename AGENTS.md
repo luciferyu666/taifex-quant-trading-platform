@@ -45,6 +45,44 @@ This repository contains the local development skeleton for the Taifex Quant Tra
   - `make check`
 - If Docker, Node, Python, or network access is unavailable, report the exact blocked command and continue with the safest skeleton changes.
 
+## Cloud-Native Roadmap Execution Rules
+
+- Always implement one phase or one vertical slice at a time.
+- Never bypass Risk Engine or OMS.
+- Never place broker SDK calls inside `strategy-engine`.
+- Never enable live trading.
+- Keep the paper broker as the default.
+- Add tests for backend APIs.
+- Add docs for every new service.
+- Run `make check` before finishing.
+- Keep roadmap docs current.
+
+## Business Operations and Marketing Rules
+
+- Do not claim guaranteed returns.
+- Do not write investment advice.
+- Do not imply the platform trades for users.
+- Do not market copy trading, managed accounts, signal subscriptions, or performance fees as available unless explicitly approved and legally reviewed.
+- Position early revenue as SaaS tooling, data services, AI diagnostics, training, implementation, and enterprise licensing.
+- Any broker fee-sharing, advisory, or discretionary trading model must be labeled compliance-dependent.
+- Keep commercial copy aligned with `docs/compliance-boundary.md`.
+- Keep live trading disabled by default.
+
+## System Architecture Implementation Rules
+
+- Control Plane must not execute trades.
+- Trading/Data Plane owns market data, strategy runner, risk, OMS, broker gateway, and reconciliation.
+- Strategies emit signals only.
+- Broker SDK calls are forbidden outside `broker-gateway`.
+- Risk Engine must approve before OMS/Broker Gateway.
+- OMS must use deterministic state transitions and idempotency keys.
+- `PaperBrokerGateway` is the only broker gateway allowed in the current implementation.
+- Live trading remains disabled by default.
+- No secrets in source code.
+- K8s, Vault, and OpenTelemetry files are placeholders unless explicitly reviewed.
+- Run `make architecture-safety-check` for architecture changes.
+- Run `make check` before finishing.
+
 ## Website / Vercel Rules
 
 - Website lives in `website/`.

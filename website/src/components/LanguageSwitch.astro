@@ -6,16 +6,25 @@ interface Props {
   label: string;
   english: string;
   chinese: string;
+  englishPath?: string;
+  chinesePath?: string;
 }
 
-const { locale, label, english, chinese } = Astro.props;
+const {
+  locale,
+  label,
+  english,
+  chinese,
+  englishPath = "/",
+  chinesePath = "/zh/"
+} = Astro.props;
 ---
 
 <nav class="language-switch" aria-label={label}>
-  <a class:list={["language-link", { active: locale === "en" }]} href="/" hreflang="en" lang="en">
+  <a class:list={["language-link", { active: locale === "en" }]} href={englishPath} hreflang="en" lang="en">
     {english}
   </a>
-  <a class:list={["language-link", { active: locale === "zh" }]} href="/zh/" hreflang="zh-Hant" lang="zh-Hant">
+  <a class:list={["language-link", { active: locale === "zh" }]} href={chinesePath} hreflang="zh-Hant" lang="zh-Hant">
     {chinese}
   </a>
 </nav>

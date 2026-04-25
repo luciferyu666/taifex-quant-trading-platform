@@ -1,0 +1,21 @@
+# Placeholder only. Web Command Center must not bypass Risk Engine or OMS.
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: web-command-center-placeholder
+  namespace: tqtp-control-plane
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: web-command-center-placeholder
+  template:
+    metadata:
+      labels:
+        app: web-command-center-placeholder
+    spec:
+      containers:
+        - name: web-command-center
+          image: example.invalid/tqtp/web-command-center:placeholder
+          ports:
+            - containerPort: 3000

@@ -1,0 +1,21 @@
+# Placeholder only. Strategy registry administers metadata, not broker execution.
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: strategy-registry-placeholder
+  namespace: tqtp-control-plane
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: strategy-registry-placeholder
+  template:
+    metadata:
+      labels:
+        app: strategy-registry-placeholder
+    spec:
+      containers:
+        - name: strategy-registry
+          image: example.invalid/tqtp/strategy-registry:placeholder
+          ports:
+            - containerPort: 8000

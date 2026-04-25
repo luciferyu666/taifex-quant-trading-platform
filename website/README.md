@@ -33,6 +33,13 @@ npm run preview
 - Traditional Chinese: `/zh/`
 - Language switch links are static and do not require backend runtime.
 
+## Commercial Pages
+
+- English: `/business/`, `/pricing/`, `/go-to-market/`, `/compliance/`
+- Traditional Chinese: `/zh/business/`, `/zh/pricing/`, `/zh/go-to-market/`, `/zh/compliance/`
+
+Commercial pages must stay aligned with `../docs/compliance-boundary.md`.
+
 ## Safety Copy Rules
 
 - Keep `TRADING_MODE=paper`, `ENABLE_LIVE_TRADING=false`, and `BROKER_PROVIDER=paper` visible.

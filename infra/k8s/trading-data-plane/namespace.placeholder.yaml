@@ -1,0 +1,8 @@
+# Placeholder only. Do not deploy without security and operations review.
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: tqtp-trading-data-plane
+  labels:
+    app.kubernetes.io/part-of: taifex-quant-trading-platform
+    tqtp.io/plane: trading-data

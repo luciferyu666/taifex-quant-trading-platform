@@ -1,6 +1,7 @@
 ---
 import type { Locale, PageContent } from "../i18n/content";
 import LanguageSwitch from "./LanguageSwitch.astro";
+import SiteNav from "./SiteNav.astro";
 
 interface Props {
   locale: Locale;
@@ -20,12 +21,17 @@ const instruments = [
   <section class="hero section">
     <div class="container topbar">
       <a class="brand-mark" href={page.path}>{page.hero.title}</a>
-      <LanguageSwitch
-        locale={locale}
-        label={page.language.label}
-        english={page.language.english}
-        chinese={page.language.chinese}
-      />
+      <div class="topbar-actions">
+        <SiteNav locale={locale} active="home" />
+        <LanguageSwitch
+          locale={locale}
+          label={page.language.label}
+          english={page.language.english}
+          chinese={page.language.chinese}
+          englishPath="/"
+          chinesePath="/zh/"
+        />
+      </div>
     </div>
     <div class="container hero-grid">
       <div class="hero-copy">
@@ -194,6 +200,33 @@ const instruments = [
         <p>{page.commercial.body}</p>
       </div>
       <p class="commercial-disclaimer">{page.commercial.disclaimer}</p>
+      <h3 class="subsection-heading">{page.commercial.pathsTitle}</h3>
+      <div class="commercial-path-grid">
+        {page.commercial.paths.map((path) => (
+          <article class="commercial-path-card">
+            <h3>{path.title}</h3>
+            <div class="path-detail">
+              <p class="path-label">{locale === "zh" ? "服務內容" : "Service"}</p>
+              <p>{path.service}</p>
+            </div>
+            <div class="path-detail">
+              <p class="path-label">{locale === "zh" ? "商業邏輯" : "Business logic"}</p>
+              <p>{path.logic}</p>
+            </div>
+            <div class="path-detail">
+              <p class="path-label">{locale === "zh" ? "應用場景" : "Use cases"}</p>
+              <ul class="compact-list">
+                {path.scenarios.map((scenario) => <li>{scenario}</li>)}
+              </ul>
+            </div>
+            <div class="path-detail">
+              <p class="path-label">{locale === "zh" ? "客戶價值" : "Value"}</p>
+              <p>{path.value}</p>
+            </div>
+            <p class="path-compliance">{path.compliance}</p>
+          </article>
+        ))}
+      </div>
       <h3 class="subsection-heading">{page.commercial.tiersTitle}</h3>
       <div class="pricing-grid">
         {page.commercial.plans.map((plan) => (

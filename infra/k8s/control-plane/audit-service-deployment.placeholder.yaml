@@ -1,0 +1,21 @@
+# Placeholder only. Audit service is read/write audit infrastructure, not execution.
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: audit-service-placeholder
+  namespace: tqtp-control-plane
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: audit-service-placeholder
+  template:
+    metadata:
+      labels:
+        app: audit-service-placeholder
+    spec:
+      containers:
+        - name: audit-service
+          image: example.invalid/tqtp/audit-service:placeholder
+          ports:
+            - containerPort: 8000

@@ -1,0 +1,59 @@
+---
+import CommercialShell from "../components/CommercialShell.astro";
+import BaseLayout from "../layouts/BaseLayout.astro";
+
+const prohibited = [
+  "guaranteed profit",
+  "risk-free",
+  "fully automated money machine",
+  "we trade for you",
+  "copy our signals for profit",
+  "guaranteed alpha",
+  "principal guaranteed",
+  "no loss",
+];
+---
+
+<BaseLayout title="Compliance Boundary | Taifex Quant Trading Platform" description="Compliance-safe commercial boundary for Taifex Quant Trading Platform." canonicalPath="/compliance/" alternatePath="/zh/compliance/">
+  <CommercialShell
+    locale="en"
+    active="compliance"
+    title="Compliance Boundary"
+    eyebrow="Commercial Safety"
+    lead="The platform is positioned as SaaS research tooling and infrastructure. Regulated offerings require separate legal and regulatory review."
+    englishPath="/compliance/"
+    chinesePath="/zh/compliance/"
+  >
+    <section class="section">
+      <div class="container commercial-grid-2">
+        <article class="commercial-card">
+          <h2>Safe positioning</h2>
+          <ul class="feature-list">
+            <li>research tooling</li>
+            <li>paper trading</li>
+            <li>infrastructure</li>
+            <li>risk controls and auditability</li>
+            <li>user-controlled workflows</li>
+          </ul>
+        </article>
+        <article class="commercial-card">
+          <h2>Regulated triggers</h2>
+          <p>Signal subscriptions, copy trading, managed accounts, performance fees, broker fee-sharing, discretionary trading, and futures advisory services are compliance-dependent future options only.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="section commercial-section">
+      <div class="container">
+        <div class="section-heading">
+          <p class="eyebrow">Prohibited claims</p>
+          <h2>Marketing language to avoid</h2>
+        </div>
+        <div class="model-list">
+          {prohibited.map((item) => <span>{item}</span>)}
+        </div>
+        <p class="notice">This website and repository are for research, engineering, paper trading, and infrastructure workflows. They are not investment advice and do not guarantee profit.</p>
+      </div>
+    </section>
+  </CommercialShell>
+</BaseLayout>

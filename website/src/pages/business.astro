@@ -1,0 +1,53 @@
+---
+import CommercialShell from "../components/CommercialShell.astro";
+import BaseLayout from "../layouts/BaseLayout.astro";
+
+const title = "Business Model";
+const description = "Commercial model for Taiwan futures quant infrastructure.";
+---
+
+<BaseLayout title={`${title} | Taifex Quant Trading Platform`} description={description} canonicalPath="/business/" alternatePath="/zh/business/">
+  <CommercialShell
+    locale="en"
+    active="business"
+    title={title}
+    eyebrow="Commercial Operations"
+    lead="A Trading OS business model focused on SaaS tooling, data services, AI diagnostics, enterprise licensing, and implementation services."
+    englishPath="/business/"
+    chinesePath="/zh/business/"
+  >
+    <section class="section">
+      <div class="container commercial-grid-2">
+        <article class="commercial-card">
+          <h2>Platform positioning</h2>
+          <p>The product is not a trading bot, advisory service, or managed account product. It is infrastructure for Taiwan futures quant workflows: data governance, research, backtesting, paper/shadow trading, risk controls, OMS, broker gateway abstraction, and auditability.</p>
+        </article>
+        <article class="commercial-card">
+          <h2>Revenue architecture</h2>
+          <ul class="feature-list">
+            <li>SaaS subscriptions</li>
+            <li>Usage-based billing</li>
+            <li>Enterprise licensing and private deployment</li>
+            <li>Data services and AI diagnostics</li>
+            <li>Training, onboarding, and implementation</li>
+          </ul>
+        </article>
+      </div>
+    </section>
+
+    <section class="section commercial-section">
+      <div class="container">
+        <div class="section-heading">
+          <p class="eyebrow">Commercial moat</p>
+          <h2>Infrastructure revenue before regulated services</h2>
+          <p>Early revenue should come from technical infrastructure, not promised trading performance. Compliance-dependent models such as performance fees, managed accounts, copy trading, signal subscriptions, or broker fee-sharing require separate legal and regulatory review.</p>
+        </div>
+        <div class="module-grid">
+          <article class="card"><h3>Data governance</h3><p>Rollover-aware, versioned Taiwan futures datasets can become recurring data infrastructure.</p></article>
+          <article class="card"><h3>Enterprise controls</h3><p>RBAC/ABAC direction, audit logs, private cloud, and SLA support institutional procurement.</p></article>
+          <article class="card"><h3>Marketplace direction</h3><p>Strategy distribution can create network effects only after review, risk labeling, and compliance controls.</p></article>
+        </div>
+      </div>
+    </section>
+  </CommercialShell>
+</BaseLayout>

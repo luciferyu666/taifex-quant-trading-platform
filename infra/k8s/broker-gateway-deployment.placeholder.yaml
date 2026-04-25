@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tqtp-broker-gateway
+  namespace: tqtp-paper
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: tqtp-broker-gateway
+  template:
+    metadata:
+      labels:
+        app: tqtp-broker-gateway
+    spec:
+      containers:
+        - name: broker-gateway
+          image: tqtp/broker-gateway:placeholder
+          env:
+            - name: BROKER_PROVIDER
+              value: paper
+            - name: ENABLE_LIVE_TRADING
+              value: "false"

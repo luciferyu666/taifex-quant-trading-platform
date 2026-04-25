@@ -27,6 +27,111 @@ if [[ -f .env ]] && grep -Eiq '^ENABLE_LIVE_TRADING=(true|1|yes)$' .env; then
   exit 1
 fi
 
+printf 'Checking business operations files...\n'
+missing_business_file=0
+for required_file in \
+  docs/business-operations-plan.md \
+  docs/business-model.md \
+  docs/pricing-strategy.md \
+  docs/go-to-market.md \
+  docs/compliance-boundary.md \
+  docs/partner-profit-sharing.md \
+  .codex/prompts/18-business-operations-implementation.md \
+  scripts/business-status.sh; do
+  if [[ ! -f "${required_file}" ]]; then
+    printf 'Missing required business file: %s\n' "${required_file}" >&2
+    missing_business_file=1
+  fi
+done
+
+if ! grep -q 'Business Operations Plan' README.md; then
+  printf 'README.md must contain Business Operations Plan section.\n' >&2
+  missing_business_file=1
+fi
+
+if [[ "${missing_business_file}" -ne 0 ]]; then
+  exit 1
+fi
+
+if [[ -x scripts/business-compliance-check.sh ]]; then
+  bash scripts/business-compliance-check.sh
+else
+  printf 'scripts/business-compliance-check.sh is missing or not executable.\n' >&2
+  exit 1
+fi
+
+printf 'Checking roadmap scaffold files...\n'
+missing_roadmap_file=0
+for required_file in \
+  docs/cloud-native-transformation-blueprint.md \
+  docs/implementation-roadmap.md \
+  docs/phase-0-compliance-boundary.md \
+  docs/phase-1-infrastructure-foundation.md \
+  docs/phase-2-data-platform.md \
+  docs/phase-3-strategy-sdk-backtest.md \
+  docs/phase-4-risk-oms-broker-gateway.md \
+  docs/phase-5-command-center-shadow-trading.md \
+  docs/phase-6-reliability-go-live-readiness.md \
+  backend/app/domain/contracts.py \
+  backend/app/domain/exposure.py \
+  backend/app/services/risk_engine.py \
+  backend/app/services/oms.py \
+  backend/app/services/broker_gateway.py \
+  backend/app/api/roadmap_routes.py \
+  data-pipeline/schemas/contract_master.sql \
+  strategy-engine/sdk/base_strategy.py \
+  scripts/roadmap-status.sh; do
+  if [[ ! -f "${required_file}" ]]; then
+    printf 'Missing required roadmap scaffold file: %s\n' "${required_file}" >&2
+    missing_roadmap_file=1
+  fi
+done
+
+if [[ "${missing_roadmap_file}" -ne 0 ]]; then
+  exit 1
+fi
+
+printf 'Checking system architecture scaffold files...\n'
+missing_architecture_file=0
+for required_file in \
+  docs/system-architecture-spec.md \
+  docs/control-plane.md \
+  docs/trading-data-plane.md \
+  docs/data-lakehouse-architecture.md \
+  docs/oms-state-machine.md \
+  docs/broker-gateway-adapter-pattern.md \
+  docs/risk-engine-spec.md \
+  docs/security-vault-asvs.md \
+  docs/observability-dr-event-sourcing.md \
+  backend/app/domain/order_state_machine.py \
+  backend/app/domain/allocator.py \
+  backend/app/domain/risk_rules.py \
+  backend/app/services/paper_broker_gateway.py \
+  backend/app/services/reconciliation.py \
+  backend/app/api/architecture_routes.py \
+  infra/k8s/control-plane/README.md \
+  infra/k8s/trading-data-plane/README.md \
+  infra/vault/transit-policy.placeholder.hcl \
+  infra/observability/opentelemetry-collector.placeholder.yaml \
+  .codex/prompts/19-system-architecture-implementation.md \
+  scripts/architecture-status.sh; do
+  if [[ ! -f "${required_file}" ]]; then
+    printf 'Missing required architecture scaffold file: %s\n' "${required_file}" >&2
+    missing_architecture_file=1
+  fi
+done
+
+if [[ "${missing_architecture_file}" -ne 0 ]]; then
+  exit 1
+fi
+
+if [[ -x scripts/architecture-safety-check.sh ]]; then
+  bash scripts/architecture-safety-check.sh
+else
+  printf 'scripts/architecture-safety-check.sh is missing or not executable.\n' >&2
+  exit 1
+fi
+
 if [[ -x "${BACKEND_PYTHON}" ]]; then
   printf 'Checking backend syntax...\n'
   "${BACKEND_PYTHON}" -m compileall -q backend/app backend/tests
@@ -46,6 +151,13 @@ if [[ -x "${BACKEND_PYTHON}" ]]; then
   fi
 else
   printf 'backend/.venv/bin/python is missing; skipping backend runtime checks. Run bash scripts/bootstrap.sh.\n' >&2
+fi
+
+if command -v python3 >/dev/null 2>&1; then
+  printf 'Checking Strategy SDK syntax...\n'
+  python3 -m compileall -q strategy-engine/sdk
+else
+  printf 'python3 is not available; skipping Strategy SDK syntax check.\n' >&2
 fi
 
 if command -v npm >/dev/null 2>&1; then

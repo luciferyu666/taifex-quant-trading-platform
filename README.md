@@ -216,6 +216,57 @@ The investor-facing Astro marketing website lives in `website/`.
 - Deployment helper: `make website-deploy`
 - Deployment guide: `docs/website-vercel-deploy.md`
 
+## Cloud-Native Implementation Roadmap
+
+The executable Phase 0-6 roadmap lives in `docs/implementation-roadmap.md`. The source blueprint lives in `docs/cloud-native-transformation-blueprint.md`.
+
+Use these Codex prompts for the next implementation slices:
+
+- `.codex/prompts/10-roadmap-phase-0-compliance.md`
+- `.codex/prompts/17-roadmap-next-safe-slice.md`
+
+Roadmap status command:
+
+```bash
+make roadmap-status
+```
+
+Phase 0-5 remain paper/shadow-only. Phase 6 is readiness planning only and does not enable live trading.
+
+## System Architecture Specification
+
+The system architecture enforces signal/execution separation: strategies emit signals, while the platform handles risk checks, OMS state transitions, paper broker gateway execution, reconciliation, auditability, and observability. Live trading remains disabled by default.
+
+Architecture artifacts:
+
+- `docs/system-architecture-spec.md`
+- `docs/control-plane.md`
+- `docs/trading-data-plane.md`
+- `docs/data-lakehouse-architecture.md`
+- `docs/oms-state-machine.md`
+- `docs/broker-gateway-adapter-pattern.md`
+- `docs/risk-engine-spec.md`
+- `docs/security-vault-asvs.md`
+- `docs/observability-dr-event-sourcing.md`
+
+Architecture status command:
+
+```bash
+make architecture-status
+```
+
+## Business Operations Plan
+
+The commercial model prioritizes SaaS tooling, data services, AI diagnostics, enterprise licensing, and implementation services for Taiwan futures quant infrastructure. Regulated services such as signal subscriptions, managed accounts, copy trading, performance fees, or broker fee-sharing require separate legal review.
+
+Business artifacts:
+
+- `docs/business-model.md`
+- `docs/pricing-strategy.md`
+- `docs/go-to-market.md`
+- `docs/compliance-boundary.md`
+- `docs/partner-profit-sharing.md`
+
 ## Quick Start
 
 ```bash

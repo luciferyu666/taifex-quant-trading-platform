@@ -1,0 +1,21 @@
+# Placeholder only. Risk Engine must approve before OMS/Broker Gateway.
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: risk-engine-placeholder
+  namespace: tqtp-trading-data-plane
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: risk-engine-placeholder
+  template:
+    metadata:
+      labels:
+        app: risk-engine-placeholder
+    spec:
+      containers:
+        - name: risk-engine
+          image: example.invalid/tqtp/risk-engine:placeholder
+          ports:
+            - containerPort: 8000

@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tqtp-oms
+  namespace: tqtp-paper
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: tqtp-oms
+  template:
+    metadata:
+      labels:
+        app: tqtp-oms
+    spec:
+      containers:
+        - name: oms
+          image: tqtp/oms:placeholder
+          env:
+            - name: TRADING_MODE
+              value: paper
+            - name: ENABLE_LIVE_TRADING
+              value: "false"

@@ -1,0 +1,53 @@
+---
+import CommercialShell from "../../components/CommercialShell.astro";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+
+const title = "商業模式";
+const description = "台指期量化交易基礎設施的商業模式。";
+---
+
+<BaseLayout title={`${title} | 台指期量化交易平台`} description={description} lang="zh-Hant" canonicalPath="/zh/business/" alternatePath="/business/">
+  <CommercialShell
+    locale="zh"
+    active="business"
+    title={title}
+    eyebrow="商業營運"
+    lead="以 Trading OS 為定位的商業模式，優先聚焦 SaaS 工具、資料服務、AI 診斷、企業授權與導入服務。"
+    englishPath="/business/"
+    chinesePath="/zh/business/"
+  >
+    <section class="section">
+      <div class="container commercial-grid-2">
+        <article class="commercial-card">
+          <h2>平台定位</h2>
+          <p>本產品不是交易機器人、投資顧問服務或代操帳戶產品，而是台灣期貨量化流程的基礎設施：資料治理、策略研究、回測、紙上/影子交易、風控、OMS、券商閘道抽象與稽核能力。</p>
+        </article>
+        <article class="commercial-card">
+          <h2>收入架構</h2>
+          <ul class="feature-list">
+            <li>SaaS 訂閱</li>
+            <li>用量型計費</li>
+            <li>企業授權與私有部署</li>
+            <li>資料服務與 AI 診斷</li>
+            <li>訓練、上線與導入服務</li>
+          </ul>
+        </article>
+      </div>
+    </section>
+
+    <section class="section commercial-section">
+      <div class="container">
+        <div class="section-heading">
+          <p class="eyebrow">商業護城河</p>
+          <h2>先做基礎設施收入，再處理受監管服務</h2>
+          <p>早期收入應來自技術基礎設施，而不是交易績效承諾。績效費、代操帳戶、跟單交易、訊號訂閱或券商分潤，都需要獨立法律與監管審查。</p>
+        </div>
+        <div class="module-grid">
+          <article class="card"><h3>資料治理</h3><p>換月感知、版本化的台灣期貨資料集，可形成長期資料基礎設施收入。</p></article>
+          <article class="card"><h3>企業控制</h3><p>RBAC/ABAC、稽核日誌、私有雲與 SLA 可支援機構採購流程。</p></article>
+          <article class="card"><h3>市集方向</h3><p>策略市集必須先具備審查、風險標籤與合規控制，才能建立網路效應。</p></article>
+        </div>
+      </div>
+    </section>
+  </CommercialShell>
+</BaseLayout>

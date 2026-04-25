@@ -1,0 +1,54 @@
+---
+import CommercialShell from "../../components/CommercialShell.astro";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+
+const plans = [
+  ["Basic", "~1,980 TWD / 月", "量化初學者 / 個人研究者", "1 分鐘資料、基礎回測、紙上交易"],
+  ["Pro", "~8,800 TWD / 月", "活躍交易者", "秒級資料、風控告警、近似正式工作流"],
+  ["Elite", "~29,800 TWD / 月", "專業交易者 / 小型團隊", "逐筆工作流、AI 診斷、runner 容量"],
+  ["Enterprise", "250,000+ TWD / 月", "機構 / 券商夥伴", "私有雲、WORM 稽核方向、RBAC/ABAC、SLA"],
+];
+---
+
+<BaseLayout title="定價策略 | 台指期量化交易平台" description="台指期量化交易平台的合規感知參考定價。" lang="zh-Hant" canonicalPath="/zh/pricing/" alternatePath="/pricing/">
+  <CommercialShell
+    locale="zh"
+    active="pricing"
+    title="定價策略"
+    eyebrow="參考定價"
+    lead="定價依工作流成熟度、資料精度、運算資源、治理需求與支援層級區分，而不是對交易績效定價。"
+    englishPath="/pricing/"
+    chinesePath="/zh/pricing/"
+  >
+    <section class="section">
+      <div class="container pricing-grid">
+        {plans.map(([name, price, customer, features]) => (
+          <article class="plan-card">
+            <div class="plan-top"><h2>{name}</h2><p class="plan-price">{price}</p></div>
+            <p class="plan-audience">{customer}</p>
+            <p>{features}</p>
+            <p class="commercial-disclaimer">合規註記：預設僅限研究、紙上/影子交易與基礎設施工作流，其他項目需另行審查。</p>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section class="section commercial-section">
+      <div class="container commercial-grid-2">
+        <article class="commercial-card">
+          <h2>用量型加值</h2>
+          <ul class="feature-list">
+            <li>AI 診斷代幣</li>
+            <li>逐筆重播與高頻資料回放</li>
+            <li>回測運算與策略 runner 容量</li>
+            <li>資料 API 用量與稽核保存</li>
+          </ul>
+        </article>
+        <article class="commercial-card">
+          <h2>留存與企業採購</h2>
+          <p>年繳可提升 ARR 可預測性。企業方案應提供安全審查支援、資料授權清楚性、SLA、稽核保存與責任邊界。</p>
+        </article>
+      </div>
+    </section>
+  </CommercialShell>
+</BaseLayout>

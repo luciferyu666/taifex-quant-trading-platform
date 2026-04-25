@@ -1,0 +1,51 @@
+---
+import CommercialShell from "../../components/CommercialShell.astro";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+
+const kpis = [
+  "免費到 Basic 轉換率",
+  "Basic 到 Pro 轉換率",
+  "Pro 到 Elite 轉換率",
+  "企業 pipeline 金額",
+  "年度經常性收入",
+  "淨收入留存率",
+  "流失率",
+  "活躍策略 runner",
+  "資料 API 用量",
+  "AI 診斷用量",
+  "策略市集 GMV",
+];
+---
+
+<BaseLayout title="市場進入 | 台指期量化交易平台" description="台灣期貨量化基礎設施的市場進入策略。" lang="zh-Hant" canonicalPath="/zh/go-to-market/" alternatePath="/go-to-market/">
+  <CommercialShell
+    locale="zh"
+    active="go-to-market"
+    title="市場進入"
+    eyebrow="商業成長"
+    lead="市場進入路徑先以工具建立信任，再透過生態系擴張，最後走向企業級基礎設施。"
+    englishPath="/go-to-market/"
+    chinesePath="/zh/go-to-market/"
+  >
+    <section class="section">
+      <div class="container phase-grid">
+        <article class="card"><h2>Phase 1：Tool-led Growth</h2><p>免費換月感知回測工具、曝險計算器、紙上交易沙盒與開發者內容。</p></article>
+        <article class="card"><h2>Phase 2：Ecosystem Expansion</h2><p>券商 API readiness、策略市集規劃、AI 診斷與專業交易者方案。</p></article>
+        <article class="card"><h2>Phase 3：Infrastructure Moat</h2><p>企業授權、私有雲、RBAC/ABAC、WORM 稽核方向、SLA 與採購審查就緒。</p></article>
+      </div>
+    </section>
+
+    <section class="section commercial-section">
+      <div class="container">
+        <div class="section-heading">
+          <p class="eyebrow">KPI 儀表板</p>
+          <h2>應追蹤的商業指標</h2>
+        </div>
+        <div class="model-list">
+          {kpis.map((kpi) => <span>{kpi}</span>)}
+        </div>
+        <p class="notice">市場文案必須聚焦基礎設施，不得承諾獲利或宣稱交易無風險。</p>
+      </div>
+    </section>
+  </CommercialShell>
+</BaseLayout>

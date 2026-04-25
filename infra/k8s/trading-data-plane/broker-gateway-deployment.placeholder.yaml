@@ -1,0 +1,21 @@
+# Placeholder only. Broker Gateway is paper-only in current implementation.
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: broker-gateway-placeholder
+  namespace: tqtp-trading-data-plane
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: broker-gateway-placeholder
+  template:
+    metadata:
+      labels:
+        app: broker-gateway-placeholder
+    spec:
+      containers:
+        - name: broker-gateway
+          image: example.invalid/tqtp/broker-gateway:placeholder
+          ports:
+            - containerPort: 8000

@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tqtp-frontend
+  namespace: tqtp-paper
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: tqtp-frontend
+  template:
+    metadata:
+      labels:
+        app: tqtp-frontend
+    spec:
+      containers:
+        - name: frontend
+          image: tqtp/frontend:placeholder
+          env:
+            - name: NEXT_PUBLIC_BACKEND_URL
+              value: http://tqtp-backend:8000

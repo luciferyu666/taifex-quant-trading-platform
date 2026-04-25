@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: tqtp-paper
+  labels:
+    app.kubernetes.io/name: taifex-quant-trading-platform
+    tqtp.io/trading-mode: paper

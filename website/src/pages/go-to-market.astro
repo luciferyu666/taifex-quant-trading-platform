@@ -1,0 +1,51 @@
+---
+import CommercialShell from "../components/CommercialShell.astro";
+import BaseLayout from "../layouts/BaseLayout.astro";
+
+const kpis = [
+  "free to Basic conversion",
+  "Basic to Pro conversion",
+  "Pro to Elite conversion",
+  "enterprise pipeline value",
+  "annual recurring revenue",
+  "net revenue retention",
+  "churn",
+  "active strategy runners",
+  "data API usage",
+  "AI diagnosis usage",
+  "strategy marketplace GMV",
+];
+---
+
+<BaseLayout title="Go-to-Market | Taifex Quant Trading Platform" description="Go-to-market roadmap for Taiwan futures quant infrastructure." canonicalPath="/go-to-market/" alternatePath="/zh/go-to-market/">
+  <CommercialShell
+    locale="en"
+    active="go-to-market"
+    title="Go-to-Market"
+    eyebrow="Commercial Growth"
+    lead="The commercial path starts with tool-led credibility, expands through ecosystem participation, and matures into enterprise infrastructure."
+    englishPath="/go-to-market/"
+    chinesePath="/zh/go-to-market/"
+  >
+    <section class="section">
+      <div class="container phase-grid">
+        <article class="card"><h2>Phase 1: Tool-led Growth</h2><p>Free rollover-aware backtesting tools, exposure calculator, paper sandbox, and developer-first content.</p></article>
+        <article class="card"><h2>Phase 2: Ecosystem Expansion</h2><p>Broker API readiness, strategy marketplace planning, AI diagnostics, and professional trader plans.</p></article>
+        <article class="card"><h2>Phase 3: Infrastructure Moat</h2><p>Enterprise licensing, private cloud, RBAC/ABAC, WORM audit direction, SLA, and procurement readiness.</p></article>
+      </div>
+    </section>
+
+    <section class="section commercial-section">
+      <div class="container">
+        <div class="section-heading">
+          <p class="eyebrow">KPI Dashboard</p>
+          <h2>Commercial metrics to track</h2>
+        </div>
+        <div class="model-list">
+          {kpis.map((kpi) => <span>{kpi}</span>)}
+        </div>
+        <p class="notice">GTM copy must remain infrastructure-focused and must not promise profitability or risk-free trading.</p>
+      </div>
+    </section>
+  </CommercialShell>
+</BaseLayout>

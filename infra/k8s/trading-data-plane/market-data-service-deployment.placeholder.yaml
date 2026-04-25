@@ -1,0 +1,21 @@
+# Placeholder only. No external market data credentials are included.
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: market-data-service-placeholder
+  namespace: tqtp-trading-data-plane
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: market-data-service-placeholder
+  template:
+    metadata:
+      labels:
+        app: market-data-service-placeholder
+    spec:
+      containers:
+        - name: market-data-service
+          image: example.invalid/tqtp/market-data-service:placeholder
+          ports:
+            - containerPort: 8000

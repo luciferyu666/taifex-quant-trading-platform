@@ -1,0 +1,21 @@
+# Placeholder only. No production image, secret, or credential is included.
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: api-gateway-placeholder
+  namespace: tqtp-control-plane
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: api-gateway-placeholder
+  template:
+    metadata:
+      labels:
+        app: api-gateway-placeholder
+    spec:
+      containers:
+        - name: api-gateway
+          image: example.invalid/tqtp/api-gateway:placeholder
+          ports:
+            - containerPort: 8000

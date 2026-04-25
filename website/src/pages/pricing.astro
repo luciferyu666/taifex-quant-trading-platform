@@ -1,0 +1,54 @@
+---
+import CommercialShell from "../components/CommercialShell.astro";
+import BaseLayout from "../layouts/BaseLayout.astro";
+
+const plans = [
+  ["Basic", "~1,980 TWD / month", "Quant beginners / individual researchers", "1-minute data, basic backtesting, paper trading"],
+  ["Pro", "~8,800 TWD / month", "Active traders", "Second-level data, risk alerts, production-like workflow"],
+  ["Elite", "~29,800 TWD / month", "Professional traders / small desks", "Tick workflows, AI diagnostics, runner capacity"],
+  ["Enterprise", "250,000+ TWD / month", "Institutions / broker partners", "Private cloud, WORM audit direction, RBAC/ABAC, SLA"],
+];
+---
+
+<BaseLayout title="Pricing Strategy | Taifex Quant Trading Platform" description="Compliance-aware reference pricing for the Taifex Quant Trading Platform." canonicalPath="/pricing/" alternatePath="/zh/pricing/">
+  <CommercialShell
+    locale="en"
+    active="pricing"
+    title="Pricing Strategy"
+    eyebrow="Reference Pricing"
+    lead="Pricing is organized by workflow maturity, data precision, compute, governance, and support. It does not price trading performance."
+    englishPath="/pricing/"
+    chinesePath="/zh/pricing/"
+  >
+    <section class="section">
+      <div class="container pricing-grid">
+        {plans.map(([name, price, customer, features]) => (
+          <article class="plan-card">
+            <div class="plan-top"><h2>{name}</h2><p class="plan-price">{price}</p></div>
+            <p class="plan-audience">{customer}</p>
+            <p>{features}</p>
+            <p class="commercial-disclaimer">Compliance note: research, paper/shadow, and infrastructure workflows only unless separately reviewed.</p>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section class="section commercial-section">
+      <div class="container commercial-grid-2">
+        <article class="commercial-card">
+          <h2>Usage-based add-ons</h2>
+          <ul class="feature-list">
+            <li>AI diagnosis tokens</li>
+            <li>Tick replay and high-frequency replay</li>
+            <li>Backtest compute and strategy runner capacity</li>
+            <li>Data API usage and audit retention</li>
+          </ul>
+        </article>
+        <article class="commercial-card">
+          <h2>Retention and procurement</h2>
+          <p>Annual billing can improve ARR predictability. Enterprise plans should include security review support, data licensing clarity, SLA terms, audit retention, and responsibility boundaries.</p>
+        </article>
+      </div>
+    </section>
+  </CommercialShell>
+</BaseLayout>

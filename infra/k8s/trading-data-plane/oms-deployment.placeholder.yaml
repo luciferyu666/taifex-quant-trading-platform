@@ -1,0 +1,21 @@
+# Placeholder only. OMS owns deterministic state transitions and idempotency.
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: oms-placeholder
+  namespace: tqtp-trading-data-plane
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: oms-placeholder
+  template:
+    metadata:
+      labels:
+        app: oms-placeholder
+    spec:
+      containers:
+        - name: oms
+          image: example.invalid/tqtp/oms:placeholder
+          ports:
+            - containerPort: 8000

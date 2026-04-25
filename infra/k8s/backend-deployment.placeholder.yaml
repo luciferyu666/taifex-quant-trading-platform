@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tqtp-backend
+  namespace: tqtp-paper
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: tqtp-backend
+  template:
+    metadata:
+      labels:
+        app: tqtp-backend
+    spec:
+      containers:
+        - name: backend
+          image: tqtp/backend:placeholder
+          env:
+            - name: TRADING_MODE
+              value: paper
+            - name: ENABLE_LIVE_TRADING
+              value: "false"
+            - name: BROKER_PROVIDER
+              value: paper
