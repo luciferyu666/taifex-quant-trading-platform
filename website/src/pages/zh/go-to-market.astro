@@ -3,17 +3,61 @@ import CommercialShell from "../../components/CommercialShell.astro";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 
 const kpis = [
-  "免費到 Basic 轉換率",
-  "Basic 到 Pro 轉換率",
-  "Pro 到 Elite 轉換率",
-  "企業 pipeline 金額",
-  "年度經常性收入",
-  "淨收入留存率",
-  "流失率",
-  "活躍策略 runner",
-  "資料 API 用量",
-  "AI 診斷用量",
-  "策略市集 GMV",
+  {
+    label: "Free -> Basic conversion",
+    group: "獲客",
+    description: "衡量免費工具、換月感知內容與紙上研究流程，是否能轉化為合格付費需求。",
+  },
+  {
+    label: "Basic -> Pro conversion",
+    group: "升級",
+    description: "觀察研究型使用者是否需要更接近正式營運的資料品質、警示與工作流程。",
+  },
+  {
+    label: "Pro -> Elite conversion",
+    group: "升級",
+    description: "追蹤 tick-level 資料、多帳戶 reconciliation、AI 診斷與 cloud runner 的需求強度。",
+  },
+  {
+    label: "Enterprise pipeline value",
+    group: "企業",
+    description: "量化私有雲、券商夥伴與機構採購機會，但不把 pipeline 當成已實現收入。",
+  },
+  {
+    label: "ARR",
+    group: "收入",
+    description: "年度經常性收入，涵蓋 SaaS 方案、企業授權、資料服務與導入支援。",
+  },
+  {
+    label: "NRR",
+    group: "留存",
+    description: "淨收入留存率，反映升級、降級、流失、加購與企業擴張後的收入品質。",
+  },
+  {
+    label: "Churn",
+    group: "留存",
+    description: "判斷產品是成為交易研究基礎設施，或仍只是短期工具的關鍵訊號。",
+  },
+  {
+    label: "Active strategy runners",
+    group: "使用",
+    description: "追蹤研究與紙上安全流程的活躍程度，不代表 live trading 或券商送單。",
+  },
+  {
+    label: "Data API usage",
+    group: "使用",
+    description: "衡量版本化行情資料、contract master、rollover metadata 與 feature dataset 的需求。",
+  },
+  {
+    label: "AI diagnosis usage",
+    group: "加值",
+    description: "追蹤 AI 輔助分析需求；輸出仍定位為研究診斷，不構成投資建議。",
+  },
+  {
+    label: "Strategy marketplace GMV",
+    group: "生態系",
+    description: "未來合規審查後的策略市集交易量指標，必須與交易績效分開追蹤。",
+  },
 ];
 ---
 
@@ -41,8 +85,14 @@ const kpis = [
           <p class="eyebrow">KPI 儀表板</p>
           <h2>應追蹤的商業指標</h2>
         </div>
-        <div class="model-list">
-          {kpis.map((kpi) => <span>{kpi}</span>)}
+        <div class="kpi-grid">
+          {kpis.map((kpi) => (
+            <article class="kpi-card">
+              <p class="kpi-group">{kpi.group}</p>
+              <h3>{kpi.label}</h3>
+              <p>{kpi.description}</p>
+            </article>
+          ))}
         </div>
         <p class="notice">市場文案必須聚焦基礎設施，不得承諾獲利或宣稱交易無風險。</p>
       </div>

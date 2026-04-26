@@ -614,6 +614,47 @@ p {
   font-weight: 700;
 }
 
+.kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.kpi-card {
+  min-height: 186px;
+  padding: 20px;
+  border: 1px solid rgba(125, 211, 252, 0.22);
+  border-radius: var(--radius);
+  background:
+    linear-gradient(180deg, rgba(125, 211, 252, 0.08), rgba(255, 255, 255, 0.025)),
+    var(--bg-elevated);
+}
+
+.kpi-card h3 {
+  margin-bottom: 10px;
+  color: var(--text);
+  font-size: 1.02rem;
+}
+
+.kpi-card p {
+  margin-bottom: 0;
+}
+
+.kpi-group {
+  display: inline-flex;
+  align-items: center;
+  min-height: 26px;
+  margin: 0 0 12px;
+  padding: 0 10px;
+  border: 1px solid rgba(34, 197, 94, 0.35);
+  border-radius: 999px;
+  background: rgba(34, 197, 94, 0.08);
+  color: #bbf7d0;
+  font-size: 0.75rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
 .notice {
   margin: 24px 0 0;
   padding: 18px;
@@ -689,6 +730,7 @@ p {
   .rule-grid,
   .comparison-grid,
   .commercial-path-grid,
+  .kpi-grid,
   .pricing-grid,
   .detail-grid,
   .segment-grid,

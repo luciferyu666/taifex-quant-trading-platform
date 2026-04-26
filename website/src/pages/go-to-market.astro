@@ -3,17 +3,61 @@ import CommercialShell from "../components/CommercialShell.astro";
 import BaseLayout from "../layouts/BaseLayout.astro";
 
 const kpis = [
-  "free to Basic conversion",
-  "Basic to Pro conversion",
-  "Pro to Elite conversion",
-  "enterprise pipeline value",
-  "annual recurring revenue",
-  "net revenue retention",
-  "churn",
-  "active strategy runners",
-  "data API usage",
-  "AI diagnosis usage",
-  "strategy marketplace GMV",
+  {
+    label: "Free -> Basic conversion",
+    group: "Acquisition",
+    description: "Shows whether free tools and paper-safe workflows are creating qualified paid demand.",
+  },
+  {
+    label: "Basic -> Pro conversion",
+    group: "Expansion",
+    description: "Measures whether active researchers graduate into production-like workflow needs.",
+  },
+  {
+    label: "Pro -> Elite conversion",
+    group: "Expansion",
+    description: "Tracks demand for tick-level data, deeper diagnostics, reconciliation, and cloud runner capacity.",
+  },
+  {
+    label: "Enterprise pipeline value",
+    group: "Enterprise",
+    description: "Quantifies private-cloud, broker-partner, and institutional opportunities before contract close.",
+  },
+  {
+    label: "ARR",
+    group: "Revenue",
+    description: "Annual recurring revenue from SaaS plans, enterprise licensing, data services, and support retainers.",
+  },
+  {
+    label: "NRR",
+    group: "Retention",
+    description: "Net revenue retention after upgrades, downgrades, churn, add-ons, and enterprise expansion.",
+  },
+  {
+    label: "Churn",
+    group: "Retention",
+    description: "Signals whether the product is becoming essential infrastructure or remaining a short-lived tool.",
+  },
+  {
+    label: "Active strategy runners",
+    group: "Usage",
+    description: "Counts research and paper-safe strategy workflows that are active without implying live execution.",
+  },
+  {
+    label: "Data API usage",
+    group: "Usage",
+    description: "Measures demand for versioned market data, contract master, rollover metadata, and feature datasets.",
+  },
+  {
+    label: "AI diagnosis usage",
+    group: "Add-ons",
+    description: "Tracks optional analysis demand while keeping outputs research-oriented and non-advisory.",
+  },
+  {
+    label: "Strategy marketplace GMV",
+    group: "Ecosystem",
+    description: "Future compliance-dependent marketplace volume, tracked separately from trading performance.",
+  },
 ];
 ---
 
@@ -41,8 +85,14 @@ const kpis = [
           <p class="eyebrow">KPI Dashboard</p>
           <h2>Commercial metrics to track</h2>
         </div>
-        <div class="model-list">
-          {kpis.map((kpi) => <span>{kpi}</span>)}
+        <div class="kpi-grid">
+          {kpis.map((kpi) => (
+            <article class="kpi-card">
+              <p class="kpi-group">{kpi.group}</p>
+              <h3>{kpi.label}</h3>
+              <p>{kpi.description}</p>
+            </article>
+          ))}
         </div>
         <p class="notice">GTM copy must remain infrastructure-focused and must not promise profitability or risk-free trading.</p>
       </div>
