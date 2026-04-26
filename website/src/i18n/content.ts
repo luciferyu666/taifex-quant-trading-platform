@@ -5,7 +5,8 @@ export const content = {
     alternatePath: "/zh/",
     meta: {
       title: "Taifex Quant Trading Platform",
-      description: "Enterprise-grade quantitative trading infrastructure for Taiwan Index Futures."
+      description:
+        "A paper-first Trading OS foundation for Taiwan Index Futures data governance, strategy research, risk control, OMS workflows, and broker-gateway isolation."
     },
     language: {
       label: "Language",
@@ -13,13 +14,28 @@ export const content = {
       chinese: "繁中"
     },
     hero: {
-      eyebrow: "Taiwan futures quant infrastructure",
+      eyebrow: "Trading OS for Taiwan Index Futures",
       title: "Taifex Quant Trading Platform",
-      subtitle: "Enterprise-grade quantitative trading infrastructure for Taiwan Index Futures.",
+      subtitle: "Turn TX / MTX / TMF quant work from scattered scripts into a governed Trading OS.",
       description:
-        "A Web platform for data governance, strategy research, backtesting, paper and shadow trading, risk control, OMS workflows, and broker gateway integration.",
-      primaryCta: "View Architecture",
-      secondaryCta: "Read Safety Principles",
+        "A Web command center for data governance, strategy research, reproducible backtests, paper and shadow workflows, risk controls, OMS state management, broker-gateway isolation, and future auditability.",
+      primaryCta: "Explore the Trading OS",
+      secondaryCta: "Review Safety Defaults",
+      valueLabel: "Core platform value propositions",
+      values: [
+        {
+          title: "Risk governed",
+          body: "Pre-trade, in-trade, and post-trade controls keep execution risk outside strategy code."
+        },
+        {
+          title: "Operationally visible",
+          body: "Command Center, audit logs, and observability turn quant workflows from black boxes into managed systems."
+        },
+        {
+          title: "Paper-first",
+          body: "Current defaults remain paper-only while the platform foundation, controls, and review process mature."
+        }
+      ],
       workflowLabel: "Platform workflow summary",
       workflow: ["Research", "Backtest", "Paper", "Shadow", "Small Live", "Full Live"],
       note: "Current defaults stop at paper trading until future approval, governance, and controls are added."
@@ -117,21 +133,71 @@ export const content = {
       ]
     },
     modules: {
-      eyebrow: "Core modules",
-      title: "Modular services for the quant workflow",
-      body: "Each module is scoped to keep data, strategy signals, risk controls, and execution boundaries clear.",
+      eyebrow: "Feature architecture",
+      title: "The operating system layer behind systematic Taiwan futures trading",
+      body:
+        "The platform is designed as an integrated workflow: govern the data, research the strategy, validate in paper or shadow mode, then keep every future order behind Risk Engine, OMS, and Broker Gateway boundaries.",
       items: [
-        ["Market Data Pipeline", "Ingest, validate, store, and serve Taiwan futures market data for research and operations."],
-        ["Continuous Futures / Rollover Engine", "Planned session-aware and rollover-aware datasets to reduce backtest/live drift."],
-        ["Strategy Research", "A future workspace for signal generation, experiment tracking, and reproducible research."],
-        ["Backtesting", "Planned historical simulation that respects futures sessions, contract multipliers, and risk limits."],
-        ["Paper and Shadow Trading", "Paper-first execution workflows for validating behavior before any future live deployment."],
-        ["Risk Engine", "Central policy enforcement for exposure, stale quotes, daily loss limits, and order eligibility."],
-        ["OMS", "Order lifecycle management designed to sit between strategy signals and broker gateway access."],
-        ["Broker Gateway", "A broker SDK isolation boundary for future integrations, never called directly by strategies."],
-        ["Web Command Center", "Operational UI for monitoring health, mode, safety defaults, modules, and future workflows."],
-        ["Audit and Observability", "Future logs, metrics, traces, and audit records for institutional review and incident response."],
-        ["AI-Assisted Analysis", "Future-facing analysis support for research review, diagnostics, and operator workflows."]
+        {
+          category: "Data foundation",
+          title: "Market Data Pipeline",
+          body: "Ingest, validate, version, and serve TX / MTX / TMF bars, ticks, contract master data, and quality reports.",
+          value: "Reduces data errors that distort research and backtests."
+        },
+        {
+          category: "Data foundation",
+          title: "Rollover Engine",
+          body: "Separate research-only adjusted continuous futures from real-contract prices used for paper or future execution simulation.",
+          value: "Addresses the classic backtest/live drift caused by contract rollover."
+        },
+        {
+          category: "Research",
+          title: "Strategy Lab",
+          body: "Bind strategy versions, data versions, research contexts, and backtest artifacts into reproducible review packets.",
+          value: "Makes strategy results reviewable instead of anecdotal."
+        },
+        {
+          category: "Validation",
+          title: "Paper and Shadow Trading",
+          body: "Validate behavior in paper-first and future shadow workflows before any broker-bound path is considered.",
+          value: "Creates a safer path from research to operating readiness."
+        },
+        {
+          category: "Control",
+          title: "Risk Engine",
+          body: "Centralize exposure limits, stale quote checks, daily loss controls, duplicate prevention, and future kill-switch policy.",
+          value: "Keeps high-risk decisions in a dedicated control layer."
+        },
+        {
+          category: "Control",
+          title: "OMS",
+          body: "Own deterministic order state, idempotency keys, event-style transitions, and future reconciliation inputs.",
+          value: "Turns order handling into an auditable process."
+        },
+        {
+          category: "Execution boundary",
+          title: "Broker Gateway",
+          body: "Isolate broker adapters behind a normalized gateway so strategies never call broker SDKs directly.",
+          value: "Reduces vendor coupling and protects the strategy layer."
+        },
+        {
+          category: "Operations",
+          title: "Web Command Center",
+          body: "Provide a command surface for mode visibility, safety flags, review packets, health, and future manual controls.",
+          value: "Gives operators one place to inspect system state before decisions."
+        },
+        {
+          category: "Enterprise",
+          title: "Audit and Observability",
+          body: "Plan for OpenTelemetry traces, immutable audit records, recovery views, and incident review workflows.",
+          value: "Supports institutional review, business continuity, and compliance conversations."
+        },
+        {
+          category: "Future analysis",
+          title: "AI-Assisted Diagnostics",
+          body: "Future-facing support for overfitting checks, experiment summaries, anomaly review, and strategy documentation.",
+          value: "Speeds research review without turning AI into a trading authority."
+        }
       ]
     },
     commercial: {
@@ -384,7 +450,8 @@ export const content = {
     alternatePath: "/",
     meta: {
       title: "台指期量化交易平台",
-      description: "面向台灣指數期貨的企業級量化交易基礎設施。"
+      description:
+        "面向台灣指數期貨的紙上優先 Trading OS 基礎，涵蓋資料治理、策略研究、風控、OMS 與券商閘道隔離。"
     },
     language: {
       label: "語言",
@@ -392,13 +459,28 @@ export const content = {
       chinese: "繁中"
     },
     hero: {
-      eyebrow: "台灣期貨量化交易基礎設施",
+      eyebrow: "台灣指數期貨 Trading OS",
       title: "台指期量化交易平台",
-      subtitle: "面向台灣指數期貨的企業級量化交易基礎設施。",
+      subtitle: "把 TX / MTX / TMF 量化流程，從零散腳本升級為可治理的交易作業系統。",
       description:
-        "一套 Web 平台，用於資料治理、策略研究、回測、紙上與影子交易、風險控管、OMS 工作流程，以及未來的券商閘道整合。",
-      primaryCta: "查看架構",
-      secondaryCta: "閱讀安全原則",
+        "一套 Web 指揮中心，用於資料治理、策略研究、可重現回測、紙上與影子交易流程、風險控管、OMS 狀態管理、券商閘道隔離與未來稽核能力。",
+      primaryCta: "探索 Trading OS",
+      secondaryCta: "檢視安全預設",
+      valueLabel: "核心平台價值主張",
+      values: [
+        {
+          title: "風控可靠",
+          body: "Pre / In / Post 多層風控，讓高風險判斷留在策略程式之外。"
+        },
+        {
+          title: "系統可控",
+          body: "Web 指揮中心、稽核紀錄與可觀測性，把量化流程從黑盒變成可管理系統。"
+        },
+        {
+          title: "紙上優先",
+          body: "目前預設維持 paper-only，先建立平台基礎、控制邊界與審核流程。"
+        }
+      ],
       workflowLabel: "平台工作流程摘要",
       workflow: ["研究", "回測", "紙上交易", "影子交易", "小規模實盤", "完整實盤"],
       note: "目前預設停留在紙上交易；未來需完成明確核准、治理與控制機制後，才可進一步擴充。"
@@ -496,21 +578,71 @@ export const content = {
       ]
     },
     modules: {
-      eyebrow: "核心模組",
-      title: "支援量化交易流程的模組化服務",
-      body: "每個模組都維持清楚邊界，讓資料、策略訊號、風險控管與執行流程彼此分離。",
+      eyebrow: "功能架構",
+      title: "支撐台灣期貨系統化交易的 Trading OS 層",
+      body:
+        "平台不是單一策略或下單機器人，而是一條受治理的工作流：先治理資料、研究策略、用紙上或影子流程驗證，再把任何未來訂單鎖在 Risk Engine、OMS 與 Broker Gateway 邊界之後。",
       items: [
-        ["市場資料管線", "擷取、驗證、儲存並提供台灣期貨市場資料，支援研究與營運。"],
-        ["連續期貨 / 換月引擎", "規劃建立 session-aware 與 rollover-aware 的資料集，降低回測與實盤落差。"],
-        ["策略研究", "未來提供訊號產生、實驗追蹤與可重現研究工作區。"],
-        ["回測", "規劃尊重交易時段、契約乘數與風險限制的歷史模擬能力。"],
-        ["紙上與影子交易", "以 paper-first 工作流驗證行為，再考慮任何未來實盤部署。"],
-        ["風險引擎", "集中執行曝險、報價陳舊、單日損失限制與訂單資格檢查。"],
-        ["OMS", "管理策略訊號到券商閘道之間的訂單生命週期。"],
-        ["券商閘道", "隔離未來券商 SDK 整合；策略不得直接呼叫。"],
-        ["Web 指揮中心", "監控健康狀態、模式、安全預設、模組與未來工作流程。"],
-        ["稽核與可觀測性", "未來提供日誌、指標、追蹤與稽核紀錄，以支援機構級審查。"],
-        ["AI 輔助分析", "未來可支援研究審查、診斷與操作流程，但不得繞過風控與 OMS。"]
+        {
+          category: "資料底座",
+          title: "市場資料管線",
+          body: "擷取、驗證、版本化並提供 TX / MTX / TMF bars、ticks、contract master 與品質報告。",
+          value: "避免資料錯誤造成回測失真。"
+        },
+        {
+          category: "資料底座",
+          title: "換月引擎",
+          body: "將研究用調整後連續期貨，與紙上或未來執行模擬使用的真實合約價格分離。",
+          value: "處理台指期換月造成的回測與營運落差。"
+        },
+        {
+          category: "研究",
+          title: "Strategy Lab",
+          body: "把策略版本、資料版本、研究上下文與回測 artifacts 綁定成可重現 review packet。",
+          value: "讓策略結果可驗證，而不是只靠口頭敘述。"
+        },
+        {
+          category: "驗證",
+          title: "紙上與影子交易",
+          body: "以 paper-first 與未來 shadow workflow 驗證系統行為，再評估任何券商送單路徑。",
+          value: "降低策略直接上線造成的營運風險。"
+        },
+        {
+          category: "控制",
+          title: "風險引擎",
+          body: "集中管理曝險限制、報價陳舊檢查、單日損失、重複下單防護與未來 kill switch policy。",
+          value: "把高風險判斷放在獨立控制層。"
+        },
+        {
+          category: "控制",
+          title: "OMS",
+          body: "管理 deterministic order state、idempotency key、event-style transitions 與未來對帳輸入。",
+          value: "讓訂單生命週期可追溯、可重建。"
+        },
+        {
+          category: "執行邊界",
+          title: "Broker Gateway",
+          body: "以標準化閘道隔離未來券商 adapter，策略不得直接呼叫券商 SDK。",
+          value: "降低券商依賴並保護策略層。"
+        },
+        {
+          category: "營運",
+          title: "Web 指揮中心",
+          body: "集中呈現模式、安全旗標、research review packet、健康狀態與未來人工控制入口。",
+          value: "讓操作人員在決策前掌握系統狀態。"
+        },
+        {
+          category: "企業",
+          title: "稽核與可觀測性",
+          body: "規劃 OpenTelemetry traces、不可竄改稽核、復原視圖與事件檢討流程。",
+          value: "支援機構審查、業務連續性與合規溝通。"
+        },
+        {
+          category: "未來分析",
+          title: "AI 輔助診斷",
+          body: "未來支援過度擬合檢查、實驗摘要、異常檢視與策略文件化。",
+          value: "提升研究審查效率，但不讓 AI 成為交易決策者。"
+        }
       ]
     },
     commercial: {
