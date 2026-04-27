@@ -1,0 +1,426 @@
+export type Language = "en" | "zh";
+
+export const dashboardCopy = {
+  en: {
+    htmlLang: "en",
+    languageToggleLabel: "Language",
+    languageOptions: {
+      en: "English",
+      zh: "繁中",
+    },
+    hero: {
+      eyebrow: "Web Command Center",
+      title: "Taifex Quant Trading Platform",
+      lead:
+        "Paper-first control surface for the Phase 0-6 cloud-native roadmap. Strategy signals, risk checks, OMS state, and broker gateway boundaries stay decoupled.",
+      safetyAria: "Runtime safety status",
+      tradingModePrefix: "TRADING_MODE",
+      liveDisabled: "Live disabled",
+      brokerPrefix: "Broker",
+    },
+    summary: {
+      ariaLabel: "System summary",
+      backendHealth: {
+        kicker: "Backend Health",
+        connected: "Connected",
+        fallback: "Fallback Mode",
+      },
+      safetyMode: {
+        kicker: "Safety Mode",
+        paperOnly: "Paper Only",
+        reviewRequired: "Review Required",
+      },
+      riskDefaults: {
+        kicker: "Risk Defaults",
+        title: "TX-equivalent limit",
+        text: "Max daily loss and stale quote limits are visible before any future OMS workflow.",
+      },
+    },
+    release: {
+      eyebrow: "Release Baseline",
+      title: "v0.1.0 paper research preview",
+      fallbackPrefix:
+        "Backend release baseline unavailable. Rendering checked-in safe fallback:",
+      currentTag: "Current tag",
+      description:
+        "This baseline is an external presentation, internal demo, and paper research preview. It is not a production trading release.",
+      releaseLevel: "Release Level",
+      safetyDefaults: "Safety Defaults",
+      validation: "Validation",
+      knownGaps: "Known Non-Production Gaps",
+      levelLabels: {
+        marketing_website: "Marketing Website",
+        web_command_center: "Web Command Center",
+        paper_research_preview: "Paper Research Preview",
+        production_trading_platform: "Production Trading Platform",
+      },
+      statusLabels: {
+        "external presentation candidate": "external presentation candidate",
+        "internal demo candidate": "internal demo candidate",
+        "internal technical preview": "internal technical preview",
+        "NOT READY": "NOT READY",
+      },
+      validationLabels: {
+        release_readiness_check: "release-readiness-check",
+        make_check: "make check",
+        github_actions_release_gate: "GitHub Actions release gate",
+      },
+      validationStatusLabels: {
+        passed: "passed",
+      },
+      gapLabels: {
+        "No production trading path exists.": "No production trading path exists.",
+        "No real broker adapter exists.": "No real broker adapter exists.",
+        "No live trading approval workflow exists.":
+          "No live trading approval workflow exists.",
+        "Data platform is based on local fixtures, dry-run validation, and schema scaffolding.":
+          "Data platform is based on local fixtures, dry-run validation, and schema scaffolding.",
+        "Backtest outputs are simulated research artifacts, not performance reports.":
+          "Backtest outputs are simulated research artifacts, not performance reports.",
+        "Web Command Center is read-only for research review packet inspection.":
+          "Web Command Center is read-only for research review packet inspection.",
+      },
+    },
+    packetLoader: {
+      localJsonKicker: "Local JSON",
+      title: "Research packet source",
+      currentSource: "Current source",
+      backendSample: "Backend sample",
+      fallbackSample: "Fallback sample",
+      selectFile: "Select local .json",
+      initialMessage: "Select an explicit local .json packet to inspect it in this browser.",
+      rejectExtension: "Rejected: selected file must be a .json packet.",
+      rejectSize: "Rejected: packet metadata JSON is larger than 500 KB.",
+      rejectPrefix: "Rejected",
+      loadedPrefix: "Local JSON",
+      loadedMessage:
+        "Loaded locally. The file was not uploaded, persisted, or sent to backend APIs.",
+      invalidJson: "Rejected: invalid JSON packet.",
+    },
+    packet: {
+      eyebrow: "Research Review Packet",
+      title: "Read-only reviewer handoff",
+      fallbackPrefix:
+        "Backend sample packet unavailable. Rendering paper-safe fallback:",
+      identityKicker: "Packet Identity",
+      packetId: "Packet ID",
+      reviewQueue: "Review queue",
+      decisionIndex: "Decision index",
+      bundles: "Bundles",
+      sectionsKicker: "Sections",
+      sectionsTitle: "Included metadata",
+      checksumsKicker: "Checksums",
+      checksumsTitle: "Audit references",
+      checksumQueue: "Queue",
+      checksumDecisionIndex: "Decision index",
+      checksumPacket: "Packet",
+      checksumReproducibility: "Reproducibility",
+      warningsKicker: "Warnings",
+      warningsTitle: "Review notes",
+      warningLabels: {
+        "Fallback packet is read-only UI metadata. It does not approve paper execution, approve live trading, rank strategies, call brokers, or claim performance.":
+          "Fallback packet is read-only UI metadata. It does not approve paper execution, approve live trading, rank strategies, call brokers, or claim performance.",
+      },
+    },
+    decisionSummary: {
+      kicker: "Review Status",
+      title: "Decision summary",
+      total: "Total decisions",
+      rejected: "Rejected",
+      needsDataReview: "Needs data review",
+      paperResearchOnly: "Paper research only",
+    },
+    safetyFlags: {
+      kicker: "Guardrails",
+      title: "Read-only safety flags",
+      labels: {
+        research_only: "Research only",
+        execution_eligible: "Execution eligible",
+        order_created: "Order created",
+        broker_api_called: "Broker API called",
+        risk_engine_called: "Risk Engine called",
+        oms_called: "OMS called",
+        performance_claim: "Performance claim",
+        simulated_metrics_only: "Simulated metrics only",
+        external_data_downloaded: "External data downloaded",
+        ranking_generated: "Ranking generated",
+        best_strategy_selected: "Best strategy selected",
+        approval_for_live: "Live approval",
+        approval_for_paper_execution: "Paper execution approval",
+        persisted: "Persisted",
+      },
+    },
+    roadmap: {
+      eyebrow: "Phase Roadmap",
+      title: "Phase 0-6 implementation status",
+      phasePrefix: "Phase",
+      statusPrefix: "Status",
+      names: {
+        0: "Compliance Boundary",
+        1: "Infrastructure Foundation",
+        2: "Data Platform",
+        3: "Strategy SDK and Backtest",
+        4: "Risk / OMS / Broker Gateway",
+        5: "Command Center and Shadow Trading",
+        6: "Reliability and Go-Live Readiness",
+      },
+      statuses: {
+        planned: "planned",
+      },
+    },
+    contracts: {
+      ariaLabel: "Contracts and paper simulation",
+      eyebrow: "Contracts",
+      title: "TX / MTX / TMF point values",
+      headers: {
+        symbol: "Symbol",
+        pointValue: "Point Value",
+        txEquivalent: "TX Equivalent",
+        description: "Description",
+      },
+      descriptions: {
+        TX: "Taiwan Index Futures",
+        MTX: "Mini Taiwan Index Futures",
+        TMF: "Micro Taiwan Index Futures",
+      },
+    },
+    paperPanel: {
+      eyebrow: "Paper Only",
+      title: "Order simulation placeholder",
+      text:
+        "Paper order APIs route through Risk Engine, OMS, and Paper Broker Gateway. This UI does not place orders or expose live trading controls.",
+    },
+    modules: {
+      eyebrow: "Architecture Modules",
+      title: "Signal-to-execution boundaries",
+      cards: [
+        [
+          "Data Platform",
+          "Bronze/Silver/Gold layers, contract master, market bars, rollover events.",
+        ],
+        [
+          "Strategy SDK",
+          "Signal-only strategy interface. No broker SDK access and no order submission.",
+        ],
+        [
+          "Risk Engine",
+          "Paper risk checks for live-disabled state and TX-equivalent exposure limits.",
+        ],
+        ["OMS", "Event-style order state machine that owns lifecycle transitions."],
+        [
+          "Broker Gateway",
+          "Paper broker acknowledgement boundary. No real orders are placed.",
+        ],
+        [
+          "Web Command Center",
+          "Operator view for roadmap, safety mode, contracts, and paper-only status.",
+        ],
+      ],
+    },
+  },
+  zh: {
+    htmlLang: "zh-Hant",
+    languageToggleLabel: "語言",
+    languageOptions: {
+      en: "English",
+      zh: "繁中",
+    },
+    hero: {
+      eyebrow: "Web 指揮中心",
+      title: "台指期量化交易平台",
+      lead:
+        "Phase 0-6 雲原生路線圖的紙上優先控制介面。策略訊號、風險檢查、OMS 狀態與券商閘道邊界維持解耦。",
+      safetyAria: "執行安全狀態",
+      tradingModePrefix: "TRADING_MODE",
+      liveDisabled: "實盤關閉",
+      brokerPrefix: "券商模式",
+    },
+    summary: {
+      ariaLabel: "系統摘要",
+      backendHealth: {
+        kicker: "後端健康狀態",
+        connected: "已連線",
+        fallback: "安全備援模式",
+      },
+      safetyMode: {
+        kicker: "安全模式",
+        paperOnly: "僅限紙上交易",
+        reviewRequired: "需要審查",
+      },
+      riskDefaults: {
+        kicker: "風控預設",
+        title: "TX 等值曝險上限",
+        text: "在任何未來 OMS 工作流之前，先清楚呈現每日虧損上限與 stale quote 限制。",
+      },
+    },
+    release: {
+      eyebrow: "版本基準",
+      title: "v0.1.0 紙上研究預覽",
+      fallbackPrefix: "後端版本基準無法取得，正在顯示內建安全備援資料：",
+      currentTag: "目前標籤",
+      description:
+        "此基準可作為對外展示、內部 demo 與紙上研究預覽；它不是正式實盤交易版本。",
+      releaseLevel: "版本層級",
+      safetyDefaults: "安全預設",
+      validation: "驗證狀態",
+      knownGaps: "非正式上線缺口",
+      levelLabels: {
+        marketing_website: "官方網站",
+        web_command_center: "Web 指揮中心",
+        paper_research_preview: "紙上研究預覽",
+        production_trading_platform: "正式交易平台",
+      },
+      statusLabels: {
+        "external presentation candidate": "對外展示候選",
+        "internal demo candidate": "內部 demo 候選",
+        "internal technical preview": "內部技術預覽",
+        "NOT READY": "NOT READY（尚未達正式交易上線標準）",
+      },
+      validationLabels: {
+        release_readiness_check: "release-readiness-check",
+        make_check: "make check",
+        github_actions_release_gate: "GitHub Actions release gate",
+      },
+      validationStatusLabels: {
+        passed: "通過",
+      },
+      gapLabels: {
+        "No production trading path exists.": "目前不存在正式實盤交易路徑。",
+        "No real broker adapter exists.": "目前不存在真實券商 adapter。",
+        "No live trading approval workflow exists.": "目前不存在實盤交易核准流程。",
+        "Data platform is based on local fixtures, dry-run validation, and schema scaffolding.":
+          "資料平台目前以本地 fixtures、dry-run 驗證與 schema 骨架為主。",
+        "Backtest outputs are simulated research artifacts, not performance reports.":
+          "回測輸出是模擬研究 artifact，不是績效報告。",
+        "Web Command Center is read-only for research review packet inspection.":
+          "Web 指揮中心目前只讀，用於檢視研究審核 packet。",
+      },
+    },
+    packetLoader: {
+      localJsonKicker: "本地 JSON",
+      title: "研究 packet 來源",
+      currentSource: "目前來源",
+      backendSample: "後端範例",
+      fallbackSample: "備援範例",
+      selectFile: "選擇本地 .json",
+      initialMessage: "請明確選取本地 .json packet，僅在此瀏覽器內檢視。",
+      rejectExtension: "拒絕：選取檔案必須是 .json packet。",
+      rejectSize: "拒絕：packet metadata JSON 超過 500 KB。",
+      rejectPrefix: "拒絕",
+      loadedPrefix: "本地 JSON",
+      loadedMessage: "已於本機讀取。檔案未上傳、未持久化，也未送往後端 API。",
+      invalidJson: "拒絕：JSON packet 格式無效。",
+    },
+    packet: {
+      eyebrow: "研究審核 Packet",
+      title: "只讀 reviewer handoff",
+      fallbackPrefix: "後端範例 packet 無法取得，正在顯示 paper-safe 備援資料：",
+      identityKicker: "Packet 識別",
+      packetId: "Packet ID",
+      reviewQueue: "審核 Queue",
+      decisionIndex: "決策 Index",
+      bundles: "Bundle 數",
+      sectionsKicker: "區段",
+      sectionsTitle: "已包含 metadata",
+      checksumsKicker: "Checksums",
+      checksumsTitle: "稽核參考",
+      checksumQueue: "Queue",
+      checksumDecisionIndex: "Decision index",
+      checksumPacket: "Packet",
+      checksumReproducibility: "可重現性",
+      warningsKicker: "警示",
+      warningsTitle: "審核備註",
+      warningLabels: {
+        "Fallback packet is read-only UI metadata. It does not approve paper execution, approve live trading, rank strategies, call brokers, or claim performance.":
+          "備援 packet 僅為只讀 UI metadata；不核准紙上執行、不核准實盤、不排名策略、不呼叫券商，也不形成績效宣稱。",
+      },
+    },
+    decisionSummary: {
+      kicker: "審核狀態",
+      title: "決策摘要",
+      total: "決策總數",
+      rejected: "已拒絕",
+      needsDataReview: "需要資料審查",
+      paperResearchOnly: "僅允許紙上研究",
+    },
+    safetyFlags: {
+      kicker: "安全邊界",
+      title: "只讀安全旗標",
+      labels: {
+        research_only: "僅限研究",
+        execution_eligible: "可進入執行",
+        order_created: "已建立訂單",
+        broker_api_called: "已呼叫券商 API",
+        risk_engine_called: "已呼叫 Risk Engine",
+        oms_called: "已呼叫 OMS",
+        performance_claim: "績效宣稱",
+        simulated_metrics_only: "僅模擬指標",
+        external_data_downloaded: "已下載外部資料",
+        ranking_generated: "已產生排名",
+        best_strategy_selected: "已選擇最佳策略",
+        approval_for_live: "實盤核准",
+        approval_for_paper_execution: "紙上執行核准",
+        persisted: "已持久化",
+      },
+    },
+    roadmap: {
+      eyebrow: "Phase 路線圖",
+      title: "Phase 0-6 實作狀態",
+      phasePrefix: "Phase",
+      statusPrefix: "狀態",
+      names: {
+        0: "合規邊界",
+        1: "基礎設施底座",
+        2: "資料平台",
+        3: "Strategy SDK 與回測",
+        4: "風控 / OMS / 券商閘道",
+        5: "指揮中心與影子交易",
+        6: "可靠性與上線準備",
+      },
+      statuses: {
+        planned: "規劃中",
+      },
+    },
+    contracts: {
+      ariaLabel: "契約與紙上模擬",
+      eyebrow: "契約規格",
+      title: "TX / MTX / TMF 點值",
+      headers: {
+        symbol: "代號",
+        pointValue: "每點價值",
+        txEquivalent: "TX 等值",
+        description: "說明",
+      },
+      descriptions: {
+        TX: "台灣指數期貨",
+        MTX: "小型台灣指數期貨",
+        TMF: "微型台灣指數期貨",
+      },
+    },
+    paperPanel: {
+      eyebrow: "僅限紙上",
+      title: "訂單模擬佔位",
+      text:
+        "紙上訂單 API 必須經過 Risk Engine、OMS 與 Paper Broker Gateway。此 UI 不會下單，也不暴露任何實盤交易控制。",
+    },
+    modules: {
+      eyebrow: "架構模組",
+      title: "訊號到執行的邊界",
+      cards: [
+        ["資料平台", "Bronze/Silver/Gold 分層、contract master、market bars 與 rollover events。"],
+        ["Strategy SDK", "策略介面只輸出 signal，不可存取券商 SDK，也不可送出訂單。"],
+        ["Risk Engine", "紙上風控檢查涵蓋 live-disabled 狀態與 TX 等值曝險限制。"],
+        ["OMS", "事件式訂單狀態機，負責完整 lifecycle transitions。"],
+        ["券商閘道", "目前僅提供 paper acknowledgement 邊界，不會送出真實訂單。"],
+        ["Web 指揮中心", "檢視路線圖、安全模式、契約規格與 paper-only 狀態的操作介面。"],
+      ],
+    },
+  },
+} as const;
+
+export type DashboardCopy = (typeof dashboardCopy)[Language];
+
+export function resolveLanguage(value: string | string[] | undefined): Language {
+  const normalized = Array.isArray(value) ? value[0] : value;
+  return normalized === "zh" ? "zh" : "en";
+}

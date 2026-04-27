@@ -1,3 +1,5 @@
+import type { DashboardCopy } from "../i18n";
+
 export type ResearchReviewSafetyFlags = {
   research_only: boolean;
   execution_eligible: boolean;
@@ -32,35 +34,19 @@ const expectedSafeValues: ResearchReviewSafetyFlags = {
   persisted: false,
 };
 
-const labels: Record<keyof ResearchReviewSafetyFlags, string> = {
-  research_only: "Research only",
-  execution_eligible: "Execution eligible",
-  order_created: "Order created",
-  broker_api_called: "Broker API called",
-  risk_engine_called: "Risk Engine called",
-  oms_called: "OMS called",
-  performance_claim: "Performance claim",
-  simulated_metrics_only: "Simulated metrics only",
-  external_data_downloaded: "External data downloaded",
-  ranking_generated: "Ranking generated",
-  best_strategy_selected: "Best strategy selected",
-  approval_for_live: "Live approval",
-  approval_for_paper_execution: "Paper execution approval",
-  persisted: "Persisted",
-};
-
 type SafetyFlagsPanelProps = {
+  copy: DashboardCopy["safetyFlags"];
   flags: ResearchReviewSafetyFlags;
 };
 
-export function SafetyFlagsPanel({ flags }: SafetyFlagsPanelProps) {
-  const entries = Object.entries(labels) as [keyof ResearchReviewSafetyFlags, string][];
+export function SafetyFlagsPanel({ copy, flags }: SafetyFlagsPanelProps) {
+  const entries = Object.entries(copy.labels) as [keyof ResearchReviewSafetyFlags, string][];
 
   return (
     <article className="packet-subpanel" aria-labelledby="safety-flags-title">
       <div>
-        <p className="card-kicker">Guardrails</p>
-        <h3 id="safety-flags-title">Read-only safety flags</h3>
+        <p className="card-kicker">{copy.kicker}</p>
+        <h3 id="safety-flags-title">{copy.title}</h3>
       </div>
       <div className="flag-grid">
         {entries.map(([key, label]) => {

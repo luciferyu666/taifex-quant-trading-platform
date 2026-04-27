@@ -7,6 +7,7 @@ import {
   type ResearchReviewPacket,
 } from "./ResearchReviewPacketPanel";
 import { validateResearchReviewPacket } from "./researchReviewPacketValidation";
+import type { DashboardCopy } from "../i18n";
 
 type PacketSource = {
   available: boolean;
@@ -16,6 +17,7 @@ type PacketSource = {
 };
 
 type ResearchReviewPacketJsonLoaderProps = {
+  copy: DashboardCopy;
   initialAvailable: boolean;
   initialError?: string;
   initialPacket: ResearchReviewPacket;
@@ -24,6 +26,7 @@ type ResearchReviewPacketJsonLoaderProps = {
 const maxLocalPacketBytes = 500_000;
 
 export function ResearchReviewPacketJsonLoader({
+  copy,
   initialAvailable,
   initialError,
   initialPacket,
@@ -31,11 +34,11 @@ export function ResearchReviewPacketJsonLoader({
   const [source, setSource] = useState<PacketSource>({
     available: initialAvailable,
     error: initialError,
-    label: initialAvailable ? "Backend sample" : "Fallback sample",
+    label: initialAvailable ? copy.packetLoader.backendSample : copy.packetLoader.fallbackSample,
     packet: initialPacket,
   });
   const [loaderMessage, setLoaderMessage] = useState<string>(
-    "Select an explicit local .json packet to inspect it in this browser.",
+    copy.packetLoader.initialMessage,
   );
   const [loaderState, setLoaderState] = useState<"idle" | "ok" | "error">("idle");
 
@@ -48,13 +51,13 @@ export function ResearchReviewPacketJsonLoader({
 
     if (!file.name.toLowerCase().endsWith(".json")) {
       setLoaderState("error");
-      setLoaderMessage("Rejected: selected file must be a .json packet.");
+      setLoaderMessage(copy.packetLoader.rejectExtension);
       return;
     }
 
     if (file.size > maxLocalPacketBytes) {
       setLoaderState("error");
-      setLoaderMessage("Rejected: packet metadata JSON is larger than 500 KB.");
+      setLoaderMessage(copy.packetLoader.rejectSize);
       return;
     }
 
@@ -63,25 +66,23 @@ export function ResearchReviewPacketJsonLoader({
       const validation = validateResearchReviewPacket(parsed);
       if (!validation.ok) {
         setLoaderState("error");
-        setLoaderMessage(`Rejected: ${validation.reason}`);
+        setLoaderMessage(`${copy.packetLoader.rejectPrefix}: ${validation.reason}`);
         return;
       }
 
       setSource({
         available: true,
-        label: `Local JSON: ${file.name}`,
+        label: `${copy.packetLoader.loadedPrefix}: ${file.name}`,
         packet: validation.packet,
       });
       setLoaderState("ok");
-      setLoaderMessage(
-        "Loaded locally. The file was not uploaded, persisted, or sent to backend APIs.",
-      );
+      setLoaderMessage(copy.packetLoader.loadedMessage);
     } catch (error) {
       setLoaderState("error");
       setLoaderMessage(
         error instanceof Error
-          ? `Rejected: ${error.message}`
-          : "Rejected: invalid JSON packet.",
+          ? `${copy.packetLoader.rejectPrefix}: ${error.message}`
+          : copy.packetLoader.invalidJson,
       );
     }
   }
@@ -90,14 +91,14 @@ export function ResearchReviewPacketJsonLoader({
     <section aria-labelledby="packet-loader-title">
       <div className="packet-loader panel">
         <div>
-          <p className="card-kicker">Local JSON</p>
-          <h2 id="packet-loader-title">Research packet source</h2>
+          <p className="card-kicker">{copy.packetLoader.localJsonKicker}</p>
+          <h2 id="packet-loader-title">{copy.packetLoader.title}</h2>
           <p>
-            Current source: <strong>{source.label}</strong>
+            {copy.packetLoader.currentSource}: <strong>{source.label}</strong>
           </p>
         </div>
         <label className="file-picker">
-          <span>Select local .json</span>
+          <span>{copy.packetLoader.selectFile}</span>
           <input
             accept=".json,application/json"
             aria-describedby="packet-loader-status"
@@ -121,6 +122,7 @@ export function ResearchReviewPacketJsonLoader({
 
       <ResearchReviewPacketPanel
         available={source.available}
+        copy={copy}
         error={source.error}
         packet={source.packet}
       />

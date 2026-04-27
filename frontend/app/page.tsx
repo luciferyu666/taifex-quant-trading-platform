@@ -1,6 +1,7 @@
 import { ResearchReviewPacketJsonLoader } from "./components/ResearchReviewPacketJsonLoader";
 import type { ResearchReviewPacket } from "./components/ResearchReviewPacketPanel";
 import { ReleaseBaselinePanel, type ReleaseBaseline } from "./components/ReleaseBaselinePanel";
+import { dashboardCopy, resolveLanguage } from "./i18n";
 
 export const dynamic = "force-dynamic";
 
@@ -175,15 +176,6 @@ const fallbackResearchReviewPacket: ResearchReviewPacket = {
   persisted: false,
 };
 
-const architectureModules = [
-  ["Data Platform", "Bronze/Silver/Gold layers, contract master, market bars, rollover events."],
-  ["Strategy SDK", "Signal-only strategy interface. No broker SDK access and no order submission."],
-  ["Risk Engine", "Paper risk checks for live-disabled state and TX-equivalent exposure limits."],
-  ["OMS", "Event-style order state machine that owns lifecycle transitions."],
-  ["Broker Gateway", "Paper broker acknowledgement boundary. No real orders are placed."],
-  ["Web Command Center", "Operator view for roadmap, safety mode, contracts, and paper-only status."],
-] as const;
-
 async function fetchJson<T>(path: string, fallback: T): Promise<LoadState<T>> {
   try {
     const response = await fetch(`${backendUrl}${path}`, {
@@ -203,7 +195,17 @@ async function fetchJson<T>(path: string, fallback: T): Promise<LoadState<T>> {
   }
 }
 
-export default async function Home() {
+type HomeProps = {
+  searchParams?: Promise<{
+    lang?: string | string[];
+  }>;
+};
+
+export default async function Home({ searchParams }: HomeProps) {
+  const params = searchParams ? await searchParams : {};
+  const language = resolveLanguage(params.lang);
+  const copy = dashboardCopy[language];
+
   const [health, roadmap, contractsResponse, paperStatus, releaseBaseline, reviewPacket] =
     await Promise.all([
       fetchJson<HealthResponse>("/health", fallbackHealth),
@@ -220,34 +222,53 @@ export default async function Home() {
   const contracts = contractsResponse.data.contracts;
 
   return (
-    <main className="shell">
+    <main className="shell" lang={copy.htmlLang}>
       <section className="hero" aria-labelledby="page-title">
         <div>
-          <p className="eyebrow">Web Command Center</p>
-          <h1 id="page-title">Taifex Quant Trading Platform</h1>
-          <p className="lead">
-            Paper-first control surface for the Phase 0-6 cloud-native roadmap. Strategy signals,
-            risk checks, OMS state, and broker gateway boundaries stay decoupled.
-          </p>
+          <div className="hero-meta">
+            <p className="eyebrow">{copy.hero.eyebrow}</p>
+            <nav className="language-toggle" aria-label={copy.languageToggleLabel}>
+              <a className={language === "en" ? "active" : undefined} href="/?lang=en">
+                {copy.languageOptions.en}
+              </a>
+              <a className={language === "zh" ? "active" : undefined} href="/?lang=zh">
+                {copy.languageOptions.zh}
+              </a>
+            </nav>
+          </div>
+          <h1 id="page-title">{copy.hero.title}</h1>
+          <p className="lead">{copy.hero.lead}</p>
         </div>
-        <div className="status-strip" aria-label="Runtime safety status">
-          <span className="status-pill safe">TRADING_MODE={paperStatus.data.trading_mode}</span>
-          <span className="status-pill">Live disabled</span>
-          <span className="status-pill">Broker: {paperStatus.data.broker_provider}</span>
+        <div className="status-strip" aria-label={copy.hero.safetyAria}>
+          <span className="status-pill safe">
+            {copy.hero.tradingModePrefix}={paperStatus.data.trading_mode}
+          </span>
+          <span className="status-pill">{copy.hero.liveDisabled}</span>
+          <span className="status-pill">
+            {copy.hero.brokerPrefix}: {paperStatus.data.broker_provider}
+          </span>
         </div>
       </section>
 
-      <section className="summary-grid" aria-label="System summary">
+      <section className="summary-grid" aria-label={copy.summary.ariaLabel}>
         <article className="card">
-          <p className="card-kicker">Backend Health</p>
-          <h2>{health.available ? "Connected" : "Fallback Mode"}</h2>
+          <p className="card-kicker">{copy.summary.backendHealth.kicker}</p>
+          <h2>
+            {health.available
+              ? copy.summary.backendHealth.connected
+              : copy.summary.backendHealth.fallback}
+          </h2>
           <p>{health.available ? health.data.service : health.error}</p>
           <span className={health.available ? "metric ok" : "metric warn"}>{health.data.status}</span>
         </article>
 
         <article className="card">
-          <p className="card-kicker">Safety Mode</p>
-          <h2>{paperStatus.data.live_trading_enabled ? "Review Required" : "Paper Only"}</h2>
+          <p className="card-kicker">{copy.summary.safetyMode.kicker}</p>
+          <h2>
+            {paperStatus.data.live_trading_enabled
+              ? copy.summary.safetyMode.reviewRequired
+              : copy.summary.safetyMode.paperOnly}
+          </h2>
           <p>{paperStatus.data.message}</p>
           <span className={paperStatus.data.live_trading_enabled ? "metric danger" : "metric ok"}>
             ENABLE_LIVE_TRADING={String(paperStatus.data.live_trading_enabled)}
@@ -255,9 +276,9 @@ export default async function Home() {
         </article>
 
         <article className="card">
-          <p className="card-kicker">Risk Defaults</p>
-          <h2>TX-equivalent limit</h2>
-          <p>Max daily loss and stale quote limits are visible before any future OMS workflow.</p>
+          <p className="card-kicker">{copy.summary.riskDefaults.kicker}</p>
+          <h2>{copy.summary.riskDefaults.title}</h2>
+          <p>{copy.summary.riskDefaults.text}</p>
           <span className="metric ok">
             MAX_TX_EQUIVALENT_EXPOSURE={paperStatus.data.max_tx_equivalent_exposure}
           </span>
@@ -267,10 +288,13 @@ export default async function Home() {
       <ReleaseBaselinePanel
         available={releaseBaseline.available}
         baseline={releaseBaseline.data}
+        copy={copy.release}
         error={releaseBaseline.available ? undefined : releaseBaseline.error}
       />
 
       <ResearchReviewPacketJsonLoader
+        copy={copy}
+        key={language}
         initialAvailable={reviewPacket.available}
         initialError={reviewPacket.available ? undefined : reviewPacket.error}
         initialPacket={reviewPacket.data}
@@ -278,35 +302,42 @@ export default async function Home() {
 
       <section className="module-section" aria-labelledby="roadmap-title">
         <div className="section-heading">
-          <p className="eyebrow">Phase Roadmap</p>
-          <h2 id="roadmap-title">Phase 0-6 implementation status</h2>
+          <p className="eyebrow">{copy.roadmap.eyebrow}</p>
+          <h2 id="roadmap-title">{copy.roadmap.title}</h2>
         </div>
         <div className="phase-grid">
           {roadmap.data.map((phase) => (
             <article className="module-card" key={phase.phase}>
-              <span className="phase-number">Phase {phase.phase}</span>
-              <h3>{phase.name}</h3>
-              <p>Status: {phase.status}</p>
+              <span className="phase-number">
+                {copy.roadmap.phasePrefix} {phase.phase}
+              </span>
+              <h3>{copy.roadmap.names[phase.phase as keyof typeof copy.roadmap.names] ?? phase.name}</h3>
+              <p>
+                {copy.roadmap.statusPrefix}:{" "}
+                {copy.roadmap.statuses[
+                  phase.status as keyof typeof copy.roadmap.statuses
+                ] ?? phase.status}
+              </p>
               <span className="metric ok">{phase.safety_mode}</span>
             </article>
           ))}
         </div>
       </section>
 
-      <section className="dashboard-grid" aria-label="Contracts and paper simulation">
+      <section className="dashboard-grid" aria-label={copy.contracts.ariaLabel}>
         <article className="panel">
           <div className="section-heading compact">
-            <p className="eyebrow">Contracts</p>
-            <h2>TX / MTX / TMF point values</h2>
+            <p className="eyebrow">{copy.contracts.eyebrow}</p>
+            <h2>{copy.contracts.title}</h2>
           </div>
           <div className="table-wrap">
             <table>
               <thead>
                 <tr>
-                  <th>Symbol</th>
-                  <th>Point Value</th>
-                  <th>TX Equivalent</th>
-                  <th>Description</th>
+                  <th>{copy.contracts.headers.symbol}</th>
+                  <th>{copy.contracts.headers.pointValue}</th>
+                  <th>{copy.contracts.headers.txEquivalent}</th>
+                  <th>{copy.contracts.headers.description}</th>
                 </tr>
               </thead>
               <tbody>
@@ -315,7 +346,9 @@ export default async function Home() {
                     <td>{contract.symbol}</td>
                     <td>{contract.point_value_twd} TWD</td>
                     <td>{contract.tx_equivalent_ratio}</td>
-                    <td>{contract.description}</td>
+                    <td>
+                      {copy.contracts.descriptions[contract.symbol] ?? contract.description}
+                    </td>
                   </tr>
                 ))}
               </tbody>
@@ -325,13 +358,10 @@ export default async function Home() {
 
         <article className="panel paper-panel">
           <div className="section-heading compact">
-            <p className="eyebrow">Paper Only</p>
-            <h2>Order simulation placeholder</h2>
+            <p className="eyebrow">{copy.paperPanel.eyebrow}</p>
+            <h2>{copy.paperPanel.title}</h2>
           </div>
-          <p>
-            Paper order APIs route through Risk Engine, OMS, and Paper Broker Gateway. This UI does
-            not place orders or expose live trading controls.
-          </p>
+          <p>{copy.paperPanel.text}</p>
           <pre>{`POST /api/paper/orders
 {
   "symbol": "TMF",
@@ -345,11 +375,11 @@ export default async function Home() {
 
       <section className="module-section" aria-labelledby="module-roadmap">
         <div className="section-heading">
-          <p className="eyebrow">Architecture Modules</p>
-          <h2 id="module-roadmap">Signal-to-execution boundaries</h2>
+          <p className="eyebrow">{copy.modules.eyebrow}</p>
+          <h2 id="module-roadmap">{copy.modules.title}</h2>
         </div>
         <div className="module-grid">
-          {architectureModules.map(([title, text]) => (
+          {copy.modules.cards.map(([title, text]) => (
             <article className="module-card" key={title}>
               <h3>{title}</h3>
               <p>{text}</p>

@@ -1,3 +1,5 @@
+import type { DashboardCopy } from "../i18n";
+
 export type ReleaseBaseline = {
   version: string;
   release_level: {
@@ -24,47 +26,33 @@ export type ReleaseBaseline = {
 type ReleaseBaselinePanelProps = {
   baseline: ReleaseBaseline;
   available: boolean;
+  copy: DashboardCopy["release"];
   error?: string;
-};
-
-const releaseLevelLabels: Record<keyof ReleaseBaseline["release_level"], string> = {
-  marketing_website: "Marketing Website",
-  web_command_center: "Web Command Center",
-  paper_research_preview: "Paper Research Preview",
-  production_trading_platform: "Production Trading Platform",
-};
-
-const validationLabels: Record<keyof ReleaseBaseline["validation"], string> = {
-  release_readiness_check: "release-readiness-check",
-  make_check: "make check",
-  github_actions_release_gate: "GitHub Actions release gate",
 };
 
 export function ReleaseBaselinePanel({
   baseline,
   available,
+  copy,
   error,
 }: ReleaseBaselinePanelProps) {
   return (
     <section className="release-section" aria-labelledby="release-baseline-title">
       <div className="section-heading">
-        <p className="eyebrow">Release Baseline</p>
-        <h2 id="release-baseline-title">v0.1.0 paper research preview</h2>
+        <p className="eyebrow">{copy.eyebrow}</p>
+        <h2 id="release-baseline-title">{copy.title}</h2>
       </div>
       {!available ? (
         <p className="notice warn">
-          Backend release baseline unavailable. Rendering checked-in safe fallback: {error}
+          {copy.fallbackPrefix} {error}
         </p>
       ) : null}
 
       <div className="release-hero panel">
         <div>
-          <p className="card-kicker">Current tag</p>
+          <p className="card-kicker">{copy.currentTag}</p>
           <h3>{baseline.version}</h3>
-          <p>
-            This baseline is an external presentation, internal demo, and paper research
-            preview. It is not a production trading release.
-          </p>
+          <p>{copy.description}</p>
         </div>
         <span className={baseline.live_trading_enabled ? "metric danger" : "metric ok"}>
           live_trading_enabled={String(baseline.live_trading_enabled)}
@@ -73,16 +61,16 @@ export function ReleaseBaselinePanel({
 
       <div className="release-grid">
         <article className="release-card">
-          <p className="card-kicker">Release Level</p>
+          <p className="card-kicker">{copy.releaseLevel}</p>
           <dl className="detail-list">
-            {Object.entries(releaseLevelLabels).map(([key, label]) => {
+            {Object.entries(copy.levelLabels).map(([key, label]) => {
               const typedKey = key as keyof ReleaseBaseline["release_level"];
               const status = baseline.release_level[typedKey];
               return (
                 <div key={key}>
                   <dt>{label}</dt>
                   <dd className={status === "NOT READY" ? "text-danger" : undefined}>
-                    {status}
+                    {copy.statusLabels[status as keyof typeof copy.statusLabels] ?? status}
                   </dd>
                 </div>
               );
@@ -91,7 +79,7 @@ export function ReleaseBaselinePanel({
         </article>
 
         <article className="release-card">
-          <p className="card-kicker">Safety Defaults</p>
+          <p className="card-kicker">{copy.safetyDefaults}</p>
           <div className="flag-grid">
             <span className="flag ok">
               <span>TRADING_MODE</span>
@@ -113,14 +101,19 @@ export function ReleaseBaselinePanel({
         </article>
 
         <article className="release-card">
-          <p className="card-kicker">Validation</p>
+          <p className="card-kicker">{copy.validation}</p>
           <div className="validation-list">
-            {Object.entries(validationLabels).map(([key, label]) => {
+            {Object.entries(copy.validationLabels).map(([key, label]) => {
               const typedKey = key as keyof ReleaseBaseline["validation"];
+              const status = baseline.validation[typedKey];
               return (
                 <span className="validation-row" key={key}>
                   <span>{label}</span>
-                  <strong>{baseline.validation[typedKey]}</strong>
+                  <strong>
+                    {copy.validationStatusLabels[
+                      status as keyof typeof copy.validationStatusLabels
+                    ] ?? status}
+                  </strong>
                 </span>
               );
             })}
@@ -129,10 +122,10 @@ export function ReleaseBaselinePanel({
       </div>
 
       <article className="release-card release-gaps">
-        <p className="card-kicker">Known Non-Production Gaps</p>
+        <p className="card-kicker">{copy.knownGaps}</p>
         <ul className="warning-list">
           {baseline.known_non_production_gaps.map((gap) => (
-            <li key={gap}>{gap}</li>
+            <li key={gap}>{copy.gapLabels[gap as keyof typeof copy.gapLabels] ?? gap}</li>
           ))}
         </ul>
       </article>

@@ -3,6 +3,7 @@ import {
   SafetyFlagsPanel,
   type ResearchReviewSafetyFlags,
 } from "./SafetyFlagsPanel";
+import type { DashboardCopy } from "../i18n";
 
 export type ResearchReviewPacket = ResearchReviewSafetyFlags & {
   packet_id: string;
@@ -30,65 +31,68 @@ export type ResearchReviewPacket = ResearchReviewSafetyFlags & {
 type ResearchReviewPacketPanelProps = {
   packet: ResearchReviewPacket;
   available: boolean;
+  copy: DashboardCopy;
   error?: string;
 };
 
 export function ResearchReviewPacketPanel({
   packet,
   available,
+  copy,
   error,
 }: ResearchReviewPacketPanelProps) {
   return (
     <section className="packet-section" aria-labelledby="packet-title">
       <div className="section-heading">
-        <p className="eyebrow">Research Review Packet</p>
-        <h2 id="packet-title">Read-only reviewer handoff</h2>
+        <p className="eyebrow">{copy.packet.eyebrow}</p>
+        <h2 id="packet-title">{copy.packet.title}</h2>
       </div>
       {!available ? (
         <p className="notice warn">
-          Backend sample packet unavailable. Rendering paper-safe fallback: {error}
+          {copy.packet.fallbackPrefix} {error}
         </p>
       ) : null}
 
       <div className="packet-layout">
         <article className="panel packet-overview">
           <div>
-            <p className="card-kicker">Packet Identity</p>
+            <p className="card-kicker">{copy.packet.identityKicker}</p>
             <h3>{packet.packet_label}</h3>
           </div>
           <dl className="detail-list">
             <div>
-              <dt>Packet ID</dt>
+              <dt>{copy.packet.packetId}</dt>
               <dd>{packet.packet_id}</dd>
             </div>
             <div>
-              <dt>Review queue</dt>
+              <dt>{copy.packet.reviewQueue}</dt>
               <dd>{packet.review_queue_id}</dd>
             </div>
             <div>
-              <dt>Decision index</dt>
+              <dt>{copy.packet.decisionIndex}</dt>
               <dd>{packet.decision_index_id}</dd>
             </div>
             <div>
-              <dt>Bundles</dt>
+              <dt>{copy.packet.bundles}</dt>
               <dd>{packet.bundle_count}</dd>
             </div>
           </dl>
         </article>
 
         <DecisionSummaryPanel
+          copy={copy.decisionSummary}
           decisionCount={packet.decision_count}
           summary={packet.decision_summary}
         />
 
-        <SafetyFlagsPanel flags={packet} />
+        <SafetyFlagsPanel copy={copy.safetyFlags} flags={packet} />
       </div>
 
       <div className="packet-layout secondary">
         <article className="packet-subpanel">
           <div>
-            <p className="card-kicker">Sections</p>
-            <h3>Included metadata</h3>
+            <p className="card-kicker">{copy.packet.sectionsKicker}</p>
+            <h3>{copy.packet.sectionsTitle}</h3>
           </div>
           <ul className="pill-list">
             {packet.included_sections.map((section) => (
@@ -99,24 +103,24 @@ export function ResearchReviewPacketPanel({
 
         <article className="packet-subpanel">
           <div>
-            <p className="card-kicker">Checksums</p>
-            <h3>Audit references</h3>
+            <p className="card-kicker">{copy.packet.checksumsKicker}</p>
+            <h3>{copy.packet.checksumsTitle}</h3>
           </div>
           <dl className="checksum-list">
             <div>
-              <dt>Queue</dt>
+              <dt>{copy.packet.checksumQueue}</dt>
               <dd>{formatChecksum(packet.checksums.queue_checksum)}</dd>
             </div>
             <div>
-              <dt>Decision index</dt>
+              <dt>{copy.packet.checksumDecisionIndex}</dt>
               <dd>{formatChecksum(packet.checksums.index_checksum)}</dd>
             </div>
             <div>
-              <dt>Packet</dt>
+              <dt>{copy.packet.checksumPacket}</dt>
               <dd>{formatChecksum(packet.checksums.packet_checksum)}</dd>
             </div>
             <div>
-              <dt>Reproducibility</dt>
+              <dt>{copy.packet.checksumReproducibility}</dt>
               <dd>{formatChecksum(packet.reproducibility_hash)}</dd>
             </div>
           </dl>
@@ -124,12 +128,16 @@ export function ResearchReviewPacketPanel({
 
         <article className="packet-subpanel">
           <div>
-            <p className="card-kicker">Warnings</p>
-            <h3>Review notes</h3>
+            <p className="card-kicker">{copy.packet.warningsKicker}</p>
+            <h3>{copy.packet.warningsTitle}</h3>
           </div>
           <ul className="warning-list">
             {packet.warnings.map((warning) => (
-              <li key={warning}>{warning}</li>
+              <li key={warning}>
+                {copy.packet.warningLabels[
+                  warning as keyof typeof copy.packet.warningLabels
+                ] ?? warning}
+              </li>
             ))}
           </ul>
         </article>
