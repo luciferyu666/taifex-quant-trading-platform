@@ -118,6 +118,8 @@ RELEASE_READINESS_STRICT=1 make release-readiness-check
 make check
 ```
 
+GitHub must also report the `Release readiness gate` check from `.github/workflows/release-readiness.yml`. The workflow installs backend, frontend, and website dependencies in a clean runner, then runs the strict release gate and `make check`.
+
 The PR must explicitly state this release level:
 
 - Marketing Website: external presentation candidate
@@ -132,6 +134,7 @@ The PR reviewer should verify:
 - Live trading defaults remain `TRADING_MODE=paper`, `ENABLE_LIVE_TRADING=false`, and `BROKER_PROVIDER=paper`.
 - No broker SDK, live order path, account-opening flow, or production trading readiness claim was introduced.
 - All trading-related new behavior is paper-only, research-only, dry-run, or read-only.
+- GitHub Actions reports `Release readiness gate` as passing before merge.
 
 ## Acceptance Criteria
 
@@ -140,6 +143,7 @@ The PR reviewer should verify:
 - Release level is not misrepresented as production trading readiness.
 - `make check` passes before any release-candidate branch is pushed.
 - Release candidate PR notes and PR template are present.
+- GitHub Actions release-readiness workflow is present.
 - Live trading remains disabled by default.
 
 ## Non-Goals

@@ -80,6 +80,7 @@ Prepare paper-first release readiness candidate
 - [ ] `make release-readiness-check` passes.
 - [ ] `RELEASE_READINESS_STRICT=1 make release-readiness-check` passes.
 - [ ] `make check` passes.
+- [ ] GitHub Actions `Release readiness gate` passes.
 - [ ] Reviewer confirms release level is not described as production trading readiness.
 - [ ] Reviewer confirms live trading remains disabled by default.
 
@@ -143,6 +144,7 @@ This PR packages the current paper-first Phase 2/3/5 work into a reviewable rele
 - [ ] `make release-readiness-check`
 - [ ] `RELEASE_READINESS_STRICT=1 make release-readiness-check`
 - [ ] `make check`
+- [ ] GitHub Actions `Release readiness gate`
 
 ## Reviewer Notes
 

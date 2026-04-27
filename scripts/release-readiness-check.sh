@@ -67,6 +67,7 @@ for required_file in \
   docs/trading-safety.md \
   docs/paper-shadow-live-boundary.md \
   .github/pull_request_template.md \
+  .github/workflows/release-readiness.yml \
   scripts/release-readiness-check.sh \
   scripts/check.sh \
   Makefile; do
@@ -127,6 +128,7 @@ else
   printf '  include  frontend read-only Command Center packet viewer and fixtures\n'
   printf '  include  docs, scripts, Makefile targets needed by make check\n'
   printf '  include  release candidate PR notes and GitHub PR template\n'
+  printf '  include  GitHub Actions release-readiness workflow\n'
   printf '  review   Documentation/*.md before committing proprietary source briefs\n'
   printf '  exclude  .env, node_modules, venvs, build outputs, logs, generated report JSON, secrets\n'
 fi
