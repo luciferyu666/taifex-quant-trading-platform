@@ -1,5 +1,6 @@
 import { ResearchReviewPacketJsonLoader } from "./components/ResearchReviewPacketJsonLoader";
 import type { ResearchReviewPacket } from "./components/ResearchReviewPacketPanel";
+import { ReleaseBaselinePanel, type ReleaseBaseline } from "./components/ReleaseBaselinePanel";
 
 export const dynamic = "force-dynamic";
 
@@ -51,14 +52,39 @@ const fallbackRoadmap: PhaseStatus[] = [
   { phase: 2, name: "Data Platform", status: "planned", safety_mode: "paper" },
   { phase: 3, name: "Strategy SDK and Backtest", status: "planned", safety_mode: "paper" },
   { phase: 4, name: "Risk / OMS / Broker Gateway", status: "planned", safety_mode: "paper" },
-  { phase: 5, name: "Command Center and Shadow Trading", status: "planned", safety_mode: "paper/shadow" },
-  { phase: 6, name: "Reliability and Go-Live Readiness", status: "planned", safety_mode: "readiness-only" },
+  {
+    phase: 5,
+    name: "Command Center and Shadow Trading",
+    status: "planned",
+    safety_mode: "paper/shadow",
+  },
+  {
+    phase: 6,
+    name: "Reliability and Go-Live Readiness",
+    status: "planned",
+    safety_mode: "readiness-only",
+  },
 ];
 
 const fallbackContracts: ContractSpec[] = [
-  { symbol: "TX", point_value_twd: 200, tx_equivalent_ratio: 1, description: "Taiwan Index Futures" },
-  { symbol: "MTX", point_value_twd: 50, tx_equivalent_ratio: 0.25, description: "Mini Taiwan Index Futures" },
-  { symbol: "TMF", point_value_twd: 10, tx_equivalent_ratio: 0.05, description: "Micro Taiwan Index Futures" },
+  {
+    symbol: "TX",
+    point_value_twd: 200,
+    tx_equivalent_ratio: 1,
+    description: "Taiwan Index Futures",
+  },
+  {
+    symbol: "MTX",
+    point_value_twd: 50,
+    tx_equivalent_ratio: 0.25,
+    description: "Mini Taiwan Index Futures",
+  },
+  {
+    symbol: "TMF",
+    point_value_twd: 10,
+    tx_equivalent_ratio: 0.05,
+    description: "Micro Taiwan Index Futures",
+  },
 ];
 
 const fallbackPaperStatus: PaperStatus = {
@@ -69,6 +95,41 @@ const fallbackPaperStatus: PaperStatus = {
   max_daily_loss_twd: 5000,
   stale_quote_seconds: 3,
   message: "Fallback paper-safe status. Backend is unavailable.",
+};
+
+const fallbackReleaseBaseline: ReleaseBaseline = {
+  version: "v0.1.0-paper-research-preview",
+  release_level: {
+    marketing_website: "external presentation candidate",
+    web_command_center: "internal demo candidate",
+    paper_research_preview: "internal technical preview",
+    production_trading_platform: "NOT READY",
+  },
+  safety_defaults: {
+    trading_mode: "paper",
+    enable_live_trading: false,
+    broker_provider: "paper",
+  },
+  validation: {
+    release_readiness_check: "passed",
+    make_check: "passed",
+    github_actions_release_gate: "passed",
+  },
+  live_trading_enabled: false,
+  known_non_production_gaps: [
+    "No production trading path exists.",
+    "No real broker adapter exists.",
+    "No live trading approval workflow exists.",
+    "Data platform is based on local fixtures, dry-run validation, and schema scaffolding.",
+    "Backtest outputs are simulated research artifacts, not performance reports.",
+    "Web Command Center is read-only for research review packet inspection.",
+  ],
+  docs: {
+    release_baseline: "docs/release-baseline-v0.1.0.md",
+    release_readiness_audit: "docs/release-readiness-audit.md",
+    trading_safety: "docs/trading-safety.md",
+    paper_shadow_live_boundary: "docs/paper-shadow-live-boundary.md",
+  },
 };
 
 const fallbackResearchReviewPacket: ResearchReviewPacket = {
@@ -125,7 +186,10 @@ const architectureModules = [
 
 async function fetchJson<T>(path: string, fallback: T): Promise<LoadState<T>> {
   try {
-    const response = await fetch(`${backendUrl}${path}`, { cache: "no-store" });
+    const response = await fetch(`${backendUrl}${path}`, {
+      cache: "no-store",
+      signal: AbortSignal.timeout(2000),
+    });
     if (!response.ok) {
       return { available: false, error: `Backend returned HTTP ${response.status}`, data: fallback };
     }
@@ -140,16 +204,18 @@ async function fetchJson<T>(path: string, fallback: T): Promise<LoadState<T>> {
 }
 
 export default async function Home() {
-  const [health, roadmap, contractsResponse, paperStatus, reviewPacket] = await Promise.all([
-    fetchJson<HealthResponse>("/health", fallbackHealth),
-    fetchJson<PhaseStatus[]>("/api/roadmap", fallbackRoadmap),
-    fetchJson<{ contracts: ContractSpec[] }>("/api/contracts", { contracts: fallbackContracts }),
-    fetchJson<PaperStatus>("/api/risk/paper-status", fallbackPaperStatus),
-    fetchJson<ResearchReviewPacket>(
-      "/api/strategy/research-review/packet/sample",
-      fallbackResearchReviewPacket,
-    ),
-  ]);
+  const [health, roadmap, contractsResponse, paperStatus, releaseBaseline, reviewPacket] =
+    await Promise.all([
+      fetchJson<HealthResponse>("/health", fallbackHealth),
+      fetchJson<PhaseStatus[]>("/api/roadmap", fallbackRoadmap),
+      fetchJson<{ contracts: ContractSpec[] }>("/api/contracts", { contracts: fallbackContracts }),
+      fetchJson<PaperStatus>("/api/risk/paper-status", fallbackPaperStatus),
+      fetchJson<ReleaseBaseline>("/api/release/baseline", fallbackReleaseBaseline),
+      fetchJson<ResearchReviewPacket>(
+        "/api/strategy/research-review/packet/sample",
+        fallbackResearchReviewPacket,
+      ),
+    ]);
 
   const contracts = contractsResponse.data.contracts;
 
@@ -192,9 +258,17 @@ export default async function Home() {
           <p className="card-kicker">Risk Defaults</p>
           <h2>TX-equivalent limit</h2>
           <p>Max daily loss and stale quote limits are visible before any future OMS workflow.</p>
-          <span className="metric ok">MAX_TX_EQUIVALENT_EXPOSURE={paperStatus.data.max_tx_equivalent_exposure}</span>
+          <span className="metric ok">
+            MAX_TX_EQUIVALENT_EXPOSURE={paperStatus.data.max_tx_equivalent_exposure}
+          </span>
         </article>
       </section>
+
+      <ReleaseBaselinePanel
+        available={releaseBaseline.available}
+        baseline={releaseBaseline.data}
+        error={releaseBaseline.available ? undefined : releaseBaseline.error}
+      />
 
       <ResearchReviewPacketJsonLoader
         initialAvailable={reviewPacket.available}
