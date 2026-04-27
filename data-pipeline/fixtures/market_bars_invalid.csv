@@ -1,0 +1,5 @@
+symbol,contract_month,bar_start,timeframe,open,high,low,close,volume,data_version,source,price_usage,adjustment_method
+TX,202606,2026-04-25T09:03:00+08:00,1m,20000,19990,20020,20010,100,fixture-v1,local-fixture,execution,none
+MTX,202606,2026-04-25T09:04:00+08:00,1m,20005,20020,19995,20010,250,fixture-v1,local-fixture,execution,back_adjusted
+ABC,202606,2026-04-25T09:05:00+08:00,1m,20008,20018,20000,20012,500,fixture-v1,local-fixture,execution,none
+TMF,202606,2026-04-25T09:06:00+08:00,1m,20008,20018,20000,20012,500,,local-fixture,execution,none

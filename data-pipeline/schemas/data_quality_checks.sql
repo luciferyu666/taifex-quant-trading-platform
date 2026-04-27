@@ -7,7 +7,7 @@ CREATE TABLE IF NOT EXISTS data_quality_reports (
     check_name TEXT NOT NULL,
     passed BOOLEAN NOT NULL,
     severity TEXT NOT NULL CHECK (severity IN ('info', 'warning', 'error')),
-    observed_count BIGINT NOT NULL DEFAULT 0,
+    observed_count BIGINT NOT NULL DEFAULT 0 CHECK (observed_count >= 0),
     details JSONB NOT NULL DEFAULT '{}'::jsonb,
     created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
