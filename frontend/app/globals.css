@@ -260,6 +260,71 @@ th {
   line-height: 1.55;
 }
 
+.release-section {
+  margin-top: 44px;
+}
+
+.release-hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 16px;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.release-hero p {
+  margin: 10px 0 0;
+  color: var(--muted);
+  line-height: 1.55;
+}
+
+.release-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(280px, 0.85fr) minmax(280px, 0.85fr);
+  gap: 16px;
+}
+
+.release-card {
+  min-width: 0;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--panel);
+  box-shadow: var(--shadow);
+  padding: 18px;
+}
+
+.release-gaps {
+  margin-top: 16px;
+}
+
+.validation-list {
+  display: grid;
+  gap: 8px;
+  margin-top: 18px;
+}
+
+.validation-row {
+  display: flex;
+  min-height: 44px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  border: 1px solid rgba(4, 120, 87, 0.24);
+  border-radius: 8px;
+  padding: 8px 10px;
+  background: rgba(4, 120, 87, 0.08);
+  color: var(--green);
+  font-size: 0.82rem;
+}
+
+.validation-row strong {
+  color: var(--green);
+}
+
+.text-danger {
+  color: var(--red);
+}
+
 .packet-section {
   margin-top: 44px;
 }
@@ -452,6 +517,8 @@ dd {
   .module-grid,
   .phase-grid,
   .dashboard-grid,
+  .release-hero,
+  .release-grid,
   .packet-loader,
   .packet-layout,
   .packet-layout.secondary {

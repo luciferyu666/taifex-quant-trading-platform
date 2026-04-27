@@ -21,6 +21,11 @@ Expose roadmap phase status, contracts, safety mode, risk status, and paper-only
   `approved_for_paper_research` counts.
 - Safety flags panel that keeps paper/live approval flags visible and false.
 - Checksum and warning sections for future audit and reviewer handoff.
+- Read-only Release Baseline dashboard for `v0.1.0-paper-research-preview`.
+- Backend release baseline endpoint:
+  `GET /api/release/baseline`.
+- Release level, validation status, safety defaults, and known non-production
+  gaps displayed in the Web Command Center.
 
 ## Acceptance Criteria
 
@@ -47,6 +52,18 @@ Expose roadmap phase status, contracts, safety mode, risk status, and paper-only
 - No live trading controls are present.
 - No approval, ranking, best-strategy, order, broker, Risk Engine, or OMS action is
   exposed from the packet viewer.
+- Release Baseline dashboard displays:
+  `Marketing Website = external presentation candidate`,
+  `Web Command Center = internal demo candidate`,
+  `Paper Research Preview = internal technical preview`, and
+  `Production Trading Platform = NOT READY`.
+- Release Baseline dashboard keeps `TRADING_MODE=paper`,
+  `ENABLE_LIVE_TRADING=false`, `BROKER_PROVIDER=paper`, and
+  `live_trading_enabled=false` visible.
+- Release Baseline dashboard lists validation status for
+  `release-readiness-check`, `make check`, and GitHub Actions release gate.
+- Release Baseline dashboard lists known non-production gaps and does not claim
+  production trading readiness.
 
 ## Safety Constraints
 
@@ -65,6 +82,10 @@ Expose roadmap phase status, contracts, safety mode, risk status, and paper-only
   paper/live execution.
 - Loader safety fixtures are local static JSON only. They must not contain secrets,
   broker credentials, account IDs, tokens, or any executable approval workflow.
+- The Release Baseline endpoint and dashboard are read-only status surfaces. They
+  must not write databases, call brokers, call Risk Engine, call OMS, create
+  orders, approve paper execution, approve live trading, or imply production
+  readiness.
 
 ## Suggested Commands
 
@@ -73,6 +94,7 @@ cd frontend && npm run typecheck
 cd frontend && npm run build
 make sample-research-review-packet
 make research-review-packet-fixtures-check
+cd backend && .venv/bin/python -m pytest tests/test_release_baseline_routes.py
 cd backend && .venv/bin/python -m pytest tests/test_research_review_packet.py
 make check
 ```
@@ -94,3 +116,7 @@ introduced.
 The fixture CLI is intentionally dependency-free and does not introduce Vitest,
 Playwright, backend behavior, persistence, uploads, broker calls, Risk Engine calls,
 or OMS calls.
+The Release Baseline dashboard should remain a status and audit-readiness surface.
+Future changes may add historical release comparisons, but must not add release
+approval buttons, live-trading enablement, broker actions, or production-readiness
+claims without a separate Phase 6 readiness and compliance review.
