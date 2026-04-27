@@ -34,6 +34,11 @@ jobs:
             frontend/package-lock.json
             website/package-lock.json
 
+      - name: Install system utilities
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ripgrep
+
       - name: Install backend dependencies
         run: |
           python -m venv backend/.venv

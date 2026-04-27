@@ -368,8 +368,8 @@ else
 fi
 
 if command -v node >/dev/null 2>&1; then
-  printf 'Checking frontend Research Review Packet loader fixtures...\n'
-  node frontend/scripts/validate-research-review-packet-fixtures.mjs
+printf 'Checking frontend Research Review Packet loader fixtures...\n'
+  node --experimental-strip-types frontend/scripts/validate-research-review-packet-fixtures.mjs
 else
   printf 'node is not available; skipping packet loader fixture checks.\n' >&2
 fi

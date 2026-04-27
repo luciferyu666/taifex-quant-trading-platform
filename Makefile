@@ -157,7 +157,7 @@ sample-research-review-packet:
 	PYTHONPATH=strategy-engine backend/.venv/bin/python strategy-engine/sdk/examples/export_sample_research_review_packet.py
 
 research-review-packet-fixtures-check:
-	node frontend/scripts/validate-research-review-packet-fixtures.mjs
+	node --experimental-strip-types frontend/scripts/validate-research-review-packet-fixtures.mjs
 
 data-quality-reports-dry-run:
 	backend/.venv/bin/python data-pipeline/validation/persist_quality_report.py

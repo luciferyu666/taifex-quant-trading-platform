@@ -34,7 +34,7 @@ They are local-only browser input samples:
 ## CLI Check
 
 ```bash
-node frontend/scripts/validate-research-review-packet-fixtures.mjs
+node --experimental-strip-types frontend/scripts/validate-research-review-packet-fixtures.mjs
 ```
 
 The CLI mirrors the current loader safety checks and is included in `make check`.
