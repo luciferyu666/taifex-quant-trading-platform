@@ -23,6 +23,9 @@ htmlcov/
 node_modules/
 frontend/node_modules/
 website/node_modules/
+.vercel/
+frontend/.vercel/
+website/.vercel/
 .next/
 frontend/.next/
 website/.astro/
