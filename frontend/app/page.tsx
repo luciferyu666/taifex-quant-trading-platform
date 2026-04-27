@@ -1,3 +1,6 @@
+import { ResearchReviewPacketJsonLoader } from "./components/ResearchReviewPacketJsonLoader";
+import type { ResearchReviewPacket } from "./components/ResearchReviewPacketPanel";
+
 export const dynamic = "force-dynamic";
 
 type HealthResponse = {
@@ -68,6 +71,49 @@ const fallbackPaperStatus: PaperStatus = {
   message: "Fallback paper-safe status. Backend is unavailable.",
 };
 
+const fallbackResearchReviewPacket: ResearchReviewPacket = {
+  packet_id: "fallback-research-review-packet",
+  packet_label: "fallback-research-review-packet",
+  review_queue_id: "fallback-research-review-queue",
+  decision_index_id: "fallback-research-review-decision-index",
+  bundle_count: 1,
+  decision_count: 3,
+  decision_summary: {
+    rejected_count: 1,
+    needs_data_review_count: 1,
+    approved_for_paper_research_count: 1,
+  },
+  included_sections: ["review_queue", "decisions", "decision_index"],
+  checksums: {
+    queue_checksum: "1111111111111111111111111111111111111111111111111111111111111111",
+    decision_checksums: [
+      "2222222222222222222222222222222222222222222222222222222222222222",
+      "3333333333333333333333333333333333333333333333333333333333333333",
+      "4444444444444444444444444444444444444444444444444444444444444444",
+    ],
+    index_checksum: "5555555555555555555555555555555555555555555555555555555555555555",
+    packet_checksum: "6666666666666666666666666666666666666666666666666666666666666666",
+  },
+  reproducibility_hash: "7777777777777777777777777777777777777777777777777777777777777777",
+  warnings: [
+    "Fallback packet is read-only UI metadata. It does not approve paper execution, approve live trading, rank strategies, call brokers, or claim performance.",
+  ],
+  research_only: true,
+  execution_eligible: false,
+  order_created: false,
+  broker_api_called: false,
+  risk_engine_called: false,
+  oms_called: false,
+  performance_claim: false,
+  simulated_metrics_only: true,
+  external_data_downloaded: false,
+  ranking_generated: false,
+  best_strategy_selected: false,
+  approval_for_live: false,
+  approval_for_paper_execution: false,
+  persisted: false,
+};
+
 const architectureModules = [
   ["Data Platform", "Bronze/Silver/Gold layers, contract master, market bars, rollover events."],
   ["Strategy SDK", "Signal-only strategy interface. No broker SDK access and no order submission."],
@@ -94,11 +140,15 @@ async function fetchJson<T>(path: string, fallback: T): Promise<LoadState<T>> {
 }
 
 export default async function Home() {
-  const [health, roadmap, contractsResponse, paperStatus] = await Promise.all([
+  const [health, roadmap, contractsResponse, paperStatus, reviewPacket] = await Promise.all([
     fetchJson<HealthResponse>("/health", fallbackHealth),
     fetchJson<PhaseStatus[]>("/api/roadmap", fallbackRoadmap),
     fetchJson<{ contracts: ContractSpec[] }>("/api/contracts", { contracts: fallbackContracts }),
     fetchJson<PaperStatus>("/api/risk/paper-status", fallbackPaperStatus),
+    fetchJson<ResearchReviewPacket>(
+      "/api/strategy/research-review/packet/sample",
+      fallbackResearchReviewPacket,
+    ),
   ]);
 
   const contracts = contractsResponse.data.contracts;
@@ -145,6 +195,12 @@ export default async function Home() {
           <span className="metric ok">MAX_TX_EQUIVALENT_EXPOSURE={paperStatus.data.max_tx_equivalent_exposure}</span>
         </article>
       </section>
+
+      <ResearchReviewPacketJsonLoader
+        initialAvailable={reviewPacket.available}
+        initialError={reviewPacket.available ? undefined : reviewPacket.error}
+        initialPacket={reviewPacket.data}
+      />
 
       <section className="module-section" aria-labelledby="roadmap-title">
         <div className="section-heading">

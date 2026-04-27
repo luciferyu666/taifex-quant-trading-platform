@@ -1,0 +1,7 @@
+root_symbol,from_contract_month,to_contract_month,rollover_timestamp,spread_points,adjustment_method,adjustment_factor,data_version,research_only,notes
+FOO,202606,202607,2026-06-17T13:45:00+08:00,12.5,back_adjusted,-12.5,fixture-v1,true,unsupported root symbol
+TX,202606,202606,2026-06-17T13:45:00+08:00,12.5,back_adjusted,-12.5,fixture-v1,true,from and to contract months are the same
+TX,202606,202607,not-a-timestamp,12.5,back_adjusted,-12.5,fixture-v1,true,invalid rollover timestamp
+MTX,202606,202607,2026-06-17T13:45:00+08:00,3.0,none,1.0,fixture-v1,true,none adjustment cannot use nonzero factor
+TMF,202606,202607,2026-06-17T13:45:00+08:00,0.8,ratio_adjusted,0.9996,fixture-v1,false,research_only must remain true
+TX,202606,202607,2026-06-17T13:45:00+08:00,12.5,back_adjusted,-12.5,,true,missing data version

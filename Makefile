@@ -1,6 +1,6 @@
 SHELL := /usr/bin/env bash
 
-.PHONY: help init infra dev backend frontend website website-build website-preview website-check website-deploy roadmap-status architecture-status architecture-docs-check architecture-safety-check business-docs-check business-compliance-check business-status check test codex-prompt clean
+.PHONY: help init infra dev backend frontend website website-build website-preview website-check website-content-check website-deploy roadmap-status release-readiness-check data-fixtures-check rollover-fixtures-check continuous-futures-preview feature-manifest-preview strategy-research-preview backtest-preview backtest-result-preview toy-backtest backtest-artifact-preview backtest-artifact-index-preview backtest-artifact-comparison-preview backtest-research-bundle-preview backtest-research-bundle-index-preview research-review-queue-preview research-review-decision-preview research-review-decision-index-preview research-review-packet-preview sample-research-review-packet research-review-packet-fixtures-check data-quality-reports-dry-run data-version-register-dry-run data-migrations-dry-run data-platform-verify architecture-status architecture-docs-check architecture-safety-check business-docs-check business-compliance-check business-status check test codex-prompt clean
 
 help:
 	@printf 'Taifex Quant Trading Platform commands\n'
@@ -14,8 +14,33 @@ help:
 	@printf '  make website-build Build Astro marketing website\n'
 	@printf '  make website-preview Preview built Astro website locally\n'
 	@printf '  make website-check Run Astro website checks\n'
+	@printf '  make website-content-check Validate website conversion, safety, and i18n copy\n'
 	@printf '  make website-deploy Build and deploy website with Vercel CLI\n'
 	@printf '  make roadmap-status Print Phase 0-6 roadmap scaffold status\n'
+	@printf '  make release-readiness-check Audit release level, dirty worktree, and safety gates\n'
+	@printf '  make data-fixtures-check Validate local market data CSV fixtures\n'
+	@printf '  make rollover-fixtures-check Validate local rollover event CSV fixtures\n'
+	@printf '  make continuous-futures-preview Preview research-only continuous futures locally\n'
+	@printf '  make feature-manifest-preview Build research-only feature dataset manifest locally\n'
+	@printf '  make strategy-research-preview Preview signal-only strategy research locally\n'
+	@printf '  make backtest-preview Preview dry-run backtest contract locally\n'
+	@printf '  make backtest-result-preview Preview dry-run backtest result schema locally\n'
+	@printf '  make toy-backtest  Run fixture-only toy backtest research simulation\n'
+	@printf '  make backtest-artifact-preview Preview local JSON backtest artifact metadata\n'
+	@printf '  make backtest-artifact-index-preview Preview local JSON artifact index metadata\n'
+	@printf '  make backtest-artifact-comparison-preview Preview local JSON artifact comparison metadata\n'
+	@printf '  make backtest-research-bundle-preview Preview local JSON research bundle metadata\n'
+	@printf '  make backtest-research-bundle-index-preview Preview local JSON research bundle index metadata\n'
+	@printf '  make research-review-queue-preview Preview local research review queue metadata\n'
+	@printf '  make research-review-decision-preview Preview local research review decision metadata\n'
+	@printf '  make research-review-decision-index-preview Preview local research review decision index metadata\n'
+	@printf '  make research-review-packet-preview Preview local research review packet metadata\n'
+	@printf '  make sample-research-review-packet Print safe local sample packet for UI loader\n'
+	@printf '  make research-review-packet-fixtures-check Validate local packet loader fixtures\n'
+	@printf '  make data-quality-reports-dry-run Validate report artifacts without DB writes\n'
+	@printf '  make data-version-register-dry-run Dry-run data version registry record creation\n'
+	@printf '  make data-migrations-dry-run List local data-platform migrations without DB writes\n'
+	@printf '  make data-platform-verify Dry-run local data-platform schema verification\n'
 	@printf '  make architecture-status Print system architecture scaffold status\n'
 	@printf '  make architecture-docs-check Validate architecture documentation files\n'
 	@printf '  make architecture-safety-check Validate architecture safety guardrails\n'
@@ -64,11 +89,87 @@ website-preview:
 website-check:
 	cd website && npm run check
 
+website-content-check:
+	cd website && node scripts/check-content-safety.mjs
+	cd website && node scripts/check-i18n-content.mjs
+
 website-deploy:
 	bash scripts/deploy-website-vercel.sh
 
 roadmap-status:
 	bash scripts/roadmap-status.sh
+
+release-readiness-check:
+	bash scripts/release-readiness-check.sh
+
+data-fixtures-check:
+	backend/.venv/bin/python data-pipeline/validation/validate_market_bar_fixtures.py
+
+rollover-fixtures-check:
+	backend/.venv/bin/python data-pipeline/validation/validate_rollover_event_fixtures.py
+
+continuous-futures-preview:
+	backend/.venv/bin/python data-pipeline/validation/preview_continuous_futures.py
+
+feature-manifest-preview:
+	backend/.venv/bin/python data-pipeline/validation/build_feature_manifest.py
+
+strategy-research-preview:
+	PYTHONPATH=strategy-engine backend/.venv/bin/python strategy-engine/sdk/examples/manifest_signal_strategy.py
+
+backtest-preview:
+	PYTHONPATH=strategy-engine backend/.venv/bin/python strategy-engine/sdk/examples/backtest_preview_example.py
+
+backtest-result-preview:
+	PYTHONPATH=strategy-engine backend/.venv/bin/python strategy-engine/sdk/examples/backtest_result_preview_example.py
+
+toy-backtest:
+	PYTHONPATH=strategy-engine backend/.venv/bin/python strategy-engine/sdk/examples/toy_backtest_example.py
+
+backtest-artifact-preview:
+	PYTHONPATH=strategy-engine backend/.venv/bin/python strategy-engine/sdk/examples/export_backtest_artifact_example.py
+
+backtest-artifact-index-preview:
+	PYTHONPATH=strategy-engine backend/.venv/bin/python strategy-engine/sdk/examples/build_backtest_artifact_index_example.py
+
+backtest-artifact-comparison-preview:
+	PYTHONPATH=strategy-engine backend/.venv/bin/python strategy-engine/sdk/examples/compare_backtest_artifacts_example.py
+
+backtest-research-bundle-preview:
+	PYTHONPATH=strategy-engine backend/.venv/bin/python strategy-engine/sdk/examples/build_backtest_research_bundle_example.py
+
+backtest-research-bundle-index-preview:
+	PYTHONPATH=strategy-engine backend/.venv/bin/python strategy-engine/sdk/examples/build_backtest_research_bundle_index_example.py
+
+research-review-queue-preview:
+	PYTHONPATH=strategy-engine backend/.venv/bin/python strategy-engine/sdk/examples/build_research_review_queue_example.py
+
+research-review-decision-preview:
+	PYTHONPATH=strategy-engine backend/.venv/bin/python strategy-engine/sdk/examples/build_research_review_decision_example.py
+
+research-review-decision-index-preview:
+	PYTHONPATH=strategy-engine backend/.venv/bin/python strategy-engine/sdk/examples/build_research_review_decision_index_example.py
+
+research-review-packet-preview:
+	PYTHONPATH=strategy-engine backend/.venv/bin/python strategy-engine/sdk/examples/build_research_review_packet_example.py
+
+sample-research-review-packet:
+	PYTHONPATH=strategy-engine backend/.venv/bin/python strategy-engine/sdk/examples/export_sample_research_review_packet.py
+
+research-review-packet-fixtures-check:
+	node --experimental-strip-types frontend/scripts/validate-research-review-packet-fixtures.mjs
+
+data-quality-reports-dry-run:
+	backend/.venv/bin/python data-pipeline/validation/persist_quality_report.py
+
+data-version-register-dry-run:
+	backend/.venv/bin/python data-pipeline/validation/register_data_version.py
+
+data-migrations-dry-run:
+	backend/.venv/bin/python data-pipeline/migrations/apply_local_migrations.py
+
+data-platform-verify:
+	backend/.venv/bin/python data-pipeline/migrations/verify_local_data_platform.py
 
 architecture-status:
 	bash scripts/architecture-status.sh

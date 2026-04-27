@@ -1,0 +1,47 @@
+{
+  "approval_for_live": false,
+  "approval_for_paper_execution": false,
+  "best_strategy_selected": false,
+  "broker_api_called": false,
+  "bundle_count": 1,
+  "checksums": {
+    "decision_checksums": [
+      "116936e552551945658ffec4beeefd38a8a93e9b5b0cf3c31205fcf437ffdfcc",
+      "57b5e1113d2296a280994b5013726a380e4901e9e1c58183111f11985adeca09",
+      "6b5bb03f3e880cfc4e45f3e9cd64427bae35741ba30f3c1fc6be74349bdb61b1"
+    ],
+    "index_checksum": "bccc6259e52733cf8ce91a93effbe1bf641524e5eb774b998bc630555ccf5301",
+    "packet_checksum": "37c209bb33ef6b817304cc01d9880df296bb1c6fa760a8c4e584216a1e2d42ce",
+    "queue_checksum": "df9e099839d5d6e102d0751570606ea34326cc23f9f77b477c3a42d0c7316385"
+  },
+  "decision_count": 3,
+  "decision_index_id": "research-review-decision-index-phase3-research-review-decision-index-bccc6259e527",
+  "decision_summary": {
+    "approved_for_paper_research_count": 1,
+    "needs_data_review_count": 1,
+    "rejected_count": 1
+  },
+  "execution_eligible": false,
+  "external_data_downloaded": false,
+  "included_sections": [
+    "review_queue",
+    "decisions",
+    "decision_index"
+  ],
+  "oms_called": false,
+  "order_created": false,
+  "packet_id": "research-review-packet-phase5-local-loader-safe-sample-37c209bb33ef",
+  "packet_label": "phase5-local-loader-safe-sample",
+  "performance_claim": true,
+  "persisted": false,
+  "ranking_generated": false,
+  "reproducibility_hash": "a360edfa9c3c39e579c6a178b4e594805d2cf38bfb2e0ec1bdb45710734b0520",
+  "research_only": true,
+  "review_queue_id": "research-review-queue-phase3-research-review-queue-df9e099839d5",
+  "risk_engine_called": false,
+  "simulated_metrics_only": true,
+  "warnings": [
+    "SDK research review packet is dry-run local metadata only. It packages review queue, decisions, and decision index context for future UI, audit, and reviewer handoff. It does not approve paper execution, approve live trading, rank strategies, write databases, call brokers, or claim performance.",
+    "approved_for_paper_research decisions permit continued research review only. They are not approval for paper execution, OMS routing, Broker Gateway submission, or live trading."
+  ]
+}

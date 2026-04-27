@@ -9,6 +9,164 @@ Paper mode is the default and only executable mode in the current roadmap implem
 - `BROKER_PROVIDER=paper`
 - PaperBrokerGateway returns simulated acknowledgements only.
 
+Phase 3 strategy research is even narrower than paper execution:
+
+- Dataset manifests are research-only.
+- Strategy SDK examples emit signals only.
+- Research preview never creates order intents.
+- Research preview never calls Risk Engine, OMS, or Broker Gateway.
+
+Phase 3 backtest preview is also narrower than paper execution:
+
+- It consumes a research-only Feature Dataset Manifest and a signal-only
+  `StrategySignal`.
+- It produces a reproducibility hash and safety flags only.
+- It does not calculate real performance.
+- It returns `performance_claim=false`.
+- It does not create order intents.
+- It does not call Risk Engine, OMS, Broker Gateway, broker APIs, or databases.
+
+Phase 3 backtest result schema preview is narrower again:
+
+- It accepts only a safe Backtest Preview Contract.
+- It defines future metric fields, but metric values stay `null`.
+- It returns `simulated_metrics_only=true`.
+- It does not make performance claims.
+- It does not read external data, write databases, create orders, or call broker APIs.
+
+Phase 3 toy backtest is still research-only:
+
+- It uses local fixture bars only.
+- It produces simulated metric values only.
+- It marks every metric `simulated=true`, `research_only=true`, and
+  `performance_claim=false`.
+- It does not create orders or call Risk Engine, OMS, Broker Gateway, databases, or
+  external data providers.
+
+Phase 3 backtest artifact export stays local:
+
+- API preview returns metadata only and `persisted=false`.
+- SDK CLI writes a local JSON file only with explicit `--output`.
+- Generated report JSON stays out of Git.
+- Artifact checksums support auditability but are not performance certification.
+
+Phase 3 artifact index is a catalog only:
+
+- It summarizes local artifacts for future UI, comparison, and audit views.
+- It does not rank results.
+- It does not select the best strategy.
+- It does not claim alpha or certify profitability.
+- It does not create execution records or broker records.
+
+Phase 3 artifact comparison is catalog metadata only:
+
+- It compares data versions, strategy versions, parameter sets, metric names, and
+  checksum status.
+- It does not calculate performance ranking.
+- It does not select a best strategy.
+- It keeps `ranking_generated=false` and `best_strategy_selected=false`.
+- It does not create order intents or call Risk Engine, OMS, Broker Gateway, broker
+  APIs, databases, or external data providers.
+
+Phase 3 research bundle is packaging metadata only:
+
+- It packages the Phase 3 research-only chain for future UI, audit, and review views.
+- It validates that all inputs are `execution_eligible=false` and
+  `performance_claim=false`.
+- It keeps `ranking_generated=false`, `best_strategy_selected=false`, and
+  `persisted=false`.
+- It may be exported to a local `.json` file only with an explicit CLI `--output`, at
+  which point the output metadata can mark `persisted=true`.
+- It is not a performance report, trading recommendation, or live-readiness approval.
+
+Phase 3 research bundle index is a local catalog only:
+
+- It summarizes multiple research bundles for future UI, review, and audit views.
+- It keeps `ranking_generated=false`, `best_strategy_selected=false`, and
+  `persisted=false`.
+- It accepts duplicate bundle checksums only with a warning.
+- It does not write databases, rank strategies, select winners, claim alpha, create
+  order intents, or call Risk Engine, OMS, Broker Gateway, broker APIs, databases, or
+  external data providers.
+
+Phase 3 research review queue is pending-review metadata only:
+
+- It consumes a safe research bundle index and creates `pending_review` items for
+  future UI, review workflow, and audit views.
+- It keeps `approval_for_live=false`, `ranking_generated=false`,
+  `best_strategy_selected=false`, and `persisted=false`.
+- It does not approve paper execution or live trading.
+- It does not rank strategies, select winners, claim alpha, create order intents, or
+  call Risk Engine, OMS, Broker Gateway, broker APIs, databases, or external data
+  providers.
+
+Phase 3 research review decision is dry-run decision metadata only:
+
+- It records one of `rejected`, `needs_data_review`, or
+  `approved_for_paper_research` against a queue item.
+- `approved_for_paper_research` means continued research review only.
+- It keeps `approval_for_live=false`, `approval_for_paper_execution=false`,
+  `ranking_generated=false`, `best_strategy_selected=false`, and `persisted=false`.
+- It does not approve paper execution, live trading, OMS routing, Broker Gateway
+  submission, order creation, strategy ranking, or investment recommendations.
+
+Phase 3 research review decision index is dry-run catalog metadata only:
+
+- It summarizes counts for `rejected`, `needs_data_review`, and
+  `approved_for_paper_research`.
+- The count distribution is not a strategy ranking, approval queue, performance
+  report, or investment recommendation.
+- It keeps `approval_for_live=false`, `approval_for_paper_execution=false`,
+  `ranking_generated=false`, `best_strategy_selected=false`, and `persisted=false`.
+- It does not approve paper execution, live trading, OMS routing, Broker Gateway
+  submission, order creation, strategy ranking, or investment recommendations.
+
+Phase 3 research review packet is dry-run handoff metadata only:
+
+- It packages a review queue, review decisions, and a decision index for future UI,
+  audit trail, and reviewer handoff.
+- It keeps `approval_for_live=false`, `approval_for_paper_execution=false`,
+  `ranking_generated=false`, `best_strategy_selected=false`, and `persisted=false`.
+- It does not write databases, approve paper execution, approve live trading, create
+  orders, call Risk Engine, call OMS, route through Broker Gateway, rank strategies,
+  select winners, certify performance, or make investment recommendations.
+
+Phase 5 Research Review Packet Viewer is read-only UI:
+
+- It may fetch `GET /api/strategy/research-review/packet/sample` or render fallback
+  packet metadata.
+- It may inspect an explicitly selected local `.json` packet in the browser only.
+- It may display packet identity, decision summary, checksums, warnings, and safety
+  flags.
+- It must not expose approve-live, approve-paper-execution, ranking, best-strategy,
+  order creation, broker, Risk Engine, or OMS actions.
+- It does not upload files, call backend mutation APIs, write databases, persist
+  packet metadata, call brokers, call Risk Engine, or call OMS.
+
+Phase 5 Research Review Packet sample export is local metadata only:
+
+- It prints a safe sample packet to stdout by default.
+- It writes a small local `.json` only with explicit `--output`.
+- The output is intended for manual JSON loader testing in the Web Command Center.
+- Generated sample JSON stays ignored by git.
+- It keeps `approval_for_live=false`, `approval_for_paper_execution=false`,
+  `execution_eligible=false`, `performance_claim=false`, `ranking_generated=false`,
+  `best_strategy_selected=false`, and `persisted=false`.
+- It does not upload files, call backend mutation APIs, write databases, call
+  brokers, call Risk Engine, call OMS, create orders, rank strategies, or make
+  performance claims.
+
+Phase 5 Research Review Packet loader fixtures are local test inputs only:
+
+- `valid.sample.json` is a safe acceptance sample.
+- `invalid-*.json` files intentionally violate one safety rule each.
+- They are used to test local loader rejection paths for live approval,
+  execution eligibility, performance claims, checksum formatting, and decision
+  summary consistency.
+- They must not be uploaded, persisted, routed to backend mutation APIs, or used
+  as approval records, rankings, recommendations, order instructions, or
+  performance reports.
+
 ## Shadow
 
 Shadow trading is a future validation stage. It may observe live-like data and theoretical orders, but it must not submit broker-bound orders.
@@ -33,3 +191,40 @@ Future live work requires:
 - No broker credentials in source.
 - No live order buttons.
 - No strategy-level broker SDK calls.
+- No strategy research path may mark a dataset manifest as execution-eligible.
+- No strategy research path may convert signals into orders.
+- No backtest preview path may present a performance claim or execution-eligible
+  artifact.
+- No backtest result schema preview may populate real performance values.
+- No toy backtest path may be used as a live trading, broker execution, or marketing
+  performance claim path.
+- No artifact export path may be used as a regulated performance report or broker
+  execution record.
+- No artifact index path may be used as a strategy ranking, advisory signal, or live
+  readiness approval.
+- No artifact comparison path may rank strategies, select winners, claim alpha, or
+  convert research metadata into execution decisions.
+- No research review packet may approve paper execution, approve live trading, rank
+  strategies, certify performance, or become a regulated report.
+- No Research Review Packet Viewer UI may expose execution controls, approval
+  escalation, broker submission, ranking, or recommendation behavior.
+- No local packet JSON loader may accept unsafe approval, execution, ranking,
+  persistence, broker, Risk Engine, OMS, external download, or performance-claim
+  flags.
+- No local Research Review Packet sample export may be used as paper execution
+  approval, live approval, persisted audit record, broker instruction, performance
+  report, ranking, or recommendation.
+- No Research Review Packet loader fixture may be used outside local UI safety
+  testing or future automated browser/component tests.
+- No research bundle path may be used as a regulated performance report, advisory
+  recommendation, ranking, or live deployment approval.
+- No research bundle index path may be used as a strategy ranking, best-strategy
+  selection, advisory signal, regulated report, or live deployment approval.
+- No research review queue path may be used as a paper execution approval, live
+  approval, advisory workflow, strategy ranking, or broker execution instruction.
+- No research review decision path may be used as a paper execution approval, live
+  approval, advisory workflow, strategy ranking, broker execution instruction, or
+  performance certification.
+- No research review decision index path may be used as a paper execution approval,
+  live approval, advisory workflow, strategy ranking, broker execution instruction,
+  or performance certification.

@@ -43,6 +43,12 @@ logs/
 *.sqlite3
 *.db
 data/
+data-pipeline/reports/*
+!data-pipeline/reports/.gitkeep
+!data-pipeline/reports/README.md
+
+# Local source briefs pending explicit public-release review
+Documentation/*商業簡報*.md
 
 # OS/editor junk
 .DS_Store

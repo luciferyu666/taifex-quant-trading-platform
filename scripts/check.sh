@@ -60,6 +60,29 @@ else
   exit 1
 fi
 
+printf 'Checking release readiness audit files...\n'
+missing_release_file=0
+for required_file in \
+  docs/release-readiness-audit.md \
+  docs/release-candidate-pr-notes.md \
+  .github/pull_request_template.md \
+  .github/workflows/release-readiness.yml \
+  scripts/release-readiness-check.sh; do
+  if [[ ! -f "${required_file}" ]]; then
+    printf 'Missing required release readiness file: %s\n' "${required_file}" >&2
+    missing_release_file=1
+  fi
+done
+
+if [[ ! -x scripts/release-readiness-check.sh ]]; then
+  printf 'scripts/release-readiness-check.sh must be executable.\n' >&2
+  missing_release_file=1
+fi
+
+if [[ "${missing_release_file}" -ne 0 ]]; then
+  exit 1
+fi
+
 printf 'Checking roadmap scaffold files...\n'
 missing_roadmap_file=0
 for required_file in \
@@ -73,13 +96,103 @@ for required_file in \
   docs/phase-5-command-center-shadow-trading.md \
   docs/phase-6-reliability-go-live-readiness.md \
   backend/app/domain/contracts.py \
+  backend/app/domain/market_data.py \
+  backend/app/domain/continuous_futures.py \
+  backend/app/domain/feature_manifest.py \
+  backend/app/domain/data_versions.py \
+  backend/app/domain/strategy_research.py \
+  backend/app/domain/backtest_preview.py \
+  backend/app/domain/backtest_result.py \
+  backend/app/domain/toy_backtest.py \
+  backend/app/domain/backtest_artifact.py \
+  backend/app/domain/backtest_artifact_index.py \
+  backend/app/domain/backtest_artifact_comparison.py \
+  backend/app/domain/backtest_research_bundle.py \
+  backend/app/domain/backtest_research_bundle_index.py \
+  backend/app/domain/research_review_queue.py \
+  backend/app/domain/research_review_decision.py \
+  backend/app/domain/research_review_decision_index.py \
+  backend/app/domain/research_review_packet.py \
   backend/app/domain/exposure.py \
   backend/app/services/risk_engine.py \
   backend/app/services/oms.py \
   backend/app/services/broker_gateway.py \
+  backend/app/api/data_routes.py \
+  backend/app/api/continuous_futures_routes.py \
+  backend/app/api/feature_manifest_routes.py \
+  backend/app/api/data_version_routes.py \
+  backend/app/api/strategy_research_routes.py \
+  backend/app/api/backtest_preview_routes.py \
+  backend/app/api/backtest_result_routes.py \
+  backend/app/api/toy_backtest_routes.py \
+  backend/app/api/backtest_artifact_routes.py \
+  backend/app/api/backtest_artifact_index_routes.py \
+  backend/app/api/backtest_artifact_comparison_routes.py \
+  backend/app/api/backtest_research_bundle_routes.py \
+  backend/app/api/backtest_research_bundle_index_routes.py \
+  backend/app/api/research_review_queue_routes.py \
+  backend/app/api/research_review_decision_routes.py \
+  backend/app/api/research_review_decision_index_routes.py \
+  backend/app/api/research_review_packet_routes.py \
   backend/app/api/roadmap_routes.py \
+  data-pipeline/migrations/001_phase_2_data_platform.sql \
+  data-pipeline/migrations/apply_local_migrations.py \
+  data-pipeline/migrations/verify_local_data_platform.py \
+  data-pipeline/fixtures/market_bars_valid.csv \
+  data-pipeline/fixtures/market_bars_invalid.csv \
+  data-pipeline/fixtures/rollover_events_valid.csv \
+  data-pipeline/fixtures/rollover_events_invalid.csv \
+  data-pipeline/validation/validate_market_bar_fixtures.py \
+  data-pipeline/validation/validate_rollover_event_fixtures.py \
+  data-pipeline/validation/preview_continuous_futures.py \
+  data-pipeline/validation/build_feature_manifest.py \
+  data-pipeline/validation/persist_quality_report.py \
+  data-pipeline/validation/register_data_version.py \
+  data-pipeline/reports/README.md \
+  data-pipeline/reports/.gitkeep \
+  frontend/test-fixtures/research-review-packets/README.md \
+  frontend/test-fixtures/research-review-packets/valid.sample.json \
+  frontend/test-fixtures/research-review-packets/invalid-live-approval.json \
+  frontend/test-fixtures/research-review-packets/invalid-execution-eligible.json \
+  frontend/test-fixtures/research-review-packets/invalid-performance-claim.json \
+  frontend/test-fixtures/research-review-packets/invalid-checksum.json \
+  frontend/test-fixtures/research-review-packets/invalid-decision-summary.json \
+  frontend/app/components/researchReviewPacketValidation.ts \
+  frontend/scripts/validate-research-review-packet-fixtures.mjs \
   data-pipeline/schemas/contract_master.sql \
+  data-pipeline/schemas/market_bars.sql \
+  data-pipeline/schemas/rollover_events.sql \
+  data-pipeline/schemas/data_quality_checks.sql \
+  data-pipeline/schemas/data_versions.sql \
+  strategy-engine/sdk/dataset_manifest.py \
+  strategy-engine/sdk/research_context.py \
+  strategy-engine/sdk/backtest_contract.py \
+  strategy-engine/sdk/backtest_result.py \
+  strategy-engine/sdk/toy_backtest.py \
+  strategy-engine/sdk/backtest_artifact.py \
+  strategy-engine/sdk/backtest_artifact_index.py \
+  strategy-engine/sdk/backtest_artifact_comparison.py \
+  strategy-engine/sdk/backtest_research_bundle.py \
+  strategy-engine/sdk/backtest_research_bundle_index.py \
+  strategy-engine/sdk/research_review_queue.py \
+  strategy-engine/sdk/research_review_decision.py \
+  strategy-engine/sdk/research_review_decision_index.py \
+  strategy-engine/sdk/research_review_packet.py \
   strategy-engine/sdk/base_strategy.py \
+  strategy-engine/sdk/examples/manifest_signal_strategy.py \
+  strategy-engine/sdk/examples/backtest_preview_example.py \
+  strategy-engine/sdk/examples/backtest_result_preview_example.py \
+  strategy-engine/sdk/examples/toy_backtest_example.py \
+  strategy-engine/sdk/examples/export_backtest_artifact_example.py \
+  strategy-engine/sdk/examples/build_backtest_artifact_index_example.py \
+  strategy-engine/sdk/examples/compare_backtest_artifacts_example.py \
+  strategy-engine/sdk/examples/build_backtest_research_bundle_example.py \
+  strategy-engine/sdk/examples/build_backtest_research_bundle_index_example.py \
+  strategy-engine/sdk/examples/build_research_review_queue_example.py \
+  strategy-engine/sdk/examples/build_research_review_decision_example.py \
+  strategy-engine/sdk/examples/build_research_review_decision_index_example.py \
+  strategy-engine/sdk/examples/build_research_review_packet_example.py \
+  strategy-engine/sdk/examples/export_sample_research_review_packet.py \
   scripts/roadmap-status.sh; do
   if [[ ! -f "${required_file}" ]]; then
     printf 'Missing required roadmap scaffold file: %s\n' "${required_file}" >&2
@@ -149,6 +262,86 @@ if [[ -x "${BACKEND_PYTHON}" ]]; then
   else
     printf 'backend pytest is not installed; skipping backend tests.\n' >&2
   fi
+
+  printf 'Running local data fixture validation...\n'
+  "${BACKEND_PYTHON}" data-pipeline/validation/validate_market_bar_fixtures.py
+
+  printf 'Running local rollover fixture validation...\n'
+  "${BACKEND_PYTHON}" data-pipeline/validation/validate_rollover_event_fixtures.py
+
+  printf 'Running continuous futures preview dry-run...\n'
+  "${BACKEND_PYTHON}" data-pipeline/validation/preview_continuous_futures.py
+
+  printf 'Running feature dataset manifest dry-run...\n'
+  "${BACKEND_PYTHON}" data-pipeline/validation/build_feature_manifest.py
+
+  printf 'Running strategy research preview dry-run...\n'
+  PYTHONPATH=strategy-engine "${BACKEND_PYTHON}" \
+    strategy-engine/sdk/examples/manifest_signal_strategy.py
+
+  printf 'Running backtest preview contract dry-run...\n'
+  PYTHONPATH=strategy-engine "${BACKEND_PYTHON}" \
+    strategy-engine/sdk/examples/backtest_preview_example.py
+
+  printf 'Running backtest result schema preview dry-run...\n'
+  PYTHONPATH=strategy-engine "${BACKEND_PYTHON}" \
+    strategy-engine/sdk/examples/backtest_result_preview_example.py
+
+  printf 'Running fixture-only toy backtest dry-run...\n'
+  PYTHONPATH=strategy-engine "${BACKEND_PYTHON}" \
+    strategy-engine/sdk/examples/toy_backtest_example.py
+
+  printf 'Running backtest artifact preview dry-run...\n'
+  PYTHONPATH=strategy-engine "${BACKEND_PYTHON}" \
+    strategy-engine/sdk/examples/export_backtest_artifact_example.py
+
+  printf 'Running backtest artifact index preview dry-run...\n'
+  PYTHONPATH=strategy-engine "${BACKEND_PYTHON}" \
+    strategy-engine/sdk/examples/build_backtest_artifact_index_example.py
+
+  printf 'Running backtest artifact comparison preview dry-run...\n'
+  PYTHONPATH=strategy-engine "${BACKEND_PYTHON}" \
+    strategy-engine/sdk/examples/compare_backtest_artifacts_example.py
+
+  printf 'Running backtest research bundle preview dry-run...\n'
+  PYTHONPATH=strategy-engine "${BACKEND_PYTHON}" \
+    strategy-engine/sdk/examples/build_backtest_research_bundle_example.py
+
+  printf 'Running backtest research bundle index preview dry-run...\n'
+  PYTHONPATH=strategy-engine "${BACKEND_PYTHON}" \
+    strategy-engine/sdk/examples/build_backtest_research_bundle_index_example.py
+
+  printf 'Running research review queue preview dry-run...\n'
+  PYTHONPATH=strategy-engine "${BACKEND_PYTHON}" \
+    strategy-engine/sdk/examples/build_research_review_queue_example.py
+
+  printf 'Running research review decision preview dry-run...\n'
+  PYTHONPATH=strategy-engine "${BACKEND_PYTHON}" \
+    strategy-engine/sdk/examples/build_research_review_decision_example.py
+
+  printf 'Running research review decision index preview dry-run...\n'
+  PYTHONPATH=strategy-engine "${BACKEND_PYTHON}" \
+    strategy-engine/sdk/examples/build_research_review_decision_index_example.py
+
+  printf 'Running research review packet preview dry-run...\n'
+  PYTHONPATH=strategy-engine "${BACKEND_PYTHON}" \
+    strategy-engine/sdk/examples/build_research_review_packet_example.py
+
+  printf 'Running safe research review packet sample stdout dry-run...\n'
+  PYTHONPATH=strategy-engine "${BACKEND_PYTHON}" \
+    strategy-engine/sdk/examples/export_sample_research_review_packet.py
+
+  printf 'Running data quality report persistence dry-run...\n'
+  "${BACKEND_PYTHON}" data-pipeline/validation/persist_quality_report.py
+
+  printf 'Running data version registry dry-run...\n'
+  "${BACKEND_PYTHON}" data-pipeline/validation/register_data_version.py
+
+  printf 'Running local data migration dry-run...\n'
+  "${BACKEND_PYTHON}" data-pipeline/migrations/apply_local_migrations.py
+
+  printf 'Running local data platform verification dry-run...\n'
+  "${BACKEND_PYTHON}" data-pipeline/migrations/verify_local_data_platform.py
 else
   printf 'backend/.venv/bin/python is missing; skipping backend runtime checks. Run bash scripts/bootstrap.sh.\n' >&2
 fi
@@ -174,15 +367,25 @@ else
   printf 'npm is not available; skipping frontend checks.\n' >&2
 fi
 
+if command -v node >/dev/null 2>&1; then
+printf 'Checking frontend Research Review Packet loader fixtures...\n'
+  node --experimental-strip-types frontend/scripts/validate-research-review-packet-fixtures.mjs
+else
+  printf 'node is not available; skipping packet loader fixture checks.\n' >&2
+fi
+
 printf 'Checking website skeleton files...\n'
 missing_website_file=0
 for required_file in \
+  docs/website-conversion-qa.md \
   website/package.json \
   website/tsconfig.json \
   website/astro.config.mjs \
   website/vercel.json \
   website/src/pages/index.astro \
-  website/src/styles/global.css; do
+  website/src/styles/global.css \
+  website/scripts/check-content-safety.mjs \
+  website/scripts/check-i18n-content.mjs; do
   if [[ ! -f "${required_file}" ]]; then
     printf 'Missing required website file: %s\n' "${required_file}" >&2
     missing_website_file=1
@@ -191,6 +394,14 @@ done
 
 if [[ "${missing_website_file}" -ne 0 ]]; then
   exit 1
+fi
+
+if command -v node >/dev/null 2>&1; then
+  printf 'Running website conversion and i18n content checks...\n'
+  (cd website && node scripts/check-content-safety.mjs)
+  (cd website && node scripts/check-i18n-content.mjs)
+else
+  printf 'node is not available; skipping website content checks.\n' >&2
 fi
 
 if command -v npm >/dev/null 2>&1; then
