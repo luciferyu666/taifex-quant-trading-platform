@@ -105,12 +105,41 @@ RELEASE_READINESS_STRICT=1 make release-readiness-check
 
 Strict mode fails when the worktree is dirty, because a dirty tree cannot be a final release candidate.
 
+## Pull Request Review Workflow
+
+The release branch should be reviewed through a GitHub pull request before merging. Use `docs/release-candidate-pr-notes.md` as the PR description source and `.github/pull_request_template.md` as the standing checklist for future PRs.
+
+Before requesting review:
+
+```bash
+git status --short
+make release-readiness-check
+RELEASE_READINESS_STRICT=1 make release-readiness-check
+make check
+```
+
+The PR must explicitly state this release level:
+
+- Marketing Website: external presentation candidate
+- Web Command Center: internal demo candidate
+- Paper Research Preview: internal technical preview
+- Production Trading Platform: NOT READY
+
+The PR reviewer should verify:
+
+- `Documentation/*.md` source briefs remain excluded unless separately approved for public release.
+- `.env`, secrets, generated JSON reports, dependency directories, and build outputs are not tracked.
+- Live trading defaults remain `TRADING_MODE=paper`, `ENABLE_LIVE_TRADING=false`, and `BROKER_PROVIDER=paper`.
+- No broker SDK, live order path, account-opening flow, or production trading readiness claim was introduced.
+- All trading-related new behavior is paper-only, research-only, dry-run, or read-only.
+
 ## Acceptance Criteria
 
 - `make release-readiness-check` reports safety defaults as safe.
 - Dirty files are visible and categorized.
 - Release level is not misrepresented as production trading readiness.
 - `make check` passes before any release-candidate branch is pushed.
+- Release candidate PR notes and PR template are present.
 - Live trading remains disabled by default.
 
 ## Non-Goals

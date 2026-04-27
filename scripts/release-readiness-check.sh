@@ -61,10 +61,12 @@ printf 'Checking release-readiness artifacts...\n'
 missing_file=0
 for required_file in \
   docs/release-readiness-audit.md \
+  docs/release-candidate-pr-notes.md \
   docs/website-conversion-qa.md \
   docs/implementation-roadmap.md \
   docs/trading-safety.md \
   docs/paper-shadow-live-boundary.md \
+  .github/pull_request_template.md \
   scripts/release-readiness-check.sh \
   scripts/check.sh \
   Makefile; do
@@ -124,6 +126,7 @@ else
   printf '  include  strategy-engine SDK dry-run contracts and examples\n'
   printf '  include  frontend read-only Command Center packet viewer and fixtures\n'
   printf '  include  docs, scripts, Makefile targets needed by make check\n'
+  printf '  include  release candidate PR notes and GitHub PR template\n'
   printf '  review   Documentation/*.md before committing proprietary source briefs\n'
   printf '  exclude  .env, node_modules, venvs, build outputs, logs, generated report JSON, secrets\n'
 fi

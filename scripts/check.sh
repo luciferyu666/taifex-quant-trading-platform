@@ -64,6 +64,8 @@ printf 'Checking release readiness audit files...\n'
 missing_release_file=0
 for required_file in \
   docs/release-readiness-audit.md \
+  docs/release-candidate-pr-notes.md \
+  .github/pull_request_template.md \
   scripts/release-readiness-check.sh; do
   if [[ ! -f "${required_file}" ]]; then
     printf 'Missing required release readiness file: %s\n' "${required_file}" >&2
