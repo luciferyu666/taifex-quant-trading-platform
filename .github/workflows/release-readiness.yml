@@ -54,5 +54,8 @@ jobs:
       - name: Run strict release-readiness gate
         run: RELEASE_READINESS_STRICT=1 make release-readiness-check
 
+      - name: Create safe CI environment file
+        run: cp .env.example .env
+
       - name: Run full repository checks
         run: make check
