@@ -15,6 +15,19 @@ This document turns the current dirty local worktree into a repeatable release-c
 
 The repository remains paper-first. Live trading remains disabled by default.
 
+## Observable Health Surfaces
+
+The release baseline should be visible without reading terminal logs:
+
+- `README.md` includes the `Release Readiness` GitHub Actions badge.
+- Latest baseline tag: `v0.1.0-paper-research-preview`.
+- Marketing Website production URL: <https://taifex-quant-trading-platform-websi.vercel.app>.
+- Web Command Center production URL: <https://taifex-quant-trading-platform-front.vercel.app>.
+- Production smoke gate: `make frontend-production-smoke-check`.
+- Repository-wide gate: `make check`.
+
+The observable status must continue to state that the Marketing Website is an external presentation candidate, the Web Command Center is an internal demo candidate, Paper Research Preview is an internal technical preview, and the Production Trading Platform is **NOT READY**.
+
 ## Release Candidate Definition
 
 A repository state may be called a release candidate only when:

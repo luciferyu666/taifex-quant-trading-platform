@@ -1,5 +1,23 @@
 # Taifex Quant Trading Platform
 
+[![Release Readiness](https://github.com/luciferyu666/taifex-quant-trading-platform/actions/workflows/release-readiness.yml/badge.svg)](https://github.com/luciferyu666/taifex-quant-trading-platform/actions/workflows/release-readiness.yml)
+![Release Baseline](https://img.shields.io/badge/release-v0.1.0--paper--research--preview-blue)
+![Trading Mode](https://img.shields.io/badge/trading%20mode-paper-green)
+![Live Trading](https://img.shields.io/badge/live%20trading-disabled-critical)
+
+## Release / Deployment Health
+
+| Surface | Current status |
+| --- | --- |
+| Latest baseline tag | `v0.1.0-paper-research-preview` |
+| GitHub Actions gate | `Release Readiness` runs on PRs to `main`, pushes to `main`, and manual dispatch. |
+| Marketing Website | External presentation candidate: <https://taifex-quant-trading-platform-websi.vercel.app> |
+| Web Command Center | Internal demo candidate: <https://taifex-quant-trading-platform-front.vercel.app> |
+| Paper Research Preview | Internal technical preview only; fixture-based, dry-run, local JSON / stdout artifacts. |
+| Production Trading Platform | **NOT READY** for live trading, customer execution, managed accounts, copy trading, or signal services. |
+
+Production-facing safety checks verify HTTP 200 responses, deployment id markers, bilingual safety copy, `TRADING_MODE=paper`, `ENABLE_LIVE_TRADING=false`, `BROKER_PROVIDER=paper`, `NOT READY`, and unsafe marketing-claim exclusions. The platform remains paper-first; live trading is disabled by default.
+
 ## Executive Summary
 
 Taifex Quant Trading Platform is a Web-based quantitative trading infrastructure platform for Taiwan Index Futures, focused on TX, MTX, and TMF workflows. It is not a simple trading bot. The platform vision is to combine data governance, strategy research, backtesting, paper trading, shadow trading, risk controls, OMS discipline, broker gateway isolation, monitoring, and enterprise controls into a coherent trading operating system for Taiwan futures quant teams.

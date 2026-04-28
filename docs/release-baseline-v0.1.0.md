@@ -6,6 +6,20 @@ This document records the first post-merge release baseline after PR #1, `Prepar
 
 This baseline is intended to be versioned as `v0.1.0-paper-research-preview`. It is a paper-first engineering and presentation baseline, not a production trading release.
 
+## Release / Deployment Observability
+
+| Signal | Current baseline |
+| --- | --- |
+| Git tag | `v0.1.0-paper-research-preview` |
+| GitHub Actions badge | `README.md` exposes the `Release Readiness` workflow badge. |
+| Release readiness workflow | `.github/workflows/release-readiness.yml` runs on pull requests to `main`, pushes to `main`, and manual dispatch. |
+| Marketing Website | <https://taifex-quant-trading-platform-websi.vercel.app> |
+| Web Command Center | <https://taifex-quant-trading-platform-front.vercel.app> |
+| Production smoke gate | `make frontend-production-smoke-check` checks the Web Command Center production alias. |
+| Repository-wide gate | `make check` runs backend tests, dry-run data/research checks, frontend checks, website checks, and Docker Compose config validation when available. |
+
+Production-facing smoke checks are read-only. They verify HTTP 200 responses, deployment id markers, bilingual safety copy, `TRADING_MODE=paper`, `ENABLE_LIVE_TRADING=false`, `BROKER_PROVIDER=paper`, `NOT READY`, and unsafe claim exclusions. They do not deploy, write data, call brokers, approve paper execution, or enable live trading.
+
 ## Release Level
 
 | Surface | Release level | Status |

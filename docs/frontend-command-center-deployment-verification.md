@@ -8,6 +8,10 @@ This runbook verifies that the standalone Web Command Center deployment on Verce
 - Production alias: `https://taifex-quant-trading-platform-front.vercel.app`
 - Local project directory: `frontend/`
 - Expected default posture: paper-only, read-only, and not production trading ready
+- Release baseline: `v0.1.0-paper-research-preview`
+- Release level: internal demo candidate for the Web Command Center; Production Trading Platform is **NOT READY**
+
+The repository README exposes the `Release Readiness` GitHub Actions badge and the production URL so reviewers can find the current deployment health status quickly.
 
 ## Preconditions
 
