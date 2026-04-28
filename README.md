@@ -10,6 +10,7 @@
 | Surface | Current status |
 | --- | --- |
 | Latest baseline tag | `v0.1.0-paper-research-preview` |
+| Verification record | `docs/release-verification-record-2026-04-28.md` |
 | GitHub Actions gate | `Release Readiness` runs on PRs to `main`, pushes to `main`, and manual dispatch. |
 | Marketing Website | External presentation candidate: <https://taifex-quant-trading-platform-websi.vercel.app> |
 | Web Command Center | Internal demo candidate: <https://taifex-quant-trading-platform-front.vercel.app> |
