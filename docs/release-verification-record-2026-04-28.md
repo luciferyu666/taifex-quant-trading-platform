@@ -364,6 +364,83 @@ Local state after refresh:
 ## main...origin/main
 ```
 
+## Paper Execution Verification Docs Deployment Refresh
+
+After the paper execution verification record was committed, the docs-only push
+triggered another Web Command Center production deployment. The production alias was
+re-checked and the automated smoke gate passed again.
+
+Refresh time:
+
+```text
+2026-04-28 21:11:55 CST (+0800)
+```
+
+Refresh commit:
+
+```text
+80ec04a Update release verification for paper execution workflow
+```
+
+GitHub Actions verification:
+
+```text
+workflow: Release Readiness
+run: 25053655899
+event: push
+branch: main
+status: completed
+conclusion: success
+duration: 1m20s
+```
+
+Production alias inspection:
+
+```text
+alias: https://taifex-quant-trading-platform-front.vercel.app
+url: https://taifex-quant-trading-platform-frontend-k6mno0udh.vercel.app
+id: dpl_677MFAp3YEqpQwjMUxPyWxpsbhtv
+target: production
+status: Ready
+created: Tue Apr 28 2026 20:47:13 GMT+0800
+```
+
+Production smoke gate refresh:
+
+```text
+Production Command Center smoke check passed.
+Production root returned HTTP 200.
+Traditional Chinese page returned HTTP 200.
+English page returned HTTP 200.
+All checked pages use deployment id dpl_677MFAp3YEqpQwjMUxPyWxpsbhtv.
+```
+
+The refreshed smoke gate confirmed:
+
+- `TRADING_MODE`
+- `ENABLE_LIVE_TRADING`
+- `BROKER_PROVIDER`
+- `NOT READY`
+- `實盤關閉`
+- `僅限紙上交易`
+- `Paper-first`
+- `Paper Only`
+
+The refreshed smoke gate rejected unsafe copy:
+
+- `guaranteed profit`
+- `risk-free`
+- `保證獲利`
+- `零風險`
+- unsafe `approve live`
+- unsafe `核准實盤`
+
+Local state after refresh:
+
+```text
+## main...origin/main
+```
+
 ## Marketing Website Reachability
 
 Command:
