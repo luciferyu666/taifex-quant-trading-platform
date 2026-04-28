@@ -122,6 +122,14 @@ GitHub must also report the `Release readiness gate` check from `.github/workflo
 
 The production smoke gate is read-only. It checks the current production Web Command Center alias for HTTP 200, deployment id markers, bilingual safety copy, and unsafe claim language. It does not deploy, write data, call brokers, or approve trading.
 
+The workflow uses Node 24-compatible GitHub action major versions:
+
+- `actions/checkout@v6`
+- `actions/setup-python@v6`
+- `actions/setup-node@v6`
+
+This keeps the release-readiness workflow aligned with GitHub's JavaScript action runtime migration while leaving the project runtime pinned separately at Python 3.12 and Node.js 22.12.0.
+
 The PR must explicitly state this release level:
 
 - Marketing Website: external presentation candidate

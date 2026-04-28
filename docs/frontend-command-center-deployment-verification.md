@@ -128,6 +128,7 @@ Expected behavior:
 - Can be started manually with `workflow_dispatch`.
 - Uses `FRONTEND_PRODUCTION_URL=https://taifex-quant-trading-platform-front.vercel.app`.
 - Performs a read-only production safety check before the strict release readiness gate and `make check`.
+- Uses Node 24-compatible GitHub actions: `actions/checkout@v6`, `actions/setup-python@v6`, and `actions/setup-node@v6`.
 
 This workflow step verifies the current production-facing safety copy. It does not deploy the frontend and does not require Vercel tokens.
 
