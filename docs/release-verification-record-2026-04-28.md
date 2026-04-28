@@ -624,6 +624,81 @@ Local state before updating this record:
 ## main...origin/main
 ```
 
+## Paper Execution Demo Seed Verification
+
+Commit:
+
+```text
+16a8930 Add paper execution demo seed
+```
+
+Release Readiness CI:
+
+```text
+run id: 25081314261
+status: completed / success
+workflow: Release Readiness
+branch: main
+event: push
+created: 2026-04-28T22:38:29Z
+```
+
+Vercel production deployment:
+
+```text
+alias: https://taifex-quant-trading-platform-front.vercel.app
+deployment url: https://taifex-quant-trading-platform-frontend-ea6550vb0.vercel.app
+deployment id: dpl_DSms6389h5AUeqPrdPzDwC2q1qT6
+target: production
+status: Ready
+created: Wed Apr 29 2026 06:38:29 GMT+0800
+```
+
+Production smoke gate:
+
+```text
+Production Command Center smoke check passed.
+Production root returned HTTP 200.
+Traditional Chinese page returned HTTP 200.
+English page returned HTTP 200.
+All checked pages use deployment id dpl_DSms6389h5AUeqPrdPzDwC2q1qT6.
+```
+
+Demo seed command:
+
+```bash
+make seed-paper-execution-demo
+```
+
+Observed result:
+
+```text
+workflow_run_id=paper-workflow-d7b2ac8fefc1163b
+order_id=paper-order-3cf67787047bb55d
+final_oms_status=PARTIALLY_FILLED
+paper_only=True
+live_trading_enabled=False
+broker_api_called=False
+```
+
+Persistence validation:
+
+```text
+make paper-execution-persistence-check
+10 passed
+```
+
+Seed scope:
+
+- Explicit local command only.
+- Local SQLite only via `PAPER_EXECUTION_AUDIT_DB_PATH`.
+- No FastAPI server call.
+- No broker API or broker SDK call.
+- No external database write.
+- No real order submission.
+- Local `data/` runtime output remains ignored by git.
+- Live trading remains disabled by default.
+
 ## Marketing Website Reachability
 
 Command:
