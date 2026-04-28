@@ -117,7 +117,21 @@ You can override the production URL for a staging alias without editing source f
 FRONTEND_PRODUCTION_URL="https://example.vercel.app" make frontend-production-smoke-check
 ```
 
-## 6. Git Clean State Check
+## 6. GitHub Actions Gate
+
+The same production smoke check is part of `.github/workflows/release-readiness.yml`.
+
+Expected behavior:
+
+- Runs on pull requests targeting `main`.
+- Runs on pushes to `main`.
+- Can be started manually with `workflow_dispatch`.
+- Uses `FRONTEND_PRODUCTION_URL=https://taifex-quant-trading-platform-front.vercel.app`.
+- Performs a read-only production safety check before the strict release readiness gate and `make check`.
+
+This workflow step verifies the current production-facing safety copy. It does not deploy the frontend and does not require Vercel tokens.
+
+## 7. Git Clean State Check
 
 Confirm deployment verification did not generate local source changes.
 
@@ -133,7 +147,7 @@ Expected result:
 
 If files are modified, inspect them before committing or discarding. Do not commit generated build artifacts, Vercel local state, logs, report JSON, `.env`, or secrets.
 
-## 7. Live Trading Disabled Confirmation
+## 8. Live Trading Disabled Confirmation
 
 Verify safe environment defaults remain present.
 

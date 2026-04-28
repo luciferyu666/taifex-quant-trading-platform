@@ -1,6 +1,9 @@
 name: Release Readiness
 
 on:
+  push:
+    branches:
+      - main
   pull_request:
     branches:
       - main
@@ -50,6 +53,11 @@ jobs:
 
       - name: Install website dependencies
         run: npm ci --prefix website
+
+      - name: Run Command Center production smoke gate
+        env:
+          FRONTEND_PRODUCTION_URL: https://taifex-quant-trading-platform-front.vercel.app
+        run: make frontend-production-smoke-check
 
       - name: Run strict release-readiness gate
         run: RELEASE_READINESS_STRICT=1 make release-readiness-check

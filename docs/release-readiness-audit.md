@@ -118,7 +118,9 @@ RELEASE_READINESS_STRICT=1 make release-readiness-check
 make check
 ```
 
-GitHub must also report the `Release readiness gate` check from `.github/workflows/release-readiness.yml`. The workflow installs backend, frontend, and website dependencies in a clean runner, then runs the strict release gate and `make check`.
+GitHub must also report the `Release readiness gate` check from `.github/workflows/release-readiness.yml`. The workflow runs on pull requests targeting `main`, pushes to `main`, and manual dispatch. It installs backend, frontend, and website dependencies in a clean runner, runs the Web Command Center production smoke gate, then runs the strict release gate and `make check`.
+
+The production smoke gate is read-only. It checks the current production Web Command Center alias for HTTP 200, deployment id markers, bilingual safety copy, and unsafe claim language. It does not deploy, write data, call brokers, or approve trading.
 
 The PR must explicitly state this release level:
 
@@ -134,6 +136,7 @@ The PR reviewer should verify:
 - Live trading defaults remain `TRADING_MODE=paper`, `ENABLE_LIVE_TRADING=false`, and `BROKER_PROVIDER=paper`.
 - No broker SDK, live order path, account-opening flow, or production trading readiness claim was introduced.
 - All trading-related new behavior is paper-only, research-only, dry-run, or read-only.
+- The Web Command Center production smoke gate passes and still reports `TRADING_MODE`, `ENABLE_LIVE_TRADING`, `BROKER_PROVIDER`, `NOT READY`, `Paper-first`, `Paper Only`, `實盤關閉`, and `僅限紙上交易`.
 - GitHub Actions reports `Release readiness gate` as passing before merge.
 
 ## Acceptance Criteria
