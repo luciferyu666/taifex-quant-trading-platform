@@ -276,6 +276,94 @@ Local state after refresh:
 ## main...origin/main
 ```
 
+## Paper Execution Approval Workflow Deployment Refresh
+
+After the Paper Execution Approval Workflow was added, the `main` push triggered a
+new `Release Readiness` run and a new Web Command Center production deployment. The
+production alias was re-checked and the automated production smoke gate passed.
+
+Refresh time:
+
+```text
+2026-04-28 20:41:00 CST (+0800)
+```
+
+Refresh commit:
+
+```text
+db65ce6 Add paper execution approval workflow
+```
+
+GitHub Actions verification:
+
+```text
+workflow: Release Readiness
+run: 25052491609
+event: push
+branch: main
+status: completed
+conclusion: success
+duration: 1m19s
+```
+
+Production alias inspection:
+
+```text
+alias: https://taifex-quant-trading-platform-front.vercel.app
+url: https://taifex-quant-trading-platform-frontend-lq2i461uc.vercel.app
+id: dpl_BLY1Uh8c3LKLMaDjsRcaS3cNekfg
+target: production
+status: Ready
+created: Tue Apr 28 2026 20:21:49 GMT+0800
+```
+
+Production smoke gate refresh:
+
+```text
+Production Command Center smoke check passed.
+Production root returned HTTP 200.
+Traditional Chinese page returned HTTP 200.
+English page returned HTTP 200.
+All checked pages use deployment id dpl_BLY1Uh8c3LKLMaDjsRcaS3cNekfg.
+```
+
+The refreshed smoke gate confirmed:
+
+- `TRADING_MODE`
+- `ENABLE_LIVE_TRADING`
+- `BROKER_PROVIDER`
+- `NOT READY`
+- `實盤關閉`
+- `僅限紙上交易`
+- `Paper-first`
+- `Paper Only`
+
+The refreshed smoke gate rejected unsafe copy:
+
+- `guaranteed profit`
+- `risk-free`
+- `保證獲利`
+- `零風險`
+- unsafe `approve live`
+- unsafe `核准實盤`
+
+Paper execution workflow status:
+
+```text
+Paper execution approval workflow is now versioned on main.
+StrategySignal remains signal-only.
+PaperOrderIntent can be created only by the platform after approved_for_paper_simulation.
+Paper order simulation must pass through Risk Engine, OMS, Paper Broker Gateway, and audit events.
+Web Command Center shows the workflow as Paper Only and read-only.
+No live trading controls, real broker adapters, broker SDK calls, or real orders were added.
+```
+
+Local state after refresh:
+
+```text
+## main...origin/main
+```
+
 ## Marketing Website Reachability
 
 Command:
