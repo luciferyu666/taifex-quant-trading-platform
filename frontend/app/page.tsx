@@ -158,7 +158,7 @@ const fallbackResearchReviewPacket: ResearchReviewPacket = {
   },
   reproducibility_hash: "7777777777777777777777777777777777777777777777777777777777777777",
   warnings: [
-    "Fallback packet is read-only UI metadata. It does not approve paper execution, approve live trading, rank strategies, call brokers, or claim performance.",
+    "Fallback packet is read-only UI metadata. It does not approve paper execution or live trading, rank strategies, call brokers, or claim performance.",
   ],
   research_only: true,
   execution_eligible: false,

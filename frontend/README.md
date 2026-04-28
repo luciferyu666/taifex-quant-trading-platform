@@ -17,6 +17,26 @@ npm run typecheck
 npm run build
 ```
 
+## Bilingual Safety QA
+
+The Command Center supports English and Traditional Chinese through
+`frontend/app/i18n.ts`.
+
+Run the local content gate before changing dashboard copy:
+
+```bash
+make frontend-i18n-check
+```
+
+The check verifies:
+
+- English and Traditional Chinese copy blocks are present.
+- `TRADING_MODE`, `ENABLE_LIVE_TRADING`, `BROKER_PROVIDER`, `paper`, and
+  `NOT READY` remain visible in the UI copy.
+- Traditional Chinese safety copy keeps `實盤關閉` and `僅限紙上交易`.
+- High-risk phrases such as guaranteed profit, risk-free, 保證獲利, 零風險,
+  and unqualified live-trading approval language are rejected.
+
 ## Vercel Deployment
 
 The Web Command Center is deployed as a separate Vercel project from the

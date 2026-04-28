@@ -118,8 +118,8 @@ export const dashboardCopy = {
       warningsKicker: "Warnings",
       warningsTitle: "Review notes",
       warningLabels: {
-        "Fallback packet is read-only UI metadata. It does not approve paper execution, approve live trading, rank strategies, call brokers, or claim performance.":
-          "Fallback packet is read-only UI metadata. It does not approve paper execution, approve live trading, rank strategies, call brokers, or claim performance.",
+        "Fallback packet is read-only UI metadata. It does not approve paper execution or live trading, rank strategies, call brokers, or claim performance.":
+          "Fallback packet is read-only UI metadata. It does not approve paper execution or live trading, rank strategies, call brokers, or claim performance.",
       },
     },
     decisionSummary: {
@@ -331,7 +331,7 @@ export const dashboardCopy = {
       warningsKicker: "警示",
       warningsTitle: "審核備註",
       warningLabels: {
-        "Fallback packet is read-only UI metadata. It does not approve paper execution, approve live trading, rank strategies, call brokers, or claim performance.":
+        "Fallback packet is read-only UI metadata. It does not approve paper execution or live trading, rank strategies, call brokers, or claim performance.":
           "備援 packet 僅為只讀 UI metadata；不核准紙上執行、不核准實盤、不排名策略、不呼叫券商，也不形成績效宣稱。",
       },
     },
