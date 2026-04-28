@@ -51,6 +51,13 @@ export const dashboardCopy = {
       safetyText:
         "A platform-created PaperOrderIntent may be simulated only after paper review. It remains separate from live trading and never calls a real broker.",
       brokerApiCalled: "BROKER_API_CALLED",
+      persistenceBackend: "Persistence",
+      persistenceAria: "Local paper execution persistence status",
+      localOnly: "LOCAL_ONLY",
+      runs: "Runs",
+      omsEvents: "OMS events",
+      auditEvents: "Audit events",
+      dbPath: "Local DB",
       statusLabels: {
         research_approved: "Research approved",
         approved_for_paper_simulation: "Approved for paper simulation",
@@ -297,6 +304,13 @@ export const dashboardCopy = {
       safetyText:
         "平台建立的 PaperOrderIntent 只有在紙上審核後才能模擬，且與實盤交易分離，永遠不呼叫真實券商。",
       brokerApiCalled: "BROKER_API_CALLED",
+      persistenceBackend: "持久化",
+      persistenceAria: "本地紙上執行持久化狀態",
+      localOnly: "LOCAL_ONLY",
+      runs: "執行紀錄",
+      omsEvents: "OMS 事件",
+      auditEvents: "稽核事件",
+      dbPath: "本地 DB",
       statusLabels: {
         research_approved: "研究已通過",
         approved_for_paper_simulation: "已核准紙上模擬",

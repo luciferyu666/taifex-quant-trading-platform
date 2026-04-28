@@ -139,11 +139,13 @@ for required_file in \
   backend/app/domain/research_review_decision_index.py \
   backend/app/domain/research_review_packet.py \
   backend/app/domain/paper_execution.py \
+  backend/app/domain/paper_execution_records.py \
   backend/app/domain/exposure.py \
   backend/app/services/risk_engine.py \
   backend/app/services/oms.py \
   backend/app/services/broker_gateway.py \
   backend/app/services/paper_execution_workflow.py \
+  backend/app/services/paper_execution_store.py \
   backend/app/api/data_routes.py \
   backend/app/api/continuous_futures_routes.py \
   backend/app/api/feature_manifest_routes.py \
@@ -248,8 +250,10 @@ for required_file in \
   backend/app/domain/allocator.py \
   backend/app/domain/risk_rules.py \
   backend/app/domain/paper_execution.py \
+  backend/app/domain/paper_execution_records.py \
   backend/app/services/paper_broker_gateway.py \
   backend/app/services/paper_execution_workflow.py \
+  backend/app/services/paper_execution_store.py \
   backend/app/services/reconciliation.py \
   backend/app/api/paper_execution_routes.py \
   backend/app/api/architecture_routes.py \

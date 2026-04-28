@@ -60,11 +60,14 @@ class PaperExecutionWorkflowRequest(BaseModel):
 
 
 class PaperExecutionWorkflowResponse(BaseModel):
+    workflow_run_id: str = ""
     paper_only: bool = True
     live_trading_enabled: bool = False
     broker_api_called: bool = False
     order_created: bool = False
     paper_broker_gateway_called: bool = False
+    persisted: bool = False
+    persistence_backend: str = "none"
     approval: PaperExecutionApproval
     paper_order_intent: PaperOrderIntent | None = None
     risk_evaluation: RiskEvaluation | None = None
@@ -97,6 +100,23 @@ def create_approval(
             request.approval_decision == "approved_for_paper_simulation"
         ),
     )
+
+
+def create_workflow_run_id(
+    request: PaperExecutionWorkflowRequest,
+    approval: PaperExecutionApproval,
+) -> str:
+    workflow_core = {
+        "approval_id": approval.approval_id,
+        "signal_id": request.signal.signal_id,
+        "strategy_id": request.signal.strategy_id,
+        "strategy_version": request.signal.strategy_version,
+        "symbol": request.symbol,
+        "quantity": request.quantity,
+        "broker_simulation": request.broker_simulation,
+        "paper_only": True,
+    }
+    return f"paper-workflow-{sha256_json(workflow_core)[:16]}"
 
 
 def paper_order_intent_from_signal(

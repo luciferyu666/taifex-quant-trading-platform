@@ -34,6 +34,9 @@ Expose roadmap phase status, contracts, safety mode, risk status, and paper-only
 - Paper execution safety indicators:
   `TRADING_MODE=paper`, `ENABLE_LIVE_TRADING=false`, `BROKER_PROVIDER=paper`, and
   `BROKER_API_CALLED=false`.
+- Read-only paper execution persistence status showing local SQLite backend, local-only
+  state, persisted workflow run count, OMS event count, audit event count, and local DB
+  path.
 
 ## Acceptance Criteria
 
@@ -76,6 +79,9 @@ Expose roadmap phase status, contracts, safety mode, risk status, and paper-only
   simulation status, required route, and safety indicators.
 - Paper Execution Approval Workflow panel does not include submit buttons,
   simulation triggers, broker connection controls, or live controls.
+- Paper execution persistence status is display-only. It may show local record counts,
+  but it must not create records, mutate records, upload files, write remote databases,
+  or expose broker/live controls.
 
 ## Safety Constraints
 
@@ -101,6 +107,10 @@ Expose roadmap phase status, contracts, safety mode, risk status, and paper-only
 - The Paper Execution Approval Workflow panel is a display surface only. It must not
   create paper simulations, create order intents, call Risk Engine, call OMS, call
   Broker Gateway, write databases, connect brokers, or expose live controls.
+- The paper execution persistence status panel is also display-only. It reads
+  `GET /api/paper-execution/persistence/status` and must not call
+  `/workflow/record`, broker endpoints, Risk Engine mutation paths, OMS mutation paths,
+  or any live approval path.
 
 ## Suggested Commands
 
@@ -108,6 +118,7 @@ Expose roadmap phase status, contracts, safety mode, risk status, and paper-only
 cd frontend && npm run typecheck
 cd frontend && npm run build
 make paper-execution-workflow-check
+make paper-execution-persistence-check
 make sample-research-review-packet
 make research-review-packet-fixtures-check
 cd backend && .venv/bin/python -m pytest tests/test_release_baseline_routes.py
@@ -136,6 +147,7 @@ The Release Baseline dashboard should remain a status and audit-readiness surfac
 Future changes may add historical release comparisons, but must not add release
 approval buttons, live-trading enablement, broker actions, or production-readiness
 claims without a separate Phase 6 readiness and compliance review.
-The paper execution workflow status panel may later show persisted paper OMS/audit
-events after a reviewed persistence slice exists. Until then, it remains read-only
-status and must not expose frontend controls that create paper simulations.
+The paper execution persistence status panel now shows local SQLite paper workflow
+record counts only. Future UI may add read-only tables for persisted runs and events,
+but must not add paper simulation submit controls, approval escalation, broker
+connection controls, or live trading controls without a separate reviewed slice.

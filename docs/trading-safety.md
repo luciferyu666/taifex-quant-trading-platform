@@ -102,6 +102,12 @@ Paper simulation is allowed only through a platform-owned workflow:
 - Paper Broker Gateway simulates acknowledgement, rejection, partial fill, fill, and
   cancellation only.
 - Every workflow run must emit audit events.
+- `POST /api/paper-execution/workflow/record` may persist paper workflow metadata,
+  OMS events, and audit events to local SQLite for audit review.
+- Local paper persistence defaults to `data/paper_execution_audit.sqlite` through
+  `PAPER_EXECUTION_AUDIT_DB_PATH`.
+- Local `.sqlite` files remain ignored by git and must not contain broker secrets,
+  account IDs, API keys, certificates, or live orders.
 - No real broker SDK is called.
 - No real order is placed.
 - `ENABLE_LIVE_TRADING=false` remains required.

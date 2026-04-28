@@ -147,6 +147,15 @@ Phase 4 paper execution approval workflow is the first controlled paper simulati
   cancellation only. It never submits real orders or calls a real broker SDK.
 - Audit events are emitted for approval, intent creation, risk evaluation, paper
   broker simulation, and OMS lifecycle recording.
+- `/api/paper-execution/workflow/record` can persist a completed paper workflow run to
+  local SQLite for audit review. It records paper workflow metadata, OMS events, and
+  audit events only.
+- Local paper execution persistence uses `PAPER_EXECUTION_AUDIT_DB_PATH`, defaults to
+  `data/paper_execution_audit.sqlite`, and remains local-only.
+- Persisted paper records are queryable through read-only `/api/paper-execution/runs`,
+  `/api/paper-execution/orders/{order_id}/oms-events`, and audit-event endpoints.
+- Local `.sqlite` outputs must stay ignored by git and must not contain broker
+  credentials, account IDs, API keys, certificates, or live orders.
 - `ENABLE_LIVE_TRADING=false` and `BROKER_PROVIDER=paper` remain required.
 
 Phase 5 Research Review Packet Viewer is read-only UI:
@@ -229,6 +238,9 @@ Future live work requires:
 - No Paper Execution Approval Workflow UI panel may create simulations, create
   order intents, connect brokers, trigger Risk Engine, trigger OMS, call Broker
   Gateway, or expose live controls.
+- No Paper Execution persistence status UI panel may call `/workflow/record`, create
+  simulations, mutate databases, connect brokers, approve paper execution, approve
+  live trading, or expose live controls.
 - No local packet JSON loader may accept unsafe approval, execution, ranking,
   persistence, broker, Risk Engine, OMS, external download, or performance-claim
   flags.

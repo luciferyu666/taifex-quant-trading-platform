@@ -47,6 +47,19 @@ type PaperExecutionStatus = {
   message: string;
 };
 
+type PaperExecutionPersistenceStatus = {
+  enabled: boolean;
+  backend: string;
+  db_path: string;
+  local_only: boolean;
+  live_trading_enabled: boolean;
+  broker_api_called: boolean;
+  runs_count: number;
+  oms_events_count: number;
+  audit_events_count: number;
+  message: string;
+};
+
 type LoadState<T> = { available: true; data: T } | { available: false; error: string; data: T };
 
 const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL ?? "http://localhost:8000";
@@ -130,6 +143,19 @@ const fallbackPaperExecutionStatus: PaperExecutionStatus = {
   ui_mode: "Paper Only read-only workflow status. No live controls are exposed.",
   broker_api_called: false,
   message: "Fallback paper execution workflow status. Backend is unavailable.",
+};
+
+const fallbackPaperExecutionPersistenceStatus: PaperExecutionPersistenceStatus = {
+  enabled: false,
+  backend: "sqlite",
+  db_path: "data/paper_execution_audit.sqlite",
+  local_only: true,
+  live_trading_enabled: false,
+  broker_api_called: false,
+  runs_count: 0,
+  oms_events_count: 0,
+  audit_events_count: 0,
+  message: "Fallback local persistence status. Backend is unavailable.",
 };
 
 const fallbackReleaseBaseline: ReleaseBaseline = {
@@ -246,6 +272,7 @@ export default async function Home({ searchParams }: HomeProps) {
     contractsResponse,
     paperStatus,
     paperExecutionStatus,
+    paperExecutionPersistence,
     releaseBaseline,
     reviewPacket,
   ] =
@@ -257,6 +284,10 @@ export default async function Home({ searchParams }: HomeProps) {
       fetchJson<PaperExecutionStatus>(
         "/api/paper-execution/status",
         fallbackPaperExecutionStatus,
+      ),
+      fetchJson<PaperExecutionPersistenceStatus>(
+        "/api/paper-execution/persistence/status",
+        fallbackPaperExecutionPersistenceStatus,
       ),
       fetchJson<ReleaseBaseline>("/api/release/baseline", fallbackReleaseBaseline),
       fetchJson<ResearchReviewPacket>(
@@ -394,8 +425,31 @@ export default async function Home({ searchParams }: HomeProps) {
                 {copy.paperExecution.brokerApiCalled}=
                 {String(paperExecutionStatus.data.broker_api_called)}
               </span>
+              <span className={paperExecutionPersistence.data.enabled ? "metric ok" : "metric warn"}>
+                {copy.paperExecution.persistenceBackend}:{" "}
+                {paperExecutionPersistence.data.backend}
+              </span>
+              <span className="metric ok">
+                {copy.paperExecution.localOnly}=
+                {String(paperExecutionPersistence.data.local_only)}
+              </span>
             </div>
           </article>
+        </div>
+        <div className="persistence-strip" aria-label={copy.paperExecution.persistenceAria}>
+          <span>
+            {copy.paperExecution.runs}: {paperExecutionPersistence.data.runs_count}
+          </span>
+          <span>
+            {copy.paperExecution.omsEvents}: {paperExecutionPersistence.data.oms_events_count}
+          </span>
+          <span>
+            {copy.paperExecution.auditEvents}:{" "}
+            {paperExecutionPersistence.data.audit_events_count}
+          </span>
+          <span>
+            {copy.paperExecution.dbPath}: {paperExecutionPersistence.data.db_path}
+          </span>
         </div>
       </section>
 

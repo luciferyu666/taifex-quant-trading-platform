@@ -1,6 +1,6 @@
 SHELL := /usr/bin/env bash
 
-.PHONY: help init infra dev backend frontend frontend-i18n-check frontend-production-smoke-check website website-build website-preview website-check website-content-check website-deploy roadmap-status release-readiness-check customer-evaluation-check paper-execution-workflow-check data-fixtures-check rollover-fixtures-check continuous-futures-preview feature-manifest-preview strategy-research-preview backtest-preview backtest-result-preview toy-backtest backtest-artifact-preview backtest-artifact-index-preview backtest-artifact-comparison-preview backtest-research-bundle-preview backtest-research-bundle-index-preview research-review-queue-preview research-review-decision-preview research-review-decision-index-preview research-review-packet-preview sample-research-review-packet research-review-packet-fixtures-check data-quality-reports-dry-run data-version-register-dry-run data-migrations-dry-run data-platform-verify architecture-status architecture-docs-check architecture-safety-check business-docs-check business-compliance-check business-status check test codex-prompt clean
+.PHONY: help init infra dev backend frontend frontend-i18n-check frontend-production-smoke-check website website-build website-preview website-check website-content-check website-deploy roadmap-status release-readiness-check customer-evaluation-check paper-execution-workflow-check paper-execution-persistence-check data-fixtures-check rollover-fixtures-check continuous-futures-preview feature-manifest-preview strategy-research-preview backtest-preview backtest-result-preview toy-backtest backtest-artifact-preview backtest-artifact-index-preview backtest-artifact-comparison-preview backtest-research-bundle-preview backtest-research-bundle-index-preview research-review-queue-preview research-review-decision-preview research-review-decision-index-preview research-review-packet-preview sample-research-review-packet research-review-packet-fixtures-check data-quality-reports-dry-run data-version-register-dry-run data-migrations-dry-run data-platform-verify architecture-status architecture-docs-check architecture-safety-check business-docs-check business-compliance-check business-status check test codex-prompt clean
 
 help:
 	@printf 'Taifex Quant Trading Platform commands\n'
@@ -22,6 +22,7 @@ help:
 	@printf '  make release-readiness-check Audit release level, dirty worktree, and safety gates\n'
 	@printf '  make customer-evaluation-check Validate controlled customer evaluation package\n'
 	@printf '  make paper-execution-workflow-check Validate paper-only execution approval workflow\n'
+	@printf '  make paper-execution-persistence-check Validate local paper OMS/audit persistence\n'
 	@printf '  make data-fixtures-check Validate local market data CSV fixtures\n'
 	@printf '  make rollover-fixtures-check Validate local rollover event CSV fixtures\n'
 	@printf '  make continuous-futures-preview Preview research-only continuous futures locally\n'
@@ -116,7 +117,10 @@ customer-evaluation-check:
 	bash scripts/customer-evaluation-check.sh
 
 paper-execution-workflow-check:
-	cd backend && . .venv/bin/activate && pytest tests/test_paper_execution_workflow.py tests/test_paper_execution_routes.py
+	cd backend && . .venv/bin/activate && pytest tests/test_paper_execution_workflow.py tests/test_paper_execution_routes.py tests/test_paper_execution_store.py
+
+paper-execution-persistence-check:
+	cd backend && . .venv/bin/activate && pytest tests/test_paper_execution_store.py tests/test_paper_execution_routes.py
 
 data-fixtures-check:
 	backend/.venv/bin/python data-pipeline/validation/validate_market_bar_fixtures.py

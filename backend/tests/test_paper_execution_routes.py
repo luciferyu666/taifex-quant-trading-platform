@@ -1,7 +1,9 @@
 from datetime import UTC, datetime
+from pathlib import Path
 
 from fastapi.testclient import TestClient
 
+from app.core.config import get_settings
 from app.main import app
 
 
@@ -117,3 +119,70 @@ def test_paper_execution_workflow_preview_rejects_unsafe_signal() -> None:
 
     assert response.status_code == 400
     assert "signals_only=true" in response.json()["detail"]
+
+
+def test_paper_execution_workflow_record_persists_and_exposes_query_endpoints(
+    tmp_path: Path,
+    monkeypatch,
+) -> None:
+    db_path = tmp_path / "paper_execution_audit.sqlite"
+    monkeypatch.setenv("PAPER_EXECUTION_AUDIT_DB_PATH", str(db_path))
+    get_settings.cache_clear()
+    client = TestClient(app)
+
+    try:
+        response = client.post(
+            "/api/paper-execution/workflow/record",
+            json={
+                "signal": _signal_payload(),
+                "approval_decision": "approved_for_paper_simulation",
+                "approval_reason": "record this paper simulation",
+                "broker_simulation": "fill",
+            },
+        )
+
+        assert response.status_code == 200
+        payload = response.json()
+        workflow_run_id = payload["workflow_run_id"]
+        order_id = payload["paper_order_intent"]["order_id"]
+        assert payload["persisted"] is True
+        assert payload["persistence_backend"] == "sqlite"
+        assert db_path.exists()
+
+        status = client.get("/api/paper-execution/persistence/status").json()
+        assert status["enabled"] is True
+        assert status["backend"] == "sqlite"
+        assert status["local_only"] is True
+        assert status["live_trading_enabled"] is False
+        assert status["broker_api_called"] is False
+        assert status["runs_count"] == 1
+
+        runs = client.get("/api/paper-execution/runs").json()
+        assert runs[0]["workflow_run_id"] == workflow_run_id
+        assert runs[0]["final_oms_status"] == "FILLED"
+
+        run = client.get(f"/api/paper-execution/runs/{workflow_run_id}").json()
+        assert run["workflow_run_id"] == workflow_run_id
+        assert run["paper_only"] is True
+
+        oms_events = client.get(
+            f"/api/paper-execution/orders/{order_id}/oms-events"
+        ).json()
+        assert [event["event_type"] for event in oms_events] == [
+            "CREATE",
+            "RISK_APPROVE",
+            "SUBMIT",
+            "ACKNOWLEDGE",
+            "FILL",
+        ]
+
+        audit_events = client.get(
+            f"/api/paper-execution/runs/{workflow_run_id}/audit-events"
+        ).json()
+        assert len(audit_events) >= 4
+        assert any(
+            event["action"] == "paper_execution.paper_broker_simulated"
+            for event in audit_events
+        )
+    finally:
+        get_settings.cache_clear()

@@ -12,6 +12,7 @@ from app.domain.paper_execution import (
     PaperExecutionWorkflowResponse,
     approval_audit_event,
     create_approval,
+    create_workflow_run_id,
     paper_order_intent_from_signal,
     workflow_audit_event,
 )
@@ -33,6 +34,7 @@ class PaperExecutionWorkflow:
         request: PaperExecutionWorkflowRequest,
     ) -> PaperExecutionWorkflowResponse:
         approval = create_approval(request)
+        workflow_run_id = create_workflow_run_id(request, approval)
         audit_events = [approval_audit_event(approval)]
 
         if approval.decision != "approved_for_paper_simulation":
@@ -50,6 +52,7 @@ class PaperExecutionWorkflow:
                 )
             )
             return PaperExecutionWorkflowResponse(
+                workflow_run_id=workflow_run_id,
                 approval=approval,
                 audit_events=audit_events,
                 message=(
@@ -104,6 +107,7 @@ class PaperExecutionWorkflow:
                 )
             )
             return PaperExecutionWorkflowResponse(
+                workflow_run_id=workflow_run_id,
                 order_created=True,
                 approval=approval,
                 paper_order_intent=intent,
@@ -149,6 +153,7 @@ class PaperExecutionWorkflow:
         )
 
         return PaperExecutionWorkflowResponse(
+            workflow_run_id=workflow_run_id,
             order_created=True,
             paper_broker_gateway_called=True,
             approval=approval,

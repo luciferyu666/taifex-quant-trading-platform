@@ -56,6 +56,10 @@ The paper execution workflow creates `PaperOrderIntent` only after
 `approved_for_paper_simulation`, then calls Risk Engine before OMS submission and
 before Paper Broker Gateway simulation.
 
+Completed paper workflow runs can be persisted to local SQLite for audit review after
+Risk Engine evaluation. The persisted records are paper-only metadata and do not
+represent broker orders, live orders, or production OMS records.
+
 ## Acceptance Criteria
 
 - Risk Engine rejects when live trading is enabled.
@@ -71,4 +75,5 @@ before Paper Broker Gateway simulation.
 ```bash
 cd backend && pytest tests/test_risk_rules.py tests/test_architecture_routes.py
 make paper-execution-workflow-check
+make paper-execution-persistence-check
 ```

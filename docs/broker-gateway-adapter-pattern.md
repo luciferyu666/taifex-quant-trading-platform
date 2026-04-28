@@ -15,6 +15,11 @@ simulation outcomes. It can simulate acknowledgement, rejection, partial fill, f
 and cancellation for workflow testing. It never places real orders and never imports
 broker SDKs.
 
+Paper Broker Gateway acknowledgements can be recorded by
+`backend/app/services/paper_execution_store.py` as local audit metadata after the
+workflow completes. The gateway itself still does not own persistence, does not call
+real brokers, and does not manage credentials.
+
 ## Future Shioaji/Fubon Adapters
 
 Shioaji, Fubon, or other broker adapters are placeholders only. They must not be added until live readiness, credential storage, legal review, rate limit handling, reconciliation, and kill switch controls exist.
@@ -43,3 +48,5 @@ Strategy Runner must never see plaintext broker keys. Future credentials should 
 - Risk Engine and OMS remain before Broker Gateway.
 - Paper Broker Gateway refuses unapproved Risk Engine decisions.
 - Paper Broker Gateway output is recorded as simulated audit metadata only.
+- Paper Gateway audit persistence remains local SQLite only in the current
+  implementation.

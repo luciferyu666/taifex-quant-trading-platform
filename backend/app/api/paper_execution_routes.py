@@ -10,7 +10,14 @@ from app.domain.paper_execution import (
     PaperExecutionWorkflowRequest,
     PaperExecutionWorkflowResponse,
 )
+from app.domain.paper_execution_records import (
+    PaperAuditEventRecord,
+    PaperExecutionPersistenceStatus,
+    PaperExecutionRunRecord,
+    PaperOmsEventRecord,
+)
 from app.domain.risk_rules import RiskPolicy
+from app.services.paper_execution_store import PaperExecutionStore
 from app.services.paper_execution_workflow import PaperExecutionWorkflow
 
 router = APIRouter(prefix="/api/paper-execution", tags=["paper-execution"])
@@ -37,6 +44,10 @@ def _risk_policy_from_settings(settings: Settings) -> RiskPolicy:
         max_daily_loss_twd=settings.max_daily_loss_twd,
         stale_quote_seconds=settings.stale_quote_seconds,
     )
+
+
+def _paper_execution_store(settings: Settings) -> PaperExecutionStore:
+    return PaperExecutionStore(settings.paper_execution_audit_db_path)
 
 
 @router.get("/status", response_model=PaperExecutionStatusResponse)
@@ -77,3 +88,81 @@ def paper_execution_workflow_preview(
         return PaperExecutionWorkflow(_risk_policy_from_settings(settings)).preview(request)
     except ValueError as exc:
         raise HTTPException(status_code=400, detail=str(exc)) from exc
+
+
+@router.post("/workflow/record", response_model=PaperExecutionWorkflowResponse)
+def paper_execution_workflow_record(
+    request: PaperExecutionWorkflowRequest,
+    settings: SettingsDep,
+) -> PaperExecutionWorkflowResponse:
+    try:
+        response = PaperExecutionWorkflow(_risk_policy_from_settings(settings)).preview(request)
+        persisted_response = response.model_copy(
+            update={"persisted": True, "persistence_backend": "sqlite"}
+        )
+        _paper_execution_store(settings).persist_workflow(persisted_response)
+        return persisted_response
+    except ValueError as exc:
+        raise HTTPException(status_code=400, detail=str(exc)) from exc
+
+
+@router.get("/persistence/status", response_model=PaperExecutionPersistenceStatus)
+def paper_execution_persistence_status(
+    settings: SettingsDep,
+) -> PaperExecutionPersistenceStatus:
+    return _paper_execution_store(settings).status()
+
+
+@router.get("/runs", response_model=list[PaperExecutionRunRecord])
+def paper_execution_runs(
+    settings: SettingsDep,
+    limit: int = 50,
+) -> list[PaperExecutionRunRecord]:
+    safe_limit = max(1, min(limit, 200))
+    return _paper_execution_store(settings).list_runs(limit=safe_limit)
+
+
+@router.get("/runs/{workflow_run_id}", response_model=PaperExecutionRunRecord)
+def paper_execution_run(
+    workflow_run_id: str,
+    settings: SettingsDep,
+) -> PaperExecutionRunRecord:
+    record = _paper_execution_store(settings).get_run(workflow_run_id)
+    if record is None:
+        raise HTTPException(status_code=404, detail="paper execution run not found")
+    return record
+
+
+@router.get("/runs/{workflow_run_id}/oms-events", response_model=list[PaperOmsEventRecord])
+def paper_execution_run_oms_events(
+    workflow_run_id: str,
+    settings: SettingsDep,
+) -> list[PaperOmsEventRecord]:
+    return _paper_execution_store(settings).list_oms_events(workflow_run_id=workflow_run_id)
+
+
+@router.get("/runs/{workflow_run_id}/audit-events", response_model=list[PaperAuditEventRecord])
+def paper_execution_run_audit_events(
+    workflow_run_id: str,
+    settings: SettingsDep,
+) -> list[PaperAuditEventRecord]:
+    return _paper_execution_store(settings).list_audit_events(
+        workflow_run_id=workflow_run_id
+    )
+
+
+@router.get("/orders/{order_id}/oms-events", response_model=list[PaperOmsEventRecord])
+def paper_execution_order_oms_events(
+    order_id: str,
+    settings: SettingsDep,
+) -> list[PaperOmsEventRecord]:
+    return _paper_execution_store(settings).list_oms_events(order_id=order_id)
+
+
+@router.get("/audit-events", response_model=list[PaperAuditEventRecord])
+def paper_execution_audit_events(
+    settings: SettingsDep,
+    limit: int = 100,
+) -> list[PaperAuditEventRecord]:
+    safe_limit = max(1, min(limit, 500))
+    return _paper_execution_store(settings).list_audit_events(limit=safe_limit)

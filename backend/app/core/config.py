@@ -30,6 +30,10 @@ class Settings(BaseSettings):
     max_tx_equivalent_exposure: float = Field(default=0.25, alias="MAX_TX_EQUIVALENT_EXPOSURE")
     max_daily_loss_twd: int = Field(default=5000, alias="MAX_DAILY_LOSS_TWD")
     stale_quote_seconds: int = Field(default=3, alias="STALE_QUOTE_SECONDS")
+    paper_execution_audit_db_path: str = Field(
+        default="data/paper_execution_audit.sqlite",
+        alias="PAPER_EXECUTION_AUDIT_DB_PATH",
+    )
 
     @model_validator(mode="after")
     def validate_live_trading_gate(self) -> "Settings":

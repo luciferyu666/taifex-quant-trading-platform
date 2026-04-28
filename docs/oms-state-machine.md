@@ -54,7 +54,8 @@ If OMS state cannot be reconciled with broker state, the order must be marked `U
 
 ## Paper-Only Current Implementation
 
-The current implementation lives in `backend/app/domain/order_state_machine.py`. It does not call brokers, does not persist state, and is intended for tests and architecture scaffolding only.
+The core state machine lives in `backend/app/domain/order_state_machine.py`. It does
+not call brokers and remains deterministic.
 
 The paper execution approval workflow now uses this state machine after a platform
 review decision reaches `approved_for_paper_simulation`. The workflow records:
@@ -66,8 +67,12 @@ review decision reaches `approved_for_paper_simulation`. The workflow records:
 - `ACKNOWLEDGE`, `REJECT`, `PARTIAL_FILL`, `FILL`, `CANCEL_REQUEST`, or `CANCEL`
   according to the simulated paper broker outcome.
 
-This remains paper-only and in-memory. It is not a durable OMS, not a production
-execution system, and not connected to any real broker.
+`backend/app/services/paper_execution_store.py` can persist completed paper workflow
+runs, OMS event history, and audit events to local SQLite through
+`POST /api/paper-execution/workflow/record`. This persistence is local-only and
+queryable for audit review. It is not a production OMS database, not an external
+database integration, not a broker reconciliation source, and not connected to any
+real broker.
 
 ## Acceptance Criteria
 
@@ -77,10 +82,13 @@ execution system, and not connected to any real broker.
 - No broker call occurs inside the state machine.
 - Paper execution tests cover acknowledgement, rejection, partial fill, fill, and
   cancellation simulations.
+- Local paper persistence tests cover run records, OMS event records, audit event
+  records, and query endpoints.
 
 ## Testing Plan
 
 ```bash
 cd backend && pytest tests/test_order_state_machine.py
 make paper-execution-workflow-check
+make paper-execution-persistence-check
 ```

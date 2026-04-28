@@ -431,6 +431,26 @@ th {
   margin-top: 18px;
 }
 
+.persistence-strip {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+  margin-top: 16px;
+}
+
+.persistence-strip span {
+  min-width: 0;
+  overflow-wrap: anywhere;
+  border: 1px solid rgba(15, 23, 42, 0.12);
+  border-radius: 8px;
+  padding: 10px 12px;
+  background: rgba(15, 23, 42, 0.04);
+  color: var(--muted);
+  font-size: 0.82rem;
+  font-weight: 700;
+  line-height: 1.35;
+}
+
 .packet-section {
   margin-top: 44px;
 }
@@ -626,6 +646,7 @@ dd {
   .release-hero,
   .release-grid,
   .paper-workflow-grid,
+  .persistence-strip,
   .packet-loader,
   .packet-layout,
   .packet-layout.secondary {
