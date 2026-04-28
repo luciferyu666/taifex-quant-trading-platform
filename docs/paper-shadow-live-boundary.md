@@ -158,6 +158,19 @@ Phase 4 paper execution approval workflow is the first controlled paper simulati
   credentials, account IDs, API keys, certificates, or live orders.
 - `ENABLE_LIVE_TRADING=false` and `BROKER_PROVIDER=paper` remain required.
 
+Phase 5 Paper OMS / Audit Query Viewer is read-only UI:
+
+- It may fetch persisted local paper workflow summaries from
+  `GET /api/paper-execution/runs`.
+- It may fetch OMS and audit timelines for the latest local paper workflow run.
+- It may display workflow run ID, approval decision, order ID, final OMS status,
+  OMS events, and audit events.
+- It must render a safe empty state when no local paper records exist.
+- It must not call `/api/paper-execution/workflow/record`, create simulations,
+  create order intents, approve paper execution, approve live trading, write
+  databases, call brokers, call Risk Engine mutation paths, call OMS mutation paths,
+  rank strategies, or provide trading recommendations.
+
 Phase 5 Research Review Packet Viewer is read-only UI:
 
 - It may fetch `GET /api/strategy/research-review/packet/sample` or render fallback
@@ -241,6 +254,9 @@ Future live work requires:
 - No Paper Execution persistence status UI panel may call `/workflow/record`, create
   simulations, mutate databases, connect brokers, approve paper execution, approve
   live trading, or expose live controls.
+- No Paper OMS / Audit Query Viewer UI panel may mutate persisted records, trigger
+  paper simulation, grant approval escalation, connect brokers, call Risk Engine,
+  call OMS, create order intents, show performance claims, or expose live controls.
 - No local packet JSON loader may accept unsafe approval, execution, ranking,
   persistence, broker, Risk Engine, OMS, external download, or performance-claim
   flags.

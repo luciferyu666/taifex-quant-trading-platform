@@ -37,6 +37,9 @@ Expose roadmap phase status, contracts, safety mode, risk status, and paper-only
 - Read-only paper execution persistence status showing local SQLite backend, local-only
   state, persisted workflow run count, OMS event count, audit event count, and local DB
   path.
+- Read-only Paper OMS / Audit Query Viewer showing persisted paper workflow run
+  summaries, latest selected run context, OMS event timeline, and audit event
+  timeline.
 
 ## Acceptance Criteria
 
@@ -82,6 +85,15 @@ Expose roadmap phase status, contracts, safety mode, risk status, and paper-only
 - Paper execution persistence status is display-only. It may show local record counts,
   but it must not create records, mutate records, upload files, write remote databases,
   or expose broker/live controls.
+- Paper OMS / Audit Query Viewer uses only existing read-only query APIs:
+  `/api/paper-execution/runs`,
+  `/api/paper-execution/runs/{workflow_run_id}/oms-events`, and
+  `/api/paper-execution/runs/{workflow_run_id}/audit-events`.
+- Paper OMS / Audit Query Viewer renders an empty safe state when no local SQLite
+  paper records exist or when the backend is unavailable.
+- Paper OMS / Audit Query Viewer does not submit simulations, create order intents,
+  alter persisted records, call brokers, call Risk Engine mutation paths, call OMS
+  mutation paths, or provide trading recommendations.
 
 ## Safety Constraints
 
@@ -111,12 +123,19 @@ Expose roadmap phase status, contracts, safety mode, risk status, and paper-only
   `GET /api/paper-execution/persistence/status` and must not call
   `/workflow/record`, broker endpoints, Risk Engine mutation paths, OMS mutation paths,
   or any live approval path.
+- The Paper OMS / Audit Query Viewer is a display surface only. It must not call
+  `/api/paper-execution/workflow/record`, any paper simulation submit endpoint, any
+  approval escalation endpoint, any broker endpoint, or any live-control path.
+- Persisted paper records shown in the viewer are audit metadata only. They must not
+  be presented as execution performance, investment advice, strategy ranking, or
+  production trading readiness.
 
 ## Suggested Commands
 
 ```bash
 cd frontend && npm run typecheck
 cd frontend && npm run build
+make frontend-i18n-check
 make paper-execution-workflow-check
 make paper-execution-persistence-check
 make sample-research-review-packet
@@ -151,3 +170,7 @@ The paper execution persistence status panel now shows local SQLite paper workfl
 record counts only. Future UI may add read-only tables for persisted runs and events,
 but must not add paper simulation submit controls, approval escalation, broker
 connection controls, or live trading controls without a separate reviewed slice.
+The Paper OMS / Audit Query Viewer now displays persisted local paper workflow
+records as read-only audit metadata. Future work may add filtering and pagination,
+but must keep mutation, broker, approval, recommendation, and live-trading behavior
+out of the viewer.

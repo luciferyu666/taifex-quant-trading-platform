@@ -1,3 +1,9 @@
+import {
+  PaperExecutionRecordsPanel,
+  type PaperExecutionRunRecord,
+} from "./components/PaperExecutionRecordsPanel";
+import type { PaperAuditEventRecord } from "./components/PaperAuditTimelinePanel";
+import type { PaperOmsEventRecord } from "./components/PaperOmsTimelinePanel";
 import { ResearchReviewPacketJsonLoader } from "./components/ResearchReviewPacketJsonLoader";
 import type { ResearchReviewPacket } from "./components/ResearchReviewPacketPanel";
 import { ReleaseBaselinePanel, type ReleaseBaseline } from "./components/ReleaseBaselinePanel";
@@ -158,6 +164,10 @@ const fallbackPaperExecutionPersistenceStatus: PaperExecutionPersistenceStatus =
   message: "Fallback local persistence status. Backend is unavailable.",
 };
 
+const fallbackPaperExecutionRuns: PaperExecutionRunRecord[] = [];
+const fallbackPaperOmsEvents: PaperOmsEventRecord[] = [];
+const fallbackPaperAuditEvents: PaperAuditEventRecord[] = [];
+
 const fallbackReleaseBaseline: ReleaseBaseline = {
   version: "v0.1.0-paper-research-preview",
   release_level: {
@@ -273,6 +283,7 @@ export default async function Home({ searchParams }: HomeProps) {
     paperStatus,
     paperExecutionStatus,
     paperExecutionPersistence,
+    paperExecutionRuns,
     releaseBaseline,
     reviewPacket,
   ] =
@@ -289,6 +300,10 @@ export default async function Home({ searchParams }: HomeProps) {
         "/api/paper-execution/persistence/status",
         fallbackPaperExecutionPersistenceStatus,
       ),
+      fetchJson<PaperExecutionRunRecord[]>(
+        "/api/paper-execution/runs?limit=5",
+        fallbackPaperExecutionRuns,
+      ),
       fetchJson<ReleaseBaseline>("/api/release/baseline", fallbackReleaseBaseline),
       fetchJson<ResearchReviewPacket>(
         "/api/strategy/research-review/packet/sample",
@@ -297,6 +312,31 @@ export default async function Home({ searchParams }: HomeProps) {
     ]);
 
   const contracts = contractsResponse.data.contracts;
+  const selectedPaperRunId = paperExecutionRuns.data[0]?.workflow_run_id;
+  const [paperOmsEvents, paperAuditEvents] = selectedPaperRunId
+    ? await Promise.all([
+        fetchJson<PaperOmsEventRecord[]>(
+          `/api/paper-execution/runs/${selectedPaperRunId}/oms-events`,
+          fallbackPaperOmsEvents,
+        ),
+        fetchJson<PaperAuditEventRecord[]>(
+          `/api/paper-execution/runs/${selectedPaperRunId}/audit-events`,
+          fallbackPaperAuditEvents,
+        ),
+      ])
+    : [
+        { available: true as const, data: fallbackPaperOmsEvents },
+        { available: true as const, data: fallbackPaperAuditEvents },
+      ];
+  const paperRecordsAvailable =
+    paperExecutionRuns.available && paperOmsEvents.available && paperAuditEvents.available;
+  const paperRecordsError = [
+    paperExecutionRuns.available ? undefined : paperExecutionRuns.error,
+    paperOmsEvents.available ? undefined : paperOmsEvents.error,
+    paperAuditEvents.available ? undefined : paperAuditEvents.error,
+  ]
+    .filter(Boolean)
+    .join("; ");
 
   return (
     <main className="shell" lang={copy.htmlLang}>
@@ -452,6 +492,15 @@ export default async function Home({ searchParams }: HomeProps) {
           </span>
         </div>
       </section>
+
+      <PaperExecutionRecordsPanel
+        available={paperRecordsAvailable}
+        copy={copy}
+        error={paperRecordsError || undefined}
+        auditEvents={paperAuditEvents.data}
+        omsEvents={paperOmsEvents.data}
+        runs={paperExecutionRuns.data}
+      />
 
       <ResearchReviewPacketJsonLoader
         copy={copy}

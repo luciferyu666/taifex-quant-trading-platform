@@ -5,6 +5,9 @@ const repoRoot = process.cwd();
 const files = {
   i18n: "frontend/app/i18n.ts",
   page: "frontend/app/page.tsx",
+  paperRecords: "frontend/app/components/PaperExecutionRecordsPanel.tsx",
+  paperOmsTimeline: "frontend/app/components/PaperOmsTimelinePanel.tsx",
+  paperAuditTimeline: "frontend/app/components/PaperAuditTimelinePanel.tsx",
   releasePanel: "frontend/app/components/ReleaseBaselinePanel.tsx",
   packetLoader: "frontend/app/components/ResearchReviewPacketJsonLoader.tsx",
   packetPanel: "frontend/app/components/ResearchReviewPacketPanel.tsx",
@@ -200,6 +203,10 @@ requireContains("English local JSON loader copy exists", sourceByFile.i18n, "Sel
 requireContains("Traditional Chinese local JSON loader copy exists", sourceByFile.i18n, "選擇本地 .json");
 requireContains("English no-upload copy exists", sourceByFile.i18n, "The file was not uploaded");
 requireContains("Traditional Chinese no-upload copy exists", sourceByFile.i18n, "檔案未上傳");
+requireContains("English paper records copy exists", sourceByFile.i18n, "Persisted paper workflow records");
+requireContains("Traditional Chinese paper records copy exists", sourceByFile.i18n, "已持久化紙上流程紀錄");
+requireContains("Paper records panel is read-only", combinedSource, "Read-only");
+requireContains("Paper records panel avoids broker calls", combinedSource, "broker_api_called");
 
 scanForbiddenPatterns();
 

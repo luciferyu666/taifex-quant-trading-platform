@@ -187,6 +187,9 @@ for required_file in \
   frontend/test-fixtures/research-review-packets/invalid-performance-claim.json \
   frontend/test-fixtures/research-review-packets/invalid-checksum.json \
   frontend/test-fixtures/research-review-packets/invalid-decision-summary.json \
+  frontend/app/components/PaperExecutionRecordsPanel.tsx \
+  frontend/app/components/PaperOmsTimelinePanel.tsx \
+  frontend/app/components/PaperAuditTimelinePanel.tsx \
   frontend/app/components/researchReviewPacketValidation.ts \
   frontend/scripts/validate-research-review-packet-fixtures.mjs \
   data-pipeline/schemas/contract_master.sql \
