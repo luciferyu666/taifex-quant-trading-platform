@@ -371,6 +371,9 @@ if command -v node >/dev/null 2>&1; then
   printf 'Checking frontend Command Center i18n and safety copy...\n'
   node frontend/scripts/check-command-center-i18n.mjs
 
+  printf 'Checking deployed frontend Command Center production safety copy...\n'
+  node frontend/scripts/check-production-command-center.mjs
+
   printf 'Checking frontend Research Review Packet loader fixtures...\n'
   node --experimental-strip-types frontend/scripts/validate-research-review-packet-fixtures.mjs
 else

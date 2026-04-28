@@ -1,6 +1,6 @@
 SHELL := /usr/bin/env bash
 
-.PHONY: help init infra dev backend frontend frontend-i18n-check website website-build website-preview website-check website-content-check website-deploy roadmap-status release-readiness-check data-fixtures-check rollover-fixtures-check continuous-futures-preview feature-manifest-preview strategy-research-preview backtest-preview backtest-result-preview toy-backtest backtest-artifact-preview backtest-artifact-index-preview backtest-artifact-comparison-preview backtest-research-bundle-preview backtest-research-bundle-index-preview research-review-queue-preview research-review-decision-preview research-review-decision-index-preview research-review-packet-preview sample-research-review-packet research-review-packet-fixtures-check data-quality-reports-dry-run data-version-register-dry-run data-migrations-dry-run data-platform-verify architecture-status architecture-docs-check architecture-safety-check business-docs-check business-compliance-check business-status check test codex-prompt clean
+.PHONY: help init infra dev backend frontend frontend-i18n-check frontend-production-smoke-check website website-build website-preview website-check website-content-check website-deploy roadmap-status release-readiness-check data-fixtures-check rollover-fixtures-check continuous-futures-preview feature-manifest-preview strategy-research-preview backtest-preview backtest-result-preview toy-backtest backtest-artifact-preview backtest-artifact-index-preview backtest-artifact-comparison-preview backtest-research-bundle-preview backtest-research-bundle-index-preview research-review-queue-preview research-review-decision-preview research-review-decision-index-preview research-review-packet-preview sample-research-review-packet research-review-packet-fixtures-check data-quality-reports-dry-run data-version-register-dry-run data-migrations-dry-run data-platform-verify architecture-status architecture-docs-check architecture-safety-check business-docs-check business-compliance-check business-status check test codex-prompt clean
 
 help:
 	@printf 'Taifex Quant Trading Platform commands\n'
@@ -11,6 +11,7 @@ help:
 	@printf '  make backend       Run FastAPI backend locally\n'
 	@printf '  make frontend      Run Next.js frontend locally\n'
 	@printf '  make frontend-i18n-check Validate Command Center bilingual safety copy\n'
+	@printf '  make frontend-production-smoke-check Validate deployed Command Center safety copy\n'
 	@printf '  make website       Run Astro marketing website locally\n'
 	@printf '  make website-build Build Astro marketing website\n'
 	@printf '  make website-preview Preview built Astro website locally\n'
@@ -80,6 +81,9 @@ frontend:
 
 frontend-i18n-check:
 	node frontend/scripts/check-command-center-i18n.mjs
+
+frontend-production-smoke-check:
+	node frontend/scripts/check-production-command-center.mjs
 
 website:
 	cd website && npm run dev

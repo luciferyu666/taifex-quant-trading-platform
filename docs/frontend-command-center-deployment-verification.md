@@ -97,15 +97,25 @@ Before declaring the deployment verified, run the local frontend i18n gate and t
 ```bash
 cd "/mnt/f/From C download/taifex-quant-trading-platform"
 make frontend-i18n-check
+make frontend-production-smoke-check
 make check
 ```
 
 Expected result:
 
 - Command Center i18n QA check passes.
+- Production Command Center smoke check returns HTTP 200 and finds bilingual safety copy.
 - Required English and Traditional Chinese safety copy is present.
 - Prohibited claims are not found.
 - `make check` completes with live trading disabled.
+
+The production smoke check is read-only. It fetches the production alias, checks deployment id markers, validates bilingual safety copy, and rejects unsafe positive claims. It does not deploy, write data, call brokers, or approve trading.
+
+You can override the production URL for a staging alias without editing source files:
+
+```bash
+FRONTEND_PRODUCTION_URL="https://example.vercel.app" make frontend-production-smoke-check
+```
 
 ## 6. Git Clean State Check
 
@@ -175,6 +185,7 @@ vercel --prod
 ```bash
 cd "/mnt/f/From C download/taifex-quant-trading-platform"
 make frontend-i18n-check
+make frontend-production-smoke-check
 ```
 
 - Check `frontend/app/i18n.ts` and `frontend/app/page.tsx`.
@@ -193,6 +204,7 @@ Frontend Command Center deployment verification:
 - Chinese smoke check: passed
 - English smoke check: passed
 - make frontend-i18n-check: passed
+- make frontend-production-smoke-check: passed
 - make check: passed
 - git status: clean
 - Live trading remains disabled by default.
