@@ -699,6 +699,80 @@ Seed scope:
 - Local `data/` runtime output remains ignored by git.
 - Live trading remains disabled by default.
 
+## Safe Read-Only Command Center Interactions Verification
+
+The safe read-only interaction layer was committed to `main`, verified by GitHub
+Actions, deployed through the Web Command Center Vercel project, and rechecked with
+the production smoke gate.
+
+Verification time:
+
+```text
+2026-04-29 07:49 CST (+0800)
+```
+
+Verified commit:
+
+```text
+7bcab7e Add safe read-only Command Center interactions
+```
+
+GitHub Actions verification:
+
+```text
+workflow: Release Readiness
+run: 25083369825
+event: push
+branch: main
+status: completed
+conclusion: success
+duration: 1m33s
+created: 2026-04-28T23:41:09Z
+```
+
+Production alias inspection:
+
+```text
+alias: https://taifex-quant-trading-platform-front.vercel.app
+url: https://taifex-quant-trading-platform-frontend-8jlkrff1a.vercel.app
+id: dpl_2fjXS229uhHM8CncXc1GZ7wvJTNm
+target: production
+status: Ready
+created: Wed Apr 29 2026 07:41:08 GMT+0800
+```
+
+Production smoke gate:
+
+```text
+Production Command Center smoke check passed.
+Production root returned HTTP 200.
+Traditional Chinese page returned HTTP 200.
+English page returned HTTP 200.
+All checked pages use deployment id dpl_2fjXS229uhHM8CncXc1GZ7wvJTNm.
+```
+
+Interaction scope:
+
+- Tabs for Release, Paper OMS, Research Packet, and Contracts.
+- Refresh/retry status.
+- Paper run row selection.
+- Read-only OMS and audit timeline reload.
+- Clipboard copy for `workflow_run_id`, `order_id`, and the local demo seed command.
+- Bundled safe Research Review Packet sample load.
+- Clear selected local JSON.
+- Backend-unavailable troubleshooting panel.
+
+Safety scope:
+
+- Mutation endpoints: none.
+- Broker SDK calls: none.
+- Database writes: none.
+- Order creation: none.
+- Paper execution approval escalation: none.
+- Live approval controls: none.
+- Credential collection: none.
+- Live trading remains disabled by default.
+
 ## Marketing Website Reachability
 
 Command:
