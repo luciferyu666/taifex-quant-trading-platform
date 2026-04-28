@@ -171,6 +171,19 @@ Phase 5 Paper OMS / Audit Query Viewer is read-only UI:
   databases, call brokers, call Risk Engine mutation paths, call OMS mutation paths,
   rank strategies, or provide trading recommendations.
 
+Paper Execution Demo Seed is an explicit local-only sample generator:
+
+- `make seed-paper-execution-demo` runs `scripts/seed-paper-execution-demo.py`.
+- It creates one `approved_for_paper_simulation` sample workflow with a paper broker
+  partial-fill simulation.
+- It writes only to local SQLite through `PAPER_EXECUTION_AUDIT_DB_PATH`.
+- It calls backend domain and service code directly; it does not call the FastAPI
+  server, external databases, broker APIs, real broker SDKs, or live order paths.
+- It prints `workflow_run_id`, `order_id`, and `final_oms_status` for demo setup.
+- The resulting record is for read-only UI evaluation and audit-view demonstration
+  only. It is not a broker confirmation, account record, performance report, trading
+  recommendation, or live-readiness approval.
+
 Phase 5 Research Review Packet Viewer is read-only UI:
 
 - It may fetch `GET /api/strategy/research-review/packet/sample` or render fallback

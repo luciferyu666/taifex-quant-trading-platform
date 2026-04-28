@@ -24,6 +24,16 @@ Confirm:
 - `ENABLE_LIVE_TRADING=false`.
 - `BROKER_PROVIDER=paper`.
 
+Optional local-only setup for demonstrating the Paper OMS / Audit Query Viewer:
+
+```bash
+make seed-paper-execution-demo
+```
+
+This creates one small paper workflow record in the local SQLite path configured by
+`PAPER_EXECUTION_AUDIT_DB_PATH`. It does not call the FastAPI server, broker APIs, an
+external database, or any live order path.
+
 ## 1. Opening Positioning
 
 Suggested talk track:
@@ -83,6 +93,10 @@ Show:
 - `ENABLE_LIVE_TRADING=false`.
 - `BROKER_PROVIDER=paper`.
 - Safety flags and read-only review components.
+- Paper OMS / Audit Query Viewer:
+  - If `make seed-paper-execution-demo` was run locally, show the seeded
+    `workflow_run_id`, order ID, OMS timeline, and audit timeline.
+  - If no local record exists, show the safe empty state.
 
 Clarify:
 
@@ -134,6 +148,8 @@ State these explicitly:
 - No customer authentication, RBAC, or enterprise tenancy.
 - No payment or subscription checkout.
 - No investment advice or signal service.
+- Local demo seed records are paper workflow samples only. They are not broker
+  confirmations, real account records, performance reports, or trading advice.
 
 ## 7. Feedback Capture
 

@@ -39,6 +39,8 @@ Customers may evaluate:
   - `BROKER_PROVIDER=paper`
 - Web Command Center read-only status panels.
 - Research review packet viewer behavior using approved local sample JSON fixtures.
+- Paper OMS / Audit Query Viewer behavior using an explicitly generated local paper
+  demo seed record.
 - Local developer setup and dry-run validation commands when the customer is a technical evaluator.
 
 ## What Customers Must Not Test
@@ -86,9 +88,17 @@ Use this sequence for a 30-45 minute customer session:
 1. Position the product as Taiwan futures quant infrastructure, not a trading bot.
 2. Open the Marketing Website and review platform thesis, safety defaults, instruments, commercial model, and compliance boundary.
 3. Open the Web Command Center and review release baseline, NOT READY status, bilingual toggle, and paper-only safety copy.
-4. Demonstrate local Research Review Packet JSON loading using a safe sample packet only.
-5. Explain what the current system does not do: no live trading, no broker integration, no customer execution.
-6. Collect structured feedback using `docs/customer-feedback-form.md`.
+4. Optional local-only setup for the Paper OMS / Audit Query Viewer:
+
+```bash
+make seed-paper-execution-demo
+```
+
+5. Demonstrate local Research Review Packet JSON loading using a safe sample packet only.
+6. If a local demo seed was created, show the read-only paper workflow summary, OMS
+   timeline, and audit timeline.
+7. Explain what the current system does not do: no live trading, no broker integration, no customer execution.
+8. Collect structured feedback using `docs/customer-feedback-form.md`.
 
 ## Success Criteria
 
@@ -108,6 +118,7 @@ A successful customer evaluation should produce:
 - Release baseline: `docs/release-baseline-v0.1.0.md`
 - Release verification record: `docs/release-verification-record-2026-04-28.md`
 - Production verification runbook: `docs/frontend-command-center-deployment-verification.md`
+- Paper execution demo seed: `scripts/seed-paper-execution-demo.py`
 
 ## Safety Statement
 

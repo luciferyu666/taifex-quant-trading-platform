@@ -146,6 +146,7 @@ for required_file in \
   backend/app/services/broker_gateway.py \
   backend/app/services/paper_execution_workflow.py \
   backend/app/services/paper_execution_store.py \
+  scripts/seed-paper-execution-demo.py \
   backend/app/api/data_routes.py \
   backend/app/api/continuous_futures_routes.py \
   backend/app/api/feature_manifest_routes.py \
