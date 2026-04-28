@@ -130,6 +130,69 @@ Unsafe copy confirmed absent:
 - unsafe `approve live`
 - unsafe `核准實盤`
 
+## Latest Vercel Deployment Refresh
+
+After this verification record was committed, the docs-only push triggered a new Web Command Center production deployment. The production alias was re-checked and the smoke gate passed again.
+
+Refresh time:
+
+```text
+2026-04-28 15:30:47 CST (+0800)
+```
+
+Refresh commit:
+
+```text
+ab5a0b9 Add release verification record
+```
+
+Production alias inspection:
+
+```text
+alias: https://taifex-quant-trading-platform-front.vercel.app
+url: https://taifex-quant-trading-platform-frontend-ooh2p1sux.vercel.app
+id: dpl_AKK12hZGX64X6GgJnMZdLUenvCFe
+target: production
+status: Ready
+created: Tue Apr 28 2026 13:14:03 GMT+0800
+```
+
+Production smoke gate refresh:
+
+```text
+Production Command Center smoke check passed.
+Production root returned HTTP 200.
+Traditional Chinese page returned HTTP 200.
+English page returned HTTP 200.
+All checked pages use deployment id dpl_AKK12hZGX64X6GgJnMZdLUenvCFe.
+```
+
+The refreshed smoke gate again confirmed:
+
+- `TRADING_MODE`
+- `ENABLE_LIVE_TRADING`
+- `BROKER_PROVIDER`
+- `NOT READY`
+- `實盤關閉`
+- `僅限紙上交易`
+- `Paper-first`
+- `Paper Only`
+
+The refreshed smoke gate again rejected unsafe copy:
+
+- `guaranteed profit`
+- `risk-free`
+- `保證獲利`
+- `零風險`
+- unsafe `approve live`
+- unsafe `核准實盤`
+
+Local state after refresh:
+
+```text
+## main...origin/main
+```
+
 ## Marketing Website Reachability
 
 Command:
