@@ -1,6 +1,6 @@
 SHELL := /usr/bin/env bash
 
-.PHONY: help init infra dev backend frontend frontend-i18n-check frontend-production-smoke-check website website-build website-preview website-check website-content-check website-deploy roadmap-status release-readiness-check data-fixtures-check rollover-fixtures-check continuous-futures-preview feature-manifest-preview strategy-research-preview backtest-preview backtest-result-preview toy-backtest backtest-artifact-preview backtest-artifact-index-preview backtest-artifact-comparison-preview backtest-research-bundle-preview backtest-research-bundle-index-preview research-review-queue-preview research-review-decision-preview research-review-decision-index-preview research-review-packet-preview sample-research-review-packet research-review-packet-fixtures-check data-quality-reports-dry-run data-version-register-dry-run data-migrations-dry-run data-platform-verify architecture-status architecture-docs-check architecture-safety-check business-docs-check business-compliance-check business-status check test codex-prompt clean
+.PHONY: help init infra dev backend frontend frontend-i18n-check frontend-production-smoke-check website website-build website-preview website-check website-content-check website-deploy roadmap-status release-readiness-check customer-evaluation-check data-fixtures-check rollover-fixtures-check continuous-futures-preview feature-manifest-preview strategy-research-preview backtest-preview backtest-result-preview toy-backtest backtest-artifact-preview backtest-artifact-index-preview backtest-artifact-comparison-preview backtest-research-bundle-preview backtest-research-bundle-index-preview research-review-queue-preview research-review-decision-preview research-review-decision-index-preview research-review-packet-preview sample-research-review-packet research-review-packet-fixtures-check data-quality-reports-dry-run data-version-register-dry-run data-migrations-dry-run data-platform-verify architecture-status architecture-docs-check architecture-safety-check business-docs-check business-compliance-check business-status check test codex-prompt clean
 
 help:
 	@printf 'Taifex Quant Trading Platform commands\n'
@@ -20,6 +20,7 @@ help:
 	@printf '  make website-deploy Build and deploy website with Vercel CLI\n'
 	@printf '  make roadmap-status Print Phase 0-6 roadmap scaffold status\n'
 	@printf '  make release-readiness-check Audit release level, dirty worktree, and safety gates\n'
+	@printf '  make customer-evaluation-check Validate controlled customer evaluation package\n'
 	@printf '  make data-fixtures-check Validate local market data CSV fixtures\n'
 	@printf '  make rollover-fixtures-check Validate local rollover event CSV fixtures\n'
 	@printf '  make continuous-futures-preview Preview research-only continuous futures locally\n'
@@ -109,6 +110,9 @@ roadmap-status:
 
 release-readiness-check:
 	bash scripts/release-readiness-check.sh
+
+customer-evaluation-check:
+	bash scripts/customer-evaluation-check.sh
 
 data-fixtures-check:
 	backend/.venv/bin/python data-pipeline/validation/validate_market_bar_fixtures.py

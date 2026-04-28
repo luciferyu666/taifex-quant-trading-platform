@@ -83,6 +83,31 @@ if [[ "${missing_release_file}" -ne 0 ]]; then
   exit 1
 fi
 
+printf 'Checking customer evaluation package...\n'
+missing_customer_eval_file=0
+for required_file in \
+  docs/customer-evaluation-package.md \
+  docs/customer-demo-script.md \
+  docs/customer-evaluation-checklist.md \
+  docs/customer-feedback-form.md \
+  scripts/customer-evaluation-check.sh; do
+  if [[ ! -f "${required_file}" ]]; then
+    printf 'Missing required customer evaluation file: %s\n' "${required_file}" >&2
+    missing_customer_eval_file=1
+  fi
+done
+
+if [[ ! -x scripts/customer-evaluation-check.sh ]]; then
+  printf 'scripts/customer-evaluation-check.sh must be executable.\n' >&2
+  missing_customer_eval_file=1
+fi
+
+if [[ "${missing_customer_eval_file}" -ne 0 ]]; then
+  exit 1
+fi
+
+bash scripts/customer-evaluation-check.sh
+
 printf 'Checking roadmap scaffold files...\n'
 missing_roadmap_file=0
 for required_file in \

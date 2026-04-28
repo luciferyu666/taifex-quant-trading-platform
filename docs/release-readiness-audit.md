@@ -24,6 +24,7 @@ The release baseline should be visible without reading terminal logs:
 - Marketing Website production URL: <https://taifex-quant-trading-platform-websi.vercel.app>.
 - Web Command Center production URL: <https://taifex-quant-trading-platform-front.vercel.app>.
 - Production smoke gate: `make frontend-production-smoke-check`.
+- Customer evaluation package gate: `make customer-evaluation-check`.
 - Repository-wide gate: `make check`.
 
 The observable status must continue to state that the Marketing Website is an external presentation candidate, the Web Command Center is an internal demo candidate, Paper Research Preview is an internal technical preview, and the Production Trading Platform is **NOT READY**.
@@ -36,6 +37,7 @@ A repository state may be called a release candidate only when:
 - `.env.example` keeps `TRADING_MODE=paper`, `ENABLE_LIVE_TRADING=false`, and `BROKER_PROVIDER=paper`.
 - `make check` passes from a clean clone or clean branch.
 - Website content QA passes.
+- Customer evaluation package exists and clearly separates allowed demo scope from prohibited trading tests.
 - Backend tests pass.
 - Frontend and Astro builds pass.
 - No generated build artifacts, dependency folders, logs, local reports, credentials, or secrets are included.

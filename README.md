@@ -19,6 +19,24 @@
 
 Production-facing safety checks verify HTTP 200 responses, deployment id markers, bilingual safety copy, `TRADING_MODE=paper`, `ENABLE_LIVE_TRADING=false`, `BROKER_PROVIDER=paper`, `NOT READY`, and unsafe marketing-claim exclusions. The platform remains paper-first; live trading is disabled by default.
 
+## Customer Evaluation Package
+
+The current release can support controlled customer evaluation of the marketing website, read-only Web Command Center, and paper research preview surfaces. It must not be presented as a production trading platform.
+
+Evaluation artifacts:
+
+- `docs/customer-evaluation-package.md`
+- `docs/customer-demo-script.md`
+- `docs/customer-evaluation-checklist.md`
+- `docs/customer-feedback-form.md`
+
+Pre-demo check:
+
+```bash
+make customer-evaluation-check
+make frontend-production-smoke-check
+```
+
 ## Executive Summary
 
 Taifex Quant Trading Platform is a Web-based quantitative trading infrastructure platform for Taiwan Index Futures, focused on TX, MTX, and TMF workflows. It is not a simple trading bot. The platform vision is to combine data governance, strategy research, backtesting, paper trading, shadow trading, risk controls, OMS discipline, broker gateway isolation, monitoring, and enterprise controls into a coherent trading operating system for Taiwan futures quant teams.

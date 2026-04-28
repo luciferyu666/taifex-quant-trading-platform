@@ -1,0 +1,116 @@
+# Customer Evaluation Package
+
+## Purpose
+
+This package defines how a customer, broker partner, technical advisor, or internal reviewer can safely evaluate the Taifex Quant Trading Platform at the current release baseline.
+
+The package is designed for controlled product evaluation. It is not a production trading onboarding guide, broker integration guide, investment advisory workflow, or managed account workflow.
+
+## Current Evaluation Level
+
+| Surface | Evaluation level | Customer-facing interpretation |
+| --- | --- | --- |
+| Marketing Website | External presentation candidate | Suitable for product positioning, commercial model, architecture, and safety review. |
+| Web Command Center | Controlled customer demo candidate | Suitable for read-only UI evaluation and bilingual safety posture review. |
+| Paper Research Preview | Technical preview | Suitable for engineering review of fixture-only dry-run data/research artifacts. |
+| Production Trading Platform | **NOT READY** | Not available for live trading, customer execution, broker-connected trading, copy trading, signal services, or managed accounts. |
+
+Live trading remains disabled by default.
+
+## Public Demo URLs
+
+- Marketing Website: <https://taifex-quant-trading-platform-websi.vercel.app>
+- Web Command Center: <https://taifex-quant-trading-platform-front.vercel.app>
+
+Both surfaces are presentation and read-only evaluation surfaces. They do not provide live order entry, broker login, account opening, payment checkout, subscription checkout, managed account onboarding, or regulated signal service enrollment.
+
+## What Customers Can Test
+
+Customers may evaluate:
+
+- Product positioning for Taiwan futures quant workflows.
+- TX / MTX / TMF exposure normalization messaging.
+- Commercial model and compliance boundary wording.
+- Bilingual website and Web Command Center copy.
+- Release baseline and deployment health visibility.
+- Paper-first safety defaults:
+  - `TRADING_MODE=paper`
+  - `ENABLE_LIVE_TRADING=false`
+  - `BROKER_PROVIDER=paper`
+- Web Command Center read-only status panels.
+- Research review packet viewer behavior using approved local sample JSON fixtures.
+- Local developer setup and dry-run validation commands when the customer is a technical evaluator.
+
+## What Customers Must Not Test
+
+Customers must not test:
+
+- Live trading.
+- Real broker login.
+- Real broker SDK access.
+- Real order submission.
+- Account opening.
+- Real API keys, certificates, account IDs, private keys, or broker credentials.
+- Production database writes.
+- External market data downloads unless separately licensed and approved.
+- Copy trading.
+- Signal subscriptions.
+- Managed account or discretionary trading flows.
+- Strategy ranking as investment advice.
+- Any claim that the system is production trading ready.
+
+## Evaluation Prerequisites
+
+Before a customer evaluation:
+
+1. Confirm GitHub Actions `Release Readiness` is passing.
+2. Confirm the Web Command Center production smoke gate is passing.
+3. Confirm production alias points to a `Ready` deployment.
+4. Confirm `.env.example` keeps paper-first defaults.
+5. Confirm customer-facing language says the platform is not investment advice and not production trading ready.
+6. Confirm no private `Documentation/*.md` source briefs, credentials, generated reports, or secrets are shared.
+
+Suggested commands:
+
+```bash
+git status --short --branch
+make customer-evaluation-check
+make frontend-production-smoke-check
+make release-readiness-check
+```
+
+## Recommended Evaluation Flow
+
+Use this sequence for a 30-45 minute customer session:
+
+1. Position the product as Taiwan futures quant infrastructure, not a trading bot.
+2. Open the Marketing Website and review platform thesis, safety defaults, instruments, commercial model, and compliance boundary.
+3. Open the Web Command Center and review release baseline, NOT READY status, bilingual toggle, and paper-only safety copy.
+4. Demonstrate local Research Review Packet JSON loading using a safe sample packet only.
+5. Explain what the current system does not do: no live trading, no broker integration, no customer execution.
+6. Collect structured feedback using `docs/customer-feedback-form.md`.
+
+## Success Criteria
+
+A successful customer evaluation should produce:
+
+- Clear understanding of current release level.
+- Confirmation that the customer understands live trading is disabled.
+- Feedback on website clarity, Web Command Center usability, and enterprise workflow needs.
+- Technical questions about data governance, research artifacts, broker gateway boundaries, risk, OMS, and auditability.
+- No request to enter real credentials, place orders, or activate live trading during the evaluation.
+
+## Evaluation Artifacts
+
+- Demo script: `docs/customer-demo-script.md`
+- Evaluation checklist: `docs/customer-evaluation-checklist.md`
+- Feedback form: `docs/customer-feedback-form.md`
+- Release baseline: `docs/release-baseline-v0.1.0.md`
+- Release verification record: `docs/release-verification-record-2026-04-28.md`
+- Production verification runbook: `docs/frontend-command-center-deployment-verification.md`
+
+## Safety Statement
+
+This project is for research, engineering development, controlled demonstrations, and paper-first workflow evaluation. It is not investment advice, does not guarantee profit, and is not ready for production trading.
+
+Live trading remains disabled by default.

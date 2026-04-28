@@ -18,6 +18,7 @@ This baseline is intended to be versioned as `v0.1.0-paper-research-preview`. It
 | Production smoke gate | `make frontend-production-smoke-check` checks the Web Command Center production alias. |
 | Repository-wide gate | `make check` runs backend tests, dry-run data/research checks, frontend checks, website checks, and Docker Compose config validation when available. |
 | Verification record | `docs/release-verification-record-2026-04-28.md` records CI, Vercel alias, smoke gate, safety defaults, and git state evidence. |
+| Customer evaluation package | `docs/customer-evaluation-package.md` defines controlled customer testing scope, demo script, checklist, and feedback capture. |
 
 Production-facing smoke checks are read-only. They verify HTTP 200 responses, deployment id markers, bilingual safety copy, `TRADING_MODE=paper`, `ENABLE_LIVE_TRADING=false`, `BROKER_PROVIDER=paper`, `NOT READY`, and unsafe claim exclusions. They do not deploy, write data, call brokers, approve paper execution, or enable live trading.
 
@@ -51,6 +52,11 @@ Production-facing smoke checks are read-only. They verify HTTP 200 responses, de
   - explicit local JSON loader with safety validation
   - safe and unsafe packet fixtures for frontend rejection-path checks
   - safe sample research review packet generator
+- Customer evaluation package:
+  - controlled testing scope and prohibited testing boundaries
+  - demo script
+  - customer checklist
+  - feedback form
 - Release readiness:
   - release readiness audit document
   - GitHub pull request template
