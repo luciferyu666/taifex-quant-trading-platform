@@ -56,15 +56,31 @@ If OMS state cannot be reconciled with broker state, the order must be marked `U
 
 The current implementation lives in `backend/app/domain/order_state_machine.py`. It does not call brokers, does not persist state, and is intended for tests and architecture scaffolding only.
 
+The paper execution approval workflow now uses this state machine after a platform
+review decision reaches `approved_for_paper_simulation`. The workflow records:
+
+- `CREATE` when the platform creates a `PaperOrderIntent` from a signal-only
+  `StrategySignal`.
+- `RISK_APPROVE` or `RISK_REJECT` after Risk Engine evaluation.
+- `SUBMIT` before the Paper Broker Gateway simulation.
+- `ACKNOWLEDGE`, `REJECT`, `PARTIAL_FILL`, `FILL`, `CANCEL_REQUEST`, or `CANCEL`
+  according to the simulated paper broker outcome.
+
+This remains paper-only and in-memory. It is not a durable OMS, not a production
+execution system, and not connected to any real broker.
+
 ## Acceptance Criteria
 
 - Invalid transitions raise an error.
 - Unknown states are explicit.
 - `MARK_UNKNOWN` can be applied from any state.
 - No broker call occurs inside the state machine.
+- Paper execution tests cover acknowledgement, rejection, partial fill, fill, and
+  cancellation simulations.
 
 ## Testing Plan
 
 ```bash
 cd backend && pytest tests/test_order_state_machine.py
+make paper-execution-workflow-check
 ```

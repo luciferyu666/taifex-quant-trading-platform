@@ -19,13 +19,21 @@ Expose roadmap phase status, contracts, safety mode, risk status, and paper-only
   the fixture validator CLI.
 - Decision summary panel for `rejected`, `needs_data_review`, and
   `approved_for_paper_research` counts.
-- Safety flags panel that keeps paper/live approval flags visible and false.
+- Safety flags panel that keeps paper/live safety flags visible and false.
 - Checksum and warning sections for future audit and reviewer handoff.
 - Read-only Release Baseline dashboard for `v0.1.0-paper-research-preview`.
 - Backend release baseline endpoint:
   `GET /api/release/baseline`.
 - Release level, validation status, safety defaults, and known non-production
   gaps displayed in the Web Command Center.
+- Read-only Paper Execution Approval Workflow panel showing:
+  `research_approved`, `approved_for_paper_simulation`, `rejected`, and
+  `needs_data_review`.
+- Paper execution route display:
+  `StrategySignal -> Platform PaperOrderIntent -> Risk Engine -> OMS -> Paper Broker Gateway -> Audit Event`.
+- Paper execution safety indicators:
+  `TRADING_MODE=paper`, `ENABLE_LIVE_TRADING=false`, `BROKER_PROVIDER=paper`, and
+  `BROKER_API_CALLED=false`.
 
 ## Acceptance Criteria
 
@@ -38,7 +46,7 @@ Expose roadmap phase status, contracts, safety mode, risk status, and paper-only
 - Local JSON loader requires an explicit user-selected `.json` file.
 - Local JSON loader validates required packet fields, checksum formats, decision
   summary counts, and all read-only safety flags before display.
-- Local JSON loader fixtures cover a valid sample plus unsafe live approval,
+- Local JSON loader fixtures cover a valid sample plus unsafe live-safety escalation,
   execution eligibility, performance claim, checksum, and decision-summary cases.
 - Fixture validation imports the same `researchReviewPacketValidation.ts` pure
   function that the UI loader uses, preventing duplicated safety rules.
@@ -64,6 +72,10 @@ Expose roadmap phase status, contracts, safety mode, risk status, and paper-only
   `release-readiness-check`, `make check`, and GitHub Actions release gate.
 - Release Baseline dashboard lists known non-production gaps and does not claim
   production trading readiness.
+- Paper Execution Approval Workflow panel is read-only and displays only paper
+  simulation status, required route, and safety indicators.
+- Paper Execution Approval Workflow panel does not include submit buttons,
+  simulation triggers, broker connection controls, or live controls.
 
 ## Safety Constraints
 
@@ -86,12 +98,16 @@ Expose roadmap phase status, contracts, safety mode, risk status, and paper-only
   must not write databases, call brokers, call Risk Engine, call OMS, create
   orders, approve paper execution, approve live trading, or imply production
   readiness.
+- The Paper Execution Approval Workflow panel is a display surface only. It must not
+  create paper simulations, create order intents, call Risk Engine, call OMS, call
+  Broker Gateway, write databases, connect brokers, or expose live controls.
 
 ## Suggested Commands
 
 ```bash
 cd frontend && npm run typecheck
 cd frontend && npm run build
+make paper-execution-workflow-check
 make sample-research-review-packet
 make research-review-packet-fixtures-check
 cd backend && .venv/bin/python -m pytest tests/test_release_baseline_routes.py
@@ -120,3 +136,6 @@ The Release Baseline dashboard should remain a status and audit-readiness surfac
 Future changes may add historical release comparisons, but must not add release
 approval buttons, live-trading enablement, broker actions, or production-readiness
 claims without a separate Phase 6 readiness and compliance review.
+The paper execution workflow status panel may later show persisted paper OMS/audit
+events after a reviewed persistence slice exists. Until then, it remains read-only
+status and must not expose frontend controls that create paper simulations.

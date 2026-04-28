@@ -131,6 +131,24 @@ Phase 3 research review packet is dry-run handoff metadata only:
   orders, call Risk Engine, call OMS, route through Broker Gateway, rank strategies,
   select winners, certify performance, or make investment recommendations.
 
+Phase 4 paper execution approval workflow is the first controlled paper simulation path:
+
+- `StrategySignal` remains signal-only and must include `reason.signals_only=true`.
+- Strategies still do not create orders, call Risk Engine, call OMS, or call Broker
+  Gateway.
+- The platform may create a `PaperOrderIntent` only after the review decision is
+  `approved_for_paper_simulation`.
+- `research_approved`, `rejected`, and `needs_data_review` do not create paper order
+  intents.
+- Every created paper intent is evaluated by Risk Engine before OMS submission.
+- OMS records deterministic event transitions for create, risk approval/rejection,
+  submit, acknowledgement, rejection, partial fill, fill, and cancellation.
+- Paper Broker Gateway simulates acknowledgement, rejection, partial fill, fill, or
+  cancellation only. It never submits real orders or calls a real broker SDK.
+- Audit events are emitted for approval, intent creation, risk evaluation, paper
+  broker simulation, and OMS lifecycle recording.
+- `ENABLE_LIVE_TRADING=false` and `BROKER_PROVIDER=paper` remain required.
+
 Phase 5 Research Review Packet Viewer is read-only UI:
 
 - It may fetch `GET /api/strategy/research-review/packet/sample` or render fallback
@@ -160,7 +178,7 @@ Phase 5 Research Review Packet loader fixtures are local test inputs only:
 
 - `valid.sample.json` is a safe acceptance sample.
 - `invalid-*.json` files intentionally violate one safety rule each.
-- They are used to test local loader rejection paths for live approval,
+- They are used to test local loader rejection paths for unsafe live escalation,
   execution eligibility, performance claims, checksum formatting, and decision
   summary consistency.
 - They must not be uploaded, persisted, routed to backend mutation APIs, or used
@@ -208,11 +226,14 @@ Future live work requires:
   strategies, certify performance, or become a regulated report.
 - No Research Review Packet Viewer UI may expose execution controls, approval
   escalation, broker submission, ranking, or recommendation behavior.
+- No Paper Execution Approval Workflow UI panel may create simulations, create
+  order intents, connect brokers, trigger Risk Engine, trigger OMS, call Broker
+  Gateway, or expose live controls.
 - No local packet JSON loader may accept unsafe approval, execution, ranking,
   persistence, broker, Risk Engine, OMS, external download, or performance-claim
   flags.
 - No local Research Review Packet sample export may be used as paper execution
-  approval, live approval, persisted audit record, broker instruction, performance
+  approval, live readiness, persisted audit record, broker instruction, performance
   report, ranking, or recommendation.
 - No Research Review Packet loader fixture may be used outside local UI safety
   testing or future automated browser/component tests.
@@ -221,10 +242,10 @@ Future live work requires:
 - No research bundle index path may be used as a strategy ranking, best-strategy
   selection, advisory signal, regulated report, or live deployment approval.
 - No research review queue path may be used as a paper execution approval, live
-  approval, advisory workflow, strategy ranking, or broker execution instruction.
+  readiness, advisory workflow, strategy ranking, or broker execution instruction.
 - No research review decision path may be used as a paper execution approval, live
-  approval, advisory workflow, strategy ranking, broker execution instruction, or
+  readiness, advisory workflow, strategy ranking, broker execution instruction, or
   performance certification.
 - No research review decision index path may be used as a paper execution approval,
-  live approval, advisory workflow, strategy ranking, broker execution instruction,
+  live readiness, advisory workflow, strategy ranking, broker execution instruction,
   or performance certification.

@@ -14,6 +14,9 @@ Risk Engine is the required gate before OMS and Broker Gateway. Current implemen
 - Margin proxy.
 - Duplicate order prevention through idempotency keys.
 - Paper broker only in current implementation.
+- Paper-only order intent flag.
+- Platform-created paper intent metadata linking source signal, strategy version, and
+  paper simulation approval ID.
 
 ## In-Trade Rules
 
@@ -47,7 +50,11 @@ MAX_DAILY_LOSS_TWD=5000
 STALE_QUOTE_SECONDS=3
 ```
 
-`backend/app/domain/risk_rules.py` rejects live trading, non-paper mode, non-paper broker provider, missing idempotency keys, excess exposure, and stale quotes.
+`backend/app/domain/risk_rules.py` rejects live trading, non-paper mode, non-paper broker provider, missing idempotency keys, non-paper intents, excess exposure, and stale quotes.
+
+The paper execution workflow creates `PaperOrderIntent` only after
+`approved_for_paper_simulation`, then calls Risk Engine before OMS submission and
+before Paper Broker Gateway simulation.
 
 ## Acceptance Criteria
 
@@ -56,10 +63,12 @@ STALE_QUOTE_SECONDS=3
 - Risk Engine rejects non-paper broker provider.
 - Risk Engine rejects exposure above the configured limit.
 - Risk Engine rejects stale quotes.
+- Risk Engine rejects any `PaperOrderIntent` where `paper_only=false`.
 - No order is placed by Risk Engine.
 
 ## Validation
 
 ```bash
 cd backend && pytest tests/test_risk_rules.py tests/test_architecture_routes.py
+make paper-execution-workflow-check
 ```

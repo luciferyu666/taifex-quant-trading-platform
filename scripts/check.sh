@@ -138,10 +138,12 @@ for required_file in \
   backend/app/domain/research_review_decision.py \
   backend/app/domain/research_review_decision_index.py \
   backend/app/domain/research_review_packet.py \
+  backend/app/domain/paper_execution.py \
   backend/app/domain/exposure.py \
   backend/app/services/risk_engine.py \
   backend/app/services/oms.py \
   backend/app/services/broker_gateway.py \
+  backend/app/services/paper_execution_workflow.py \
   backend/app/api/data_routes.py \
   backend/app/api/continuous_futures_routes.py \
   backend/app/api/feature_manifest_routes.py \
@@ -159,6 +161,7 @@ for required_file in \
   backend/app/api/research_review_decision_routes.py \
   backend/app/api/research_review_decision_index_routes.py \
   backend/app/api/research_review_packet_routes.py \
+  backend/app/api/paper_execution_routes.py \
   backend/app/api/roadmap_routes.py \
   data-pipeline/migrations/001_phase_2_data_platform.sql \
   data-pipeline/migrations/apply_local_migrations.py \
@@ -244,8 +247,11 @@ for required_file in \
   backend/app/domain/order_state_machine.py \
   backend/app/domain/allocator.py \
   backend/app/domain/risk_rules.py \
+  backend/app/domain/paper_execution.py \
   backend/app/services/paper_broker_gateway.py \
+  backend/app/services/paper_execution_workflow.py \
   backend/app/services/reconciliation.py \
+  backend/app/api/paper_execution_routes.py \
   backend/app/api/architecture_routes.py \
   infra/k8s/control-plane/README.md \
   infra/k8s/trading-data-plane/README.md \

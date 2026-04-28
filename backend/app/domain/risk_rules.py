@@ -9,6 +9,7 @@ class RiskRuleName(StrEnum):
     MAX_EXPOSURE = "MAX_EXPOSURE"
     STALE_QUOTE = "STALE_QUOTE"
     IDEMPOTENCY_KEY_PRESENT = "IDEMPOTENCY_KEY_PRESENT"
+    PAPER_ONLY_INTENT = "PAPER_ONLY_INTENT"
     PAPER_BROKER_ONLY = "PAPER_BROKER_ONLY"
 
 
@@ -41,6 +42,11 @@ class PaperOrderIntent(BaseModel):
     quantity: int = Field(gt=0)
     tx_equivalent_exposure: float = Field(ge=0)
     quote_age_seconds: float = Field(default=0, ge=0)
+    paper_only: bool = True
+    source_signal_id: str | None = None
+    strategy_id: str | None = None
+    strategy_version: str | None = None
+    approval_id: str | None = None
 
 
 def evaluate_paper_order(intent: PaperOrderIntent, policy: RiskPolicy) -> RiskEvaluation:
@@ -59,6 +65,11 @@ def evaluate_paper_order(intent: PaperOrderIntent, policy: RiskPolicy) -> RiskEv
             name=RiskRuleName.IDEMPOTENCY_KEY_PRESENT,
             passed=bool(intent.idempotency_key.strip()),
             message="Order intent must include an idempotency key.",
+        ),
+        RiskCheckResult(
+            name=RiskRuleName.PAPER_ONLY_INTENT,
+            passed=intent.paper_only is True,
+            message="Order intent must remain paper_only=true.",
         ),
         RiskCheckResult(
             name=RiskRuleName.MAX_EXPOSURE,

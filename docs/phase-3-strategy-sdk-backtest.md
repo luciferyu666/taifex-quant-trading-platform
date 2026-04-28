@@ -577,7 +577,7 @@ PYTHONPATH=strategy-engine backend/.venv/bin/python \
 ```
 
 The review queue is suitable as an input contract for a future Web Command Center
-research review page. It is not a live approval workflow, investment recommendation,
+research review page. It is not a live-safety escalation workflow, investment recommendation,
 performance report, strategy ranking, or broker execution instruction.
 
 ## Research Review Decision Preview
@@ -847,10 +847,10 @@ bundles only; they must not rank strategies, select winners, make alpha claims, 
 serve as live deployment approval.
 Research review queues should remain pending human-review metadata only. Future
 statuses such as `rejected`, `needs-data-review`, or `approved-for-paper-research`
-require a separate review-workflow design and must never imply live approval.
+require a separate review-workflow design and must never imply live readiness.
 Research review decisions may record `rejected`, `needs_data_review`, or
 `approved_for_paper_research` as dry-run metadata only. They must never imply paper
-execution approval, live approval, advisory recommendation, ranking, or performance
+execution approval, live readiness, advisory recommendation, ranking, or performance
 certification.
 Research review decision indexes may summarize decision distributions only. They must
 not rank strategies, select winners, certify performance, or convert review metadata

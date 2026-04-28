@@ -1,8 +1,16 @@
-from typing import Any
+from typing import Any, Literal
 
 from pydantic import BaseModel, Field
 
 from app.domain.risk_rules import PaperOrderIntent, RiskEvaluation
+
+PaperBrokerSimulationOutcome = Literal[
+    "acknowledge",
+    "partial_fill",
+    "fill",
+    "reject",
+    "cancel",
+]
 
 
 class PaperBrokerAck(BaseModel):
@@ -18,14 +26,35 @@ class PaperBrokerGateway:
         self,
         intent: PaperOrderIntent,
         risk_evaluation: RiskEvaluation,
+        simulation: PaperBrokerSimulationOutcome = "acknowledge",
     ) -> PaperBrokerAck:
         if not risk_evaluation.approved:
             raise ValueError("PaperBrokerGateway refuses unapproved order intents")
 
+        if simulation == "reject":
+            return PaperBrokerAck(
+                paper_order_id=f"paper-{intent.order_id}",
+                accepted=False,
+                message=(
+                    "Paper broker simulated rejection only. No real order was placed."
+                ),
+                payload={
+                    "order_id": intent.order_id,
+                    "idempotency_key": intent.idempotency_key,
+                    "symbol": intent.symbol,
+                    "side": intent.side,
+                    "quantity": intent.quantity,
+                    "paper_only": True,
+                    "simulation": simulation,
+                },
+            )
+
         return PaperBrokerAck(
             paper_order_id=f"paper-{intent.order_id}",
             accepted=True,
-            message="Paper broker acknowledgement only. No real order was placed.",
+            message=(
+                f"Paper broker simulated {simulation}. No real order was placed."
+            ),
             payload={
                 "order_id": intent.order_id,
                 "idempotency_key": intent.idempotency_key,
@@ -33,5 +62,6 @@ class PaperBrokerGateway:
                 "side": intent.side,
                 "quantity": intent.quantity,
                 "paper_only": True,
+                "simulation": simulation,
             },
         )

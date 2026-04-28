@@ -363,6 +363,74 @@ th {
   color: var(--red);
 }
 
+.paper-workflow {
+  margin-top: 44px;
+}
+
+.paper-workflow .section-heading p:not(.eyebrow) {
+  max-width: 860px;
+  margin: 10px 0 0;
+  color: var(--muted);
+  line-height: 1.55;
+}
+
+.paper-workflow-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 0.8fr) minmax(0, 1fr) minmax(320px, 1fr);
+  gap: 16px;
+}
+
+.paper-workflow-card {
+  min-width: 0;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--panel);
+  box-shadow: var(--shadow);
+  padding: 18px;
+}
+
+.paper-workflow-card.safety {
+  border-color: rgba(4, 120, 87, 0.2);
+  background: linear-gradient(180deg, rgba(4, 120, 87, 0.06), #ffffff);
+}
+
+.paper-workflow-card p {
+  margin: 12px 0 0;
+  color: var(--muted);
+  line-height: 1.55;
+}
+
+.workflow-list {
+  display: grid;
+  gap: 8px;
+  margin: 18px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.workflow-list.ordered {
+  padding-left: 20px;
+  list-style: decimal;
+}
+
+.workflow-list li {
+  border: 1px solid rgba(29, 78, 216, 0.2);
+  border-radius: 8px;
+  padding: 9px 10px;
+  background: rgba(29, 78, 216, 0.06);
+  color: var(--text);
+  font-size: 0.88rem;
+  font-weight: 700;
+  line-height: 1.35;
+}
+
+.workflow-metrics {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 18px;
+}
+
 .packet-section {
   margin-top: 44px;
 }
@@ -557,6 +625,7 @@ dd {
   .dashboard-grid,
   .release-hero,
   .release-grid,
+  .paper-workflow-grid,
   .packet-loader,
   .packet-layout,
   .packet-layout.secondary {

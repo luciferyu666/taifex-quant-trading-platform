@@ -108,7 +108,7 @@ make check
 ## Known Non-Production Gaps
 
 - No real broker adapter is implemented.
-- No live trading approval workflow exists.
+- No live execution path exists.
 - OMS and Risk Engine remain scaffolded for paper-only and research-only flows.
 - Data pipelines use local fixtures and dry-run validation.
 - Backtest outputs are simulated research artifacts, not performance reports.

@@ -107,7 +107,7 @@ GitHub Actions should report the `Release readiness gate` workflow as passing fo
 
 - No production trading path exists.
 - No real broker adapter exists.
-- No live trading approval workflow exists.
+- No live execution path exists.
 - Risk Engine, OMS, Broker Gateway, reconciliation, and audit remain incomplete for production use.
 - Data platform is based on local fixtures, dry-run validation, and schema scaffolding.
 - Backtest outputs are simulated research artifacts, not performance reports.

@@ -36,6 +36,17 @@ type PaperStatus = {
   message: string;
 };
 
+type PaperExecutionStatus = {
+  trading_mode: string;
+  live_trading_enabled: boolean;
+  broker_provider: string;
+  workflow_statuses: string[];
+  order_path: string[];
+  ui_mode: string;
+  broker_api_called: boolean;
+  message: string;
+};
+
 type LoadState<T> = { available: true; data: T } | { available: false; error: string; data: T };
 
 const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL ?? "http://localhost:8000";
@@ -98,6 +109,29 @@ const fallbackPaperStatus: PaperStatus = {
   message: "Fallback paper-safe status. Backend is unavailable.",
 };
 
+const fallbackPaperExecutionStatus: PaperExecutionStatus = {
+  trading_mode: "paper",
+  live_trading_enabled: false,
+  broker_provider: "paper",
+  workflow_statuses: [
+    "research_approved",
+    "approved_for_paper_simulation",
+    "rejected",
+    "needs_data_review",
+  ],
+  order_path: [
+    "StrategySignal",
+    "Platform PaperOrderIntent",
+    "Risk Engine",
+    "OMS",
+    "Paper Broker Gateway",
+    "Audit Event",
+  ],
+  ui_mode: "Paper Only read-only workflow status. No live controls are exposed.",
+  broker_api_called: false,
+  message: "Fallback paper execution workflow status. Backend is unavailable.",
+};
+
 const fallbackReleaseBaseline: ReleaseBaseline = {
   version: "v0.1.0-paper-research-preview",
   release_level: {
@@ -120,7 +154,7 @@ const fallbackReleaseBaseline: ReleaseBaseline = {
   known_non_production_gaps: [
     "No production trading path exists.",
     "No real broker adapter exists.",
-    "No live trading approval workflow exists.",
+    "No live execution path exists.",
     "Data platform is based on local fixtures, dry-run validation, and schema scaffolding.",
     "Backtest outputs are simulated research artifacts, not performance reports.",
     "Web Command Center is read-only for research review packet inspection.",
@@ -206,12 +240,24 @@ export default async function Home({ searchParams }: HomeProps) {
   const language = resolveLanguage(params.lang);
   const copy = dashboardCopy[language];
 
-  const [health, roadmap, contractsResponse, paperStatus, releaseBaseline, reviewPacket] =
+  const [
+    health,
+    roadmap,
+    contractsResponse,
+    paperStatus,
+    paperExecutionStatus,
+    releaseBaseline,
+    reviewPacket,
+  ] =
     await Promise.all([
       fetchJson<HealthResponse>("/health", fallbackHealth),
       fetchJson<PhaseStatus[]>("/api/roadmap", fallbackRoadmap),
       fetchJson<{ contracts: ContractSpec[] }>("/api/contracts", { contracts: fallbackContracts }),
       fetchJson<PaperStatus>("/api/risk/paper-status", fallbackPaperStatus),
+      fetchJson<PaperExecutionStatus>(
+        "/api/paper-execution/status",
+        fallbackPaperExecutionStatus,
+      ),
       fetchJson<ReleaseBaseline>("/api/release/baseline", fallbackReleaseBaseline),
       fetchJson<ResearchReviewPacket>(
         "/api/strategy/research-review/packet/sample",
@@ -291,6 +337,67 @@ export default async function Home({ searchParams }: HomeProps) {
         copy={copy.release}
         error={releaseBaseline.available ? undefined : releaseBaseline.error}
       />
+
+      <section className="paper-workflow" aria-labelledby="paper-workflow-title">
+        <div className="section-heading">
+          <p className="eyebrow">{copy.paperExecution.eyebrow}</p>
+          <h2 id="paper-workflow-title">{copy.paperExecution.title}</h2>
+          <p>{copy.paperExecution.description}</p>
+          {!paperExecutionStatus.available ? (
+            <p className="notice">
+              {copy.paperExecution.fallbackPrefix} {paperExecutionStatus.error}
+            </p>
+          ) : null}
+        </div>
+        <div className="paper-workflow-grid">
+          <article className="paper-workflow-card">
+            <p className="card-kicker">{copy.paperExecution.approvalKicker}</p>
+            <h3>{copy.paperExecution.approvalTitle}</h3>
+            <ul className="workflow-list">
+              {paperExecutionStatus.data.workflow_statuses.map((status) => (
+                <li key={status}>
+                  {copy.paperExecution.statusLabels[
+                    status as keyof typeof copy.paperExecution.statusLabels
+                  ] ?? status}
+                </li>
+              ))}
+            </ul>
+          </article>
+
+          <article className="paper-workflow-card">
+            <p className="card-kicker">{copy.paperExecution.pathKicker}</p>
+            <h3>{copy.paperExecution.pathTitle}</h3>
+            <ol className="workflow-list ordered">
+              {paperExecutionStatus.data.order_path.map((step) => (
+                <li key={step}>
+                  {copy.paperExecution.pathLabels[
+                    step as keyof typeof copy.paperExecution.pathLabels
+                  ] ?? step}
+                </li>
+              ))}
+            </ol>
+          </article>
+
+          <article className="paper-workflow-card safety">
+            <p className="card-kicker">{copy.paperExecution.safetyKicker}</p>
+            <h3>{copy.paperExecution.safetyTitle}</h3>
+            <p>{copy.paperExecution.safetyText}</p>
+            <div className="workflow-metrics">
+              <span className="metric ok">TRADING_MODE={paperExecutionStatus.data.trading_mode}</span>
+              <span className="metric ok">
+                ENABLE_LIVE_TRADING={String(paperExecutionStatus.data.live_trading_enabled)}
+              </span>
+              <span className="metric ok">
+                BROKER_PROVIDER={paperExecutionStatus.data.broker_provider}
+              </span>
+              <span className="metric ok">
+                {copy.paperExecution.brokerApiCalled}=
+                {String(paperExecutionStatus.data.broker_api_called)}
+              </span>
+            </div>
+          </article>
+        </div>
+      </section>
 
       <ResearchReviewPacketJsonLoader
         copy={copy}

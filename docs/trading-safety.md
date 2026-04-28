@@ -58,7 +58,7 @@ Phase 3 research and backtest preview artifacts are intentionally non-executable
   used as advice, alpha proof, or live readiness approval.
 - Backtest research bundle may package the full research-only chain for UI, audit, and
   review workflows. It must remain `persisted=false` by default and must not be treated
-  as a performance report, ranking, recommendation, or live approval.
+  as a performance report, ranking, recommendation, or live readiness approval.
 - Research bundle local export may mark `persisted=true` only when the user explicitly
   provides a local `.json` `--output` path. It must remain local metadata only and must
   not write databases, call brokers, or create orders.
@@ -83,6 +83,28 @@ Phase 3 research and backtest preview artifacts are intentionally non-executable
 
 Any future performance report must be clearly labeled as research/backtest output and
 must not be marketed as guaranteed profit or investment advice.
+
+## Paper Execution Approval Workflow
+
+Paper simulation is allowed only through a platform-owned workflow:
+
+- Strategy code still emits `StrategySignal` only.
+- `StrategySignal.reason.signals_only` must be `true`.
+- A strategy must not create orders, call Risk Engine, call OMS, call Broker Gateway,
+  or call broker APIs.
+- The platform can create a `PaperOrderIntent` only when review status is
+  `approved_for_paper_simulation`.
+- `research_approved` means the research artifact can proceed in review; it is not a
+  paper simulation approval.
+- `rejected` and `needs_data_review` do not create paper order intents.
+- Every `PaperOrderIntent` must pass Risk Engine before OMS submission.
+- OMS owns the deterministic order lifecycle.
+- Paper Broker Gateway simulates acknowledgement, rejection, partial fill, fill, and
+  cancellation only.
+- Every workflow run must emit audit events.
+- No real broker SDK is called.
+- No real order is placed.
+- `ENABLE_LIVE_TRADING=false` remains required.
 
 ## Risk and OMS Rule
 

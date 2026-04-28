@@ -37,7 +37,7 @@ class ReleaseBaselineResponse(BaseModel):
 KNOWN_NON_PRODUCTION_GAPS = [
     "No production trading path exists.",
     "No real broker adapter exists.",
-    "No live trading approval workflow exists.",
+    "No live execution path exists.",
     (
         "Risk Engine, OMS, Broker Gateway, reconciliation, and audit remain incomplete "
         "for production use."

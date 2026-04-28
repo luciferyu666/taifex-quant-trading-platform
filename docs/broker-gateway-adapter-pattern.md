@@ -10,7 +10,10 @@ Normalized order intents enter Broker Gateway only after Risk Engine approval an
 
 ## Paper Adapter
 
-`backend/app/services/paper_broker_gateway.py` returns deterministic paper acknowledgements. It never places real orders and never imports broker SDKs.
+`backend/app/services/paper_broker_gateway.py` returns deterministic paper
+simulation outcomes. It can simulate acknowledgement, rejection, partial fill, fill,
+and cancellation for workflow testing. It never places real orders and never imports
+broker SDKs.
 
 ## Future Shioaji/Fubon Adapters
 
@@ -38,3 +41,5 @@ Strategy Runner must never see plaintext broker keys. Future credentials should 
 - No Shioaji/Fubon SDK imports exist in this task.
 - Broker credentials are not stored in source code.
 - Risk Engine and OMS remain before Broker Gateway.
+- Paper Broker Gateway refuses unapproved Risk Engine decisions.
+- Paper Broker Gateway output is recorded as simulated audit metadata only.

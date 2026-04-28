@@ -36,6 +36,36 @@ export const dashboardCopy = {
         text: "Max daily loss and stale quote limits are visible before any future OMS workflow.",
       },
     },
+    paperExecution: {
+      eyebrow: "Paper Execution",
+      title: "Paper simulation approval workflow",
+      description:
+        "Read-only view of the controlled path from StrategySignal to PaperOrderIntent, Risk Engine, OMS, Paper Broker Gateway, and audit events. This UI does not submit simulations or expose live controls.",
+      fallbackPrefix: "Backend paper execution status unavailable. Rendering safe fallback:",
+      approvalKicker: "Approval States",
+      approvalTitle: "Allowed review outcomes",
+      pathKicker: "Paper Path",
+      pathTitle: "Required simulation route",
+      safetyKicker: "Safety State",
+      safetyTitle: "Paper Only, no live controls",
+      safetyText:
+        "A platform-created PaperOrderIntent may be simulated only after paper review. It remains separate from live trading and never calls a real broker.",
+      brokerApiCalled: "BROKER_API_CALLED",
+      statusLabels: {
+        research_approved: "Research approved",
+        approved_for_paper_simulation: "Approved for paper simulation",
+        rejected: "Rejected",
+        needs_data_review: "Needs data review",
+      },
+      pathLabels: {
+        StrategySignal: "StrategySignal",
+        "Platform PaperOrderIntent": "Platform PaperOrderIntent",
+        "Risk Engine": "Risk Engine",
+        OMS: "OMS",
+        "Paper Broker Gateway": "Paper Broker Gateway",
+        "Audit Event": "Audit Event",
+      },
+    },
     release: {
       eyebrow: "Release Baseline",
       title: "v0.1.0 paper research preview",
@@ -71,8 +101,7 @@ export const dashboardCopy = {
       gapLabels: {
         "No production trading path exists.": "No production trading path exists.",
         "No real broker adapter exists.": "No real broker adapter exists.",
-        "No live trading approval workflow exists.":
-          "No live trading approval workflow exists.",
+        "No live execution path exists.": "No live execution path exists.",
         "Data platform is based on local fixtures, dry-run validation, and schema scaffolding.":
           "Data platform is based on local fixtures, dry-run validation, and schema scaffolding.",
         "Backtest outputs are simulated research artifacts, not performance reports.":
@@ -145,7 +174,7 @@ export const dashboardCopy = {
         external_data_downloaded: "External data downloaded",
         ranking_generated: "Ranking generated",
         best_strategy_selected: "Best strategy selected",
-        approval_for_live: "Live approval",
+        approval_for_live: "Live disabled check",
         approval_for_paper_execution: "Paper execution approval",
         persisted: "Persisted",
       },
@@ -253,6 +282,36 @@ export const dashboardCopy = {
         text: "在任何未來 OMS 工作流之前，先清楚呈現每日虧損上限與 stale quote 限制。",
       },
     },
+    paperExecution: {
+      eyebrow: "紙上執行",
+      title: "紙上模擬審批流程",
+      description:
+        "只讀檢視從 StrategySignal 到 PaperOrderIntent、Risk Engine、OMS、Paper Broker Gateway 與 audit events 的受控路徑。此 UI 不送出模擬，不提供任何實盤控制。",
+      fallbackPrefix: "後端紙上執行狀態無法取得，正在顯示安全備援資料：",
+      approvalKicker: "審核狀態",
+      approvalTitle: "允許的審核結果",
+      pathKicker: "紙上路徑",
+      pathTitle: "必要模擬路由",
+      safetyKicker: "安全狀態",
+      safetyTitle: "僅限 Paper Only，無實盤控制",
+      safetyText:
+        "平台建立的 PaperOrderIntent 只有在紙上審核後才能模擬，且與實盤交易分離，永遠不呼叫真實券商。",
+      brokerApiCalled: "BROKER_API_CALLED",
+      statusLabels: {
+        research_approved: "研究已通過",
+        approved_for_paper_simulation: "已核准紙上模擬",
+        rejected: "已拒絕",
+        needs_data_review: "需要資料審查",
+      },
+      pathLabels: {
+        StrategySignal: "StrategySignal",
+        "Platform PaperOrderIntent": "平台 PaperOrderIntent",
+        "Risk Engine": "Risk Engine",
+        OMS: "OMS",
+        "Paper Broker Gateway": "Paper Broker Gateway",
+        "Audit Event": "Audit Event",
+      },
+    },
     release: {
       eyebrow: "版本基準",
       title: "v0.1.0 紙上研究預覽",
@@ -287,7 +346,7 @@ export const dashboardCopy = {
       gapLabels: {
         "No production trading path exists.": "目前不存在正式實盤交易路徑。",
         "No real broker adapter exists.": "目前不存在真實券商 adapter。",
-        "No live trading approval workflow exists.": "目前不存在實盤交易核准流程。",
+        "No live execution path exists.": "目前不存在實盤執行路徑。",
         "Data platform is based on local fixtures, dry-run validation, and schema scaffolding.":
           "資料平台目前以本地 fixtures、dry-run 驗證與 schema 骨架為主。",
         "Backtest outputs are simulated research artifacts, not performance reports.":
@@ -358,7 +417,7 @@ export const dashboardCopy = {
         external_data_downloaded: "已下載外部資料",
         ranking_generated: "已產生排名",
         best_strategy_selected: "已選擇最佳策略",
-        approval_for_live: "實盤核准",
+        approval_for_live: "實盤關閉檢查",
         approval_for_paper_execution: "紙上執行核准",
         persisted: "已持久化",
       },
