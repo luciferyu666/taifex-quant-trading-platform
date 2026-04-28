@@ -5,6 +5,7 @@ const repoRoot = process.cwd();
 const files = {
   i18n: "frontend/app/i18n.ts",
   page: "frontend/app/page.tsx",
+  commandTabs: "frontend/app/components/CommandCenterTabs.tsx",
   paperRecords: "frontend/app/components/PaperExecutionRecordsPanel.tsx",
   paperOmsTimeline: "frontend/app/components/PaperOmsTimelinePanel.tsx",
   paperAuditTimeline: "frontend/app/components/PaperAuditTimelinePanel.tsx",
@@ -203,10 +204,21 @@ requireContains("English local JSON loader copy exists", sourceByFile.i18n, "Sel
 requireContains("Traditional Chinese local JSON loader copy exists", sourceByFile.i18n, "選擇本地 .json");
 requireContains("English no-upload copy exists", sourceByFile.i18n, "The file was not uploaded");
 requireContains("Traditional Chinese no-upload copy exists", sourceByFile.i18n, "檔案未上傳");
+requireContains("English read-only interaction copy exists", sourceByFile.i18n, "Read-only Command Center tools");
+requireContains("Traditional Chinese read-only interaction copy exists", sourceByFile.i18n, "只讀 Command Center 工具");
+requireContains("Command Center tabs are implemented", sourceByFile.commandTabs, "role=\"tablist\"");
+requireContains("Command Center refresh action exists", sourceByFile.i18n, "Refresh status");
+requireContains("Command Center backend troubleshooting exists", sourceByFile.commandTabs, "troubleshooting-panel");
 requireContains("English paper records copy exists", sourceByFile.i18n, "Persisted paper workflow records");
 requireContains("Traditional Chinese paper records copy exists", sourceByFile.i18n, "已持久化紙上流程紀錄");
 requireContains("Paper records panel is read-only", combinedSource, "Read-only");
+requireContains("Paper records rows are selectable", sourceByFile.paperRecords, "aria-pressed");
+requireContains("Paper records workflow copy action exists", sourceByFile.i18n, "Copy workflow ID");
+requireContains("Paper records order copy action exists", sourceByFile.i18n, "Copy order ID");
 requireContains("Paper records panel avoids broker calls", combinedSource, "broker_api_called");
+requireContains("Packet loader bundled sample action exists", sourceByFile.i18n, "Load safe sample");
+requireContains("Packet loader clear local JSON action exists", sourceByFile.i18n, "Clear local JSON");
+requireContains("Packet loader still performs local validation", sourceByFile.packetLoader, "validateResearchReviewPacket");
 
 scanForbiddenPatterns();
 

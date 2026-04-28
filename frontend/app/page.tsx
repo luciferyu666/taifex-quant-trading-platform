@@ -2,6 +2,7 @@ import {
   PaperExecutionRecordsPanel,
   type PaperExecutionRunRecord,
 } from "./components/PaperExecutionRecordsPanel";
+import { CommandCenterTabs } from "./components/CommandCenterTabs";
 import type { PaperAuditEventRecord } from "./components/PaperAuditTimelinePanel";
 import type { PaperOmsEventRecord } from "./components/PaperOmsTimelinePanel";
 import { ResearchReviewPacketJsonLoader } from "./components/ResearchReviewPacketJsonLoader";
@@ -337,6 +338,22 @@ export default async function Home({ searchParams }: HomeProps) {
   ]
     .filter(Boolean)
     .join("; ");
+  const backendIssues = [
+    health.available ? undefined : `health: ${health.error}`,
+    roadmap.available ? undefined : `roadmap: ${roadmap.error}`,
+    contractsResponse.available ? undefined : `contracts: ${contractsResponse.error}`,
+    paperStatus.available ? undefined : `paper status: ${paperStatus.error}`,
+    paperExecutionStatus.available
+      ? undefined
+      : `paper execution: ${paperExecutionStatus.error}`,
+    paperExecutionPersistence.available
+      ? undefined
+      : `paper persistence: ${paperExecutionPersistence.error}`,
+    paperExecutionRuns.available ? undefined : `paper records: ${paperExecutionRuns.error}`,
+    releaseBaseline.available ? undefined : `release baseline: ${releaseBaseline.error}`,
+    reviewPacket.available ? undefined : `research packet: ${reviewPacket.error}`,
+  ].filter((issue): issue is string => Boolean(issue));
+  const backendAvailable = backendIssues.length === 0;
 
   return (
     <main className="shell" lang={copy.htmlLang}>
@@ -402,177 +419,200 @@ export default async function Home({ searchParams }: HomeProps) {
         </article>
       </section>
 
-      <ReleaseBaselinePanel
-        available={releaseBaseline.available}
-        baseline={releaseBaseline.data}
-        copy={copy.release}
-        error={releaseBaseline.available ? undefined : releaseBaseline.error}
-      />
+      <CommandCenterTabs
+        backendAvailable={backendAvailable}
+        backendIssues={backendIssues}
+        copy={copy.interactions}
+        release={
+          <ReleaseBaselinePanel
+            available={releaseBaseline.available}
+            baseline={releaseBaseline.data}
+            copy={copy.release}
+            error={releaseBaseline.available ? undefined : releaseBaseline.error}
+          />
+        }
+        paper={
+          <>
+            <section className="paper-workflow" aria-labelledby="paper-workflow-title">
+              <div className="section-heading">
+                <p className="eyebrow">{copy.paperExecution.eyebrow}</p>
+                <h2 id="paper-workflow-title">{copy.paperExecution.title}</h2>
+                <p>{copy.paperExecution.description}</p>
+                {!paperExecutionStatus.available ? (
+                  <p className="notice">
+                    {copy.paperExecution.fallbackPrefix} {paperExecutionStatus.error}
+                  </p>
+                ) : null}
+              </div>
+              <div className="paper-workflow-grid">
+                <article className="paper-workflow-card">
+                  <p className="card-kicker">{copy.paperExecution.approvalKicker}</p>
+                  <h3>{copy.paperExecution.approvalTitle}</h3>
+                  <ul className="workflow-list">
+                    {paperExecutionStatus.data.workflow_statuses.map((status) => (
+                      <li key={status}>
+                        {copy.paperExecution.statusLabels[
+                          status as keyof typeof copy.paperExecution.statusLabels
+                        ] ?? status}
+                      </li>
+                    ))}
+                  </ul>
+                </article>
 
-      <section className="paper-workflow" aria-labelledby="paper-workflow-title">
-        <div className="section-heading">
-          <p className="eyebrow">{copy.paperExecution.eyebrow}</p>
-          <h2 id="paper-workflow-title">{copy.paperExecution.title}</h2>
-          <p>{copy.paperExecution.description}</p>
-          {!paperExecutionStatus.available ? (
-            <p className="notice">
-              {copy.paperExecution.fallbackPrefix} {paperExecutionStatus.error}
-            </p>
-          ) : null}
-        </div>
-        <div className="paper-workflow-grid">
-          <article className="paper-workflow-card">
-            <p className="card-kicker">{copy.paperExecution.approvalKicker}</p>
-            <h3>{copy.paperExecution.approvalTitle}</h3>
-            <ul className="workflow-list">
-              {paperExecutionStatus.data.workflow_statuses.map((status) => (
-                <li key={status}>
-                  {copy.paperExecution.statusLabels[
-                    status as keyof typeof copy.paperExecution.statusLabels
-                  ] ?? status}
-                </li>
-              ))}
-            </ul>
-          </article>
+                <article className="paper-workflow-card">
+                  <p className="card-kicker">{copy.paperExecution.pathKicker}</p>
+                  <h3>{copy.paperExecution.pathTitle}</h3>
+                  <ol className="workflow-list ordered">
+                    {paperExecutionStatus.data.order_path.map((step) => (
+                      <li key={step}>
+                        {copy.paperExecution.pathLabels[
+                          step as keyof typeof copy.paperExecution.pathLabels
+                        ] ?? step}
+                      </li>
+                    ))}
+                  </ol>
+                </article>
 
-          <article className="paper-workflow-card">
-            <p className="card-kicker">{copy.paperExecution.pathKicker}</p>
-            <h3>{copy.paperExecution.pathTitle}</h3>
-            <ol className="workflow-list ordered">
-              {paperExecutionStatus.data.order_path.map((step) => (
-                <li key={step}>
-                  {copy.paperExecution.pathLabels[
-                    step as keyof typeof copy.paperExecution.pathLabels
-                  ] ?? step}
-                </li>
-              ))}
-            </ol>
-          </article>
+                <article className="paper-workflow-card safety">
+                  <p className="card-kicker">{copy.paperExecution.safetyKicker}</p>
+                  <h3>{copy.paperExecution.safetyTitle}</h3>
+                  <p>{copy.paperExecution.safetyText}</p>
+                  <div className="workflow-metrics">
+                    <span className="metric ok">
+                      TRADING_MODE={paperExecutionStatus.data.trading_mode}
+                    </span>
+                    <span className="metric ok">
+                      ENABLE_LIVE_TRADING=
+                      {String(paperExecutionStatus.data.live_trading_enabled)}
+                    </span>
+                    <span className="metric ok">
+                      BROKER_PROVIDER={paperExecutionStatus.data.broker_provider}
+                    </span>
+                    <span className="metric ok">
+                      {copy.paperExecution.brokerApiCalled}=
+                      {String(paperExecutionStatus.data.broker_api_called)}
+                    </span>
+                    <span
+                      className={paperExecutionPersistence.data.enabled ? "metric ok" : "metric warn"}
+                    >
+                      {copy.paperExecution.persistenceBackend}:{" "}
+                      {paperExecutionPersistence.data.backend}
+                    </span>
+                    <span className="metric ok">
+                      {copy.paperExecution.localOnly}=
+                      {String(paperExecutionPersistence.data.local_only)}
+                    </span>
+                  </div>
+                </article>
+              </div>
+              <div className="persistence-strip" aria-label={copy.paperExecution.persistenceAria}>
+                <span>
+                  {copy.paperExecution.runs}: {paperExecutionPersistence.data.runs_count}
+                </span>
+                <span>
+                  {copy.paperExecution.omsEvents}:{" "}
+                  {paperExecutionPersistence.data.oms_events_count}
+                </span>
+                <span>
+                  {copy.paperExecution.auditEvents}:{" "}
+                  {paperExecutionPersistence.data.audit_events_count}
+                </span>
+                <span>
+                  {copy.paperExecution.dbPath}: {paperExecutionPersistence.data.db_path}
+                </span>
+              </div>
+            </section>
 
-          <article className="paper-workflow-card safety">
-            <p className="card-kicker">{copy.paperExecution.safetyKicker}</p>
-            <h3>{copy.paperExecution.safetyTitle}</h3>
-            <p>{copy.paperExecution.safetyText}</p>
-            <div className="workflow-metrics">
-              <span className="metric ok">TRADING_MODE={paperExecutionStatus.data.trading_mode}</span>
-              <span className="metric ok">
-                ENABLE_LIVE_TRADING={String(paperExecutionStatus.data.live_trading_enabled)}
-              </span>
-              <span className="metric ok">
-                BROKER_PROVIDER={paperExecutionStatus.data.broker_provider}
-              </span>
-              <span className="metric ok">
-                {copy.paperExecution.brokerApiCalled}=
-                {String(paperExecutionStatus.data.broker_api_called)}
-              </span>
-              <span className={paperExecutionPersistence.data.enabled ? "metric ok" : "metric warn"}>
-                {copy.paperExecution.persistenceBackend}:{" "}
-                {paperExecutionPersistence.data.backend}
-              </span>
-              <span className="metric ok">
-                {copy.paperExecution.localOnly}=
-                {String(paperExecutionPersistence.data.local_only)}
-              </span>
-            </div>
-          </article>
-        </div>
-        <div className="persistence-strip" aria-label={copy.paperExecution.persistenceAria}>
-          <span>
-            {copy.paperExecution.runs}: {paperExecutionPersistence.data.runs_count}
-          </span>
-          <span>
-            {copy.paperExecution.omsEvents}: {paperExecutionPersistence.data.oms_events_count}
-          </span>
-          <span>
-            {copy.paperExecution.auditEvents}:{" "}
-            {paperExecutionPersistence.data.audit_events_count}
-          </span>
-          <span>
-            {copy.paperExecution.dbPath}: {paperExecutionPersistence.data.db_path}
-          </span>
-        </div>
-      </section>
-
-      <PaperExecutionRecordsPanel
-        available={paperRecordsAvailable}
-        copy={copy}
-        error={paperRecordsError || undefined}
-        auditEvents={paperAuditEvents.data}
-        omsEvents={paperOmsEvents.data}
-        runs={paperExecutionRuns.data}
-      />
-
-      <ResearchReviewPacketJsonLoader
-        copy={copy}
-        key={language}
-        initialAvailable={reviewPacket.available}
-        initialError={reviewPacket.available ? undefined : reviewPacket.error}
-        initialPacket={reviewPacket.data}
-      />
-
-      <section className="module-section" aria-labelledby="roadmap-title">
-        <div className="section-heading">
-          <p className="eyebrow">{copy.roadmap.eyebrow}</p>
-          <h2 id="roadmap-title">{copy.roadmap.title}</h2>
-        </div>
-        <div className="phase-grid">
-          {roadmap.data.map((phase) => (
-            <article className="module-card" key={phase.phase}>
-              <span className="phase-number">
-                {copy.roadmap.phasePrefix} {phase.phase}
-              </span>
-              <h3>{copy.roadmap.names[phase.phase as keyof typeof copy.roadmap.names] ?? phase.name}</h3>
-              <p>
-                {copy.roadmap.statusPrefix}:{" "}
-                {copy.roadmap.statuses[
-                  phase.status as keyof typeof copy.roadmap.statuses
-                ] ?? phase.status}
-              </p>
-              <span className="metric ok">{phase.safety_mode}</span>
-            </article>
-          ))}
-        </div>
-      </section>
-
-      <section className="dashboard-grid" aria-label={copy.contracts.ariaLabel}>
-        <article className="panel">
-          <div className="section-heading compact">
-            <p className="eyebrow">{copy.contracts.eyebrow}</p>
-            <h2>{copy.contracts.title}</h2>
-          </div>
-          <div className="table-wrap">
-            <table>
-              <thead>
-                <tr>
-                  <th>{copy.contracts.headers.symbol}</th>
-                  <th>{copy.contracts.headers.pointValue}</th>
-                  <th>{copy.contracts.headers.txEquivalent}</th>
-                  <th>{copy.contracts.headers.description}</th>
-                </tr>
-              </thead>
-              <tbody>
-                {contracts.map((contract) => (
-                  <tr key={contract.symbol}>
-                    <td>{contract.symbol}</td>
-                    <td>{contract.point_value_twd} TWD</td>
-                    <td>{contract.tx_equivalent_ratio}</td>
-                    <td>
-                      {copy.contracts.descriptions[contract.symbol] ?? contract.description}
-                    </td>
-                  </tr>
+            <PaperExecutionRecordsPanel
+              available={paperRecordsAvailable}
+              copy={copy}
+              error={paperRecordsError || undefined}
+              auditEvents={paperAuditEvents.data}
+              omsEvents={paperOmsEvents.data}
+              runs={paperExecutionRuns.data}
+            />
+          </>
+        }
+        packet={
+          <ResearchReviewPacketJsonLoader
+            copy={copy}
+            key={language}
+            initialAvailable={reviewPacket.available}
+            initialError={reviewPacket.available ? undefined : reviewPacket.error}
+            initialPacket={reviewPacket.data}
+            safeSamplePacket={fallbackResearchReviewPacket}
+          />
+        }
+        contracts={
+          <>
+            <section className="module-section" aria-labelledby="roadmap-title">
+              <div className="section-heading">
+                <p className="eyebrow">{copy.roadmap.eyebrow}</p>
+                <h2 id="roadmap-title">{copy.roadmap.title}</h2>
+              </div>
+              <div className="phase-grid">
+                {roadmap.data.map((phase) => (
+                  <article className="module-card" key={phase.phase}>
+                    <span className="phase-number">
+                      {copy.roadmap.phasePrefix} {phase.phase}
+                    </span>
+                    <h3>
+                      {copy.roadmap.names[
+                        phase.phase as keyof typeof copy.roadmap.names
+                      ] ?? phase.name}
+                    </h3>
+                    <p>
+                      {copy.roadmap.statusPrefix}:{" "}
+                      {copy.roadmap.statuses[
+                        phase.status as keyof typeof copy.roadmap.statuses
+                      ] ?? phase.status}
+                    </p>
+                    <span className="metric ok">{phase.safety_mode}</span>
+                  </article>
                 ))}
-              </tbody>
-            </table>
-          </div>
-        </article>
+              </div>
+            </section>
 
-        <article className="panel paper-panel">
-          <div className="section-heading compact">
-            <p className="eyebrow">{copy.paperPanel.eyebrow}</p>
-            <h2>{copy.paperPanel.title}</h2>
-          </div>
-          <p>{copy.paperPanel.text}</p>
-          <pre>{`POST /api/paper/orders
+            <section className="dashboard-grid" aria-label={copy.contracts.ariaLabel}>
+              <article className="panel">
+                <div className="section-heading compact">
+                  <p className="eyebrow">{copy.contracts.eyebrow}</p>
+                  <h2>{copy.contracts.title}</h2>
+                </div>
+                <div className="table-wrap">
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>{copy.contracts.headers.symbol}</th>
+                        <th>{copy.contracts.headers.pointValue}</th>
+                        <th>{copy.contracts.headers.txEquivalent}</th>
+                        <th>{copy.contracts.headers.description}</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {contracts.map((contract) => (
+                        <tr key={contract.symbol}>
+                          <td>{contract.symbol}</td>
+                          <td>{contract.point_value_twd} TWD</td>
+                          <td>{contract.tx_equivalent_ratio}</td>
+                          <td>
+                            {copy.contracts.descriptions[contract.symbol] ??
+                              contract.description}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </article>
+
+              <article className="panel paper-panel">
+                <div className="section-heading compact">
+                  <p className="eyebrow">{copy.paperPanel.eyebrow}</p>
+                  <h2>{copy.paperPanel.title}</h2>
+                </div>
+                <p>{copy.paperPanel.text}</p>
+                <pre>{`POST /api/paper/orders
 {
   "symbol": "TMF",
   "side": "BUY",
@@ -580,23 +620,26 @@ export default async function Home({ searchParams }: HomeProps) {
   "tx_equivalent_exposure": 0.05,
   "paper_only": true
 }`}</pre>
-        </article>
-      </section>
+              </article>
+            </section>
 
-      <section className="module-section" aria-labelledby="module-roadmap">
-        <div className="section-heading">
-          <p className="eyebrow">{copy.modules.eyebrow}</p>
-          <h2 id="module-roadmap">{copy.modules.title}</h2>
-        </div>
-        <div className="module-grid">
-          {copy.modules.cards.map(([title, text]) => (
-            <article className="module-card" key={title}>
-              <h3>{title}</h3>
-              <p>{text}</p>
-            </article>
-          ))}
-        </div>
-      </section>
+            <section className="module-section" aria-labelledby="module-roadmap">
+              <div className="section-heading">
+                <p className="eyebrow">{copy.modules.eyebrow}</p>
+                <h2 id="module-roadmap">{copy.modules.title}</h2>
+              </div>
+              <div className="module-grid">
+                {copy.modules.cards.map(([title, text]) => (
+                  <article className="module-card" key={title}>
+                    <h3>{title}</h3>
+                    <p>{text}</p>
+                  </article>
+                ))}
+              </div>
+            </section>
+          </>
+        }
+      />
     </main>
   );
 }

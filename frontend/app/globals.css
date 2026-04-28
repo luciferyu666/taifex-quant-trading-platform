@@ -179,6 +179,150 @@ h3 {
   margin-top: 24px;
 }
 
+.command-center-interactions {
+  margin-top: 28px;
+}
+
+.interaction-toolbar {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 16px;
+  align-items: end;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 18px;
+  background: var(--panel);
+  box-shadow: var(--shadow);
+}
+
+.interaction-toolbar h2,
+.interaction-toolbar p {
+  margin: 0;
+}
+
+.interaction-toolbar h2 {
+  margin-top: 4px;
+}
+
+.interaction-toolbar p:not(.eyebrow) {
+  max-width: 880px;
+  margin-top: 8px;
+  color: var(--muted);
+  line-height: 1.55;
+}
+
+.toolbar-actions,
+.packet-loader-actions,
+.timeline-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+}
+
+.action-button,
+.tab-button,
+.inline-copy-button {
+  border: 1px solid rgba(29, 78, 216, 0.28);
+  border-radius: 8px;
+  background: rgba(29, 78, 216, 0.08);
+  color: var(--blue);
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.9rem;
+  font-weight: 800;
+}
+
+.action-button {
+  min-height: 40px;
+  padding: 9px 14px;
+}
+
+.action-button.secondary {
+  background: #ffffff;
+}
+
+.action-button:hover,
+.action-button:focus-visible,
+.tab-button:hover,
+.tab-button:focus-visible,
+.inline-copy-button:hover,
+.inline-copy-button:focus-visible,
+.file-picker:hover,
+.file-picker:focus-within {
+  border-color: rgba(29, 78, 216, 0.5);
+  background: rgba(29, 78, 216, 0.12);
+  outline: none;
+}
+
+.troubleshooting-panel {
+  display: grid;
+  gap: 14px;
+  margin-top: 14px;
+  border: 1px solid rgba(185, 28, 28, 0.18);
+  border-radius: 8px;
+  padding: 18px;
+  background: rgba(185, 28, 28, 0.04);
+}
+
+.troubleshooting-panel h3,
+.troubleshooting-panel p {
+  margin: 0;
+}
+
+.troubleshooting-panel p:not(.card-kicker) {
+  margin-top: 8px;
+  color: var(--muted);
+  line-height: 1.55;
+}
+
+.demo-command {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 12px;
+  align-items: center;
+  border: 1px solid rgba(15, 23, 42, 0.1);
+  border-radius: 8px;
+  padding: 12px;
+  background: #ffffff;
+}
+
+.demo-command code {
+  display: block;
+  overflow-wrap: anywhere;
+  color: var(--text);
+  font-weight: 800;
+}
+
+.tabs-shell {
+  margin-top: 16px;
+}
+
+.tab-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  border-bottom: 1px solid var(--line);
+  padding-bottom: 10px;
+}
+
+.tab-button {
+  min-height: 38px;
+  padding: 8px 12px;
+  background: #ffffff;
+  color: var(--muted);
+}
+
+.tab-button.active {
+  border-color: rgba(4, 120, 87, 0.34);
+  background: rgba(4, 120, 87, 0.08);
+  color: var(--green);
+}
+
+.tab-panel {
+  margin-top: 18px;
+}
+
 .card,
 .module-card {
   min-width: 0;
@@ -495,11 +639,30 @@ th {
 }
 
 .paper-run-row {
+  display: block;
+  width: 100%;
   min-width: 0;
   border: 1px solid rgba(29, 78, 216, 0.18);
   border-radius: 8px;
   padding: 12px;
   background: rgba(29, 78, 216, 0.05);
+  color: inherit;
+  cursor: pointer;
+  font: inherit;
+  text-align: left;
+  transition:
+    border-color 140ms ease,
+    background 140ms ease,
+    box-shadow 140ms ease;
+}
+
+.paper-run-row:hover,
+.paper-run-row:focus-visible,
+.paper-run-row.active {
+  border-color: rgba(4, 120, 87, 0.36);
+  background: rgba(4, 120, 87, 0.08);
+  box-shadow: 0 0 0 3px rgba(4, 120, 87, 0.08);
+  outline: none;
 }
 
 .paper-run-row > div:first-child {
@@ -528,6 +691,22 @@ th {
 
 .paper-run-row dl {
   grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.selected-run dd {
+  display: grid;
+  gap: 6px;
+}
+
+.inline-copy-button {
+  justify-self: start;
+  min-height: 30px;
+  padding: 5px 8px;
+  font-size: 0.78rem;
+}
+
+.timeline-toolbar {
+  margin-top: 16px;
 }
 
 .event-timeline {
@@ -623,13 +802,17 @@ th {
   grid-template-columns: minmax(0, 1fr) auto;
   gap: 16px;
   align-items: center;
-  margin-top: 44px;
+  margin-top: 0;
 }
 
 .packet-loader p {
   margin: 8px 0 0;
   color: var(--muted);
   line-height: 1.5;
+}
+
+.packet-loader-actions {
+  grid-column: 1 / -1;
 }
 
 .file-picker {
@@ -801,6 +984,8 @@ dd {
 }
 
 @media (max-width: 860px) {
+  .interaction-toolbar,
+  .demo-command,
   .hero,
   .summary-grid,
   .module-grid,

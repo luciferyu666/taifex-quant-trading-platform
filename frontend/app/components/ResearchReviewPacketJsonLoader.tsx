@@ -21,6 +21,7 @@ type ResearchReviewPacketJsonLoaderProps = {
   initialAvailable: boolean;
   initialError?: string;
   initialPacket: ResearchReviewPacket;
+  safeSamplePacket: ResearchReviewPacket;
 };
 
 const maxLocalPacketBytes = 500_000;
@@ -30,6 +31,7 @@ export function ResearchReviewPacketJsonLoader({
   initialAvailable,
   initialError,
   initialPacket,
+  safeSamplePacket,
 }: ResearchReviewPacketJsonLoaderProps) {
   const [source, setSource] = useState<PacketSource>({
     available: initialAvailable,
@@ -87,6 +89,27 @@ export function ResearchReviewPacketJsonLoader({
     }
   }
 
+  function loadBundledSafeSample() {
+    setSource({
+      available: true,
+      label: copy.packetLoader.bundledSample,
+      packet: safeSamplePacket,
+    });
+    setLoaderState("ok");
+    setLoaderMessage(copy.packetLoader.bundledMessage);
+  }
+
+  function clearLocalJson() {
+    setSource({
+      available: initialAvailable,
+      error: initialError,
+      label: initialAvailable ? copy.packetLoader.backendSample : copy.packetLoader.fallbackSample,
+      packet: initialPacket,
+    });
+    setLoaderState("idle");
+    setLoaderMessage(copy.packetLoader.clearMessage);
+  }
+
   return (
     <section aria-labelledby="packet-loader-title">
       <div className="packet-loader panel">
@@ -106,6 +129,14 @@ export function ResearchReviewPacketJsonLoader({
             type="file"
           />
         </label>
+        <div className="packet-loader-actions">
+          <button className="action-button secondary" type="button" onClick={loadBundledSafeSample}>
+            {copy.packetLoader.loadBundledSample}
+          </button>
+          <button className="action-button secondary" type="button" onClick={clearLocalJson}>
+            {copy.packetLoader.clearLocalJson}
+          </button>
+        </div>
         <p
           className={
             loaderState === "error"

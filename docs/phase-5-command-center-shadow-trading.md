@@ -26,6 +26,11 @@ Expose roadmap phase status, contracts, safety mode, risk status, and paper-only
   `GET /api/release/baseline`.
 - Release level, validation status, safety defaults, and known non-production
   gaps displayed in the Web Command Center.
+- Safe read-only interaction layer with Release / Paper OMS / Research Packet /
+  Contracts tabs.
+- Read-only refresh/retry action for frontend status reloading.
+- Backend-unavailable troubleshooting panel with a local demo seed command copy
+  block.
 - Read-only Paper Execution Approval Workflow panel showing:
   `research_approved`, `approved_for_paper_simulation`, `rejected`, and
   `needs_data_review`.
@@ -40,6 +45,10 @@ Expose roadmap phase status, contracts, safety mode, risk status, and paper-only
 - Read-only Paper OMS / Audit Query Viewer showing persisted paper workflow run
   summaries, latest selected run context, OMS event timeline, and audit event
   timeline.
+- Selectable paper workflow rows for switching the displayed OMS and audit
+  timeline through read-only query APIs.
+- Copy controls for `workflow_run_id`, `order_id`, and the local demo seed command.
+- Bundled safe Research Review Packet sample loader and clear-local-JSON action.
 
 ## Acceptance Criteria
 
@@ -78,6 +87,11 @@ Expose roadmap phase status, contracts, safety mode, risk status, and paper-only
   `release-readiness-check`, `make check`, and GitHub Actions release gate.
 - Release Baseline dashboard lists known non-production gaps and does not claim
   production trading readiness.
+- Command Center tabs group the read-only surfaces into Release, Paper OMS,
+  Research Packet, and Contracts sections without adding mutation paths.
+- Refresh/retry only reloads frontend status. It must not call mutation endpoints.
+- Backend-unavailable troubleshooting panel explains safe fallback behavior and
+  shows `make seed-paper-execution-demo` as an explicit local demo setup command.
 - Paper Execution Approval Workflow panel is read-only and displays only paper
   simulation status, required route, and safety indicators.
 - Paper Execution Approval Workflow panel does not include submit buttons,
@@ -91,6 +105,12 @@ Expose roadmap phase status, contracts, safety mode, risk status, and paper-only
   `/api/paper-execution/runs/{workflow_run_id}/audit-events`.
 - Paper OMS / Audit Query Viewer renders an empty safe state when no local SQLite
   paper records exist or when the backend is unavailable.
+- Paper OMS / Audit Query Viewer supports selecting a persisted workflow row and
+  fetching that workflow's OMS and audit timelines through read-only endpoints.
+- Copy buttons may copy IDs to the clipboard, but they must not write backend state.
+- Research Review Packet loader can load a bundled safe sample or clear the local
+  JSON selection without uploading files, writing databases, or mutating backend
+  state.
 - Paper OMS / Audit Query Viewer does not submit simulations, create order intents,
   alter persisted records, call brokers, call Risk Engine mutation paths, call OMS
   mutation paths, or provide trading recommendations.
@@ -126,6 +146,11 @@ Expose roadmap phase status, contracts, safety mode, risk status, and paper-only
 - The Paper OMS / Audit Query Viewer is a display surface only. It must not call
   `/api/paper-execution/workflow/record`, any paper simulation submit endpoint, any
   approval escalation endpoint, any broker endpoint, or any live-control path.
+- The Safe Read-Only Interaction Layer may expose refresh, tab switching, row
+  selection, clipboard copy, bundled sample loading, and local JSON clearing only.
+  It must not create orders, write databases, upload local JSON, call broker
+  endpoints, call Risk Engine mutation paths, call OMS mutation paths, approve paper
+  execution, approve live trading, or collect credentials.
 - Persisted paper records shown in the viewer are audit metadata only. They must not
   be presented as execution performance, investment advice, strategy ranking, or
   production trading readiness.
@@ -174,3 +199,8 @@ The Paper OMS / Audit Query Viewer now displays persisted local paper workflow
 records as read-only audit metadata. Future work may add filtering and pagination,
 but must keep mutation, broker, approval, recommendation, and live-trading behavior
 out of the viewer.
+The Safe Read-Only Interaction Layer now provides the minimum interaction needed for
+customer evaluation: tabs, refresh/retry, selectable paper runs, timeline reload,
+clipboard copy, bundled safe packet loading, local JSON clearing, and backend
+troubleshooting. Future UI enhancements should preserve this read-only boundary and
+avoid adding submit, approval, live, broker, credential, or persistence controls.

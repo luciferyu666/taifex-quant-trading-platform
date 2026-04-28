@@ -1,3 +1,7 @@
+"use client";
+
+import { useState } from "react";
+
 import type { DashboardCopy } from "../i18n";
 import {
   PaperAuditTimelinePanel,
@@ -33,6 +37,8 @@ type PaperExecutionRecordsPanelProps = {
   auditEvents: PaperAuditEventRecord[];
 };
 
+const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL ?? "http://localhost:8000";
+
 export function PaperExecutionRecordsPanel({
   copy,
   available,
@@ -41,7 +47,57 @@ export function PaperExecutionRecordsPanel({
   omsEvents,
   auditEvents,
 }: PaperExecutionRecordsPanelProps) {
-  const selectedRun = runs[0];
+  const [selectedRunId, setSelectedRunId] = useState<string>(
+    runs[0]?.workflow_run_id ?? "",
+  );
+  const [currentOmsEvents, setCurrentOmsEvents] =
+    useState<PaperOmsEventRecord[]>(omsEvents);
+  const [currentAuditEvents, setCurrentAuditEvents] =
+    useState<PaperAuditEventRecord[]>(auditEvents);
+  const [timelineError, setTimelineError] = useState<string>("");
+  const [isLoadingTimeline, setIsLoadingTimeline] = useState(false);
+  const [copyStatus, setCopyStatus] = useState<string>("");
+
+  const selectedRun =
+    runs.find((run) => run.workflow_run_id === selectedRunId) ?? runs[0];
+
+  async function selectRun(run: PaperExecutionRunRecord) {
+    setSelectedRunId(run.workflow_run_id);
+    setTimelineError("");
+    setIsLoadingTimeline(true);
+    try {
+      const [nextOmsEvents, nextAuditEvents] = await Promise.all([
+        fetchReadOnlyJson<PaperOmsEventRecord[]>(
+          `/api/paper-execution/runs/${run.workflow_run_id}/oms-events`,
+        ),
+        fetchReadOnlyJson<PaperAuditEventRecord[]>(
+          `/api/paper-execution/runs/${run.workflow_run_id}/audit-events`,
+        ),
+      ]);
+      setCurrentOmsEvents(nextOmsEvents);
+      setCurrentAuditEvents(nextAuditEvents);
+    } catch (fetchError) {
+      setTimelineError(
+        fetchError instanceof Error ? fetchError.message : copy.paperRecords.timelineError,
+      );
+      setCurrentOmsEvents([]);
+      setCurrentAuditEvents([]);
+    } finally {
+      setIsLoadingTimeline(false);
+    }
+  }
+
+  async function copyValue(label: string, value: string | null) {
+    if (!value) {
+      return;
+    }
+    try {
+      await navigator.clipboard.writeText(value);
+      setCopyStatus(`${label}: ${copy.paperRecords.copied}`);
+    } catch {
+      setCopyStatus(copy.paperRecords.copyFailed);
+    }
+  }
 
   return (
     <section className="paper-records-section" aria-labelledby="paper-records-title">
@@ -67,7 +123,17 @@ export function PaperExecutionRecordsPanel({
           ) : (
             <div className="paper-run-list">
               {runs.map((run) => (
-                <div className="paper-run-row" key={run.workflow_run_id}>
+                <button
+                  aria-pressed={selectedRun?.workflow_run_id === run.workflow_run_id}
+                  className={
+                    selectedRun?.workflow_run_id === run.workflow_run_id
+                      ? "paper-run-row active"
+                      : "paper-run-row"
+                  }
+                  key={run.workflow_run_id}
+                  type="button"
+                  onClick={() => void selectRun(run)}
+                >
                   <div>
                     <strong>{run.workflow_run_id}</strong>
                     <span>{formatDate(run.persisted_at)}</span>
@@ -86,7 +152,7 @@ export function PaperExecutionRecordsPanel({
                       <dd>{run.final_oms_status ?? copy.paperRecords.none}</dd>
                     </div>
                   </dl>
-                </div>
+                </button>
               ))}
             </div>
           )}
@@ -101,7 +167,18 @@ export function PaperExecutionRecordsPanel({
             <dl className="detail-list">
               <div>
                 <dt>{copy.paperRecords.workflowRunId}</dt>
-                <dd>{selectedRun.workflow_run_id}</dd>
+                <dd>
+                  <span>{selectedRun.workflow_run_id}</span>
+                  <button
+                    className="inline-copy-button"
+                    type="button"
+                    onClick={() =>
+                      void copyValue(copy.paperRecords.workflowRunId, selectedRun.workflow_run_id)
+                    }
+                  >
+                    {copy.paperRecords.copyWorkflow}
+                  </button>
+                </dd>
               </div>
               <div>
                 <dt>{copy.paperRecords.approvalId}</dt>
@@ -127,6 +204,23 @@ export function PaperExecutionRecordsPanel({
                 <dt>{copy.paperRecords.brokerApiCalled}</dt>
                 <dd>{String(selectedRun.broker_api_called)}</dd>
               </div>
+              <div>
+                <dt>{copy.paperRecords.orderId}</dt>
+                <dd>
+                  <span>{selectedRun.order_id ?? copy.paperRecords.none}</span>
+                  {selectedRun.order_id ? (
+                    <button
+                      className="inline-copy-button"
+                      type="button"
+                      onClick={() =>
+                        void copyValue(copy.paperRecords.orderId, selectedRun.order_id)
+                      }
+                    >
+                      {copy.paperRecords.copyOrder}
+                    </button>
+                  ) : null}
+                </dd>
+              </div>
             </dl>
           ) : (
             <p className="empty-state">{copy.paperRecords.noSelectedRun}</p>
@@ -134,9 +228,28 @@ export function PaperExecutionRecordsPanel({
         </article>
       </div>
 
+      <div className="timeline-toolbar">
+        <span className={isLoadingTimeline ? "metric warn" : "metric ok"}>
+          {isLoadingTimeline
+            ? copy.paperRecords.timelineLoading
+            : copy.paperRecords.timelineReady}
+        </span>
+        {selectedRun ? (
+          <button
+            className="action-button secondary"
+            type="button"
+            onClick={() => void selectRun(selectedRun)}
+          >
+            {copy.paperRecords.refreshTimelines}
+          </button>
+        ) : null}
+      </div>
+      {timelineError ? <p className="notice">{timelineError}</p> : null}
+      {copyStatus ? <p className="loader-status ok">{copyStatus}</p> : null}
+
       <div className="paper-timeline-layout">
-        <PaperOmsTimelinePanel copy={copy.paperOmsTimeline} events={omsEvents} />
-        <PaperAuditTimelinePanel copy={copy.paperAuditTimeline} events={auditEvents} />
+        <PaperOmsTimelinePanel copy={copy.paperOmsTimeline} events={currentOmsEvents} />
+        <PaperAuditTimelinePanel copy={copy.paperAuditTimeline} events={currentAuditEvents} />
       </div>
 
       <p className="read-only-note">{copy.paperRecords.readOnlyNote}</p>
@@ -150,4 +263,15 @@ function formatDate(value: string): string {
     return value;
   }
   return date.toISOString();
+}
+
+async function fetchReadOnlyJson<T>(path: string): Promise<T> {
+  const response = await fetch(`${backendUrl}${path}`, {
+    cache: "no-store",
+    signal: AbortSignal.timeout(5000),
+  });
+  if (!response.ok) {
+    throw new Error(`Backend returned HTTP ${response.status}`);
+  }
+  return (await response.json()) as T;
 }

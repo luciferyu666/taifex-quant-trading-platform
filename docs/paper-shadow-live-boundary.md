@@ -163,6 +163,9 @@ Phase 5 Paper OMS / Audit Query Viewer is read-only UI:
 - It may fetch persisted local paper workflow summaries from
   `GET /api/paper-execution/runs`.
 - It may fetch OMS and audit timelines for the latest local paper workflow run.
+- It may let the user select a persisted paper workflow row to view that workflow's
+  OMS and audit timeline through read-only query APIs.
+- It may copy `workflow_run_id` and `order_id` values to the clipboard.
 - It may display workflow run ID, approval decision, order ID, final OMS status,
   OMS events, and audit events.
 - It must render a safe empty state when no local paper records exist.
@@ -170,6 +173,19 @@ Phase 5 Paper OMS / Audit Query Viewer is read-only UI:
   create order intents, approve paper execution, approve live trading, write
   databases, call brokers, call Risk Engine mutation paths, call OMS mutation paths,
   rank strategies, or provide trading recommendations.
+
+Phase 5 Safe Read-Only Interaction Layer is UI navigation and inspection only:
+
+- It may provide tabs for Release, Paper OMS, Research Packet, and Contracts views.
+- It may refresh/retry frontend status by reloading the page.
+- It may show backend-unavailable troubleshooting text and copy the explicit local
+  demo seed command `make seed-paper-execution-demo`.
+- It may load a bundled safe Research Review Packet sample into the frontend viewer.
+- It may clear the currently selected local JSON and return to backend or fallback
+  sample data.
+- It must not upload local JSON, write databases, create orders, submit paper
+  simulations, approve paper execution, approve live trading, collect credentials,
+  call brokers, call Risk Engine mutation paths, or call OMS mutation paths.
 
 Paper Execution Demo Seed is an explicit local-only sample generator:
 

@@ -36,6 +36,30 @@ export const dashboardCopy = {
         text: "Max daily loss and stale quote limits are visible before any future OMS workflow.",
       },
     },
+    interactions: {
+      ariaLabel: "Safe read-only interaction layer",
+      eyebrow: "Interaction Layer",
+      title: "Read-only Command Center tools",
+      description:
+        "Safe controls for refreshing status, switching views, inspecting local samples, selecting paper audit records, and copying IDs. These controls do not submit orders, write databases, or connect brokers.",
+      readOnlyBadge: "Read-only",
+      refresh: "Refresh status",
+      tabsLabel: "Command Center sections",
+      tabs: {
+        release: "Release",
+        paper: "Paper OMS",
+        packet: "Research Packet",
+        contracts: "Contracts",
+      },
+      troubleshootingKicker: "Backend unavailable",
+      troubleshootingTitle: "Safe fallback is active",
+      troubleshootingText:
+        "The production frontend can still show checked-in paper-safe data when the backend is unavailable. For a local demo, start the backend or create one local paper audit sample with the command below.",
+      demoSeedKicker: "Local demo seed",
+      copyCommand: "Copy command",
+      copied: "Copied to clipboard.",
+      copyFailed: "Copy failed. Copy the command manually.",
+    },
     paperExecution: {
       eyebrow: "Paper Execution",
       title: "Paper simulation approval workflow",
@@ -97,6 +121,15 @@ export const dashboardCopy = {
       none: "None",
       readOnlyNote:
         "Read-only audit surface. It does not write databases, alter persisted records, call brokers, create orders, escalate approvals, or provide trading advice.",
+      selectRun: "Select run",
+      copyWorkflow: "Copy workflow ID",
+      copyOrder: "Copy order ID",
+      copied: "copied",
+      copyFailed: "Copy failed. Copy the ID manually.",
+      refreshTimelines: "Refresh timeline",
+      timelineLoading: "Loading timeline",
+      timelineReady: "Timeline ready",
+      timelineError: "Unable to load paper timeline.",
     },
     paperOmsTimeline: {
       kicker: "OMS Timeline",
@@ -174,6 +207,13 @@ export const dashboardCopy = {
       loadedMessage:
         "Loaded locally. The file was not uploaded, persisted, or sent to backend APIs.",
       invalidJson: "Rejected: invalid JSON packet.",
+      bundledSample: "Bundled safe sample",
+      loadBundledSample: "Load safe sample",
+      bundledMessage:
+        "Loaded bundled safe sample. No upload, database write, broker call, or backend mutation occurred.",
+      clearLocalJson: "Clear local JSON",
+      clearMessage:
+        "Local JSON selection cleared. Rendering backend sample or checked-in fallback again.",
     },
     packet: {
       eyebrow: "Research Review Packet",
@@ -331,6 +371,30 @@ export const dashboardCopy = {
         text: "在任何未來 OMS 工作流之前，先清楚呈現每日虧損上限與 stale quote 限制。",
       },
     },
+    interactions: {
+      ariaLabel: "安全只讀互動層",
+      eyebrow: "互動層",
+      title: "只讀 Command Center 工具",
+      description:
+        "安全控制項可用於重新整理狀態、切換區段、檢視本地樣本、選取紙上稽核紀錄與複製 ID。這些控制項不送出訂單、不寫資料庫，也不連接券商。",
+      readOnlyBadge: "只讀",
+      refresh: "重新整理狀態",
+      tabsLabel: "Command Center 區段",
+      tabs: {
+        release: "版本",
+        paper: "紙上 OMS",
+        packet: "研究 Packet",
+        contracts: "契約規格",
+      },
+      troubleshootingKicker: "後端無法連線",
+      troubleshootingTitle: "安全備援已啟用",
+      troubleshootingText:
+        "即使後端無法連線，production 前端仍會顯示已檢查的紙上安全資料。本地 demo 可啟動後端，或使用下方指令建立一筆本地紙上稽核樣本。",
+      demoSeedKicker: "本地 demo seed",
+      copyCommand: "複製指令",
+      copied: "已複製到剪貼簿。",
+      copyFailed: "複製失敗，請手動複製指令。",
+    },
     paperExecution: {
       eyebrow: "紙上執行",
       title: "紙上模擬審批流程",
@@ -392,6 +456,15 @@ export const dashboardCopy = {
       none: "無",
       readOnlyNote:
         "只讀稽核介面。它不寫入資料庫、不修改持久化紀錄、不呼叫券商、不建立訂單、不升級審批，也不提供交易建議。",
+      selectRun: "選取流程",
+      copyWorkflow: "複製 workflow ID",
+      copyOrder: "複製 order ID",
+      copied: "已複製",
+      copyFailed: "複製失敗，請手動複製 ID。",
+      refreshTimelines: "重新整理時間線",
+      timelineLoading: "時間線載入中",
+      timelineReady: "時間線已就緒",
+      timelineError: "無法載入紙上時間線。",
     },
     paperOmsTimeline: {
       kicker: "OMS 時間線",
@@ -467,6 +540,12 @@ export const dashboardCopy = {
       loadedPrefix: "本地 JSON",
       loadedMessage: "已於本機讀取。檔案未上傳、未持久化，也未送往後端 API。",
       invalidJson: "拒絕：JSON packet 格式無效。",
+      bundledSample: "內建安全範例",
+      loadBundledSample: "載入安全範例",
+      bundledMessage:
+        "已載入內建安全範例。沒有上傳、沒有寫資料庫、沒有呼叫券商，也沒有後端 mutation。",
+      clearLocalJson: "清除本地 JSON",
+      clearMessage: "已清除本地 JSON 選取，改回後端範例或已檢查的備援資料。",
     },
     packet: {
       eyebrow: "研究審核 Packet",
