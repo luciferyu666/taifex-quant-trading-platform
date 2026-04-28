@@ -441,6 +441,96 @@ Local state after refresh:
 ## main...origin/main
 ```
 
+## Paper OMS / Audit Persistence Verification
+
+The paper OMS/audit persistence slice was committed to `main`, verified by GitHub
+Actions, deployed through the Web Command Center Vercel project, and rechecked with
+the production smoke gate.
+
+Verification time:
+
+```text
+2026-04-29 03:35 CST (+0800)
+```
+
+Verified commit:
+
+```text
+98818e7 Add paper OMS audit persistence
+```
+
+GitHub Actions verification:
+
+```text
+workflow: Release Readiness
+run: 25072918221
+event: push
+branch: main
+status: completed
+conclusion: success
+duration: 1m23s
+```
+
+Production alias inspection:
+
+```text
+alias: https://taifex-quant-trading-platform-front.vercel.app
+url: https://taifex-quant-trading-platform-frontend-3v5nbuz72.vercel.app
+id: dpl_2ynQnfSEUipSMJPs1UWZnss3RK8m
+target: production
+status: Ready
+created: Wed Apr 29 2026 03:20:39 GMT+0800
+```
+
+Production smoke gate:
+
+```text
+Production Command Center smoke check passed.
+Production root returned HTTP 200.
+Traditional Chinese page returned HTTP 200.
+English page returned HTTP 200.
+All checked pages use deployment id dpl_2ynQnfSEUipSMJPs1UWZnss3RK8m.
+```
+
+The smoke gate confirmed:
+
+- `TRADING_MODE`
+- `ENABLE_LIVE_TRADING`
+- `BROKER_PROVIDER`
+- `NOT READY`
+- `實盤關閉`
+- `僅限紙上交易`
+- `Paper-first`
+- `Paper Only`
+
+The smoke gate rejected unsafe copy:
+
+- `guaranteed profit`
+- `risk-free`
+- `保證獲利`
+- `零風險`
+- unsafe `approve live`
+- unsafe `核准實盤`
+
+Paper persistence scope:
+
+```text
+Paper OMS/audit persistence is local SQLite only.
+Default path: data/paper_execution_audit.sqlite
+The `.sqlite` output remains ignored by git.
+The persistence store records paper workflow metadata, OMS events, and audit events.
+It is not production OMS storage.
+It does not call broker SDKs.
+It does not place real orders.
+Live trading remains disabled by default.
+```
+
+Local state before updating this record:
+
+```text
+## main...origin/main
+```
+
 ## Marketing Website Reachability
 
 Command:
