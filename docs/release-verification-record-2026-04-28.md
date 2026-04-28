@@ -193,6 +193,89 @@ Local state after refresh:
 ## main...origin/main
 ```
 
+## Customer Evaluation Package Deployment Refresh
+
+After the Customer Evaluation Package was added, the `main` push triggered a new `Release Readiness` run and a new Web Command Center production deployment. The production alias was re-checked and the automated production smoke gate passed.
+
+Refresh time:
+
+```text
+2026-04-28 17:04:19 CST (+0800)
+```
+
+Refresh commit:
+
+```text
+e1b8e2c Add customer evaluation package
+```
+
+GitHub Actions verification:
+
+```text
+workflow: Release Readiness
+run: 25042567193
+event: push
+branch: main
+status: completed
+conclusion: success
+duration: 1m35s
+```
+
+Production alias inspection:
+
+```text
+alias: https://taifex-quant-trading-platform-front.vercel.app
+url: https://taifex-quant-trading-platform-frontend-7mx68kwgf.vercel.app
+id: dpl_G79T1Bm4oqgA134v2boGVMtsrb9p
+target: production
+status: Ready
+created: Tue Apr 28 2026 16:33:29 GMT+0800
+```
+
+Production smoke gate refresh:
+
+```text
+Production Command Center smoke check passed.
+Production root returned HTTP 200.
+Traditional Chinese page returned HTTP 200.
+English page returned HTTP 200.
+All checked pages use deployment id dpl_G79T1Bm4oqgA134v2boGVMtsrb9p.
+```
+
+The refreshed smoke gate confirmed:
+
+- `TRADING_MODE`
+- `ENABLE_LIVE_TRADING`
+- `BROKER_PROVIDER`
+- `NOT READY`
+- `實盤關閉`
+- `僅限紙上交易`
+- `Paper-first`
+- `Paper Only`
+
+The refreshed smoke gate rejected unsafe copy:
+
+- `guaranteed profit`
+- `risk-free`
+- `保證獲利`
+- `零風險`
+- unsafe `approve live`
+- unsafe `核准實盤`
+
+Customer evaluation package status:
+
+```text
+Customer evaluation docs and demo workflow are now versioned on main.
+Customer testing is limited to marketing review, read-only Web Command Center review, local JSON artifact review, checklist completion, and feedback capture.
+Customer testing does not include live trading, paper execution approval, broker connectivity, account onboarding, or regulated investment advice.
+```
+
+Local state after refresh:
+
+```text
+## main...origin/main
+```
+
 ## Marketing Website Reachability
 
 Command:
