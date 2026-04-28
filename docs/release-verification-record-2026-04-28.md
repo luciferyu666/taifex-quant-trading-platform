@@ -531,6 +531,99 @@ Local state before updating this record:
 ## main...origin/main
 ```
 
+## Paper OMS / Audit Query Viewer Verification
+
+The read-only Paper OMS / Audit Query Viewer was committed to `main`, verified by
+GitHub Actions, deployed through the Web Command Center Vercel project, and rechecked
+with the production smoke gate.
+
+Verification time:
+
+```text
+2026-04-29 04:35 CST (+0800)
+```
+
+Verified commit:
+
+```text
+d82d92a Add paper OMS audit query viewer
+```
+
+GitHub Actions verification:
+
+```text
+workflow: Release Readiness
+run: 25075703161
+event: push
+branch: main
+status: completed
+conclusion: success
+duration: 1m58s
+```
+
+Production alias inspection:
+
+```text
+alias: https://taifex-quant-trading-platform-front.vercel.app
+url: https://taifex-quant-trading-platform-frontend-1vagq7bt7.vercel.app
+id: dpl_266tooQTqognbN7sNoJVQsfan7ht
+target: production
+status: Ready
+created: Wed Apr 29 2026 04:22:08 GMT+0800
+```
+
+Production smoke gate:
+
+```text
+Production Command Center smoke check passed.
+Production root returned HTTP 200.
+Traditional Chinese page returned HTTP 200.
+English page returned HTTP 200.
+All checked pages use deployment id dpl_266tooQTqognbN7sNoJVQsfan7ht.
+```
+
+The smoke gate confirmed:
+
+- `TRADING_MODE`
+- `ENABLE_LIVE_TRADING`
+- `BROKER_PROVIDER`
+- `NOT READY`
+- `實盤關閉`
+- `僅限紙上交易`
+- `Paper-first`
+- `Paper Only`
+
+The smoke gate rejected unsafe copy:
+
+- `guaranteed profit`
+- `risk-free`
+- `保證獲利`
+- `零風險`
+- unsafe `approve live`
+- unsafe `核准實盤`
+
+Viewer scope:
+
+```text
+The Paper OMS / Audit Query Viewer is read-only.
+It displays persisted paper workflow run summaries, OMS timeline, and audit timeline.
+It uses existing query APIs only.
+It does not call /api/paper-execution/workflow/record.
+It does not add simulation submit controls.
+It does not add approval escalation.
+It does not add live controls.
+It does not call broker SDKs.
+It does not write databases.
+It does not modify persisted records.
+Live trading remains disabled by default.
+```
+
+Local state before updating this record:
+
+```text
+## main...origin/main
+```
+
 ## Marketing Website Reachability
 
 Command:
