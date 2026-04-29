@@ -6,6 +6,7 @@ import { CommandCenterTabs } from "./components/CommandCenterTabs";
 import { DemoGuidePanel } from "./components/DemoGuidePanel";
 import type { PaperAuditEventRecord } from "./components/PaperAuditTimelinePanel";
 import type { PaperOmsEventRecord } from "./components/PaperOmsTimelinePanel";
+import { PaperSimulationSubmitPanel } from "./components/PaperSimulationSubmitPanel";
 import { ResearchReviewPacketJsonLoader } from "./components/ResearchReviewPacketJsonLoader";
 import type { ResearchReviewPacket } from "./components/ResearchReviewPacketPanel";
 import { ReleaseBaselinePanel, type ReleaseBaseline } from "./components/ReleaseBaselinePanel";
@@ -525,6 +526,8 @@ export default async function Home({ searchParams }: HomeProps) {
                 </span>
               </div>
             </section>
+
+            <PaperSimulationSubmitPanel copy={copy} />
 
             <PaperExecutionRecordsPanel
               available={paperRecordsAvailable}

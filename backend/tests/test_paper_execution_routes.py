@@ -50,6 +50,26 @@ def test_paper_execution_status_is_paper_only() -> None:
     ]
 
 
+def test_paper_execution_cors_allows_command_center_without_credentials() -> None:
+    client = TestClient(app)
+
+    response = client.options(
+        "/api/paper-execution/workflow/record",
+        headers={
+            "Origin": "https://taifex-quant-trading-platform-front.vercel.app",
+            "Access-Control-Request-Method": "POST",
+            "Access-Control-Request-Headers": "content-type",
+        },
+    )
+
+    assert response.status_code == 200
+    assert (
+        response.headers["access-control-allow-origin"]
+        == "https://taifex-quant-trading-platform-front.vercel.app"
+    )
+    assert "access-control-allow-credentials" not in response.headers
+
+
 def test_paper_execution_workflow_preview_runs_full_paper_path() -> None:
     client = TestClient(app)
 

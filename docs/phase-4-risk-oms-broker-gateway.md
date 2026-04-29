@@ -27,6 +27,12 @@ Create a paper-only execution core where order intents are evaluated by Risk Eng
   - Query APIs expose persisted paper workflow runs, OMS events, and audit events.
   - The default path is `data/paper_execution_audit.sqlite`.
   - Generated `.sqlite` files remain ignored by git.
+- Controlled Paper Simulation UI:
+  - The Web Command Center may call only
+    `/api/paper-execution/workflow/record`.
+  - The UI must generate signal-only payloads and keep
+    `approval_decision=approved_for_paper_simulation`.
+  - The UI must not collect credentials, expose live approval, or call a real broker.
 
 ## Acceptance Criteria
 
@@ -44,6 +50,8 @@ Create a paper-only execution core where order intents are evaluated by Risk Eng
   list endpoints.
 - Persistence status reports local-only SQLite counts for runs, OMS events, and audit
   events.
+- Controlled UI submissions create local SQLite paper records only and preserve
+  `paper_only=true`, `ENABLE_LIVE_TRADING=false`, and `BROKER_PROVIDER=paper`.
 
 ## Safety Constraints
 

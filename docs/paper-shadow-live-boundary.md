@@ -174,6 +174,21 @@ Phase 5 Paper OMS / Audit Query Viewer is read-only UI:
   databases, call brokers, call Risk Engine mutation paths, call OMS mutation paths,
   rank strategies, or provide trading recommendations.
 
+Phase 5 Paper Simulation Controlled Submit UI is the only frontend paper mutation
+allowed in this release:
+
+- It may call `POST /api/paper-execution/workflow/record` only.
+- It uses a UI-generated `StrategySignal` with `reason.signals_only=true`.
+- It fixes `approval_decision=approved_for_paper_simulation` and keeps
+  `approval_for_live=false`.
+- It lets the user choose only paper-safe direction, TX/MTX/TMF symbol, small
+  quantity, capped TX-equivalent exposure, and paper broker simulation outcome.
+- It writes only local SQLite paper OMS/audit records through the backend.
+- It must not collect broker credentials, account IDs, API keys, certificates, or
+  customer financial information.
+- It must not expose live approval, broker login, real order submission, account
+  onboarding, or production trading readiness claims.
+
 Phase 5 Safe Read-Only Interaction Layer is UI navigation and inspection only:
 
 - It may provide tabs for Release, Paper OMS, Research Packet, and Contracts views.

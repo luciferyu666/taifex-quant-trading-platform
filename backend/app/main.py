@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 
 from app.api.architecture_routes import router as architecture_router
 from app.api.backtest_artifact_comparison_routes import (
@@ -41,6 +42,17 @@ def create_app() -> FastAPI:
         title="Taifex Quant Trading Platform API",
         version="0.1.0",
         description="Paper-first API skeleton for Taiwan Index Futures quantitative trading.",
+    )
+    app.add_middleware(
+        CORSMiddleware,
+        allow_origins=[
+            "http://localhost:3000",
+            "http://127.0.0.1:3000",
+            "https://taifex-quant-trading-platform-front.vercel.app",
+        ],
+        allow_credentials=False,
+        allow_methods=["GET", "POST", "OPTIONS"],
+        allow_headers=["content-type"],
     )
     app.include_router(router)
     app.include_router(roadmap_router)

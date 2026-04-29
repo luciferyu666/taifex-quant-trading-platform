@@ -8,6 +8,7 @@ const files = {
   demoGuide: "frontend/app/components/DemoGuidePanel.tsx",
   commandTabs: "frontend/app/components/CommandCenterTabs.tsx",
   paperRecords: "frontend/app/components/PaperExecutionRecordsPanel.tsx",
+  paperSubmit: "frontend/app/components/PaperSimulationSubmitPanel.tsx",
   paperOmsTimeline: "frontend/app/components/PaperOmsTimelinePanel.tsx",
   paperAuditTimeline: "frontend/app/components/PaperAuditTimelinePanel.tsx",
   releasePanel: "frontend/app/components/ReleaseBaselinePanel.tsx",
@@ -220,6 +221,12 @@ requireContains("Command Center refresh action exists", sourceByFile.i18n, "Refr
 requireContains("Command Center backend troubleshooting exists", sourceByFile.commandTabs, "troubleshooting-panel");
 requireContains("English paper records copy exists", sourceByFile.i18n, "Persisted paper workflow records");
 requireContains("Traditional Chinese paper records copy exists", sourceByFile.i18n, "已持久化紙上流程紀錄");
+requireContains("English paper submit copy exists", sourceByFile.i18n, "Create a paper simulation record");
+requireContains("Traditional Chinese paper submit copy exists", sourceByFile.i18n, "建立紙上模擬紀錄");
+requireContains("Paper submit component is implemented", sourceByFile.paperSubmit, "PaperSimulationSubmitPanel");
+requireContains("Paper submit calls workflow record only", sourceByFile.paperSubmit, "/api/paper-execution/workflow/record");
+requireContains("Paper submit keeps fixed paper decision", sourceByFile.paperSubmit, "approved_for_paper_simulation");
+requireContains("Paper submit is mounted on page", sourceByFile.page, "PaperSimulationSubmitPanel");
 requireContains("Paper records panel is read-only", combinedSource, "Read-only");
 requireContains("Paper records rows are selectable", sourceByFile.paperRecords, "aria-pressed");
 requireContains("Paper records workflow copy action exists", sourceByFile.i18n, "Copy workflow ID");

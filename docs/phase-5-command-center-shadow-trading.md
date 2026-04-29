@@ -148,6 +148,12 @@ Expose roadmap phase status, contracts, safety mode, risk status, and paper-only
 - The Paper Execution Approval Workflow panel is a display surface only. It must not
   create paper simulations, create order intents, call Risk Engine, call OMS, call
   Broker Gateway, write databases, connect brokers, or expose live controls.
+- The Paper Simulation Controlled Submit UI is the only allowed paper mutation in
+  this release. It may call `/api/paper-execution/workflow/record` only, with
+  `approval_decision=approved_for_paper_simulation`, a UI-generated signal-only
+  `StrategySignal`, capped TX-equivalent exposure, and a paper broker simulation
+  outcome. It must not collect credentials, call real brokers, expose live approval,
+  or submit real orders.
 - The paper execution persistence status panel is also display-only. It reads
   `GET /api/paper-execution/persistence/status` and must not call
   `/workflow/record`, broker endpoints, Risk Engine mutation paths, OMS mutation paths,

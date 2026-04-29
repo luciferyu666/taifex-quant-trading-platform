@@ -743,6 +743,96 @@ th {
   line-height: 1.35;
 }
 
+.paper-submit-section {
+  margin-top: 44px;
+}
+
+.paper-submit-section .section-heading p:not(.eyebrow) {
+  max-width: 900px;
+  margin: 10px 0 0;
+  color: var(--muted);
+  line-height: 1.55;
+}
+
+.paper-submit-card {
+  display: grid;
+  gap: 16px;
+  border: 1px solid rgba(4, 120, 87, 0.22);
+  border-radius: 8px;
+  background: linear-gradient(180deg, rgba(4, 120, 87, 0.05), #ffffff 34%);
+  box-shadow: var(--shadow);
+  padding: 18px;
+}
+
+.paper-submit-banner,
+.paper-submit-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+}
+
+.paper-submit-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.paper-submit-grid label {
+  display: grid;
+  min-width: 0;
+  gap: 6px;
+  color: var(--muted);
+  font-size: 0.78rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.paper-submit-grid input,
+.paper-submit-grid select,
+.paper-submit-grid textarea {
+  width: 100%;
+  min-height: 40px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 9px 10px;
+  background: #ffffff;
+  color: var(--text);
+  font: inherit;
+  font-size: 0.9rem;
+  text-transform: none;
+}
+
+.paper-submit-grid input[readonly] {
+  background: rgba(15, 23, 42, 0.04);
+  color: var(--green);
+  font-weight: 800;
+}
+
+.paper-submit-grid textarea {
+  resize: vertical;
+  line-height: 1.5;
+}
+
+.paper-submit-reason {
+  grid-column: 1 / -1;
+}
+
+.paper-submit-guardrails {
+  margin-top: 0;
+}
+
+.paper-submit-result {
+  border: 1px solid rgba(4, 120, 87, 0.24);
+  border-radius: 8px;
+  padding: 14px;
+  background: rgba(4, 120, 87, 0.08);
+}
+
+.paper-submit-result h3 {
+  margin: 0;
+}
+
 .paper-records-section {
   margin-top: 44px;
 }
@@ -1146,6 +1236,7 @@ dd {
   .release-grid,
   .paper-workflow-grid,
   .persistence-strip,
+  .paper-submit-grid,
   .paper-records-layout,
   .paper-timeline-layout,
   .packet-loader,

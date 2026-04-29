@@ -49,6 +49,12 @@ Customers may evaluate:
 - Research review packet viewer behavior using approved local sample JSON fixtures.
 - Paper OMS / Audit Query Viewer behavior using an explicitly generated local paper
   demo seed record.
+- Paper Simulation Controlled Submit UI when a local backend is running:
+  - Creates one bounded Paper Only workflow record through
+    `/api/paper-execution/workflow/record`.
+  - Writes only to local SQLite through `PAPER_EXECUTION_AUDIT_DB_PATH`.
+  - Does not collect broker credentials, account IDs, certificates, API keys, or
+    customer financial data.
 - Local developer setup and dry-run validation commands when the customer is a technical evaluator.
 
 ## What Customers Must Not Test
@@ -68,6 +74,8 @@ Customers must not test:
 - Managed account or discretionary trading flows.
 - Strategy ranking as investment advice.
 - Any claim that the system is production trading ready.
+- Any attempt to use the paper simulation UI for real orders, live approval, broker
+  login, credential upload, or account onboarding.
 
 ## Evaluation Prerequisites
 
@@ -105,11 +113,14 @@ Use this sequence for a 30-45 minute customer session:
 make seed-paper-execution-demo
 ```
 
-6. Demonstrate local Research Review Packet JSON loading using a safe sample packet only.
-7. If a local demo seed was created, show the read-only paper workflow summary, OMS
+6. Optional local-only paper simulation:
+   use the controlled Paper Only submit panel only with a running local backend, then
+   refresh records and inspect the generated local SQLite audit record.
+7. Demonstrate local Research Review Packet JSON loading using a safe sample packet only.
+8. If a local demo seed or controlled paper submit was used, show the paper workflow summary, OMS
    timeline, and audit timeline.
-8. Explain what the current system does not do: no live trading, no broker integration, no customer execution.
-9. Collect structured feedback using `docs/customer-feedback-form.md`.
+9. Explain what the current system does not do: no live trading, no broker integration, no customer execution.
+10. Collect structured feedback using `docs/customer-feedback-form.md`.
 
 ## Success Criteria
 
