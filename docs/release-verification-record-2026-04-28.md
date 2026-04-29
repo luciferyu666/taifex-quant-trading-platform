@@ -1194,6 +1194,66 @@ Request UI scope:
   records, Risk Engine calls, Broker Gateway calls, broker connections,
   credential flows, account login, or live approval.
 
+## Paper Approval UI Flow Smoke Drill Verification
+
+Commit:
+
+```text
+e5dcd3c Add paper approval UI flow smoke drill
+```
+
+GitHub Actions:
+
+```text
+Workflow: Release Readiness
+Run ID: 25113343367
+Status: passed
+```
+
+Vercel deployment:
+
+```text
+Deployment URL: https://taifex-quant-trading-platform-frontend-k9uqjei0k.vercel.app
+Deployment ID: dpl_7Da8vcU9saD6spLnxQ2Zf8TbWpFm
+Production alias: https://taifex-quant-trading-platform-front.vercel.app
+Status: Ready
+```
+
+Validation commands:
+
+```bash
+make paper-approval-ui-flow-smoke-check
+make frontend-i18n-check
+cd frontend && npm run typecheck
+cd frontend && npm run build
+make paper-approval-workflow-check
+make paper-simulation-submit-check
+make check
+make frontend-production-smoke-check
+```
+
+Observed result:
+
+```text
+All listed checks passed. The local browser drill completed the full
+Paper Approval Request -> research_approved decision ->
+approved_for_paper_simulation decision -> Controlled Paper Submit ->
+OMS/Audit Viewer path through the Web Command Center UI.
+Production smoke gate confirmed deployment id dpl_7Da8vcU9saD6spLnxQ2Zf8TbWpFm
+and required safety copy on English and Traditional Chinese pages.
+```
+
+UI drill scope:
+
+- Starts a local FastAPI backend, local Next.js frontend, temporary local SQLite
+  audit database, and headless browser.
+- Creates a paper-only approval request from the Web UI.
+- Records two reviewer decisions from the Web UI.
+- Submits one controlled Paper Only simulation from the Web UI.
+- Confirms persisted OMS and audit timelines are visible in the Web UI.
+- Does not call a real broker, collect credentials, write external databases,
+  enable live trading, or create real orders.
+
 ## Marketing Website Reachability
 
 Command:
