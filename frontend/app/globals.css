@@ -1155,6 +1155,17 @@ th {
   min-width: 0;
 }
 
+.timeout-action-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.timeout-action-result {
+  margin-top: 16px;
+}
+
 .muted-copy {
   color: var(--muted);
   line-height: 1.5;

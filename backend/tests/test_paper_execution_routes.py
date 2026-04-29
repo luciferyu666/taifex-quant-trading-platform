@@ -1,4 +1,5 @@
-from datetime import UTC, datetime
+import sqlite3
+from datetime import UTC, datetime, timedelta
 from pathlib import Path
 
 from fastapi.testclient import TestClient
@@ -338,5 +339,109 @@ def test_paper_execution_timeout_candidates_are_read_only(
         ).json()
 
         assert timeout_candidates == []
+    finally:
+        get_settings.cache_clear()
+
+
+def test_paper_execution_timeout_preview_and_mark_are_paper_only(
+    tmp_path: Path,
+    monkeypatch,
+) -> None:
+    db_path = tmp_path / "paper_execution_audit.sqlite"
+    monkeypatch.setenv("PAPER_EXECUTION_AUDIT_DB_PATH", str(db_path))
+    get_settings.cache_clear()
+    client = TestClient(app)
+
+    try:
+        signal = _signal_payload()
+        approval_request_id = _create_approved_approval_request(client, signal)
+        response = client.post(
+            "/api/paper-execution/workflow/record",
+            json={
+                "signal": signal,
+                "approval_request_id": approval_request_id,
+                "broker_simulation": "partial_fill",
+            },
+        )
+        assert response.status_code == 200
+        payload = response.json()
+        workflow_run_id = payload["workflow_run_id"]
+        order_id = payload["paper_order_intent"]["order_id"]
+        assert payload["oms_state"]["status"] == "PARTIALLY_FILLED"
+        old_persisted_at = datetime.now(UTC) - timedelta(seconds=120)
+        with sqlite3.connect(db_path) as connection:
+            connection.execute(
+                """
+                UPDATE paper_execution_runs
+                SET persisted_at = ?
+                WHERE workflow_run_id = ?
+                """,
+                (old_persisted_at.isoformat(), workflow_run_id),
+            )
+
+        timeout_payload = {
+            "workflow_run_id": workflow_run_id,
+            "order_id": order_id,
+            "timeout_seconds": 30,
+            "actor_id": "route-timeout-reviewer",
+            "reason": "Route test explicit paper timeout mark.",
+            "paper_only": True,
+        }
+        preview = client.post(
+            "/api/paper-execution/reliability/timeout-preview",
+            json=timeout_payload,
+        )
+        assert preview.status_code == 200
+        preview_payload = preview.json()
+        assert preview_payload["persisted"] is False
+        assert preview_payload["previous_status"] == "PARTIALLY_FILLED"
+        assert preview_payload["new_status"] == "EXPIRED"
+        assert preview_payload["paper_only"] is True
+        assert preview_payload["live_trading_enabled"] is False
+        assert preview_payload["broker_api_called"] is False
+        assert preview_payload["production_oms_ready"] is False
+
+        run_before_mark = client.get(f"/api/paper-execution/runs/{workflow_run_id}")
+        assert run_before_mark.json()["final_oms_status"] == "PARTIALLY_FILLED"
+
+        marked = client.post(
+            "/api/paper-execution/reliability/timeout-mark",
+            json=timeout_payload,
+        )
+        assert marked.status_code == 200
+        marked_payload = marked.json()
+        assert marked_payload["persisted"] is True
+        assert marked_payload["new_status"] == "EXPIRED"
+        assert marked_payload["oms_event"]["event_type"] == "EXPIRE"
+        assert marked_payload["audit_event"]["action"] == (
+            "paper_execution.timeout_marked"
+        )
+        assert marked_payload["execution_report"]["execution_type"] == "EXPIRE"
+        assert marked_payload["execution_report"]["broker_api_called"] is False
+
+        run_after_mark = client.get(f"/api/paper-execution/runs/{workflow_run_id}")
+        assert run_after_mark.json()["final_oms_status"] == "EXPIRED"
+
+        reports = client.get(
+            f"/api/paper-execution/orders/{order_id}/execution-reports"
+        ).json()
+        assert reports[-1]["execution_type"] == "EXPIRE"
+        assert reports[-1]["paper_only"] is True
+        assert reports[-1]["broker_api_called"] is False
+
+        audit_events = client.get(
+            f"/api/paper-execution/runs/{workflow_run_id}/audit-events"
+        ).json()
+        assert any(
+            event["action"] == "paper_execution.timeout_marked"
+            for event in audit_events
+        )
+
+        second_mark = client.post(
+            "/api/paper-execution/reliability/timeout-mark",
+            json=timeout_payload,
+        )
+        assert second_mark.status_code == 400
+        assert "nonterminal OMS status" in second_mark.json()["detail"]
     finally:
         get_settings.cache_clear()

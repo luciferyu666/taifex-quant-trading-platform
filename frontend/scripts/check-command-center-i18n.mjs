@@ -309,13 +309,16 @@ requireContains("Paper OMS reliability status endpoint is read on page", sourceB
 requireContains("Paper OMS outbox endpoint is read on page", sourceByFile.page, "/api/paper-execution/outbox");
 requireContains("Paper OMS execution reports endpoint is read on page", sourceByFile.page, "/execution-reports");
 requireContains("Paper OMS timeout candidates endpoint is read on page", sourceByFile.page, "/api/paper-execution/reliability/timeout-candidates");
+requireContains("Paper OMS timeout preview endpoint is called by panel", sourceByFile.paperOmsReliability, "/api/paper-execution/reliability/timeout-preview");
+requireContains("Paper OMS timeout mark endpoint is called by panel", sourceByFile.paperOmsReliability, "/api/paper-execution/reliability/timeout-mark");
+requireContains("Paper OMS timeout mark action is explicit", sourceByFile.i18n, "Mark EXPIRED locally");
+requireContains("Paper OMS timeout handling stays paper-only", sourceByFile.paperOmsReliability, "paper_only: true");
 requireContains("Paper OMS reliability panel shows production_oms_ready", sourceByFile.paperOmsReliability, "production_oms_ready");
 requireContains("Paper OMS reliability panel shows async_order_processing_enabled", sourceByFile.paperOmsReliability, "async_order_processing_enabled");
 requireContains("Paper OMS reliability panel shows execution report model", sourceByFile.paperOmsReliability, "execution_report_model_enabled");
 requireContains("Paper OMS reliability panel shows duplicate prevention", sourceByFile.paperOmsReliability, "duplicate_order_prevention_enabled");
 requireContains("Paper OMS reliability panel shows timeout scan", sourceByFile.paperOmsReliability, "timeout_candidate_scan_enabled");
 requireContains("Paper OMS reliability panel is mounted on page", sourceByFile.page, "PaperOmsReliabilityPanel");
-requireNotContains("Paper OMS reliability panel does not fetch backend", sourceByFile.paperOmsReliability, "fetch(");
 requireNotContains("Paper OMS reliability panel does not call workflow record", sourceByFile.paperOmsReliability, "/api/paper-execution/workflow/record");
 requireNotContains("Paper OMS reliability panel does not call approval decisions", sourceByFile.paperOmsReliability, "/decisions");
 requireNotContains("Paper OMS reliability panel does not collect API keys", sourceByFile.paperOmsReliability.toLowerCase(), "api_key");

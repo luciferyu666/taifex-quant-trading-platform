@@ -1,3 +1,8 @@
+"use client";
+
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+
 import type { DashboardCopy } from "../i18n";
 
 export type PaperOmsReliabilityStatus = {
@@ -70,6 +75,35 @@ export type PaperOrderTimeoutCandidate = {
   message: string;
 };
 
+type PaperOrderTimeoutMarkResponse = {
+  workflow_run_id: string;
+  order_id: string;
+  previous_status: string;
+  new_status: string;
+  timeout_seconds: number;
+  age_seconds: number;
+  persisted: boolean;
+  paper_only: boolean;
+  live_trading_enabled: boolean;
+  broker_api_called: boolean;
+  production_oms_ready: boolean;
+  oms_event: {
+    event_id: string;
+    event_type: string;
+    status_after: string;
+  };
+  audit_event: {
+    audit_id: string;
+    action: string;
+  };
+  execution_report: {
+    report_id: string;
+    execution_type: string;
+  };
+  warnings: string[];
+  message: string;
+};
+
 type PaperOmsReliabilityPanelProps = {
   available: boolean;
   copy: DashboardCopy;
@@ -80,6 +114,8 @@ type PaperOmsReliabilityPanelProps = {
   reliability: PaperOmsReliabilityStatus;
   timeoutCandidates: PaperOrderTimeoutCandidate[];
 };
+
+const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL ?? "http://localhost:8000";
 
 const trueIsSafe = new Set([
   "paper_only",
@@ -110,6 +146,72 @@ export function PaperOmsReliabilityPanel({
   timeoutCandidates,
 }: PaperOmsReliabilityPanelProps) {
   const labels = copy.paperReliability;
+  const router = useRouter();
+  const [previewResult, setPreviewResult] =
+    useState<PaperOrderTimeoutMarkResponse | null>(null);
+  const [markResult, setMarkResult] = useState<PaperOrderTimeoutMarkResponse | null>(
+    null,
+  );
+  const [actionError, setActionError] = useState<string>("");
+  const [pendingActionKey, setPendingActionKey] = useState<string>("");
+
+  async function previewTimeout(candidate: PaperOrderTimeoutCandidate) {
+    await runTimeoutAction(
+      "/api/paper-execution/reliability/timeout-preview",
+      candidate,
+      (payload) => {
+        setPreviewResult(payload);
+        setMarkResult(null);
+      },
+    );
+  }
+
+  async function markTimeout(candidate: PaperOrderTimeoutCandidate) {
+    await runTimeoutAction(
+      "/api/paper-execution/reliability/timeout-mark",
+      candidate,
+      (payload) => {
+        setMarkResult(payload);
+        setPreviewResult(null);
+        router.refresh();
+      },
+    );
+  }
+
+  async function runTimeoutAction(
+    path: string,
+    candidate: PaperOrderTimeoutCandidate,
+    onSuccess: (payload: PaperOrderTimeoutMarkResponse) => void,
+  ) {
+    const actionKey = `${path}:${candidate.workflow_run_id}:${candidate.order_id}`;
+    setPendingActionKey(actionKey);
+    setActionError("");
+    try {
+      const response = await fetch(`${backendUrl}${path}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          workflow_run_id: candidate.workflow_run_id,
+          order_id: candidate.order_id,
+          timeout_seconds: candidate.timeout_seconds,
+          actor_id: "command-center-timeout-reviewer",
+          reason: labels.timeoutActionReason,
+          paper_only: true,
+        }),
+      });
+      if (!response.ok) {
+        const errorPayload = (await response.json().catch(() => null)) as
+          | { detail?: string }
+          | null;
+        throw new Error(errorPayload?.detail ?? `HTTP ${response.status}`);
+      }
+      onSuccess((await response.json()) as PaperOrderTimeoutMarkResponse);
+    } catch (error) {
+      setActionError(error instanceof Error ? error.message : labels.actionError);
+    } finally {
+      setPendingActionKey("");
+    }
+  }
 
   return (
     <section className="paper-reliability-section" aria-labelledby="paper-reliability-title">
@@ -273,12 +375,13 @@ export function PaperOmsReliabilityPanel({
         <article className="paper-record-panel">
           <p className="card-kicker">{labels.timeoutKicker}</p>
           <h3>{labels.timeoutTitle}</h3>
+          <p className="muted-copy">{labels.timeoutActionNote}</p>
           {timeoutCandidates.length === 0 ? (
             <p className="empty-state">{labels.emptyTimeouts}</p>
           ) : (
             <ol className="reliability-list">
               {timeoutCandidates.map((candidate) => (
-                <li key={`${candidate.workflow_run_id}-${candidate.order_id}`}>
+                <li key={candidateKey(candidate)}>
                   <strong>{candidate.final_oms_status}</strong>
                   <dl className="detail-list compact">
                     <Detail label={labels.fields.workflowRunId} value={candidate.workflow_run_id} />
@@ -293,6 +396,37 @@ export function PaperOmsReliabilityPanel({
                     />
                     <Detail label={labels.fields.message} value={candidate.message} />
                   </dl>
+                  <div className="timeout-action-row">
+                    <button
+                      className="action-button secondary"
+                      disabled={
+                        pendingActionKey ===
+                        `/api/paper-execution/reliability/timeout-preview:${candidateKey(candidate)}`
+                      }
+                      type="button"
+                      onClick={() => void previewTimeout(candidate)}
+                    >
+                      {pendingActionKey ===
+                      `/api/paper-execution/reliability/timeout-preview:${candidateKey(candidate)}`
+                        ? labels.previewing
+                        : labels.previewTimeout}
+                    </button>
+                    <button
+                      className="action-button"
+                      disabled={
+                        !isPreviewForCandidate(previewResult, candidate) ||
+                        pendingActionKey ===
+                          `/api/paper-execution/reliability/timeout-mark:${candidateKey(candidate)}`
+                      }
+                      type="button"
+                      onClick={() => void markTimeout(candidate)}
+                    >
+                      {pendingActionKey ===
+                      `/api/paper-execution/reliability/timeout-mark:${candidateKey(candidate)}`
+                        ? labels.marking
+                        : labels.markTimeout}
+                    </button>
+                  </div>
                 </li>
               ))}
             </ol>
@@ -300,8 +434,68 @@ export function PaperOmsReliabilityPanel({
         </article>
       </div>
 
+      {actionError ? <p className="loader-status error">{actionError}</p> : null}
+      {previewResult ? (
+        <TimeoutActionResult
+          labels={labels}
+          result={previewResult}
+          statusText={labels.previewReady}
+        />
+      ) : null}
+      {markResult ? (
+        <TimeoutActionResult
+          labels={labels}
+          result={markResult}
+          statusText={labels.markSuccess}
+        />
+      ) : null}
+
       <p className="read-only-note">{labels.readOnlyNote}</p>
     </section>
+  );
+}
+
+function TimeoutActionResult({
+  labels,
+  result,
+  statusText,
+}: {
+  labels: DashboardCopy["paperReliability"];
+  result: PaperOrderTimeoutMarkResponse;
+  statusText: string;
+}) {
+  return (
+    <article className="paper-record-panel timeout-action-result">
+      <p className="card-kicker">{labels.actionResultKicker}</p>
+      <h3>{labels.actionResultTitle}</h3>
+      <p className={result.persisted ? "loader-status ok" : "loader-status"}>
+        {statusText} {result.message}
+      </p>
+      <dl className="detail-list compact">
+        <Detail label={labels.fields.workflowRunId} value={result.workflow_run_id} />
+        <Detail label={labels.fields.orderId} value={result.order_id} />
+        <Detail label={labels.fields.previousStatus} value={result.previous_status} />
+        <Detail label={labels.fields.newStatus} value={result.new_status} />
+        <Detail label={labels.fields.persisted} value={String(result.persisted)} />
+        <Detail label={labels.fields.eventId} value={result.oms_event.event_id} />
+        <Detail label={labels.fields.auditId} value={result.audit_event.audit_id} />
+        <Detail label={labels.fields.reportId} value={result.execution_report.report_id} />
+        <Detail label={labels.fields.paperOnly} value={String(result.paper_only)} />
+        <Detail
+          label={labels.fields.brokerApiCalled}
+          value={String(result.broker_api_called)}
+        />
+        <Detail
+          label={labels.fields.productionOmsReady}
+          value={String(result.production_oms_ready)}
+        />
+      </dl>
+      <ul className="warning-list">
+        {result.warnings.map((warning) => (
+          <li key={warning}>{warning}</li>
+        ))}
+      </ul>
+    </article>
   );
 }
 
@@ -343,4 +537,19 @@ function formatDate(value: string): string {
     return value;
   }
   return date.toISOString();
+}
+
+function candidateKey(candidate: PaperOrderTimeoutCandidate): string {
+  return `${candidate.workflow_run_id}:${candidate.order_id}`;
+}
+
+function isPreviewForCandidate(
+  previewResult: PaperOrderTimeoutMarkResponse | null,
+  candidate: PaperOrderTimeoutCandidate,
+): boolean {
+  return (
+    previewResult?.workflow_run_id === candidate.workflow_run_id &&
+    previewResult?.order_id === candidate.order_id &&
+    previewResult.persisted === false
+  );
 }

@@ -1,12 +1,18 @@
 from __future__ import annotations
 
+import hashlib
 import json
 import sqlite3
 from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 
-from app.domain.order_state_machine import OrderEvent, OrderStatus
+from app.domain.order_state_machine import (
+    ALLOWED_TRANSITIONS,
+    OrderEvent,
+    OrderEventType,
+    OrderStatus,
+)
 from app.domain.paper_execution import PaperExecutionWorkflowResponse
 from app.domain.paper_execution_records import (
     PaperAuditEventRecord,
@@ -20,8 +26,11 @@ from app.domain.paper_oms_reliability import (
     PaperOmsOutboxItem,
     PaperOmsReliabilityStatus,
     PaperOrderTimeoutCandidate,
+    PaperOrderTimeoutMarkRequest,
+    PaperOrderTimeoutMarkResponse,
     build_execution_reports,
     build_outbox_item,
+    build_timeout_execution_report,
     is_terminal_status,
 )
 
@@ -550,6 +559,143 @@ class PaperExecutionStore:
             )
         return candidates
 
+    def preview_timeout_mark(
+        self,
+        request: PaperOrderTimeoutMarkRequest,
+        *,
+        now: datetime | None = None,
+    ) -> PaperOrderTimeoutMarkResponse:
+        if not self.db_path.exists():
+            raise ValueError("No local paper OMS audit database exists yet.")
+        self.initialize()
+        with self._connect() as connection:
+            return self._build_timeout_mark_response(
+                connection,
+                request,
+                persisted=False,
+                now=now,
+            )
+
+    def mark_timeout(
+        self,
+        request: PaperOrderTimeoutMarkRequest,
+        *,
+        now: datetime | None = None,
+    ) -> PaperOrderTimeoutMarkResponse:
+        if not self.db_path.exists():
+            raise ValueError("No local paper OMS audit database exists yet.")
+        self.initialize()
+        with self._connect() as connection:
+            response = self._build_timeout_mark_response(
+                connection,
+                request,
+                persisted=True,
+                now=now,
+            )
+            connection.execute(
+                """
+                INSERT INTO paper_oms_events (
+                    workflow_run_id,
+                    order_id,
+                    event_id,
+                    sequence,
+                    event_type,
+                    status_after,
+                    timestamp,
+                    reason,
+                    payload_json
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+                """,
+                (
+                    response.oms_event.workflow_run_id,
+                    response.oms_event.order_id,
+                    response.oms_event.event_id,
+                    response.oms_event.sequence,
+                    response.oms_event.event_type,
+                    response.oms_event.status_after,
+                    response.oms_event.timestamp.isoformat(),
+                    response.oms_event.reason,
+                    json_dumps(response.oms_event.payload),
+                ),
+            )
+            connection.execute(
+                """
+                INSERT INTO paper_audit_events (
+                    workflow_run_id,
+                    audit_id,
+                    actor,
+                    action,
+                    resource,
+                    timestamp,
+                    paper_only,
+                    metadata_json
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+                """,
+                (
+                    response.audit_event.workflow_run_id,
+                    response.audit_event.audit_id,
+                    response.audit_event.actor,
+                    response.audit_event.action,
+                    response.audit_event.resource,
+                    response.audit_event.timestamp.isoformat(),
+                    int(response.audit_event.paper_only),
+                    json_dumps(response.audit_event.metadata),
+                ),
+            )
+            connection.execute(
+                """
+                INSERT INTO paper_execution_reports (
+                    workflow_run_id,
+                    order_id,
+                    report_id,
+                    idempotency_key,
+                    execution_type,
+                    order_status,
+                    last_quantity,
+                    cumulative_filled_quantity,
+                    leaves_quantity,
+                    average_fill_price,
+                    event_id,
+                    timestamp,
+                    paper_only,
+                    live_trading_enabled,
+                    broker_api_called,
+                    payload_json
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                """,
+                (
+                    response.execution_report.workflow_run_id,
+                    response.execution_report.order_id,
+                    response.execution_report.report_id,
+                    response.execution_report.idempotency_key,
+                    response.execution_report.execution_type,
+                    response.execution_report.order_status,
+                    response.execution_report.last_quantity,
+                    response.execution_report.cumulative_filled_quantity,
+                    response.execution_report.leaves_quantity,
+                    response.execution_report.average_fill_price,
+                    response.execution_report.event_id,
+                    response.execution_report.timestamp.isoformat(),
+                    int(response.execution_report.paper_only),
+                    int(response.execution_report.live_trading_enabled),
+                    int(response.execution_report.broker_api_called),
+                    json_dumps(response.execution_report.payload),
+                ),
+            )
+            connection.execute(
+                """
+                UPDATE paper_execution_runs
+                SET final_oms_status = ?
+                WHERE workflow_run_id = ? AND order_id = ?
+                """,
+                (
+                    response.new_status,
+                    response.workflow_run_id,
+                    response.order_id,
+                ),
+            )
+            return response
+
     def status(self) -> PaperExecutionPersistenceStatus:
         if not self.db_path.exists():
             return PaperExecutionPersistenceStatus(
@@ -611,6 +757,191 @@ class PaperExecutionStore:
                 "idempotency keys, completed outbox metadata, execution reports, and "
                 "timeout candidates for paper simulation review. It is not a "
                 "production OMS."
+            ),
+        )
+
+    def _build_timeout_mark_response(
+        self,
+        connection: sqlite3.Connection,
+        request: PaperOrderTimeoutMarkRequest,
+        *,
+        persisted: bool,
+        now: datetime | None,
+    ) -> PaperOrderTimeoutMarkResponse:
+        now = now or datetime.now(UTC)
+        run_row = connection.execute(
+            """
+            SELECT * FROM paper_execution_runs
+            WHERE workflow_run_id = ? AND order_id = ?
+            """,
+            (request.workflow_run_id, request.order_id),
+        ).fetchone()
+        if run_row is None:
+            raise ValueError("paper workflow run/order pair was not found")
+        if not bool(run_row["paper_only"]):
+            raise ValueError("paper timeout handling requires paper_only run records")
+        if bool(run_row["live_trading_enabled"]):
+            raise ValueError("paper timeout handling cannot run on live-enabled records")
+        if bool(run_row["broker_api_called"]):
+            raise ValueError("paper timeout handling cannot run on broker-called records")
+
+        status_row = connection.execute(
+            """
+            SELECT status_after, sequence
+            FROM paper_oms_events
+            WHERE workflow_run_id = ? AND order_id = ?
+            ORDER BY sequence DESC
+            LIMIT 1
+            """,
+            (request.workflow_run_id, request.order_id),
+        ).fetchone()
+        current_status_value = (
+            status_row["status_after"] if status_row else run_row["final_oms_status"]
+        )
+        if current_status_value is None:
+            raise ValueError("paper OMS status is missing for timeout handling")
+        if is_terminal_status(current_status_value):
+            raise ValueError("paper timeout mark requires a nonterminal OMS status")
+        try:
+            current_status = OrderStatus(str(current_status_value))
+        except ValueError as exc:
+            raise ValueError("paper OMS status is not recognized") from exc
+        if OrderEventType.EXPIRE not in ALLOWED_TRANSITIONS[current_status]:
+            raise ValueError(
+                f"paper timeout mark is not allowed from OMS status {current_status}"
+            )
+
+        persisted_at = datetime.fromisoformat(run_row["persisted_at"])
+        age_seconds = max(0.0, (now - persisted_at).total_seconds())
+        if age_seconds < request.timeout_seconds:
+            raise ValueError(
+                "paper timeout mark requires candidate age to exceed timeout_seconds"
+            )
+
+        idempotency_row = connection.execute(
+            """
+            SELECT idempotency_key
+            FROM paper_order_idempotency
+            WHERE workflow_run_id = ? AND order_id = ?
+            """,
+            (request.workflow_run_id, request.order_id),
+        ).fetchone()
+        if idempotency_row is None:
+            raise ValueError("paper timeout mark requires an idempotency key record")
+
+        previous_report_row = connection.execute(
+            """
+            SELECT *
+            FROM paper_execution_reports
+            WHERE workflow_run_id = ? AND order_id = ?
+            ORDER BY timestamp DESC, report_id DESC
+            LIMIT 1
+            """,
+            (request.workflow_run_id, request.order_id),
+        ).fetchone()
+        previous_report = (
+            execution_report_from_row(previous_report_row)
+            if previous_report_row is not None
+            else None
+        )
+        next_sequence = int(status_row["sequence"]) + 1 if status_row else 1
+        event = OrderEvent(
+            event_id=f"{request.order_id}-{next_sequence}-EXPIRE",
+            order_id=request.order_id,
+            event_type=OrderEventType.EXPIRE,
+            timestamp=now,
+            reason=request.reason,
+            payload={
+                "last_quantity": 0,
+                "cumulative_filled_quantity": (
+                    previous_report.cumulative_filled_quantity
+                    if previous_report
+                    else 0
+                ),
+                "leaves_quantity": previous_report.leaves_quantity
+                if previous_report
+                else 0,
+                "paper_only": True,
+                "timeout_mark": True,
+                "actor_id": request.actor_id,
+                "timeout_seconds": request.timeout_seconds,
+                "age_seconds": age_seconds,
+                "broker_api_called": False,
+                "live_trading_enabled": False,
+            },
+        )
+        oms_event = PaperOmsEventRecord(
+            workflow_run_id=request.workflow_run_id,
+            order_id=request.order_id,
+            event_id=event.event_id,
+            sequence=next_sequence,
+            event_type=event.event_type,
+            status_after=str(OrderStatus.EXPIRED),
+            timestamp=now,
+            reason=request.reason,
+            payload=event.payload,
+        )
+        execution_report = build_timeout_execution_report(
+            workflow_run_id=request.workflow_run_id,
+            order_id=request.order_id,
+            idempotency_key=idempotency_row["idempotency_key"],
+            event=event,
+            previous_report=previous_report,
+        )
+        audit_core = {
+            "workflow_run_id": request.workflow_run_id,
+            "order_id": request.order_id,
+            "action": "paper_execution.timeout_marked",
+            "event_id": event.event_id,
+            "paper_only": True,
+        }
+        audit_event = PaperAuditEventRecord(
+            workflow_run_id=request.workflow_run_id,
+            audit_id=f"paper-timeout-audit-{stable_digest(audit_core)[:16]}",
+            actor=request.actor_id,
+            action="paper_execution.timeout_marked",
+            resource=request.order_id,
+            timestamp=now,
+            paper_only=True,
+            metadata={
+                "previous_status": str(current_status),
+                "new_status": str(OrderStatus.EXPIRED),
+                "timeout_seconds": request.timeout_seconds,
+                "age_seconds": age_seconds,
+                "reason": request.reason,
+                "paper_only": True,
+                "live_trading_enabled": False,
+                "broker_api_called": False,
+                "production_oms_ready": False,
+                "note": (
+                    "Explicit local paper timeout mark only. No broker was called "
+                    "and this is not production OMS timeout processing."
+                ),
+            },
+        )
+        return PaperOrderTimeoutMarkResponse(
+            workflow_run_id=request.workflow_run_id,
+            order_id=request.order_id,
+            previous_status=str(current_status),
+            new_status=str(OrderStatus.EXPIRED),
+            timeout_seconds=request.timeout_seconds,
+            age_seconds=age_seconds,
+            persisted=persisted,
+            paper_only=True,
+            live_trading_enabled=False,
+            broker_api_called=False,
+            production_oms_ready=False,
+            oms_event=oms_event,
+            audit_event=audit_event,
+            execution_report=execution_report,
+            warnings=[
+                "Paper-only local timeout metadata. This is not a production OMS timeout worker.",
+                "No broker API, credential, live trading, or real order path is used.",
+            ],
+            message=(
+                "Paper timeout mark preview is ready."
+                if not persisted
+                else "Paper timeout mark persisted locally as EXPIRED."
             ),
         )
 
@@ -884,3 +1215,7 @@ def paper_oms_known_gaps() -> list[str]:
 
 def json_dumps(payload: Any) -> str:
     return json.dumps(payload, sort_keys=True, separators=(",", ":"))
+
+
+def stable_digest(payload: dict[str, Any]) -> str:
+    return hashlib.sha256(json_dumps(payload).encode("utf-8")).hexdigest()

@@ -21,6 +21,8 @@ from app.domain.paper_oms_reliability import (
     PaperOmsOutboxItem,
     PaperOmsReliabilityStatus,
     PaperOrderTimeoutCandidate,
+    PaperOrderTimeoutMarkRequest,
+    PaperOrderTimeoutMarkResponse,
 )
 from app.domain.risk_rules import RiskPolicy
 from app.services.paper_approval_store import PaperApprovalStore
@@ -234,3 +236,31 @@ def paper_execution_timeout_candidates(
     return _paper_execution_store(settings).list_timeout_candidates(
         timeout_seconds=safe_timeout,
     )
+
+
+@router.post(
+    "/reliability/timeout-preview",
+    response_model=PaperOrderTimeoutMarkResponse,
+)
+def paper_execution_timeout_preview(
+    request: PaperOrderTimeoutMarkRequest,
+    settings: SettingsDep,
+) -> PaperOrderTimeoutMarkResponse:
+    try:
+        return _paper_execution_store(settings).preview_timeout_mark(request)
+    except ValueError as exc:
+        raise HTTPException(status_code=400, detail=str(exc)) from exc
+
+
+@router.post(
+    "/reliability/timeout-mark",
+    response_model=PaperOrderTimeoutMarkResponse,
+)
+def paper_execution_timeout_mark(
+    request: PaperOrderTimeoutMarkRequest,
+    settings: SettingsDep,
+) -> PaperOrderTimeoutMarkResponse:
+    try:
+        return _paper_execution_store(settings).mark_timeout(request)
+    except ValueError as exc:
+        raise HTTPException(status_code=400, detail=str(exc)) from exc

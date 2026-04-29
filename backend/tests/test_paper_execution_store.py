@@ -5,6 +5,7 @@ from pathlib import Path
 import pytest
 
 from app.domain.order_state_machine import OrderStatus
+from app.domain.paper_oms_reliability import PaperOrderTimeoutMarkRequest
 from app.domain.risk_rules import RiskPolicy
 from app.services.paper_execution_store import PaperExecutionStore
 from app.services.paper_execution_workflow import PaperExecutionWorkflow
@@ -195,3 +196,72 @@ def test_paper_execution_store_lists_timeout_candidates_for_nonterminal_orders(
     assert candidates[0].final_oms_status == OrderStatus.PARTIALLY_FILLED
     assert candidates[0].paper_only is True
     assert candidates[0].live_trading_enabled is False
+
+
+def test_paper_execution_store_previews_and_marks_timeout_locally(
+    tmp_path: Path,
+) -> None:
+    db_path = tmp_path / "paper_execution_audit.sqlite"
+    request, history = _request(broker_simulation="partial_fill")
+    response = PaperExecutionWorkflow(RiskPolicy()).preview(request, history)
+    persisted_response = response.model_copy(
+        update={"persisted": True, "persistence_backend": "sqlite"}
+    )
+
+    store = PaperExecutionStore(db_path)
+    store.persist_workflow(persisted_response)
+    assert response.paper_order_intent is not None
+    old_persisted_at = datetime.now(UTC) - timedelta(seconds=120)
+    with sqlite3.connect(db_path) as connection:
+        connection.execute(
+            """
+            UPDATE paper_execution_runs
+            SET persisted_at = ?
+            WHERE workflow_run_id = ?
+            """,
+            (old_persisted_at.isoformat(), response.workflow_run_id),
+        )
+
+    timeout_request = PaperOrderTimeoutMarkRequest(
+        workflow_run_id=response.workflow_run_id,
+        order_id=response.paper_order_intent.order_id,
+        timeout_seconds=30,
+        actor_id="local-timeout-reviewer",
+        reason="Explicit paper timeout mark test.",
+        paper_only=True,
+    )
+    preview = store.preview_timeout_mark(timeout_request, now=datetime.now(UTC))
+
+    assert preview.persisted is False
+    assert preview.previous_status == OrderStatus.PARTIALLY_FILLED
+    assert preview.new_status == OrderStatus.EXPIRED
+    assert preview.paper_only is True
+    assert preview.live_trading_enabled is False
+    assert preview.broker_api_called is False
+    assert preview.production_oms_ready is False
+    assert preview.oms_event.event_type == "EXPIRE"
+    assert store.get_run(response.workflow_run_id).final_oms_status == (
+        OrderStatus.PARTIALLY_FILLED
+    )
+
+    marked = store.mark_timeout(timeout_request, now=datetime.now(UTC))
+
+    assert marked.persisted is True
+    assert marked.new_status == OrderStatus.EXPIRED
+    assert store.get_run(response.workflow_run_id).final_oms_status == (
+        OrderStatus.EXPIRED
+    )
+    oms_events = store.list_oms_events(order_id=response.paper_order_intent.order_id)
+    assert oms_events[-1].event_type == "EXPIRE"
+    assert oms_events[-1].status_after == OrderStatus.EXPIRED
+    reports = store.list_execution_reports(order_id=response.paper_order_intent.order_id)
+    assert reports[-1].execution_type == "EXPIRE"
+    assert reports[-1].paper_only is True
+    assert reports[-1].broker_api_called is False
+    audit_events = store.list_audit_events(workflow_run_id=response.workflow_run_id)
+    assert any(
+        event.action == "paper_execution.timeout_marked" for event in audit_events
+    )
+
+    with pytest.raises(ValueError, match="nonterminal OMS status"):
+        store.mark_timeout(timeout_request, now=datetime.now(UTC))

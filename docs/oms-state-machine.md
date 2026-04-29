@@ -85,7 +85,9 @@ The paper reliability foundation also records:
 - local idempotency keys for duplicate prevention across local workflow sessions
 - local outbox metadata for completed paper workflow submissions
 - paper execution report metadata derived from simulated OMS events
-- read-only timeout candidates for nonterminal paper orders
+- timeout candidates for nonterminal paper orders
+- explicit paper-only timeout preview/mark metadata that can append an `EXPIRE`
+  OMS event to local SQLite only after a reviewer/user action
 
 These records support customer demos and reviewer audits. They do not provide
 asynchronous order processing, production durable queues, amend/replace,
@@ -103,7 +105,7 @@ real broker execution reports, or reconciliation loops.
   records, and query endpoints.
 - Paper OMS reliability tests cover duplicate idempotency rejection, execution
   report metadata, completed local outbox metadata, reliability status, and
-  read-only timeout candidate scans.
+  paper-only timeout candidate preview/mark flows.
 
 ## Testing Plan
 

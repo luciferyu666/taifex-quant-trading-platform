@@ -14,6 +14,10 @@ from app.domain.order_state_machine import (
     OrderState,
     OrderStatus,
 )
+from app.domain.paper_execution_records import (
+    PaperAuditEventRecord,
+    PaperOmsEventRecord,
+)
 
 ExecutionReportType = Literal[
     "ACKNOWLEDGED",
@@ -126,6 +130,62 @@ class PaperOrderTimeoutCandidate(BaseModel):
     message: str
 
 
+class PaperOrderTimeoutMarkRequest(BaseModel):
+    workflow_run_id: str = Field(min_length=1)
+    order_id: str = Field(min_length=1)
+    timeout_seconds: int = Field(default=30, ge=1, le=86_400)
+    actor_id: str = Field(default="local-timeout-reviewer", min_length=1)
+    reason: str = Field(
+        default="Explicit paper-only timeout handling action.",
+        min_length=1,
+    )
+    paper_only: bool = True
+
+    @field_validator("paper_only")
+    @classmethod
+    def require_paper_only(cls, value: bool) -> bool:
+        if value is not True:
+            raise ValueError("paper timeout handling must remain paper_only=true")
+        return value
+
+
+class PaperOrderTimeoutMarkResponse(BaseModel):
+    workflow_run_id: str
+    order_id: str
+    previous_status: str
+    new_status: str
+    timeout_seconds: int
+    age_seconds: float
+    persisted: bool = False
+    paper_only: bool = True
+    live_trading_enabled: bool = False
+    broker_api_called: bool = False
+    production_oms_ready: bool = False
+    oms_event: PaperOmsEventRecord
+    audit_event: PaperAuditEventRecord
+    execution_report: PaperExecutionReport
+    warnings: list[str] = Field(default_factory=list)
+    message: str
+
+    @field_validator("paper_only")
+    @classmethod
+    def require_paper_only(cls, value: bool) -> bool:
+        if value is not True:
+            raise ValueError("paper timeout mark response must remain paper_only=true")
+        return value
+
+    @field_validator(
+        "live_trading_enabled",
+        "broker_api_called",
+        "production_oms_ready",
+    )
+    @classmethod
+    def require_false_safety_flags(cls, value: bool) -> bool:
+        if value is not False:
+            raise ValueError("paper timeout handling must not enable live/broker paths")
+        return value
+
+
 class PaperOmsReliabilityStatus(BaseModel):
     paper_only: bool = True
     live_trading_enabled: bool = False
@@ -217,6 +277,54 @@ def build_outbox_item(
         order_id=order_id,
         idempotency_key=idempotency_key,
         payload=payload,
+    )
+
+
+def build_timeout_execution_report(
+    *,
+    workflow_run_id: str,
+    order_id: str,
+    idempotency_key: str,
+    event: OrderEvent,
+    previous_report: PaperExecutionReport | None = None,
+) -> PaperExecutionReport:
+    cumulative_filled_quantity = (
+        previous_report.cumulative_filled_quantity if previous_report else 0
+    )
+    leaves_quantity = previous_report.leaves_quantity if previous_report else 0
+    report_core = {
+        "workflow_run_id": workflow_run_id,
+        "order_id": order_id,
+        "event_id": event.event_id,
+        "execution_type": "EXPIRE",
+        "paper_only": True,
+    }
+    return PaperExecutionReport(
+        report_id=f"paper-exec-report-{_sha256_json(report_core)[:16]}",
+        workflow_run_id=workflow_run_id,
+        order_id=order_id,
+        idempotency_key=idempotency_key,
+        execution_type="EXPIRE",
+        order_status=str(OrderStatus.EXPIRED),
+        last_quantity=0,
+        cumulative_filled_quantity=cumulative_filled_quantity,
+        leaves_quantity=leaves_quantity,
+        event_id=event.event_id,
+        timestamp=event.timestamp,
+        paper_only=True,
+        live_trading_enabled=False,
+        broker_api_called=False,
+        payload={
+            "last_quantity": 0,
+            "cumulative_filled_quantity": cumulative_filled_quantity,
+            "leaves_quantity": leaves_quantity,
+            "paper_only": True,
+            "timeout_mark": True,
+            "note": (
+                "Explicit local paper timeout metadata only. No broker was called "
+                "and this is not a production execution report."
+            ),
+        },
     )
 
 

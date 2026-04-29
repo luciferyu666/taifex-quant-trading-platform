@@ -187,9 +187,14 @@ Expose roadmap phase status, contracts, safety mode, risk status, and paper-only
 - The Paper OMS Reliability Viewer is a display surface only. It may read
   `/api/paper-execution/reliability/status`, `/api/paper-execution/outbox`,
   `/api/paper-execution/orders/{order_id}/execution-reports`, and
-  `/api/paper-execution/reliability/timeout-candidates`. It must not process
-  outbox workers, mutate OMS state, write databases, approve execution, call
-  brokers, collect credentials, or imply production OMS readiness.
+  `/api/paper-execution/reliability/timeout-candidates`. It may also call
+  `POST /api/paper-execution/reliability/timeout-preview` and
+  `POST /api/paper-execution/reliability/timeout-mark` only for explicit
+  paper-only timeout handling. Preview must not write. Mark may write only local
+  SQLite EXPIRE OMS metadata, audit metadata, and simulated execution-report
+  metadata. It must not process outbox workers, call brokers, collect
+  credentials, approve execution, enable live trading, or imply production OMS
+  readiness.
 - The Safe Read-Only Interaction Layer may expose refresh, tab switching, row
   selection, clipboard copy, bundled sample loading, and local JSON clearing only.
   It must not create orders, write databases, upload local JSON, call broker
@@ -264,7 +269,7 @@ queue/history as read-only workflow context. Future UI should require persisted
 approval history before allowing paper simulation submission.
 The Paper OMS Reliability Viewer now surfaces local-only outbox metadata,
 idempotency key counts, simulated execution report metadata, timeout candidates,
-and non-production gaps. Future work should keep this panel read-only until a
-separate backend slice introduces durable queues, asynchronous processing, timeout
-mutation handling, amend/replace, and reconciliation under explicit paper-only
-tests.
+non-production gaps, and explicit paper-only timeout preview/mark actions. Future
+work should keep this panel bounded to local paper metadata until a separate
+backend slice introduces durable queues, asynchronous processing, amend/replace,
+and reconciliation under explicit paper-only tests.

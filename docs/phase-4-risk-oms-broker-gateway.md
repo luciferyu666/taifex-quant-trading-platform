@@ -44,8 +44,11 @@ Create a paper-only execution core where order intents are evaluated by Risk Eng
     review. This is not an asynchronous worker or distributed durable queue.
   - Execution report records summarize simulated acknowledgements, fills,
     partial fills, rejections, cancellations, and expirations.
-  - Read-only timeout candidate scans identify nonterminal paper orders that may
-    need review without mutating OMS state.
+  - Timeout candidate scans identify nonterminal paper orders that may need
+    review.
+  - Explicit paper-only timeout preview/mark endpoints can validate and append a
+    local SQLite `EXPIRE` OMS event, audit event, and simulated execution report.
+    This is not an asynchronous production timeout worker.
   - Reliability status explicitly reports `production_oms_ready=false`.
 - Controlled Paper Simulation UI:
   - The Web Command Center may call only
@@ -74,6 +77,9 @@ Create a paper-only execution core where order intents are evaluated by Risk Eng
   events.
 - Paper OMS reliability status reports local-only outbox metadata, idempotency key
   count, execution report count, timeout candidates, and known production gaps.
+- Paper timeout handling preview does not write, and paper timeout mark writes only
+  local SQLite metadata with `paper_only=true`, `broker_api_called=false`, and
+  `production_oms_ready=false`.
 - Controlled UI submissions create local SQLite paper records only and preserve
   `paper_only=true`, `ENABLE_LIVE_TRADING=false`, and `BROKER_PROVIDER=paper`.
 - Paper approval queue and history can be queried without broker calls, credentials,
@@ -96,6 +102,7 @@ Create a paper-only execution core where order intents are evaluated by Risk Eng
   for paper simulation. Controlled Paper Submit must use persisted approval history.
 - Do not treat the local outbox metadata as asynchronous production processing.
 - Do not treat paper execution reports as broker execution reports.
+- Do not treat explicit paper timeout mark as production timeout processing.
 - Do not implement amend/replace or reconciliation loops without a separate paper-only
   design and tests.
 
@@ -106,13 +113,14 @@ make paper-approval-workflow-check
 make paper-execution-workflow-check
 make paper-execution-persistence-check
 make paper-oms-reliability-check
+make paper-oms-timeout-check
 cd backend && pytest tests/test_exposure_allocator.py tests/test_risk_engine.py tests/test_roadmap_routes.py
 make check
 ```
 
 ## Next Implementation Notes
 
-Next safe slice: add read-only UI panels for OMS reliability metadata if needed.
-Do not add asynchronous workers, external databases, live adapters, amend/replace,
-real broker execution reports, or reconciliation loops until the paper-only
-contracts and release readiness gates remain stable under tests.
+Next safe slice: improve paper-only timeout handling evidence and UI verification
+if needed. Do not add asynchronous workers, external databases, live adapters,
+amend/replace, real broker execution reports, or reconciliation loops until the
+paper-only contracts and release readiness gates remain stable under tests.
