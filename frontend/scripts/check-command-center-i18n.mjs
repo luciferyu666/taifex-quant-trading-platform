@@ -5,6 +5,7 @@ const repoRoot = process.cwd();
 const files = {
   i18n: "frontend/app/i18n.ts",
   page: "frontend/app/page.tsx",
+  demoGuide: "frontend/app/components/DemoGuidePanel.tsx",
   commandTabs: "frontend/app/components/CommandCenterTabs.tsx",
   paperRecords: "frontend/app/components/PaperExecutionRecordsPanel.tsx",
   paperOmsTimeline: "frontend/app/components/PaperOmsTimelinePanel.tsx",
@@ -204,6 +205,14 @@ requireContains("English local JSON loader copy exists", sourceByFile.i18n, "Sel
 requireContains("Traditional Chinese local JSON loader copy exists", sourceByFile.i18n, "選擇本地 .json");
 requireContains("English no-upload copy exists", sourceByFile.i18n, "The file was not uploaded");
 requireContains("Traditional Chinese no-upload copy exists", sourceByFile.i18n, "檔案未上傳");
+requireContains("English demo guide copy exists", sourceByFile.i18n, "Customer evaluation flow");
+requireContains("Traditional Chinese demo guide copy exists", sourceByFile.i18n, "客戶測試導覽流程");
+requireContains("Demo guide component is implemented", sourceByFile.demoGuide, "DemoGuidePanel");
+requireContains("Demo guide previous action exists", sourceByFile.demoGuide, "goToPreviousStep");
+requireContains("Demo guide next action exists", sourceByFile.demoGuide, "goToNextStep");
+requireContains("Demo guide copy checklist action exists", sourceByFile.demoGuide, "copyChecklist");
+requireContains("Demo guide renders prohibited actions", sourceByFile.demoGuide, "prohibitedItems");
+requireContains("Demo guide is mounted on page", sourceByFile.page, "DemoGuidePanel");
 requireContains("English read-only interaction copy exists", sourceByFile.i18n, "Read-only Command Center tools");
 requireContains("Traditional Chinese read-only interaction copy exists", sourceByFile.i18n, "只讀 Command Center 工具");
 requireContains("Command Center tabs are implemented", sourceByFile.commandTabs, "role=\"tablist\"");

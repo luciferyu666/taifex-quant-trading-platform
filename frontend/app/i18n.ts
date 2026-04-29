@@ -36,6 +36,108 @@ export const dashboardCopy = {
         text: "Max daily loss and stale quote limits are visible before any future OMS workflow.",
       },
     },
+    demoGuide: {
+      ariaLabel: "Customer demo guided flow",
+      eyebrow: "Demo Tour",
+      title: "Customer evaluation flow",
+      description:
+        "A read-only walkthrough for understanding release level, safety defaults, paper OMS records, research packets, and contract specs. The tour changes only local UI state.",
+      readOnlyBadge: "Read-only tour",
+      stepListLabel: "Demo tour steps",
+      activeStepLabel: "Step",
+      suggestedTabLabel: "Open tab",
+      expectedLabel: "What to verify",
+      safetyLabel: "Safety boundary",
+      previous: "Previous",
+      next: "Next",
+      reset: "Reset tour",
+      copyChecklist: "Copy checklist",
+      copied: "Checklist copied.",
+      copyFailed: "Copy failed. Copy the checklist manually.",
+      checklistIntro: "Customer Demo Guided Flow checklist",
+      prohibitedKicker: "Prohibited actions",
+      prohibitedTitle: "This release is not a production trading product",
+      prohibitedItems: [
+        "No live trading",
+        "No broker login",
+        "No real orders",
+        "No credential upload",
+        "No customer account onboarding",
+        "No trading recommendation",
+      ],
+      steps: [
+        {
+          title: "Confirm Release Level",
+          tab: "Release",
+          body:
+            "Start with the release baseline and confirm the customer understands the current level before discussing any workflow.",
+          expected:
+            "Marketing Website is an external presentation candidate, Web Command Center is an internal demo candidate, Paper Research Preview is an internal technical preview, and Production Trading Platform is NOT READY.",
+          safety:
+            "This confirms the platform is available for evaluation only and is not positioned as production trading ready.",
+        },
+        {
+          title: "Confirm Safety Defaults",
+          tab: "Release",
+          body:
+            "Review the visible runtime defaults and verify that paper mode remains the default across the interface.",
+          expected:
+            "TRADING_MODE=paper, ENABLE_LIVE_TRADING=false, and BROKER_PROVIDER=paper are visible.",
+          safety:
+            "The tour does not change environment variables, runtime configuration, or trading mode.",
+        },
+        {
+          title: "Review Paper OMS Workflow",
+          tab: "Paper OMS",
+          body:
+            "Walk through the controlled paper path from signal to risk, OMS, paper gateway, and audit events.",
+          expected:
+            "StrategySignal -> Platform PaperOrderIntent -> Risk Engine -> OMS -> Paper Broker Gateway -> Audit Event.",
+          safety:
+            "The UI explains the workflow but does not submit simulations, create orders, or call brokers.",
+        },
+        {
+          title: "Inspect Paper Audit Records",
+          tab: "Paper OMS",
+          body:
+            "Select a paper workflow row, inspect the OMS timeline and audit timeline, and copy IDs when needed for review notes.",
+          expected:
+            "The selected workflow, order ID, final OMS status, OMS events, and audit events are visible as read-only data.",
+          safety:
+            "Selection, timeline reload, and clipboard copy do not write databases or mutate persisted records.",
+        },
+        {
+          title: "Load Research Packet Sample",
+          tab: "Research Packet",
+          body:
+            "Load the bundled safe sample or inspect an explicit local JSON packet in the browser.",
+          expected:
+            "Safety flags stay research_only=true and execution_eligible=false, with no performance claim.",
+          safety:
+            "Local packet inspection does not upload files, write databases, call Risk Engine, call OMS, or call brokers.",
+        },
+        {
+          title: "Review Contract Specs",
+          tab: "Contracts",
+          body:
+            "Review TX, MTX, and TMF point values and TX-equivalent sizing relationships.",
+          expected:
+            "TX, MTX, and TMF contract specs support risk-normalized sizing discussion.",
+          safety:
+            "Contract specs are informational and do not create signals, orders, recommendations, or account actions.",
+        },
+        {
+          title: "Confirm Prohibited Actions",
+          tab: "Release",
+          body:
+            "Close by confirming what the customer must not attempt during this release evaluation.",
+          expected:
+            "The customer understands that live trading, broker login, real orders, credential upload, and customer onboarding are not available.",
+          safety:
+            "The demo remains read-only and paper-first from start to finish.",
+        },
+      ],
+    },
     interactions: {
       ariaLabel: "Safe read-only interaction layer",
       eyebrow: "Interaction Layer",
@@ -370,6 +472,93 @@ export const dashboardCopy = {
         title: "TX 等值曝險上限",
         text: "在任何未來 OMS 工作流之前，先清楚呈現每日虧損上限與 stale quote 限制。",
       },
+    },
+    demoGuide: {
+      ariaLabel: "客戶 demo 導覽流程",
+      eyebrow: "Demo Tour",
+      title: "客戶測試導覽流程",
+      description:
+        "只讀導覽用於理解版本層級、安全預設、紙上 OMS 紀錄、研究 Packet 與契約規格。此導覽只改變前端本地 UI 狀態。",
+      readOnlyBadge: "只讀導覽",
+      stepListLabel: "Demo tour 步驟",
+      activeStepLabel: "步驟",
+      suggestedTabLabel: "建議分頁",
+      expectedLabel: "應確認內容",
+      safetyLabel: "安全邊界",
+      previous: "上一步",
+      next: "下一步",
+      reset: "重設導覽",
+      copyChecklist: "複製 checklist",
+      copied: "Checklist 已複製。",
+      copyFailed: "複製失敗，請手動複製 checklist。",
+      checklistIntro: "客戶測試導覽流程 checklist",
+      prohibitedKicker: "禁止操作",
+      prohibitedTitle: "此版本不是正式交易產品",
+      prohibitedItems: [
+        "不支援實盤交易",
+        "不支援券商登入",
+        "不支援真實委託",
+        "不支援憑證上傳",
+        "不支援客戶帳戶開通",
+        "不提供交易建議",
+      ],
+      steps: [
+        {
+          title: "確認版本層級",
+          tab: "版本",
+          body: "先查看 release baseline，確認客戶理解目前版本定位，再進入功能展示。",
+          expected:
+            "Marketing Website 是對外展示候選，Web Command Center 是內部 demo 候選，Paper Research Preview 是內部技術預覽，Production Trading Platform = NOT READY。",
+          safety: "此步驟確認平台僅供評估，不會被定位為正式交易上線版本。",
+        },
+        {
+          title: "確認安全預設",
+          tab: "版本",
+          body: "檢查畫面上的執行預設，確認整體介面仍維持 paper mode。",
+          expected:
+            "畫面可見 TRADING_MODE=paper、ENABLE_LIVE_TRADING=false、BROKER_PROVIDER=paper。",
+          safety: "導覽不會變更環境變數、runtime 設定或交易模式。",
+        },
+        {
+          title: "查看紙上 OMS 流程",
+          tab: "紙上 OMS",
+          body: "說明從 signal 到 risk、OMS、paper gateway 與 audit events 的受控紙上路徑。",
+          expected:
+            "StrategySignal -> 平台 PaperOrderIntent -> Risk Engine -> OMS -> Paper Broker Gateway -> Audit Event。",
+          safety: "此 UI 只說明流程，不送出模擬、不建立訂單，也不呼叫券商。",
+        },
+        {
+          title: "檢視紙上稽核紀錄",
+          tab: "紙上 OMS",
+          body: "選取 paper workflow row，檢視 OMS timeline 與 audit timeline，必要時複製 ID 作為 review notes。",
+          expected:
+            "可看到選取 workflow、order ID、最終 OMS 狀態、OMS events 與 audit events。",
+          safety: "選取、重新整理時間線與複製 ID 都不寫資料庫，也不修改持久化紀錄。",
+        },
+        {
+          title: "載入研究 Packet 範例",
+          tab: "研究 Packet",
+          body: "載入內建安全範例，或在瀏覽器內檢視使用者明確選取的本地 JSON packet。",
+          expected:
+            "安全旗標維持 research_only=true、execution_eligible=false，且 performance_claim=false。",
+          safety:
+            "本地 packet 檢視不會上傳檔案、不寫資料庫、不呼叫 Risk Engine、不呼叫 OMS，也不呼叫券商。",
+        },
+        {
+          title: "查看契約規格",
+          tab: "契約規格",
+          body: "查看 TX、MTX、TMF 點值與 TX-equivalent sizing 關係。",
+          expected: "TX、MTX、TMF 契約規格可支援風險等值 sizing 討論。",
+          safety: "契約規格僅供資訊檢視，不建立訊號、訂單、建議或帳戶操作。",
+        },
+        {
+          title: "確認禁止操作",
+          tab: "版本",
+          body: "結尾再次確認客戶在此版本評估期間不得嘗試的項目。",
+          expected: "客戶理解此版本不提供實盤交易、券商登入、真實委託、憑證上傳或客戶開通。",
+          safety: "整個 demo 從開始到結束都維持只讀與 paper-first。",
+        },
+      ],
     },
     interactions: {
       ariaLabel: "安全只讀互動層",

@@ -38,6 +38,14 @@ Customers may evaluate:
   - `ENABLE_LIVE_TRADING=false`
   - `BROKER_PROVIDER=paper`
 - Web Command Center read-only status panels.
+- Web Command Center customer demo guided flow:
+  - Release level confirmation.
+  - Paper-first safety defaults.
+  - Paper OMS workflow explanation.
+  - Paper audit record inspection.
+  - Safe Research Review Packet sample loading.
+  - TX / MTX / TMF contract spec review.
+  - Prohibited-action confirmation.
 - Research review packet viewer behavior using approved local sample JSON fixtures.
 - Paper OMS / Audit Query Viewer behavior using an explicitly generated local paper
   demo seed record.
@@ -88,17 +96,19 @@ Use this sequence for a 30-45 minute customer session:
 1. Position the product as Taiwan futures quant infrastructure, not a trading bot.
 2. Open the Marketing Website and review platform thesis, safety defaults, instruments, commercial model, and compliance boundary.
 3. Open the Web Command Center and review release baseline, NOT READY status, bilingual toggle, and paper-only safety copy.
-4. Optional local-only setup for the Paper OMS / Audit Query Viewer:
+4. Use the in-app Customer Demo Guided Flow to walk through Release, Paper OMS,
+   Research Packet, and Contracts in a consistent order.
+5. Optional local-only setup for the Paper OMS / Audit Query Viewer:
 
 ```bash
 make seed-paper-execution-demo
 ```
 
-5. Demonstrate local Research Review Packet JSON loading using a safe sample packet only.
-6. If a local demo seed was created, show the read-only paper workflow summary, OMS
+6. Demonstrate local Research Review Packet JSON loading using a safe sample packet only.
+7. If a local demo seed was created, show the read-only paper workflow summary, OMS
    timeline, and audit timeline.
-7. Explain what the current system does not do: no live trading, no broker integration, no customer execution.
-8. Collect structured feedback using `docs/customer-feedback-form.md`.
+8. Explain what the current system does not do: no live trading, no broker integration, no customer execution.
+9. Collect structured feedback using `docs/customer-feedback-form.md`.
 
 ## Success Criteria
 

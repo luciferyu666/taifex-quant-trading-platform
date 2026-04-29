@@ -3,6 +3,7 @@ import {
   type PaperExecutionRunRecord,
 } from "./components/PaperExecutionRecordsPanel";
 import { CommandCenterTabs } from "./components/CommandCenterTabs";
+import { DemoGuidePanel } from "./components/DemoGuidePanel";
 import type { PaperAuditEventRecord } from "./components/PaperAuditTimelinePanel";
 import type { PaperOmsEventRecord } from "./components/PaperOmsTimelinePanel";
 import { ResearchReviewPacketJsonLoader } from "./components/ResearchReviewPacketJsonLoader";
@@ -418,6 +419,8 @@ export default async function Home({ searchParams }: HomeProps) {
           </span>
         </article>
       </section>
+
+      <DemoGuidePanel copy={copy.demoGuide} />
 
       <CommandCenterTabs
         backendAvailable={backendAvailable}

@@ -179,6 +179,149 @@ h3 {
   margin-top: 24px;
 }
 
+.demo-guide {
+  display: grid;
+  gap: 16px;
+  margin-top: 28px;
+}
+
+.demo-guide-header,
+.demo-step-card,
+.demo-prohibited-panel {
+  min-width: 0;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--panel);
+  box-shadow: var(--shadow);
+}
+
+.demo-guide-header {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 16px;
+  align-items: start;
+  padding: 18px;
+}
+
+.demo-guide-header h2,
+.demo-guide-header p,
+.demo-prohibited-panel h3 {
+  margin: 0;
+}
+
+.demo-guide-header p:not(.eyebrow) {
+  max-width: 880px;
+  margin-top: 8px;
+  color: var(--muted);
+  line-height: 1.55;
+}
+
+.demo-guide-layout {
+  display: grid;
+  grid-template-columns: minmax(220px, 0.42fr) minmax(0, 1fr);
+  gap: 16px;
+}
+
+.demo-step-list {
+  display: grid;
+  align-content: start;
+  gap: 8px;
+}
+
+.demo-step-button {
+  display: grid;
+  grid-template-columns: 28px minmax(0, 1fr);
+  gap: 10px;
+  align-items: center;
+  border: 1px solid rgba(29, 78, 216, 0.2);
+  border-radius: 8px;
+  padding: 10px;
+  background: #ffffff;
+  color: var(--muted);
+  cursor: pointer;
+  font: inherit;
+  text-align: left;
+}
+
+.demo-step-button span {
+  display: inline-flex;
+  width: 28px;
+  height: 28px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  background: rgba(29, 78, 216, 0.08);
+  color: var(--blue);
+  font-size: 0.82rem;
+  font-weight: 900;
+}
+
+.demo-step-button strong {
+  min-width: 0;
+  overflow-wrap: anywhere;
+  font-size: 0.88rem;
+}
+
+.demo-step-button:hover,
+.demo-step-button:focus-visible,
+.demo-step-button.active {
+  border-color: rgba(4, 120, 87, 0.34);
+  background: rgba(4, 120, 87, 0.08);
+  color: var(--text);
+  outline: none;
+}
+
+.demo-step-card {
+  padding: 18px;
+}
+
+.demo-step-meta,
+.demo-guide-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+}
+
+.demo-step-card h3 {
+  margin-top: 16px;
+  font-size: 1.2rem;
+}
+
+.demo-step-card p {
+  margin: 10px 0 0;
+  color: var(--muted);
+  line-height: 1.55;
+}
+
+.demo-step-details {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin: 18px 0 0;
+}
+
+.demo-step-details > div {
+  border: 1px solid rgba(15, 23, 42, 0.1);
+  border-radius: 8px;
+  padding: 10px 12px;
+  background: #f8fafc;
+}
+
+.demo-guide-actions {
+  margin-top: 18px;
+}
+
+.demo-prohibited-panel {
+  padding: 18px;
+}
+
+.demo-prohibited-panel .pill-list li {
+  border-color: rgba(185, 28, 28, 0.2);
+  background: rgba(185, 28, 28, 0.08);
+  color: var(--red);
+}
+
 .command-center-interactions {
   margin-top: 28px;
 }
@@ -253,6 +396,11 @@ h3 {
   border-color: rgba(29, 78, 216, 0.5);
   background: rgba(29, 78, 216, 0.12);
   outline: none;
+}
+
+.action-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
 }
 
 .troubleshooting-panel {
@@ -984,6 +1132,9 @@ dd {
 }
 
 @media (max-width: 860px) {
+  .demo-guide-header,
+  .demo-guide-layout,
+  .demo-step-details,
   .interaction-toolbar,
   .demo-command,
   .hero,

@@ -97,12 +97,30 @@ Show:
   - If `make seed-paper-execution-demo` was run locally, show the seeded
     `workflow_run_id`, order ID, OMS timeline, and audit timeline.
   - If no local record exists, show the safe empty state.
+- Customer Demo Guided Flow:
+  - Use the guided tour panel to walk through Release, Paper OMS, Research Packet,
+    and Contracts in a predictable order.
+  - Use Previous / Next step controls to keep the evaluation sequence consistent.
+  - Use Copy checklist only for reviewer notes; it does not write backend state.
+  - Confirm the prohibited-action list: no live trading, no broker login, no real
+    orders, no credential upload, no customer account onboarding, and no trading
+    recommendation.
 
 Clarify:
 
 ```text
 The Command Center is read-only in this release. It does not submit orders, approve live trading, approve paper execution, connect to brokers, or write customer data.
 ```
+
+Suggested in-app guided sequence:
+
+1. Confirm release level.
+2. Confirm safety defaults.
+3. Review the paper OMS workflow.
+4. Inspect paper audit records if local records exist.
+5. Load the bundled safe Research Review Packet sample.
+6. Review TX / MTX / TMF contract specs.
+7. Confirm prohibited actions and current non-production status.
 
 ## 4. Local JSON Loader Demo
 

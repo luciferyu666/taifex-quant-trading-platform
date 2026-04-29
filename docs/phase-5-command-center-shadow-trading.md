@@ -49,6 +49,11 @@ Expose roadmap phase status, contracts, safety mode, risk status, and paper-only
   timeline through read-only query APIs.
 - Copy controls for `workflow_run_id`, `order_id`, and the local demo seed command.
 - Bundled safe Research Review Packet sample loader and clear-local-JSON action.
+- Customer Demo Guided Flow panel with a seven-step read-only evaluation sequence:
+  release level, safety defaults, paper OMS workflow, paper audit records,
+  research packet sample, contract specs, and prohibited actions.
+- Demo guide Previous / Next / Reset / Copy checklist controls that modify only
+  frontend local state or clipboard contents.
 
 ## Acceptance Criteria
 
@@ -89,6 +94,10 @@ Expose roadmap phase status, contracts, safety mode, risk status, and paper-only
   production trading readiness.
 - Command Center tabs group the read-only surfaces into Release, Paper OMS,
   Research Packet, and Contracts sections without adding mutation paths.
+- Customer Demo Guided Flow provides a customer-safe walkthrough and keeps all
+  steps presentation-only.
+- Demo guide controls may change the active guide step or copy a checklist, but
+  they must not call backend mutation APIs.
 - Refresh/retry only reloads frontend status. It must not call mutation endpoints.
 - Backend-unavailable troubleshooting panel explains safe fallback behavior and
   shows `make seed-paper-execution-demo` as an explicit local demo setup command.
@@ -151,6 +160,10 @@ Expose roadmap phase status, contracts, safety mode, risk status, and paper-only
   It must not create orders, write databases, upload local JSON, call broker
   endpoints, call Risk Engine mutation paths, call OMS mutation paths, approve paper
   execution, approve live trading, or collect credentials.
+- The Customer Demo Guided Flow may expose Previous, Next, Reset, step selection,
+  and Copy checklist controls only. It must not submit simulations, create orders,
+  write databases, upload files, call brokers, call Risk Engine mutation paths, call
+  OMS mutation paths, collect credentials, or imply production readiness.
 - Persisted paper records shown in the viewer are audit metadata only. They must not
   be presented as execution performance, investment advice, strategy ranking, or
   production trading readiness.
@@ -204,3 +217,7 @@ customer evaluation: tabs, refresh/retry, selectable paper runs, timeline reload
 clipboard copy, bundled safe packet loading, local JSON clearing, and backend
 troubleshooting. Future UI enhancements should preserve this read-only boundary and
 avoid adding submit, approval, live, broker, credential, or persistence controls.
+The Customer Demo Guided Flow now gives reviewers a predictable seven-step path
+through the Command Center. Future guide changes should remain educational and
+local-state-only, without turning the tour into an execution, approval, onboarding,
+credential, ranking, or recommendation workflow.
