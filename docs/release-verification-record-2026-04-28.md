@@ -943,6 +943,64 @@ Safety scope:
 - Live approval controls: none.
 - Live trading remains disabled by default.
 
+## Controlled Paper Simulation Submit UI Verification
+
+The controlled Paper Only submit UI was committed to `main`, verified by GitHub
+Actions, deployed by Vercel, and checked by the production safety gates.
+
+Commit:
+
+```text
+b7defa1 Add controlled paper simulation submit UI
+```
+
+GitHub Actions:
+
+```text
+Workflow: Release Readiness
+Run ID: 25092584967
+Status: passed
+```
+
+Vercel deployment:
+
+```text
+Deployment URL: https://taifex-quant-trading-platform-frontend-dl568pu1x.vercel.app
+Deployment ID: dpl_C85JA4sQz2KrYpqrp35esq2PeANJ
+Production alias: https://taifex-quant-trading-platform-front.vercel.app
+Status: Ready
+```
+
+Production smoke gate:
+
+```text
+make frontend-production-smoke-check
+make customer-demo-ui-smoke-check
+```
+
+Observed result:
+
+```text
+Both production smoke gates passed.
+All checked pages use deployment id dpl_C85JA4sQz2KrYpqrp35esq2PeANJ.
+Safety copy includes TRADING_MODE, ENABLE_LIVE_TRADING, BROKER_PROVIDER,
+NOT READY, Paper Only, 實盤關閉, and 僅限紙上交易.
+```
+
+Controlled submit scope:
+
+- UI is labeled Paper Only.
+- The UI calls only `POST /api/paper-execution/workflow/record`.
+- `StrategySignal` remains signal-only.
+- Approval is fixed to `approved_for_paper_simulation`.
+- No live approval control is present.
+- No broker credentials are collected.
+- No broker SDK calls are made.
+- No real order path is added.
+- Backend CORS allows the Command Center origin without credentials.
+- Persistence remains local paper OMS / audit storage only.
+- Live trading remains disabled by default.
+
 ## Marketing Website Reachability
 
 Command:
@@ -991,7 +1049,7 @@ Observed result:
 ## Safety Conclusion
 
 - Live trading remains disabled by default.
-- The Web Command Center remains read-only and paper-first.
+- The Web Command Center remains paper-first. Most surfaces are read-only; the only controlled mutation is the Paper Only simulation submit path that calls `/api/paper-execution/workflow/record`.
 - The release baseline is suitable for external presentation, internal demo, and paper research preview use.
 - The repository is **not** ready for production trading, live execution, broker-connected trading, signal services, copy trading, managed accounts, or performance-based services.
 
