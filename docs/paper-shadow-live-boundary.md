@@ -325,6 +325,12 @@ Future live work requires:
 - No Paper Approval Queue UI may create approval requests, collect credentials,
   call brokers, create paper simulations, create order intents, or expose live
   controls.
+- Paper Approval Request UI may mutate only local SQLite approval-request records
+  through `POST /api/paper-execution/approvals/requests`. It must start requests
+  as `pending_review`, use signals-only payloads, keep `paper_only=true`, and must
+  not create reviewer decisions, paper simulations, orders, OMS records, Risk
+  Engine calls, Broker Gateway calls, broker connections, credential collection,
+  account login, or live controls.
 - Paper Approval Decision UI may mutate only local SQLite approval-decision records
   through the paper-only decision endpoint. It must not create approval requests,
   create paper simulations, call Risk Engine, call OMS, call Broker Gateway,

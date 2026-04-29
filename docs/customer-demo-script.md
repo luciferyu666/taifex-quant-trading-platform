@@ -116,6 +116,14 @@ Show:
     flags.
   - Explain that the queue/history panel is read-only and validates the reviewer
     workflow model.
+- Paper Approval Request UI:
+  - Create one local Paper Only approval request from a signals-only
+    `StrategySignal` payload.
+  - Confirm the created request starts at `pending_review`.
+  - Confirm request creation does not create reviewer decisions, paper simulations,
+    order intents, OMS records, broker gateway calls, credential flows, account
+    login, or live approval.
+  - Refresh the queue/history and locate the new `approval_request_id`.
 - Paper Approval Decision UI:
   - Use it only with an existing local approval request in the pending queue.
   - Record a paper-only reviewer decision such as `research_approved`,

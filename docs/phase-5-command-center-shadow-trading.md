@@ -164,6 +164,11 @@ Expose roadmap phase status, contracts, safety mode, risk status, and paper-only
   It must not create approval requests, create paper simulations, call Risk Engine,
   call OMS, call Broker Gateway, collect credentials, connect brokers, expose live
   approval, or grant production authorization.
+- The Paper Approval Request UI may submit paper-only local approval requests only
+  to `POST /api/paper-execution/approvals/requests`. It creates `pending_review`
+  requests from signals-only payloads and must not create reviewer decisions, paper
+  simulations, order intents, OMS records, broker gateway calls, credential flows,
+  account login, or live approval.
 - The paper execution persistence status panel is also display-only. It reads
   `GET /api/paper-execution/persistence/status` and must not call
   `/workflow/record`, broker endpoints, Risk Engine mutation paths, OMS mutation paths,

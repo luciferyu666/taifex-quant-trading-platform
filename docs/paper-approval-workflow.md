@@ -121,6 +121,26 @@ GET /api/paper-execution/approvals/history
 The panel displays pending approval requests, current status, required review
 sequence, reviewer history, hash-chain references, and paper-only safety flags.
 
+The Web Command Center also includes a paper-only approval request creation form.
+It may submit new local requests only to:
+
+```text
+POST /api/paper-execution/approvals/requests
+```
+
+The request form is intentionally narrow:
+
+- It creates only a local `pending_review` request.
+- It includes a `StrategySignal` payload with `reason.signals_only=true`.
+- It always sends `paper_only=true`.
+- It does not create reviewer decisions.
+- It does not create paper simulations, order intents, OMS records, or audit events
+  for execution.
+- It does not call Risk Engine, OMS, Broker Gateway, or any broker.
+- It does not collect broker credentials, account IDs, certificates, or customer
+  financial data.
+- It does not grant live-trading access.
+
 The Web Command Center also includes a paper-only reviewer decision form. It may
 submit decisions only to:
 
