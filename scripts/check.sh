@@ -113,6 +113,14 @@ fi
 
 bash scripts/customer-evaluation-check.sh
 
+printf 'Checking Facebook community launch content...\n'
+if [[ -x scripts/social-content-check.sh ]]; then
+  bash scripts/social-content-check.sh
+else
+  printf 'scripts/social-content-check.sh is missing or not executable.\n' >&2
+  exit 1
+fi
+
 printf 'Checking roadmap scaffold files...\n'
 missing_roadmap_file=0
 for required_file in \

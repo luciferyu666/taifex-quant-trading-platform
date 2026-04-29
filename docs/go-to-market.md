@@ -58,6 +58,12 @@ Content themes:
 - Strategy/execution separation.
 - Risk Engine and OMS boundaries.
 
+Facebook execution assets:
+- `docs/facebook-community-launch-plan.md`
+- `docs/facebook-content-calendar.md`
+
+Facebook should be used as the broad education and community channel for Taiwan futures researchers. Keep the channel focused on data governance, backtesting discipline, Paper Only demos, and platform safety boundaries.
+
 ## 7. Broker Partnership Motion
 
 Broker partnerships should start as infrastructure or integration discussions. Any fee-sharing, referral, signal, or order-routing revenue requires legal and regulatory review.

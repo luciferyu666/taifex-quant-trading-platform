@@ -37,6 +37,29 @@ make customer-evaluation-check
 make frontend-production-smoke-check
 ```
 
+## Facebook Community Launch Kit
+
+Facebook should be used for broad education, product demo traffic, and moderated community discussion around Taiwan futures quant infrastructure. The repo includes a launch playbook and first-month content calendar for:
+
+- Facebook Page: `台指期量化交易平台`
+- Facebook Group: `台指期量化交易研究社`
+- weekly education posts
+- weekly Paper Only product demo posts
+- monthly livestream or online sharing
+
+Artifacts:
+
+- `docs/facebook-community-launch-plan.md`
+- `docs/facebook-content-calendar.md`
+
+Safety check:
+
+```bash
+make social-content-check
+```
+
+The social media plan is educational and infrastructure-focused. It does not provide investment advice, real order instructions, broker login, credential collection, live trading approval, or profit claims.
+
 ## Executive Summary
 
 Taifex Quant Trading Platform is a Web-based quantitative trading infrastructure platform for Taiwan Index Futures, focused on TX, MTX, and TMF workflows. It is not a simple trading bot. The platform vision is to combine data governance, strategy research, backtesting, paper trading, shadow trading, risk controls, OMS discipline, broker gateway isolation, monitoring, and enterprise controls into a coherent trading operating system for Taiwan futures quant teams.
