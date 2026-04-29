@@ -13,6 +13,19 @@ export type PaperApprovalStatus = {
   message: string;
 };
 
+export type PaperApprovalSignalPayload = {
+  signal_id: string;
+  strategy_id: string;
+  strategy_version: string;
+  timestamp: string;
+  symbol_group: string;
+  direction: "LONG" | "SHORT" | "FLAT";
+  target_tx_equivalent: number;
+  confidence: number;
+  stop_distance_points: number | null;
+  reason: Record<string, unknown>;
+};
+
 export type PaperApprovalRequestRecord = {
   approval_request_id: string;
   signal_id: string;
@@ -31,6 +44,9 @@ export type PaperApprovalRequestRecord = {
   broker_api_called: boolean;
   request_hash: string;
   latest_chain_hash: string;
+  payload?: {
+    signal?: PaperApprovalSignalPayload;
+  };
 };
 
 export type PaperApprovalDecisionRecord = {

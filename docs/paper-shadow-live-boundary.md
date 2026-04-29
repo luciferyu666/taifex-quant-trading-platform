@@ -178,11 +178,12 @@ Phase 5 Paper Simulation Controlled Submit UI is the only frontend paper mutatio
 allowed in this release:
 
 - It may call `POST /api/paper-execution/workflow/record` only.
-- It uses a UI-generated `StrategySignal` with `reason.signals_only=true`.
-- It fixes `approval_decision=approved_for_paper_simulation` and keeps
-  `approval_for_live=false`.
-- It lets the user choose only paper-safe direction, TX/MTX/TMF symbol, small
-  quantity, capped TX-equivalent exposure, and paper broker simulation outcome.
+- It must reference a persisted `approval_request_id` whose local approval history
+  has reached `approved_for_paper_simulation`.
+- It uses the StrategySignal payload associated with the persisted approval request.
+- It keeps `approval_for_live=false`.
+- It lets the user choose only TX/MTX/TMF symbol, small quantity, and paper broker
+  simulation outcome after approval history is selected.
 - It writes only local SQLite paper OMS/audit records through the backend.
 - It must not collect broker credentials, account IDs, API keys, certificates, or
   customer financial information.
@@ -228,8 +229,8 @@ Paper Approval Workflow Foundation is local paper governance scaffolding:
   or broker authorization.
 - It does not collect credentials, call brokers, create orders, call OMS, or call
   Broker Gateway.
-- Future UI work should use persisted approval history instead of trusting a client
-  supplied `approval_decision` payload.
+- Controlled Paper Submit now uses persisted approval history instead of trusting a
+  client supplied `approval_decision` payload.
 
 Phase 5 Research Review Packet Viewer is read-only UI:
 

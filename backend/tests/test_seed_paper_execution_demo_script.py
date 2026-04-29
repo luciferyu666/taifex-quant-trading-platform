@@ -30,6 +30,7 @@ def test_seed_paper_execution_demo_script_creates_local_sqlite_record(
     )
 
     assert "workflow_run_id=" in result.stdout
+    assert "approval_request_id=paper-approval-request-" in result.stdout
     assert "order_id=paper-order-" in result.stdout
     assert "final_oms_status=PARTIALLY_FILLED" in result.stdout
     assert "broker_api_called=False" in result.stdout
@@ -56,6 +57,10 @@ def test_seed_paper_execution_demo_script_creates_local_sqlite_record(
         "PARTIAL_FILL",
     ]
     audit_events = store.list_audit_events(workflow_run_id=run.workflow_run_id)
+    assert any(
+        event.action == "paper_execution.approval_request_verified"
+        for event in audit_events
+    )
     assert any(event.action == "paper_execution.intent_created" for event in audit_events)
     assert any(
         event.action == "paper_execution.paper_broker_simulated"

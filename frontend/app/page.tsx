@@ -583,8 +583,6 @@ export default async function Home({ searchParams }: HomeProps) {
               </div>
             </section>
 
-            <PaperSimulationSubmitPanel copy={copy} />
-
             <PaperApprovalQueuePanel
               available={
                 paperApprovalStatus.available &&
@@ -604,6 +602,11 @@ export default async function Home({ searchParams }: HomeProps) {
               history={paperApprovalHistory.data}
               queue={paperApprovalQueue.data}
               status={paperApprovalStatus.data}
+            />
+
+            <PaperSimulationSubmitPanel
+              approvalHistories={paperApprovalHistory.data}
+              copy={copy}
             />
 
             <PaperExecutionRecordsPanel

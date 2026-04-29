@@ -28,6 +28,53 @@ def _signal_payload(exposure: float = 0.05) -> dict[str, object]:
     }
 
 
+def _create_approval_request(
+    client: TestClient,
+    signal: dict[str, object],
+) -> str:
+    response = client.post(
+        "/api/paper-execution/approvals/requests",
+        json={
+            "signal": signal,
+            "requester_id": "paper-execution-route-requester",
+            "request_reason": "Route test approval request for paper simulation.",
+            "paper_only": True,
+        },
+    )
+    assert response.status_code == 200
+    return response.json()["request"]["approval_request_id"]
+
+
+def _create_approved_approval_request(
+    client: TestClient,
+    signal: dict[str, object],
+) -> str:
+    approval_request_id = _create_approval_request(client, signal)
+    research = client.post(
+        f"/api/paper-execution/approvals/requests/{approval_request_id}/decisions",
+        json={
+            "decision": "research_approved",
+            "reviewer_id": "paper-execution-research-reviewer",
+            "reviewer_role": "research_reviewer",
+            "decision_reason": "Research approved for route paper simulation.",
+            "paper_only": True,
+        },
+    )
+    assert research.status_code == 200
+    risk = client.post(
+        f"/api/paper-execution/approvals/requests/{approval_request_id}/decisions",
+        json={
+            "decision": "approved_for_paper_simulation",
+            "reviewer_id": "paper-execution-risk-reviewer",
+            "reviewer_role": "risk_reviewer",
+            "decision_reason": "Risk approved for paper simulation only.",
+            "paper_only": True,
+        },
+    )
+    assert risk.status_code == 200
+    return approval_request_id
+
+
 def test_paper_execution_status_is_paper_only() -> None:
     client = TestClient(app)
 
@@ -70,75 +117,95 @@ def test_paper_execution_cors_allows_command_center_without_credentials() -> Non
     assert "access-control-allow-credentials" not in response.headers
 
 
-def test_paper_execution_workflow_preview_runs_full_paper_path() -> None:
+def test_paper_execution_workflow_preview_runs_full_paper_path(
+    tmp_path: Path,
+    monkeypatch,
+) -> None:
+    monkeypatch.setenv("PAPER_EXECUTION_AUDIT_DB_PATH", str(tmp_path / "paper.sqlite"))
+    get_settings.cache_clear()
     client = TestClient(app)
+    try:
+        signal = _signal_payload()
+        approval_request_id = _create_approved_approval_request(client, signal)
 
-    response = client.post(
-        "/api/paper-execution/workflow/preview",
-        json={
-            "signal": _signal_payload(),
-            "approval_decision": "approved_for_paper_simulation",
-            "approval_reason": "reviewed for paper simulation",
-            "broker_simulation": "fill",
-        },
-    )
+        response = client.post(
+            "/api/paper-execution/workflow/preview",
+            json={
+                "signal": signal,
+                "approval_request_id": approval_request_id,
+                "broker_simulation": "fill",
+            },
+        )
 
-    assert response.status_code == 200
-    payload = response.json()
-    assert payload["paper_only"] is True
-    assert payload["live_trading_enabled"] is False
-    assert payload["broker_api_called"] is False
-    assert payload["order_created"] is True
-    assert payload["paper_broker_gateway_called"] is True
-    assert payload["approval"]["approval_for_live"] is False
-    assert payload["approval"]["approval_for_paper_simulation"] is True
-    assert payload["paper_order_intent"]["paper_only"] is True
-    assert payload["risk_evaluation"]["approved"] is True
-    assert payload["oms_state"]["status"] == "FILLED"
-    assert payload["paper_broker_ack"]["broker_provider"] == "paper"
-    assert "No real order was placed" in payload["message"]
-    assert len(payload["audit_events"]) >= 4
+        assert response.status_code == 200
+        payload = response.json()
+        assert payload["paper_only"] is True
+        assert payload["live_trading_enabled"] is False
+        assert payload["broker_api_called"] is False
+        assert payload["order_created"] is True
+        assert payload["paper_broker_gateway_called"] is True
+        assert payload["approval"]["approval_for_live"] is False
+        assert payload["approval"]["approval_for_paper_simulation"] is True
+        assert payload["approval"]["approval_id"] == approval_request_id
+        assert payload["paper_order_intent"]["paper_only"] is True
+        assert payload["risk_evaluation"]["approved"] is True
+        assert payload["oms_state"]["status"] == "FILLED"
+        assert payload["paper_broker_ack"]["broker_provider"] == "paper"
+        assert "No real order was placed" in payload["message"]
+        assert len(payload["audit_events"]) >= 4
+    finally:
+        get_settings.cache_clear()
 
 
-def test_paper_execution_workflow_preview_non_approved_decision_creates_no_order() -> None:
+def test_paper_execution_workflow_preview_rejects_unapproved_request(
+    tmp_path: Path,
+    monkeypatch,
+) -> None:
+    monkeypatch.setenv("PAPER_EXECUTION_AUDIT_DB_PATH", str(tmp_path / "paper.sqlite"))
+    get_settings.cache_clear()
     client = TestClient(app)
+    try:
+        signal = _signal_payload()
+        approval_request_id = _create_approval_request(client, signal)
 
-    response = client.post(
-        "/api/paper-execution/workflow/preview",
-        json={
-            "signal": _signal_payload(),
-            "approval_decision": "needs_data_review",
-            "approval_reason": "data version needs review",
-        },
-    )
+        response = client.post(
+            "/api/paper-execution/workflow/preview",
+            json={
+                "signal": signal,
+                "approval_request_id": approval_request_id,
+            },
+        )
 
-    assert response.status_code == 200
-    payload = response.json()
-    assert payload["paper_only"] is True
-    assert payload["order_created"] is False
-    assert payload["paper_broker_gateway_called"] is False
-    assert payload["paper_order_intent"] is None
-    assert payload["risk_evaluation"] is None
-    assert payload["oms_state"] is None
-    assert payload["paper_broker_ack"] is None
+        assert response.status_code == 400
+        assert "approved_for_paper_simulation" in response.json()["detail"]
+    finally:
+        get_settings.cache_clear()
 
 
-def test_paper_execution_workflow_preview_rejects_unsafe_signal() -> None:
+def test_paper_execution_workflow_preview_rejects_unsafe_signal(
+    tmp_path: Path,
+    monkeypatch,
+) -> None:
+    monkeypatch.setenv("PAPER_EXECUTION_AUDIT_DB_PATH", str(tmp_path / "paper.sqlite"))
+    get_settings.cache_clear()
     client = TestClient(app)
-    signal = _signal_payload()
-    signal["reason"] = {"signals_only": False}
+    try:
+        signal = _signal_payload()
+        approval_request_id = _create_approved_approval_request(client, signal)
+        signal["reason"] = {"signals_only": False}
 
-    response = client.post(
-        "/api/paper-execution/workflow/preview",
-        json={
-            "signal": signal,
-            "approval_decision": "approved_for_paper_simulation",
-            "approval_reason": "unsafe signal",
-        },
-    )
+        response = client.post(
+            "/api/paper-execution/workflow/preview",
+            json={
+                "signal": signal,
+                "approval_request_id": approval_request_id,
+            },
+        )
 
-    assert response.status_code == 400
-    assert "signals_only=true" in response.json()["detail"]
+        assert response.status_code == 400
+        assert "signals_only=true" in response.json()["detail"]
+    finally:
+        get_settings.cache_clear()
 
 
 def test_paper_execution_workflow_record_persists_and_exposes_query_endpoints(
@@ -151,12 +218,13 @@ def test_paper_execution_workflow_record_persists_and_exposes_query_endpoints(
     client = TestClient(app)
 
     try:
+        signal = _signal_payload()
+        approval_request_id = _create_approved_approval_request(client, signal)
         response = client.post(
             "/api/paper-execution/workflow/record",
             json={
-                "signal": _signal_payload(),
-                "approval_decision": "approved_for_paper_simulation",
-                "approval_reason": "record this paper simulation",
+                "signal": signal,
+                "approval_request_id": approval_request_id,
                 "broker_simulation": "fill",
             },
         )

@@ -55,7 +55,9 @@ def run_drill(db_path: Path) -> int:
     get_settings.cache_clear()
 
     client = TestClient(app)
-    payload = build_ui_like_payload()
+    signal = build_ui_like_signal()
+    approval_request_id = create_approved_paper_request(client, signal)
+    payload = build_ui_like_payload(signal, approval_request_id)
 
     response = client.post("/api/paper-execution/workflow/record", json=payload)
     require(
@@ -81,6 +83,10 @@ def run_drill(db_path: Path) -> int:
     require(
         workflow["approval"]["approval_for_live"] is False,
         "approval_for_live must remain false",
+    )
+    require(
+        workflow["approval"]["approval_id"] == approval_request_id,
+        "workflow must reference the persisted approval_request_id",
     )
     require(
         workflow["approval"]["approval_for_paper_simulation"] is True,
@@ -160,6 +166,7 @@ def run_drill(db_path: Path) -> int:
     print(f"audit_events_count={len(audit_events)}")
     print(f"db_path={db_path}")
     print("endpoint=/api/paper-execution/workflow/record")
+    print(f"approval_request_id={approval_request_id}")
     print("paper_only=True")
     print("live_trading_enabled=False")
     print("broker_api_called=False")
@@ -170,33 +177,94 @@ def run_drill(db_path: Path) -> int:
     return 0
 
 
-def build_ui_like_payload() -> dict[str, Any]:
-    return {
-        "signal": {
-            "signal_id": "ui-paper-submit-drill-signal",
-            "strategy_id": "ui-paper-submit-drill",
-            "strategy_version": "0.1.0",
-            "timestamp": datetime.now(UTC).isoformat(),
-            "symbol_group": "TAIEX_FUTURES",
-            "direction": "LONG",
-            "target_tx_equivalent": 0.05,
-            "confidence": 0.74,
-            "stop_distance_points": 20,
-            "reason": {
-                "signals_only": True,
-                "order_created": False,
-                "broker_api_called": False,
-                "risk_engine_called": False,
-                "oms_called": False,
-                "ui_source": "paper_simulation_controlled_submit",
-                "drill": "paper_simulation_submit_ux_verification",
-            },
+def create_approved_paper_request(
+    client: TestClient,
+    signal: dict[str, Any],
+) -> str:
+    request_response = client.post(
+        "/api/paper-execution/approvals/requests",
+        json={
+            "signal": signal,
+            "requester_id": "local-paper-submit-drill-requester",
+            "request_reason": (
+                "Paper Only UX verification drill approval request for OMS "
+                "and audit traceability."
+            ),
+            "paper_only": True,
         },
-        "approval_decision": "approved_for_paper_simulation",
-        "reviewer_id": "local-paper-submit-drill",
-        "approval_reason": (
-            "Paper Only UX verification drill for OMS and audit traceability."
-        ),
+    )
+    require(
+        request_response.status_code == 200,
+        f"approval request returned {request_response.status_code}",
+    )
+    approval_request_id = request_response.json()["request"]["approval_request_id"]
+
+    research_response = client.post(
+        f"/api/paper-execution/approvals/requests/{approval_request_id}/decisions",
+        json={
+            "decision": "research_approved",
+            "reviewer_id": "local-paper-submit-research-reviewer",
+            "reviewer_role": "research_reviewer",
+            "decision_reason": "Research approved for paper-only UX drill.",
+            "paper_only": True,
+        },
+    )
+    require(
+        research_response.status_code == 200,
+        f"research approval returned {research_response.status_code}",
+    )
+
+    risk_response = client.post(
+        f"/api/paper-execution/approvals/requests/{approval_request_id}/decisions",
+        json={
+            "decision": "approved_for_paper_simulation",
+            "reviewer_id": "local-paper-submit-risk-reviewer",
+            "reviewer_role": "risk_reviewer",
+            "decision_reason": "Risk approved for paper simulation UX drill only.",
+            "paper_only": True,
+        },
+    )
+    require(
+        risk_response.status_code == 200,
+        f"paper simulation approval returned {risk_response.status_code}",
+    )
+    require(
+        risk_response.json()["paper_simulation_approved"] is True,
+        "approval history must reach paper_simulation_approved=true",
+    )
+    return approval_request_id
+
+
+def build_ui_like_signal() -> dict[str, Any]:
+    return {
+        "signal_id": "ui-paper-submit-drill-signal",
+        "strategy_id": "ui-paper-submit-drill",
+        "strategy_version": "0.1.0",
+        "timestamp": datetime.now(UTC).isoformat(),
+        "symbol_group": "TAIEX_FUTURES",
+        "direction": "LONG",
+        "target_tx_equivalent": 0.05,
+        "confidence": 0.74,
+        "stop_distance_points": 20,
+        "reason": {
+            "signals_only": True,
+            "order_created": False,
+            "broker_api_called": False,
+            "risk_engine_called": False,
+            "oms_called": False,
+            "ui_source": "paper_simulation_controlled_submit",
+            "drill": "paper_simulation_submit_ux_verification",
+        },
+    }
+
+
+def build_ui_like_payload(
+    signal: dict[str, Any],
+    approval_request_id: str,
+) -> dict[str, Any]:
+    return {
+        "signal": signal,
+        "approval_request_id": approval_request_id,
         "symbol": "TMF",
         "quantity": 1,
         "quote_age_seconds": 0,
@@ -220,7 +288,7 @@ def require_oms_events(events: list[dict[str, Any]]) -> None:
 def require_audit_events(events: list[dict[str, Any]]) -> None:
     actions = {event["action"] for event in events}
     required_actions = {
-        "paper_execution.approval_decision",
+        "paper_execution.approval_request_verified",
         "paper_execution.intent_created",
         "paper_execution.risk_evaluated",
         "paper_execution.paper_broker_simulated",

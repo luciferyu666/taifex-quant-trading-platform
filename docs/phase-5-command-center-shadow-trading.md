@@ -150,10 +150,10 @@ Expose roadmap phase status, contracts, safety mode, risk status, and paper-only
   Broker Gateway, write databases, connect brokers, or expose live controls.
 - The Paper Simulation Controlled Submit UI is the only allowed paper mutation in
   this release. It may call `/api/paper-execution/workflow/record` only, with
-  `approval_decision=approved_for_paper_simulation`, a UI-generated signal-only
-  `StrategySignal`, capped TX-equivalent exposure, and a paper broker simulation
-  outcome. It must not collect credentials, call real brokers, expose live approval,
-  or submit real orders.
+  a persisted `approval_request_id` whose approval history has reached
+  `approved_for_paper_simulation`, the approved signal payload, small quantity, and
+  a paper broker simulation outcome. It must not collect credentials, call real
+  brokers, expose live approval, or submit real orders.
 - Paper approval workflow API is now available as a backend foundation, but no UI
   approval escalation surface is exposed yet. The Command Center may display
   approval queue/history as read-only data through

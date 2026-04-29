@@ -3,12 +3,16 @@
 import { useState, type FormEvent } from "react";
 
 import type { DashboardCopy } from "../i18n";
+import type {
+  PaperApprovalHistory,
+  PaperApprovalSignalPayload,
+} from "./PaperApprovalQueuePanel";
 
-type Direction = "LONG" | "SHORT";
 type SymbolCode = "TX" | "MTX" | "TMF";
 type BrokerSimulation = "acknowledge" | "partial_fill" | "fill" | "reject" | "cancel";
 
 type PaperSimulationSubmitPanelProps = {
+  approvalHistories: PaperApprovalHistory[];
   copy: DashboardCopy;
 };
 
@@ -48,23 +52,45 @@ type PaperWorkflowResponse = {
 
 const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL ?? "http://localhost:8000";
 
-export function PaperSimulationSubmitPanel({ copy }: PaperSimulationSubmitPanelProps) {
-  const [direction, setDirection] = useState<Direction>("LONG");
+export function PaperSimulationSubmitPanel({
+  approvalHistories,
+  copy,
+}: PaperSimulationSubmitPanelProps) {
+  const approvedApprovalHistories = approvalHistories.filter(
+    (history) =>
+      history.current_status === "approved_for_paper_simulation" &&
+      history.paper_simulation_approved &&
+      !history.approval_for_live &&
+      !history.live_execution_eligible &&
+      !history.broker_api_called,
+  );
+  const [approvalRequestId, setApprovalRequestId] = useState<string>(
+    approvedApprovalHistories[0]?.request.approval_request_id ?? "",
+  );
   const [symbol, setSymbol] = useState<SymbolCode>("TMF");
   const [quantity, setQuantity] = useState(1);
-  const [targetTxEquivalent, setTargetTxEquivalent] = useState(0.05);
   const [brokerSimulation, setBrokerSimulation] =
     useState<BrokerSimulation>("fill");
-  const [approvalReason, setApprovalReason] = useState<string>(
-    copy.paperSubmit.defaultReason,
-  );
   const [statusMessage, setStatusMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [result, setResult] = useState<PaperWorkflowResponse | null>(null);
+  const effectiveApprovalRequestId =
+    approvalRequestId || approvedApprovalHistories[0]?.request.approval_request_id || "";
+  const selectedApproval =
+    approvedApprovalHistories.find(
+      (history) => history.request.approval_request_id === effectiveApprovalRequestId,
+    ) ?? approvedApprovalHistories[0];
+  const selectedSignal = selectedApproval?.request.payload?.signal;
+  const submitDisabled = isSubmitting || !selectedApproval || !selectedSignal;
 
   async function submitPaperSimulation(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    if (!selectedApproval || !selectedSignal) {
+      setErrorMessage(copy.paperSubmit.missingApproval);
+      setStatusMessage("");
+      return;
+    }
     setIsSubmitting(true);
     setErrorMessage("");
     setStatusMessage(copy.paperSubmit.submitting);
@@ -72,12 +98,11 @@ export function PaperSimulationSubmitPanel({ copy }: PaperSimulationSubmitPanelP
 
     try {
       const payload = buildPaperWorkflowPayload({
-        direction,
+        approvalRequestId: selectedApproval.request.approval_request_id,
+        signal: selectedSignal,
         symbol,
         quantity,
-        targetTxEquivalent,
         brokerSimulation,
-        approvalReason,
       });
       const response = await fetch(`${backendUrl}/api/paper-execution/workflow/record`, {
         method: "POST",
@@ -97,6 +122,12 @@ export function PaperSimulationSubmitPanel({ copy }: PaperSimulationSubmitPanelP
       }
 
       assertPaperOnlyResponse(responsePayload as PaperWorkflowResponse);
+      if (
+        (responsePayload as PaperWorkflowResponse).approval.approval_id !==
+        selectedApproval.request.approval_request_id
+      ) {
+        throw new Error("Unsafe response: approval_id must match approval_request_id.");
+      }
       setResult(responsePayload as PaperWorkflowResponse);
       setStatusMessage(copy.paperSubmit.success);
     } catch (error) {
@@ -124,18 +155,45 @@ export function PaperSimulationSubmitPanel({ copy }: PaperSimulationSubmitPanelP
           <span className="metric ok">{copy.paperSubmit.paperOnlyBadge}</span>
           <span className="metric ok">ENABLE_LIVE_TRADING=false</span>
           <span className="metric ok">BROKER_PROVIDER=paper</span>
+          <span className={selectedApproval ? "metric ok" : "metric warn"}>
+            {copy.paperSubmit.approvalRequiredBadge}
+          </span>
         </div>
 
         <div className="paper-submit-grid">
+          <label className="paper-submit-wide">
+            <span>{copy.paperSubmit.fields.approvalRequestId}</span>
+            <select
+              value={selectedApproval?.request.approval_request_id ?? ""}
+              onChange={(event) => setApprovalRequestId(event.target.value)}
+              disabled={approvedApprovalHistories.length === 0}
+            >
+              {approvedApprovalHistories.length === 0 ? (
+                <option value="">{copy.paperSubmit.noApprovedRequests}</option>
+              ) : (
+                approvedApprovalHistories.map((history) => (
+                  <option
+                    key={history.request.approval_request_id}
+                    value={history.request.approval_request_id}
+                  >
+                    {history.request.approval_request_id}
+                  </option>
+                ))
+              )}
+            </select>
+          </label>
+
           <label>
             <span>{copy.paperSubmit.fields.direction}</span>
-            <select
-              value={direction}
-              onChange={(event) => setDirection(event.target.value as Direction)}
-            >
-              <option value="LONG">{copy.paperSubmit.directionOptions.LONG}</option>
-              <option value="SHORT">{copy.paperSubmit.directionOptions.SHORT}</option>
-            </select>
+            <input readOnly value={selectedSignal?.direction ?? copy.paperRecords.none} />
+          </label>
+
+          <label>
+            <span>{copy.paperSubmit.fields.targetExposure}</span>
+            <input
+              readOnly
+              value={selectedSignal?.target_tx_equivalent ?? copy.paperRecords.none}
+            />
           </label>
 
           <label>
@@ -163,18 +221,6 @@ export function PaperSimulationSubmitPanel({ copy }: PaperSimulationSubmitPanelP
           </label>
 
           <label>
-            <span>{copy.paperSubmit.fields.targetExposure}</span>
-            <input
-              min={0.05}
-              max={0.25}
-              step={0.05}
-              type="number"
-              value={targetTxEquivalent}
-              onChange={(event) => setTargetTxEquivalent(Number(event.target.value))}
-            />
-          </label>
-
-          <label>
             <span>{copy.paperSubmit.fields.brokerSimulation}</span>
             <select
               value={brokerSimulation}
@@ -196,18 +242,31 @@ export function PaperSimulationSubmitPanel({ copy }: PaperSimulationSubmitPanelP
 
           <label>
             <span>{copy.paperSubmit.fields.approvalDecision}</span>
-            <input readOnly value="approved_for_paper_simulation" />
-          </label>
-
-          <label className="paper-submit-reason">
-            <span>{copy.paperSubmit.fields.approvalReason}</span>
-            <textarea
-              rows={3}
-              value={approvalReason}
-              onChange={(event) => setApprovalReason(event.target.value)}
-            />
+            <input readOnly value={selectedApproval?.current_status ?? copy.paperRecords.none} />
           </label>
         </div>
+
+        {selectedApproval ? (
+          <dl className="detail-list paper-submit-approval-context">
+            <div>
+              <dt>{copy.paperSubmit.approvalContext.strategy}</dt>
+              <dd>
+                {selectedApproval.request.strategy_id}@
+                {selectedApproval.request.strategy_version}
+              </dd>
+            </div>
+            <div>
+              <dt>{copy.paperSubmit.approvalContext.requiredSequence}</dt>
+              <dd>{selectedApproval.request.required_decision_sequence.join(" -> ")}</dd>
+            </div>
+            <div>
+              <dt>{copy.paperSubmit.approvalContext.latestHash}</dt>
+              <dd>{selectedApproval.request.latest_chain_hash}</dd>
+            </div>
+          </dl>
+        ) : (
+          <p className="empty-state">{copy.paperSubmit.missingApproval}</p>
+        )}
 
         <ul className="warning-list paper-submit-guardrails">
           {copy.paperSubmit.guardrails.map((guardrail) => (
@@ -216,7 +275,7 @@ export function PaperSimulationSubmitPanel({ copy }: PaperSimulationSubmitPanelP
         </ul>
 
         <div className="paper-submit-actions">
-          <button className="action-button" disabled={isSubmitting} type="submit">
+          <button className="action-button" disabled={submitDisabled} type="submit">
             {isSubmitting ? copy.paperSubmit.submitting : copy.paperSubmit.submit}
           </button>
           <button className="action-button secondary" type="button" onClick={refreshRecords}>
@@ -235,6 +294,10 @@ export function PaperSimulationSubmitPanel({ copy }: PaperSimulationSubmitPanelP
               <div>
                 <dt>{copy.paperSubmit.result.workflowRunId}</dt>
                 <dd>{result.workflow_run_id}</dd>
+              </div>
+              <div>
+                <dt>{copy.paperSubmit.result.approvalRequestId}</dt>
+                <dd>{result.approval.approval_id}</dd>
               </div>
               <div>
                 <dt>{copy.paperSubmit.result.orderId}</dt>
@@ -263,40 +326,17 @@ export function PaperSimulationSubmitPanel({ copy }: PaperSimulationSubmitPanelP
 }
 
 function buildPaperWorkflowPayload(input: {
-  direction: Direction;
+  approvalRequestId: string;
+  signal: PaperApprovalSignalPayload;
   symbol: SymbolCode;
   quantity: number;
-  targetTxEquivalent: number;
   brokerSimulation: BrokerSimulation;
-  approvalReason: string;
 }) {
-  const now = new Date();
   const safeQuantity = Math.max(1, Math.min(5, Math.trunc(input.quantity || 1)));
-  const safeExposure = Math.max(0.05, Math.min(0.25, input.targetTxEquivalent || 0.05));
 
   return {
-    signal: {
-      signal_id: `ui-paper-signal-${now.getTime()}`,
-      strategy_id: "controlled-paper-ui-demo",
-      strategy_version: "0.1.0",
-      timestamp: now.toISOString(),
-      symbol_group: "TAIEX_FUTURES",
-      direction: input.direction,
-      target_tx_equivalent: safeExposure,
-      confidence: 0.5,
-      stop_distance_points: 20,
-      reason: {
-        signals_only: true,
-        order_created: false,
-        broker_api_called: false,
-        risk_engine_called: false,
-        oms_called: false,
-        ui_source: "paper_simulation_controlled_submit",
-      },
-    },
-    approval_decision: "approved_for_paper_simulation",
-    reviewer_id: "local-paper-reviewer",
-    approval_reason: input.approvalReason.trim() || "Controlled paper UI demo only.",
+    signal: input.signal,
+    approval_request_id: input.approvalRequestId,
     symbol: input.symbol,
     quantity: safeQuantity,
     quote_age_seconds: 0,

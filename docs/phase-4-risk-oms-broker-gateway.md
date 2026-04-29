@@ -40,8 +40,10 @@ Create a paper-only execution core where order intents are evaluated by Risk Eng
 - Controlled Paper Simulation UI:
   - The Web Command Center may call only
     `/api/paper-execution/workflow/record`.
-  - The UI must generate signal-only payloads and keep
-    `approval_decision=approved_for_paper_simulation`.
+  - The UI must reference a persisted `approval_request_id` whose local approval
+    history has reached `approved_for_paper_simulation`.
+  - The backend verifies that the submitted `StrategySignal` matches the signal
+    payload associated with the persisted approval request.
   - The UI must not collect credentials, expose live approval, or call a real broker.
 
 ## Acceptance Criteria
@@ -78,9 +80,8 @@ Create a paper-only execution core where order intents are evaluated by Risk Eng
   reviewed persistence design.
 - Do not treat local approval queue records as production identity, final compliance
   approval, or live readiness.
-- Do not let the client-supplied `approval_decision` remain the long-term source of
-  authority for paper simulation. Future work should reference persisted approval
-  history.
+- Do not let a client-supplied `approval_decision` become the source of authority
+  for paper simulation. Controlled Paper Submit must use persisted approval history.
 
 ## Suggested Commands
 

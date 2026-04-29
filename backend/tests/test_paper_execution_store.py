@@ -30,9 +30,8 @@ def test_paper_execution_store_persists_run_oms_events_and_audit_events(
     tmp_path: Path,
 ) -> None:
     db_path = tmp_path / "paper_execution_audit.sqlite"
-    response = PaperExecutionWorkflow(RiskPolicy()).preview(
-        _request(broker_simulation="partial_fill")
-    )
+    request, history = _request(broker_simulation="partial_fill")
+    response = PaperExecutionWorkflow(RiskPolicy()).preview(request, history)
     persisted_response = response.model_copy(
         update={"persisted": True, "persistence_backend": "sqlite"}
     )
@@ -76,19 +75,11 @@ def test_paper_execution_store_persists_run_oms_events_and_audit_events(
     assert status.audit_events_count == len(audit_events)
 
 
-def test_paper_execution_store_persists_non_order_decision(tmp_path: Path) -> None:
-    response = PaperExecutionWorkflow(RiskPolicy()).preview(
-        _request(approval_decision="needs_data_review")
-    )
-    persisted_response = response.model_copy(
-        update={"persisted": True, "persistence_backend": "sqlite"}
-    )
+def test_paper_execution_store_does_not_create_records_on_read_paths(
+    tmp_path: Path,
+) -> None:
     store = PaperExecutionStore(tmp_path / "paper_execution_audit.sqlite")
 
-    run = store.persist_workflow(persisted_response)
-
-    assert run.order_id is None
-    assert run.final_oms_status is None
-    assert run.approval_decision == "needs_data_review"
-    assert store.list_oms_events(workflow_run_id=response.workflow_run_id) == []
-    assert len(store.list_audit_events(workflow_run_id=response.workflow_run_id)) == 2
+    assert store.list_runs() == []
+    assert store.list_oms_events(workflow_run_id="missing") == []
+    assert store.list_audit_events(workflow_run_id="missing") == []

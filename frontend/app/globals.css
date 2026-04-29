@@ -818,6 +818,19 @@ th {
   grid-column: 1 / -1;
 }
 
+.paper-submit-wide,
+.paper-submit-approval-context {
+  grid-column: 1 / -1;
+}
+
+.paper-submit-approval-context {
+  margin-top: 0;
+  border: 1px solid rgba(4, 120, 87, 0.22);
+  border-radius: 8px;
+  padding: 12px;
+  background: rgba(4, 120, 87, 0.06);
+}
+
 .paper-submit-guardrails {
   margin-top: 0;
 }

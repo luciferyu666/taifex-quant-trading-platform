@@ -7,6 +7,7 @@ from app.domain.order_state_machine import (
     apply_order_event,
     new_order_state,
 )
+from app.domain.paper_approval import PaperApprovalHistory
 from app.domain.paper_execution import (
     PaperExecutionWorkflowRequest,
     PaperExecutionWorkflowResponse,
@@ -32,35 +33,11 @@ class PaperExecutionWorkflow:
     def preview(
         self,
         request: PaperExecutionWorkflowRequest,
+        approval_history: PaperApprovalHistory,
     ) -> PaperExecutionWorkflowResponse:
-        approval = create_approval(request)
+        approval = create_approval(request, approval_history)
         workflow_run_id = create_workflow_run_id(request, approval)
         audit_events = [approval_audit_event(approval)]
-
-        if approval.decision != "approved_for_paper_simulation":
-            audit_events.append(
-                workflow_audit_event(
-                    action="paper_execution.intent_not_created",
-                    resource=approval.approval_id,
-                    metadata={
-                        "decision": approval.decision,
-                        "reason": (
-                            "Only approved_for_paper_simulation can create a "
-                            "paper order intent."
-                        ),
-                    },
-                )
-            )
-            return PaperExecutionWorkflowResponse(
-                workflow_run_id=workflow_run_id,
-                approval=approval,
-                audit_events=audit_events,
-                message=(
-                    "Research review decision recorded. No paper order intent was "
-                    "created, no Risk Engine/OMS path was entered, and no broker "
-                    "gateway was called."
-                ),
-            )
 
         intent = paper_order_intent_from_signal(
             request.signal,

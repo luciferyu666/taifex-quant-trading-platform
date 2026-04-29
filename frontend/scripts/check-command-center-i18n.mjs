@@ -226,7 +226,10 @@ requireContains("English paper submit copy exists", sourceByFile.i18n, "Create a
 requireContains("Traditional Chinese paper submit copy exists", sourceByFile.i18n, "建立紙上模擬紀錄");
 requireContains("Paper submit component is implemented", sourceByFile.paperSubmit, "PaperSimulationSubmitPanel");
 requireContains("Paper submit calls workflow record only", sourceByFile.paperSubmit, "/api/paper-execution/workflow/record");
-requireContains("Paper submit keeps fixed paper decision", sourceByFile.paperSubmit, "approved_for_paper_simulation");
+requireContains("Paper submit requires persisted approval request", sourceByFile.paperSubmit, "approval_request_id");
+requireContains("Paper submit uses approved approval history", sourceByFile.paperSubmit, "paper_simulation_approved");
+requireNotContains("Paper submit no longer sends client approval decision", sourceByFile.paperSubmit, "approval_decision:");
+requireNotContains("Paper submit does not create approval requests", sourceByFile.paperSubmit, "/api/paper-execution/approvals/requests");
 requireContains("Paper submit is mounted on page", sourceByFile.page, "PaperSimulationSubmitPanel");
 requireContains("English paper approval queue copy exists", sourceByFile.i18n, "Paper-only approval queue and history");
 requireContains("Traditional Chinese paper approval queue copy exists", sourceByFile.i18n, "紙上審批佇列與歷史");

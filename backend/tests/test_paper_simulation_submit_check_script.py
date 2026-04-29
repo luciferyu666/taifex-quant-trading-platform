@@ -35,6 +35,7 @@ def test_paper_simulation_submit_check_script_verifies_api_trace(
 
     assert "Paper simulation submit UX audit trace drill passed." in result.stdout
     assert "workflow_run_id=paper-workflow-" in result.stdout
+    assert "approval_request_id=paper-approval-request-" in result.stdout
     assert "order_id=paper-order-" in result.stdout
     assert "final_oms_status=FILLED" in result.stdout
     assert "oms_events_count=5" in result.stdout
@@ -65,6 +66,10 @@ def test_paper_simulation_submit_check_script_verifies_api_trace(
         "FILL",
     ]
     audit_events = store.list_audit_events(workflow_run_id=run.workflow_run_id)
+    assert any(
+        event.action == "paper_execution.approval_request_verified"
+        for event in audit_events
+    )
     assert any(
         event.action == "paper_execution.paper_broker_simulated"
         for event in audit_events

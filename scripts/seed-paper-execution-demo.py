@@ -12,9 +12,14 @@ if str(BACKEND_ROOT) not in sys.path:
     sys.path.insert(0, str(BACKEND_ROOT))
 
 from app.core.config import get_settings  # noqa: E402
+from app.domain.paper_approval import (  # noqa: E402
+    PaperApprovalDecisionCreate,
+    PaperApprovalRequestCreate,
+)
 from app.domain.paper_execution import PaperExecutionWorkflowRequest  # noqa: E402
 from app.domain.risk_rules import RiskPolicy  # noqa: E402
 from app.domain.signals import StrategySignal  # noqa: E402
+from app.services.paper_approval_store import PaperApprovalStore  # noqa: E402
 from app.services.paper_execution_store import PaperExecutionStore  # noqa: E402
 from app.services.paper_execution_workflow import PaperExecutionWorkflow  # noqa: E402
 
@@ -65,13 +70,41 @@ def main() -> int:
             "demo_seed": True,
         },
     )
+
+    approval_store = PaperApprovalStore(db_path)
+    queued = approval_store.create_request(
+        PaperApprovalRequestCreate(
+            signal=signal,
+            requester_id="local-demo-requester",
+            request_reason=(
+                "Local demo seed request for Paper OMS / Audit Query Viewer."
+            ),
+            paper_only=True,
+        )
+    )
+    after_research = approval_store.record_decision(
+        queued.request.approval_request_id,
+        PaperApprovalDecisionCreate(
+            decision="research_approved",
+            reviewer_id="local-demo-research-reviewer",
+            reviewer_role="research_reviewer",
+            decision_reason="Research approved for local paper demo seed.",
+            paper_only=True,
+        ),
+    )
+    approved_history = approval_store.record_decision(
+        after_research.request.approval_request_id,
+        PaperApprovalDecisionCreate(
+            decision="approved_for_paper_simulation",
+            reviewer_id="local-demo-risk-reviewer",
+            reviewer_role="risk_reviewer",
+            decision_reason="Risk approved for local paper simulation demo seed only.",
+            paper_only=True,
+        ),
+    )
     request = PaperExecutionWorkflowRequest(
         signal=signal,
-        approval_decision="approved_for_paper_simulation",
-        reviewer_id="local-demo-reviewer",
-        approval_reason=(
-            "Local demo seed for the read-only Paper OMS / Audit Query Viewer."
-        ),
+        approval_request_id=approved_history.request.approval_request_id,
         symbol="TMF",
         quantity=1,
         quote_age_seconds=0,
@@ -79,7 +112,7 @@ def main() -> int:
         paper_only=True,
     )
 
-    response = PaperExecutionWorkflow(risk_policy).preview(request)
+    response = PaperExecutionWorkflow(risk_policy).preview(request, approved_history)
     if (
         response.live_trading_enabled
         or response.broker_api_called
@@ -96,6 +129,7 @@ def main() -> int:
 
     print("Paper execution demo seed created.")
     print(f"workflow_run_id={run.workflow_run_id}")
+    print(f"approval_request_id={approved_history.request.approval_request_id}")
     print(f"order_id={run.order_id}")
     print(f"final_oms_status={run.final_oms_status}")
     print(f"db_path={db_path}")

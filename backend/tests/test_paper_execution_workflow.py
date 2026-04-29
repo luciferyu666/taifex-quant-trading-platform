@@ -3,6 +3,14 @@ from datetime import UTC, datetime
 import pytest
 
 from app.domain.order_state_machine import OrderStatus
+from app.domain.paper_approval import (
+    PaperApprovalDecisionCreate,
+    PaperApprovalHistory,
+    PaperApprovalRequestCreate,
+    build_approval_history,
+    build_paper_approval_decision_record,
+    build_paper_approval_request_record,
+)
 from app.domain.paper_execution import PaperExecutionWorkflowRequest
 from app.domain.risk_rules import RiskPolicy
 from app.domain.signals import StrategySignal
@@ -35,39 +43,75 @@ def _signal(
 
 
 def _request(
-    approval_decision: str = "approved_for_paper_simulation",
+    approval_history: PaperApprovalHistory | None = None,
     broker_simulation: str = "fill",
     exposure: float = 0.05,
-) -> PaperExecutionWorkflowRequest:
+    signal: StrategySignal | None = None,
+) -> tuple[PaperExecutionWorkflowRequest, PaperApprovalHistory]:
+    signal = signal or _signal(exposure=exposure)
+    approval_history = approval_history or _approved_history(signal)
     return PaperExecutionWorkflowRequest(
-        signal=_signal(exposure=exposure),
-        approval_decision=approval_decision,  # type: ignore[arg-type]
-        approval_reason="reviewed for paper simulation only",
+        signal=signal,
+        approval_request_id=approval_history.request.approval_request_id,
         broker_simulation=broker_simulation,  # type: ignore[arg-type]
-    )
+    ), approval_history
 
 
-def test_rejected_approval_does_not_create_order_or_call_broker() -> None:
-    response = PaperExecutionWorkflow(RiskPolicy()).preview(
-        _request(approval_decision="rejected")
+def _queued_history(signal: StrategySignal | None = None) -> PaperApprovalHistory:
+    request = build_paper_approval_request_record(
+        PaperApprovalRequestCreate(
+            signal=signal or _signal(),
+            requester_id="paper-workflow-test-requester",
+            request_reason="Workflow test approval request.",
+        )
     )
+    return build_approval_history(request, [])
 
-    assert response.paper_only is True
-    assert response.live_trading_enabled is False
-    assert response.order_created is False
-    assert response.paper_broker_gateway_called is False
-    assert response.paper_order_intent is None
-    assert response.risk_evaluation is None
-    assert response.oms_state is None
-    assert response.paper_broker_ack is None
-    assert any(
-        event.action == "paper_execution.intent_not_created"
-        for event in response.audit_events
+
+def _approved_history(signal: StrategySignal | None = None) -> PaperApprovalHistory:
+    request = build_paper_approval_request_record(
+        PaperApprovalRequestCreate(
+            signal=signal or _signal(),
+            requester_id="paper-workflow-test-requester",
+            request_reason="Workflow test approval request.",
+        )
     )
+    research_decision = build_paper_approval_decision_record(
+        approval_request_id=request.approval_request_id,
+        request_hash=request.request_hash,
+        existing_decisions=[],
+        decision=PaperApprovalDecisionCreate(
+            decision="research_approved",
+            reviewer_id="research-reviewer",
+            reviewer_role="research_reviewer",
+            decision_reason="Research approved for workflow test.",
+        ),
+    )
+    risk_decision = build_paper_approval_decision_record(
+        approval_request_id=request.approval_request_id,
+        request_hash=request.request_hash,
+        existing_decisions=[research_decision],
+        decision=PaperApprovalDecisionCreate(
+            decision="approved_for_paper_simulation",
+            reviewer_id="risk-reviewer",
+            reviewer_role="risk_reviewer",
+            decision_reason="Approved for paper simulation workflow test.",
+        ),
+    )
+    return build_approval_history(request, [research_decision, risk_decision])
+
+
+def test_pending_approval_request_cannot_create_order_or_call_broker() -> None:
+    history = _queued_history()
+    request, _ = _request(approval_history=history)
+
+    with pytest.raises(ValueError, match="approved_for_paper_simulation"):
+        PaperExecutionWorkflow(RiskPolicy()).preview(request, history)
 
 
 def test_approved_paper_simulation_goes_through_risk_oms_and_paper_broker() -> None:
-    response = PaperExecutionWorkflow(RiskPolicy()).preview(_request())
+    request, history = _request()
+    response = PaperExecutionWorkflow(RiskPolicy()).preview(request, history)
 
     assert response.order_created is True
     assert response.paper_broker_gateway_called is True
@@ -90,14 +134,20 @@ def test_approved_paper_simulation_goes_through_risk_oms_and_paper_broker() -> N
 
 
 def test_paper_broker_can_simulate_partial_fill_reject_and_cancel() -> None:
+    partial_request, partial_history = _request(broker_simulation="partial_fill")
+    rejected_request, rejected_history = _request(broker_simulation="reject")
+    cancelled_request, cancelled_history = _request(broker_simulation="cancel")
     partial = PaperExecutionWorkflow(RiskPolicy()).preview(
-        _request(broker_simulation="partial_fill")
+        partial_request,
+        partial_history,
     )
     rejected = PaperExecutionWorkflow(RiskPolicy()).preview(
-        _request(broker_simulation="reject")
+        rejected_request,
+        rejected_history,
     )
     cancelled = PaperExecutionWorkflow(RiskPolicy()).preview(
-        _request(broker_simulation="cancel")
+        cancelled_request,
+        cancelled_history,
     )
 
     assert partial.oms_state is not None
@@ -111,8 +161,10 @@ def test_paper_broker_can_simulate_partial_fill_reject_and_cancel() -> None:
 
 
 def test_risk_rejection_records_oms_rejection_without_broker_call() -> None:
+    request, history = _request(exposure=0.05)
     response = PaperExecutionWorkflow(RiskPolicy(max_tx_equivalent_exposure=0.01)).preview(
-        _request(exposure=0.05)
+        request,
+        history,
     )
 
     assert response.order_created is True
@@ -125,22 +177,35 @@ def test_risk_rejection_records_oms_rejection_without_broker_call() -> None:
 
 
 def test_signal_must_remain_signal_only() -> None:
+    history = _approved_history(_signal(signals_only=True))
+    signal = _signal(signals_only=False)
     request = PaperExecutionWorkflowRequest(
-        signal=_signal(signals_only=False),
-        approval_decision="approved_for_paper_simulation",
-        approval_reason="unsafe signal",
+        signal=signal,
+        approval_request_id=history.request.approval_request_id,
     )
 
     with pytest.raises(ValueError, match="signals_only=true"):
-        PaperExecutionWorkflow(RiskPolicy()).preview(request)
+        PaperExecutionWorkflow(RiskPolicy()).preview(request, history)
 
 
 def test_flat_signal_cannot_create_paper_order_intent() -> None:
+    signal = _signal(direction="FLAT")
+    history = _approved_history(signal)
     request = PaperExecutionWorkflowRequest(
-        signal=_signal(direction="FLAT"),
-        approval_decision="approved_for_paper_simulation",
-        approval_reason="flat signal",
+        signal=signal,
+        approval_request_id=history.request.approval_request_id,
     )
 
     with pytest.raises(ValueError, match="FLAT"):
-        PaperExecutionWorkflow(RiskPolicy()).preview(request)
+        PaperExecutionWorkflow(RiskPolicy()).preview(request, history)
+
+
+def test_signal_must_match_persisted_approval_request() -> None:
+    history = _approved_history(_signal(direction="LONG"))
+    request = PaperExecutionWorkflowRequest(
+        signal=_signal(direction="SHORT"),
+        approval_request_id=history.request.approval_request_id,
+    )
+
+    with pytest.raises(ValueError, match="direction must match"):
+        PaperExecutionWorkflow(RiskPolicy()).preview(request, history)

@@ -92,19 +92,20 @@ ledger, legal audit vault, or regulated record archive.
 
 ## Relationship to Paper Execution
 
-Current controlled paper submit still calls:
+Controlled paper submit calls:
 
 ```text
 POST /api/paper-execution/workflow/record
 ```
 
-and includes `approval_decision=approved_for_paper_simulation` in the request payload.
-That path remains a controlled demo path.
+and must include a persisted `approval_request_id` whose approval history has
+reached `approved_for_paper_simulation`. The backend loads the approval history from
+local SQLite, verifies the required review sequence, confirms `approval_for_live=false`,
+and checks that the submitted `StrategySignal` matches the signal associated with the
+approval request.
 
-The next productization step is to make the submit UI and paper workflow reference a
-persisted `approval_request_id` whose history has reached
-`approved_for_paper_simulation`, instead of trusting a decision value submitted by the
-client.
+The request no longer accepts `approval_decision` as the source of authority for
+paper simulation.
 
 ## Web Command Center Read-Only Viewer
 

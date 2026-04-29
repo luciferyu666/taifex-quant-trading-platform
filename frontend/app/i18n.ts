@@ -203,10 +203,12 @@ export const dashboardCopy = {
       eyebrow: "Controlled Paper Submit",
       title: "Create a paper simulation record",
       description:
-        "Creates one Paper Only simulation through the existing backend workflow record API. The request uses a UI-generated signal, fixed paper approval, Risk Engine, OMS, Paper Broker Gateway, and local audit persistence. It cannot approve live trading, collect credentials, or call a real broker.",
+        "Creates one Paper Only simulation through the backend workflow record API only when the selected persisted approval_request_id has completed the required review sequence. It cannot approve live trading, collect credentials, or call a real broker.",
       paperOnlyBadge: "Paper Only submit",
+      approvalRequiredBadge: "Persisted approval required",
       defaultReason: "Controlled customer demo: paper simulation only.",
       fields: {
+        approvalRequestId: "Persisted approval request",
         direction: "Signal direction",
         symbol: "Contract",
         quantity: "Quantity",
@@ -215,6 +217,9 @@ export const dashboardCopy = {
         approvalDecision: "Approval decision",
         approvalReason: "Audit reason",
       },
+      noApprovedRequests: "No approved paper approval requests available",
+      missingApproval:
+        "Submit is disabled until a persisted approval_request_id reaches approved_for_paper_simulation.",
       directionOptions: {
         LONG: "LONG",
         SHORT: "SHORT",
@@ -227,10 +232,16 @@ export const dashboardCopy = {
         cancel: "Cancel",
       },
       guardrails: [
-        "Paper Only: calls /api/paper-execution/workflow/record only.",
-        "StrategySignal remains signal-only and cannot call broker, Risk Engine, or OMS directly.",
+        "Paper Only: calls /api/paper-execution/workflow/record only with a persisted approval_request_id.",
+        "The selected approval request must already be approved_for_paper_simulation through the local approval queue.",
+        "StrategySignal remains the approved signal payload and cannot call broker, Risk Engine, or OMS directly.",
         "No live approval, no credential upload, no account login, and no real broker connection.",
       ],
+      approvalContext: {
+        strategy: "Approved strategy",
+        requiredSequence: "Required review sequence",
+        latestHash: "Latest approval chain hash",
+      },
       submit: "Create Paper Simulation",
       submitting: "Creating paper simulation...",
       refreshRecords: "Refresh records",
@@ -240,6 +251,7 @@ export const dashboardCopy = {
       resultTitle: "Recorded workflow summary",
       result: {
         workflowRunId: "Workflow run",
+        approvalRequestId: "Approval request",
         orderId: "Order ID",
         finalStatus: "Final OMS status",
         persistence: "Persisted",
@@ -712,10 +724,12 @@ export const dashboardCopy = {
       eyebrow: "受控紙上送出",
       title: "建立紙上模擬紀錄",
       description:
-        "透過既有後端 workflow record API 建立一筆 Paper Only 模擬。請求使用 UI 產生的 signal、固定紙上審批、Risk Engine、OMS、Paper Broker Gateway 與本地稽核持久化。它不提供實盤核准、不能收集憑證，也不會呼叫真實券商。",
+        "只有在選取的 persisted approval_request_id 已完成必要審批順序後，才會透過後端 workflow record API 建立一筆 Paper Only 模擬。它不提供實盤核准、不能收集憑證，也不會呼叫真實券商。",
       paperOnlyBadge: "Paper Only submit",
+      approvalRequiredBadge: "必須引用已持久化審批",
       defaultReason: "受控客戶 demo：僅限紙上模擬。",
       fields: {
+        approvalRequestId: "已持久化 approval request",
         direction: "訊號方向",
         symbol: "契約",
         quantity: "數量",
@@ -724,6 +738,9 @@ export const dashboardCopy = {
         approvalDecision: "審批決策",
         approvalReason: "稽核原因",
       },
+      noApprovedRequests: "目前沒有已核准的紙上 approval request",
+      missingApproval:
+        "必須先有 persisted approval_request_id 達到 approved_for_paper_simulation，才能送出紙上模擬。",
       directionOptions: {
         LONG: "LONG",
         SHORT: "SHORT",
@@ -736,10 +753,16 @@ export const dashboardCopy = {
         cancel: "取消",
       },
       guardrails: [
-        "Paper Only：只呼叫 /api/paper-execution/workflow/record。",
-        "StrategySignal 仍只輸出訊號，不能直接呼叫券商、Risk Engine 或 OMS。",
+        "Paper Only：只以 persisted approval_request_id 呼叫 /api/paper-execution/workflow/record。",
+        "選取的 approval request 必須已經在本地審批佇列中達到 approved_for_paper_simulation。",
+        "StrategySignal 仍是已核准的訊號 payload，不能直接呼叫券商、Risk Engine 或 OMS。",
         "不提供實盤核准、不上傳憑證、不登入帳戶，也不連接真實券商。",
       ],
+      approvalContext: {
+        strategy: "已核准策略",
+        requiredSequence: "必要審批順序",
+        latestHash: "最新審批鏈 hash",
+      },
       submit: "建立紙上模擬",
       submitting: "正在建立紙上模擬...",
       refreshRecords: "重新整理紀錄",
@@ -749,6 +772,7 @@ export const dashboardCopy = {
       resultTitle: "已記錄 workflow 摘要",
       result: {
         workflowRunId: "Workflow run",
+        approvalRequestId: "Approval request",
         orderId: "Order ID",
         finalStatus: "最終 OMS 狀態",
         persistence: "已持久化",

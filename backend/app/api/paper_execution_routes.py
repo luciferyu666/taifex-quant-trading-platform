@@ -17,6 +17,7 @@ from app.domain.paper_execution_records import (
     PaperOmsEventRecord,
 )
 from app.domain.risk_rules import RiskPolicy
+from app.services.paper_approval_store import PaperApprovalStore
 from app.services.paper_execution_store import PaperExecutionStore
 from app.services.paper_execution_workflow import PaperExecutionWorkflow
 
@@ -48,6 +49,10 @@ def _risk_policy_from_settings(settings: Settings) -> RiskPolicy:
 
 def _paper_execution_store(settings: Settings) -> PaperExecutionStore:
     return PaperExecutionStore(settings.paper_execution_audit_db_path)
+
+
+def _paper_approval_store(settings: Settings) -> PaperApprovalStore:
+    return PaperApprovalStore(settings.paper_execution_audit_db_path)
 
 
 @router.get("/status", response_model=PaperExecutionStatusResponse)
@@ -85,7 +90,13 @@ def paper_execution_workflow_preview(
     settings: SettingsDep,
 ) -> PaperExecutionWorkflowResponse:
     try:
-        return PaperExecutionWorkflow(_risk_policy_from_settings(settings)).preview(request)
+        approval_history = _paper_approval_store(settings).get_history(
+            request.approval_request_id
+        )
+        return PaperExecutionWorkflow(_risk_policy_from_settings(settings)).preview(
+            request,
+            approval_history,
+        )
     except ValueError as exc:
         raise HTTPException(status_code=400, detail=str(exc)) from exc
 
@@ -96,7 +107,13 @@ def paper_execution_workflow_record(
     settings: SettingsDep,
 ) -> PaperExecutionWorkflowResponse:
     try:
-        response = PaperExecutionWorkflow(_risk_policy_from_settings(settings)).preview(request)
+        approval_history = _paper_approval_store(settings).get_history(
+            request.approval_request_id
+        )
+        response = PaperExecutionWorkflow(_risk_policy_from_settings(settings)).preview(
+            request,
+            approval_history,
+        )
         persisted_response = response.model_copy(
             update={"persisted": True, "persistence_backend": "sqlite"}
         )

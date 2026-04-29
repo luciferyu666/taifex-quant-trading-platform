@@ -26,8 +26,11 @@ The drill must preserve these constraints:
 - `ENABLE_LIVE_TRADING=false`
 - `BROKER_PROVIDER=paper`
 - Strategy signals remain signal-only.
-- The platform creates `PaperOrderIntent` only after
+- The platform creates `PaperOrderIntent` only after loading a persisted
+  `approval_request_id` whose local approval history has reached
   `approved_for_paper_simulation`.
+- The submitted StrategySignal must match the signal payload associated with the
+  approval request.
 - Paper order intents pass through Risk Engine and OMS.
 - Broker Gateway is paper-only.
 - No broker credentials, account IDs, API keys, certificates, or customer
@@ -56,6 +59,8 @@ Default behavior:
 - Uses FastAPI `TestClient`.
 - Posts a bounded Paper Only payload to
   `/api/paper-execution/workflow/record`.
+- Creates a local paper approval request and two reviewer decisions first, then
+  references the resulting `approval_request_id`.
 - Uses a temporary local SQLite database.
 - Verifies `paper_only=true`.
 - Verifies `live_trading_enabled=false`.
@@ -71,6 +76,7 @@ Expected output includes:
 ```text
 Paper simulation submit UX audit trace drill passed.
 workflow_run_id=paper-workflow-...
+approval_request_id=paper-approval-request-...
 order_id=paper-order-...
 final_oms_status=FILLED
 oms_events_count=5
@@ -109,27 +115,33 @@ https://taifex-quant-trading-platform-front.vercel.app/?lang=zh
 
 3. Open the `Paper OMS` tab.
 
-4. In `Controlled Paper Submit`, verify the UI states:
+4. In `Paper Approval Queue / History`, verify an approval request has reached
+   `approved_for_paper_simulation`. If none exists, the submit button must remain
+   disabled.
+
+5. In `Controlled Paper Submit`, verify the UI states:
 
 - Paper Only.
 - `ENABLE_LIVE_TRADING=false`.
+- A persisted `approval_request_id` is selected.
 - No live approval.
 - No credential collection.
 - Endpoint is `/api/paper-execution/workflow/record`.
 
-5. Submit the bounded demo payload.
+6. Submit the bounded demo payload.
 
-6. Confirm the result displays:
+7. Confirm the result displays:
 
 - `workflow_run_id`
+- `approval_request_id`
 - `order_id`
 - final OMS status
 - persisted SQLite backend
 - paper broker simulation message
 
-7. Refresh paper records.
+8. Refresh paper records.
 
-8. Select the generated workflow row and inspect:
+9. Select the generated workflow row and inspect:
 
 - OMS timeline.
 - Audit timeline.
