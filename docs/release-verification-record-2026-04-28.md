@@ -1432,6 +1432,70 @@ Viewer scope:
 - Keeps `production_oms_ready=false`.
 - Live trading remains disabled by default.
 
+## Paper OMS Timeout Handling Preview Verification
+
+Verification date:
+
+```text
+2026-04-30
+```
+
+Commit:
+
+```text
+045f8a5 Add paper OMS timeout handling preview
+```
+
+GitHub Actions:
+
+```text
+Workflow: Release Readiness
+Run ID: 25138570471
+Status: passed
+```
+
+Vercel deployment:
+
+```text
+Deployment URL: https://taifex-quant-trading-platform-frontend-q29iz4uty.vercel.app
+Deployment ID: dpl_4Lwf86ueb4mLjn5tjtR53YRNqyoo
+Production alias: https://taifex-quant-trading-platform-front.vercel.app
+Status: Ready
+```
+
+Validation commands:
+
+```bash
+make paper-oms-timeout-check
+make frontend-i18n-check
+cd frontend && npm run typecheck
+cd frontend && npm run build
+make check
+make frontend-production-smoke-check
+```
+
+Observed result:
+
+```text
+All listed checks passed. The Web Command Center can now explicitly preview a
+paper-only timeout mark for eligible nonterminal paper OMS records and then,
+only after that explicit action, mark the local paper OMS record as EXPIRED.
+Production smoke gate confirmed deployment id
+dpl_4Lwf86ueb4mLjn5tjtR53YRNqyoo and required safety copy on English and
+Traditional Chinese pages.
+```
+
+Timeout handling scope:
+
+- `POST /api/paper-execution/reliability/timeout-preview` validates the timeout candidate without writing records.
+- `POST /api/paper-execution/reliability/timeout-mark` appends local SQLite paper OMS, audit, and simulated execution report metadata only.
+- The UI requires an explicit preview before local EXPIRED marking.
+- The flow requires `paper_only=true`, `live_trading_enabled=false`, and `broker_api_called=false`.
+- No broker SDK is called.
+- No credentials are collected.
+- No outbox worker, asynchronous order processor, reconciliation loop, amend/replace path, or production OMS timeout engine is enabled.
+- Live trading remains disabled by default.
+
 ## Marketing Website Reachability
 
 Command:
