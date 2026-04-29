@@ -849,6 +849,100 @@ Safety scope:
 - Production trading readiness claim: none.
 - Live trading remains disabled by default.
 
+## Customer Demo UI Smoke Test Verification
+
+The Customer Demo UI Smoke Test was committed to `main`, verified by GitHub
+Actions, deployed through the Web Command Center Vercel project, and rechecked
+against the production alias.
+
+Verification time:
+
+```text
+2026-04-29 11:03 CST (+0800)
+```
+
+Verified commit:
+
+```text
+1c77a64 Add customer demo UI smoke test
+```
+
+GitHub Actions verification:
+
+```text
+workflow: Release Readiness
+run: 25088717366
+event: push
+branch: main
+status: completed
+conclusion: success
+duration: 1m35s
+created: 2026-04-29T03:00:24Z
+```
+
+Production alias inspection:
+
+```text
+alias: https://taifex-quant-trading-platform-front.vercel.app
+url: https://taifex-quant-trading-platform-frontend-ioem9dla9.vercel.app
+id: dpl_DJUQLTvNDvHH1o7pFSGwF41WBomC
+target: production
+status: Ready
+created: Wed Apr 29 2026 11:00:25 GMT+0800
+```
+
+Customer demo UI smoke gate:
+
+```text
+Customer Demo UI smoke check passed.
+Production root returned HTTP 200.
+Traditional Chinese page returned HTTP 200.
+English page returned HTTP 200.
+All checked pages use deployment id dpl_DJUQLTvNDvHH1o7pFSGwF41WBomC.
+English and Traditional Chinese demo guide steps are present.
+Previous / Next / Reset / Copy checklist controls are present.
+Release / Paper OMS / Research Packet / Contracts tabs are present.
+Prohibited-action lists are present.
+```
+
+Production safety smoke gate:
+
+```text
+Production Command Center smoke check passed.
+Production root returned HTTP 200.
+Traditional Chinese page returned HTTP 200.
+English page returned HTTP 200.
+All checked pages use deployment id dpl_DJUQLTvNDvHH1o7pFSGwF41WBomC.
+Safety copy includes TRADING_MODE, ENABLE_LIVE_TRADING, BROKER_PROVIDER,
+NOT READY, Paper Only, 實盤關閉, and 僅限紙上交易.
+```
+
+Smoke test scope:
+
+- Production URL HTTP 200 checks.
+- Vercel deployment id marker checks.
+- Customer Demo Guided Flow / 客戶測試導覽流程 presence checks.
+- Seven English and seven Traditional Chinese demo step checks.
+- Previous / Next / Reset / Copy checklist control checks.
+- Release / Paper OMS / Research Packet / Contracts tab copy checks.
+- Prohibited-action list checks.
+- Prohibited claim checks for guaranteed profit, risk-free, 保證獲利, and 零風險.
+- Unsafe live-approval wording checks for approve live and 核准實盤.
+
+Safety scope:
+
+- HTML-level read-only production smoke check only.
+- Browser automation: none.
+- Backend mutation endpoints: none.
+- Order submission: none.
+- Broker SDK calls: none.
+- Database writes: none.
+- File uploads: none.
+- Credential collection: none.
+- Paper execution approval escalation: none.
+- Live approval controls: none.
+- Live trading remains disabled by default.
+
 ## Marketing Website Reachability
 
 Command:
