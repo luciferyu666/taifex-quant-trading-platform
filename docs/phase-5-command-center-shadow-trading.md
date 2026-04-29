@@ -155,9 +155,12 @@ Expose roadmap phase status, contracts, safety mode, risk status, and paper-only
   outcome. It must not collect credentials, call real brokers, expose live approval,
   or submit real orders.
 - Paper approval workflow API is now available as a backend foundation, but no UI
-  approval escalation surface is exposed yet. Future Command Center work may show
-  approval queue/history as read-only first, then add controlled paper-only review
-  actions after a separate UX and safety review.
+  approval escalation surface is exposed yet. The Command Center may display
+  approval queue/history as read-only data through
+  `GET /api/paper-execution/approvals/status`,
+  `GET /api/paper-execution/approvals/queue`, and
+  `GET /api/paper-execution/approvals/history`, but it must not submit reviewer
+  decisions, create approval requests, or grant paper/live execution.
 - The paper execution persistence status panel is also display-only. It reads
   `GET /api/paper-execution/persistence/status` and must not call
   `/workflow/record`, broker endpoints, Risk Engine mutation paths, OMS mutation paths,
@@ -233,5 +236,6 @@ local-state-only, without turning the tour into an execution, approval, onboardi
 credential, ranking, or recommendation workflow.
 The paper approval workflow foundation is the next backend dependency for a more
 productized paper simulation submit flow. The current frontend still uses the
-controlled demo submit path; future UI should require persisted approval history
-before allowing paper simulation submission.
+controlled demo submit path, while the Command Center can now show approval
+queue/history as read-only workflow context. Future UI should require persisted
+approval history before allowing paper simulation submission.

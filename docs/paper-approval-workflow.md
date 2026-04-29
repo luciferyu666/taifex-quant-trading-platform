@@ -106,6 +106,27 @@ persisted `approval_request_id` whose history has reached
 `approved_for_paper_simulation`, instead of trusting a decision value submitted by the
 client.
 
+## Web Command Center Read-Only Viewer
+
+The Web Command Center now includes a read-only approval queue and history panel.
+It reads only these endpoints:
+
+```text
+GET /api/paper-execution/approvals/status
+GET /api/paper-execution/approvals/queue
+GET /api/paper-execution/approvals/history
+```
+
+The panel displays pending approval requests, current status, required review
+sequence, reviewer history, hash-chain references, and paper-only safety flags.
+It does not create approval requests, submit reviewer decisions, approve paper
+execution, approve live trading, collect credentials, call brokers, or write
+databases.
+
+This viewer is meant to validate the data model and reviewer workflow with users
+before the next slice makes Controlled Paper Submit reference a persisted
+`approval_request_id`.
+
 ## Validation
 
 ```bash

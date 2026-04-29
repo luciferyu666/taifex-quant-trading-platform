@@ -218,6 +218,8 @@ Paper Execution Demo Seed is an explicit local-only sample generator:
 Paper Approval Workflow Foundation is local paper governance scaffolding:
 
 - It creates a separate approval queue under `/api/paper-execution/approvals`.
+- The Web Command Center may display approval status, queue, and history through
+  read-only GET endpoints only.
 - `research_approved` is a first review only; it does not authorize paper simulation.
 - `approved_for_paper_simulation` requires a distinct second reviewer after
   `research_approved`.
@@ -314,6 +316,9 @@ Future live work requires:
   live trading, or expose live controls.
 - No Paper Approval Workflow API may be treated as production authentication,
   regulated compliance approval, live-readiness approval, or broker authorization.
+- No Paper Approval Queue UI may create approval requests, submit reviewer
+  decisions, mutate SQLite, collect credentials, call brokers, approve paper
+  execution, or expose live controls.
 - No Paper OMS / Audit Query Viewer UI panel may mutate persisted records, trigger
   paper simulation, grant approval escalation, connect brokers, call Risk Engine,
   call OMS, create order intents, show performance claims, or expose live controls.

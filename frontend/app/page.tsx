@@ -2,6 +2,11 @@ import {
   PaperExecutionRecordsPanel,
   type PaperExecutionRunRecord,
 } from "./components/PaperExecutionRecordsPanel";
+import {
+  PaperApprovalQueuePanel,
+  type PaperApprovalHistory,
+  type PaperApprovalStatus,
+} from "./components/PaperApprovalQueuePanel";
 import { CommandCenterTabs } from "./components/CommandCenterTabs";
 import { DemoGuidePanel } from "./components/DemoGuidePanel";
 import type { PaperAuditEventRecord } from "./components/PaperAuditTimelinePanel";
@@ -171,6 +176,33 @@ const fallbackPaperExecutionRuns: PaperExecutionRunRecord[] = [];
 const fallbackPaperOmsEvents: PaperOmsEventRecord[] = [];
 const fallbackPaperAuditEvents: PaperAuditEventRecord[] = [];
 
+const fallbackPaperApprovalStatus: PaperApprovalStatus = {
+  trading_mode: "paper",
+  live_trading_enabled: false,
+  broker_provider: "paper",
+  approval_mode: "paper_only_local_approval_foundation",
+  supported_decisions: [
+    "research_approved",
+    "approved_for_paper_simulation",
+    "rejected",
+    "needs_data_review",
+  ],
+  reviewer_roles: [
+    "research_reviewer",
+    "risk_reviewer",
+    "compliance_reviewer",
+  ],
+  dual_review_required: true,
+  immutable_record_policy:
+    "Append-only local SQLite records with hash chaining. This is not a production WORM ledger or production identity system.",
+  broker_api_called: false,
+  message:
+    "Fallback paper approval status. Approval UI remains read-only and paper-only while backend is unavailable.",
+};
+
+const fallbackPaperApprovalQueue: PaperApprovalHistory[] = [];
+const fallbackPaperApprovalHistory: PaperApprovalHistory[] = [];
+
 const fallbackReleaseBaseline: ReleaseBaseline = {
   version: "v0.1.0-paper-research-preview",
   release_level: {
@@ -287,6 +319,9 @@ export default async function Home({ searchParams }: HomeProps) {
     paperExecutionStatus,
     paperExecutionPersistence,
     paperExecutionRuns,
+    paperApprovalStatus,
+    paperApprovalQueue,
+    paperApprovalHistory,
     releaseBaseline,
     reviewPacket,
   ] =
@@ -306,6 +341,18 @@ export default async function Home({ searchParams }: HomeProps) {
       fetchJson<PaperExecutionRunRecord[]>(
         "/api/paper-execution/runs?limit=5",
         fallbackPaperExecutionRuns,
+      ),
+      fetchJson<PaperApprovalStatus>(
+        "/api/paper-execution/approvals/status",
+        fallbackPaperApprovalStatus,
+      ),
+      fetchJson<PaperApprovalHistory[]>(
+        "/api/paper-execution/approvals/queue?limit=5",
+        fallbackPaperApprovalQueue,
+      ),
+      fetchJson<PaperApprovalHistory[]>(
+        "/api/paper-execution/approvals/history?limit=8",
+        fallbackPaperApprovalHistory,
       ),
       fetchJson<ReleaseBaseline>("/api/release/baseline", fallbackReleaseBaseline),
       fetchJson<ResearchReviewPacket>(
@@ -352,6 +399,15 @@ export default async function Home({ searchParams }: HomeProps) {
       ? undefined
       : `paper persistence: ${paperExecutionPersistence.error}`,
     paperExecutionRuns.available ? undefined : `paper records: ${paperExecutionRuns.error}`,
+    paperApprovalStatus.available
+      ? undefined
+      : `paper approval status: ${paperApprovalStatus.error}`,
+    paperApprovalQueue.available
+      ? undefined
+      : `paper approval queue: ${paperApprovalQueue.error}`,
+    paperApprovalHistory.available
+      ? undefined
+      : `paper approval history: ${paperApprovalHistory.error}`,
     releaseBaseline.available ? undefined : `release baseline: ${releaseBaseline.error}`,
     reviewPacket.available ? undefined : `research packet: ${reviewPacket.error}`,
   ].filter((issue): issue is string => Boolean(issue));
@@ -528,6 +584,27 @@ export default async function Home({ searchParams }: HomeProps) {
             </section>
 
             <PaperSimulationSubmitPanel copy={copy} />
+
+            <PaperApprovalQueuePanel
+              available={
+                paperApprovalStatus.available &&
+                paperApprovalQueue.available &&
+                paperApprovalHistory.available
+              }
+              copy={copy}
+              error={
+                [
+                  paperApprovalStatus.available ? undefined : paperApprovalStatus.error,
+                  paperApprovalQueue.available ? undefined : paperApprovalQueue.error,
+                  paperApprovalHistory.available ? undefined : paperApprovalHistory.error,
+                ]
+                  .filter(Boolean)
+                  .join("; ") || undefined
+              }
+              history={paperApprovalHistory.data}
+              queue={paperApprovalQueue.data}
+              status={paperApprovalStatus.data}
+            />
 
             <PaperExecutionRecordsPanel
               available={paperRecordsAvailable}

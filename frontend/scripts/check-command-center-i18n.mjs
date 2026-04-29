@@ -7,6 +7,7 @@ const files = {
   page: "frontend/app/page.tsx",
   demoGuide: "frontend/app/components/DemoGuidePanel.tsx",
   commandTabs: "frontend/app/components/CommandCenterTabs.tsx",
+  paperApprovals: "frontend/app/components/PaperApprovalQueuePanel.tsx",
   paperRecords: "frontend/app/components/PaperExecutionRecordsPanel.tsx",
   paperSubmit: "frontend/app/components/PaperSimulationSubmitPanel.tsx",
   paperOmsTimeline: "frontend/app/components/PaperOmsTimelinePanel.tsx",
@@ -227,6 +228,20 @@ requireContains("Paper submit component is implemented", sourceByFile.paperSubmi
 requireContains("Paper submit calls workflow record only", sourceByFile.paperSubmit, "/api/paper-execution/workflow/record");
 requireContains("Paper submit keeps fixed paper decision", sourceByFile.paperSubmit, "approved_for_paper_simulation");
 requireContains("Paper submit is mounted on page", sourceByFile.page, "PaperSimulationSubmitPanel");
+requireContains("English paper approval queue copy exists", sourceByFile.i18n, "Paper-only approval queue and history");
+requireContains("Traditional Chinese paper approval queue copy exists", sourceByFile.i18n, "紙上審批佇列與歷史");
+requireContains("Paper approval queue panel is implemented", sourceByFile.paperApprovals, "PaperApprovalQueuePanel");
+requireContains("Paper approval status endpoint is read on page", sourceByFile.page, "/api/paper-execution/approvals/status");
+requireContains("Paper approval queue endpoint is read on page", sourceByFile.page, "/api/paper-execution/approvals/queue");
+requireContains("Paper approval history endpoint is read on page", sourceByFile.page, "/api/paper-execution/approvals/history");
+requireContains("Paper approval queue panel is mounted on page", sourceByFile.page, "PaperApprovalQueuePanel");
+requireContains("Paper approval panel shows hash-chain references", sourceByFile.paperApprovals, "latest_chain_hash");
+requireContains("Paper approval panel shows reviewer history", sourceByFile.paperApprovals, "reviewer_id");
+requireContains("Paper approval panel shows required review sequence", sourceByFile.paperApprovals, "required_decision_sequence");
+requireContains("Paper approval panel shows safety flags", sourceByFile.paperApprovals, "live_execution_eligible");
+requireNotContains("Paper approval panel does not call mutation endpoints", sourceByFile.paperApprovals, "/decisions");
+requireNotContains("Paper approval panel does not create approval requests", sourceByFile.paperApprovals, "/requests");
+requireNotContains("Paper approval panel does not fetch directly", sourceByFile.paperApprovals, "fetch(");
 requireContains("Paper records panel is read-only", combinedSource, "Read-only");
 requireContains("Paper records rows are selectable", sourceByFile.paperRecords, "aria-pressed");
 requireContains("Paper records workflow copy action exists", sourceByFile.i18n, "Copy workflow ID");

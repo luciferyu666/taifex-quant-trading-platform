@@ -194,6 +194,7 @@ for required_file in \
   frontend/test-fixtures/research-review-packets/invalid-performance-claim.json \
   frontend/test-fixtures/research-review-packets/invalid-checksum.json \
   frontend/test-fixtures/research-review-packets/invalid-decision-summary.json \
+  frontend/app/components/PaperApprovalQueuePanel.tsx \
   frontend/app/components/PaperExecutionRecordsPanel.tsx \
   frontend/app/components/PaperSimulationSubmitPanel.tsx \
   frontend/app/components/PaperOmsTimelinePanel.tsx \

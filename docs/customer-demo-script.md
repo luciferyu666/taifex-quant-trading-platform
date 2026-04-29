@@ -110,6 +110,14 @@ Show:
   - If `make seed-paper-execution-demo` was run locally, show the seeded
     `workflow_run_id`, order ID, OMS timeline, and audit timeline.
   - If no local record exists, show the safe empty state.
+- Paper Approval Queue / History:
+  - Show the read-only paper approval status, pending queue, approval history,
+    required review sequence, reviewer history, hash-chain references, and safety
+    flags.
+  - Explain that this validates the reviewer workflow model only. It does not
+    create approval requests, submit reviewer decisions, approve paper execution,
+    approve live trading, collect credentials, call brokers, or write databases
+    from the UI.
 - Paper Simulation Controlled Submit UI:
   - Use it only when a local FastAPI backend is running and the evaluator understands
     the action writes one local SQLite paper workflow record.
