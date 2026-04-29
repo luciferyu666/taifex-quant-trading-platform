@@ -10,6 +10,7 @@ import {
 import { CommandCenterTabs } from "./components/CommandCenterTabs";
 import { DemoGuidePanel } from "./components/DemoGuidePanel";
 import type { PaperAuditEventRecord } from "./components/PaperAuditTimelinePanel";
+import { PaperApprovalDecisionPanel } from "./components/PaperApprovalDecisionPanel";
 import type { PaperOmsEventRecord } from "./components/PaperOmsTimelinePanel";
 import { PaperSimulationSubmitPanel } from "./components/PaperSimulationSubmitPanel";
 import { ResearchReviewPacketJsonLoader } from "./components/ResearchReviewPacketJsonLoader";
@@ -602,6 +603,16 @@ export default async function Home({ searchParams }: HomeProps) {
               history={paperApprovalHistory.data}
               queue={paperApprovalQueue.data}
               status={paperApprovalStatus.data}
+            />
+
+            <PaperApprovalDecisionPanel
+              available={
+                paperApprovalStatus.available &&
+                paperApprovalQueue.available &&
+                paperApprovalHistory.available
+              }
+              copy={copy}
+              queue={paperApprovalQueue.data}
             />
 
             <PaperSimulationSubmitPanel

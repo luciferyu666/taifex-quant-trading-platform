@@ -107,10 +107,10 @@ approval request.
 The request no longer accepts `approval_decision` as the source of authority for
 paper simulation.
 
-## Web Command Center Read-Only Viewer
+## Web Command Center Approval Surfaces
 
-The Web Command Center now includes a read-only approval queue and history panel.
-It reads only these endpoints:
+The Web Command Center includes a read-only approval queue and history panel.
+It reads these endpoints:
 
 ```text
 GET /api/paper-execution/approvals/status
@@ -120,13 +120,28 @@ GET /api/paper-execution/approvals/history
 
 The panel displays pending approval requests, current status, required review
 sequence, reviewer history, hash-chain references, and paper-only safety flags.
-It does not create approval requests, submit reviewer decisions, approve paper
-execution, approve live trading, collect credentials, call brokers, or write
-databases.
 
-This viewer is meant to validate the data model and reviewer workflow with users
-before the next slice makes Controlled Paper Submit reference a persisted
-`approval_request_id`.
+The Web Command Center also includes a paper-only reviewer decision form. It may
+submit decisions only to:
+
+```text
+POST /api/paper-execution/approvals/requests/{approval_request_id}/decisions
+```
+
+The decision form is intentionally narrow:
+
+- It selects an existing pending approval request.
+- It records only `research_approved`, `approved_for_paper_simulation`,
+  `rejected`, or `needs_data_review`.
+- It always sends `paper_only=true`.
+- It does not create approval requests.
+- It does not create paper simulations, order intents, or OMS records.
+- It does not collect broker credentials or account data.
+- It does not call brokers, Risk Engine, OMS, or Broker Gateway.
+- It does not grant live-trading access.
+
+Controlled Paper Submit remains a separate step and can proceed only after a
+persisted approval request has completed the required review sequence.
 
 ## Validation
 

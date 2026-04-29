@@ -8,6 +8,7 @@ const files = {
   demoGuide: "frontend/app/components/DemoGuidePanel.tsx",
   commandTabs: "frontend/app/components/CommandCenterTabs.tsx",
   paperApprovals: "frontend/app/components/PaperApprovalQueuePanel.tsx",
+  paperApprovalDecision: "frontend/app/components/PaperApprovalDecisionPanel.tsx",
   paperRecords: "frontend/app/components/PaperExecutionRecordsPanel.tsx",
   paperSubmit: "frontend/app/components/PaperSimulationSubmitPanel.tsx",
   paperOmsTimeline: "frontend/app/components/PaperOmsTimelinePanel.tsx",
@@ -234,6 +235,18 @@ requireContains("Paper submit is mounted on page", sourceByFile.page, "PaperSimu
 requireContains("English paper approval queue copy exists", sourceByFile.i18n, "Paper-only approval queue and history");
 requireContains("Traditional Chinese paper approval queue copy exists", sourceByFile.i18n, "紙上審批佇列與歷史");
 requireContains("Paper approval queue panel is implemented", sourceByFile.paperApprovals, "PaperApprovalQueuePanel");
+requireContains("English paper approval decision copy exists", sourceByFile.i18n, "Record a paper-only reviewer decision");
+requireContains("Traditional Chinese paper approval decision copy exists", sourceByFile.i18n, "記錄紙上覆核決策");
+requireContains("Paper approval decision panel is implemented", sourceByFile.paperApprovalDecision, "PaperApprovalDecisionPanel");
+requireContains("Paper approval decision panel calls decision endpoint", sourceByFile.paperApprovalDecision, "/decisions");
+requireContains("Paper approval decision panel stays paper-only", sourceByFile.paperApprovalDecision, "paper_only: true");
+requireContains("Paper approval decision panel records reviewer decisions", sourceByFile.paperApprovalDecision, "reviewer_id");
+requireNotContains("Paper approval decision panel does not create approval requests", sourceByFile.paperApprovalDecision, "/api/paper-execution/approvals/requests\"");
+requireNotContains("Paper approval decision panel does not collect API keys", sourceByFile.paperApprovalDecision.toLowerCase(), "api_key");
+requireNotContains("Paper approval decision panel does not collect account IDs", sourceByFile.paperApprovalDecision.toLowerCase(), "account_id");
+requireNotContains("Paper approval decision panel does not collect certificates", sourceByFile.paperApprovalDecision.toLowerCase(), "certificate");
+requireNotContains("Paper approval decision panel does not call broker APIs", sourceByFile.paperApprovalDecision, "broker_api_called: true");
+requireContains("Paper approval decision panel is mounted on page", sourceByFile.page, "PaperApprovalDecisionPanel");
 requireContains("Paper approval status endpoint is read on page", sourceByFile.page, "/api/paper-execution/approvals/status");
 requireContains("Paper approval queue endpoint is read on page", sourceByFile.page, "/api/paper-execution/approvals/queue");
 requireContains("Paper approval history endpoint is read on page", sourceByFile.page, "/api/paper-execution/approvals/history");

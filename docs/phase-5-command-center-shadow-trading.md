@@ -154,13 +154,16 @@ Expose roadmap phase status, contracts, safety mode, risk status, and paper-only
   `approved_for_paper_simulation`, the approved signal payload, small quantity, and
   a paper broker simulation outcome. It must not collect credentials, call real
   brokers, expose live approval, or submit real orders.
-- Paper approval workflow API is now available as a backend foundation, but no UI
-  approval escalation surface is exposed yet. The Command Center may display
-  approval queue/history as read-only data through
+- Paper approval workflow API is available as a backend foundation. The Command
+  Center may display approval queue/history as read-only data through
   `GET /api/paper-execution/approvals/status`,
   `GET /api/paper-execution/approvals/queue`, and
-  `GET /api/paper-execution/approvals/history`, but it must not submit reviewer
-  decisions, create approval requests, or grant paper/live execution.
+  `GET /api/paper-execution/approvals/history`.
+- The Paper Approval Decision UI may submit paper-only reviewer decisions only to
+  `POST /api/paper-execution/approvals/requests/{approval_request_id}/decisions`.
+  It must not create approval requests, create paper simulations, call Risk Engine,
+  call OMS, call Broker Gateway, collect credentials, connect brokers, expose live
+  approval, or grant production authorization.
 - The paper execution persistence status panel is also display-only. It reads
   `GET /api/paper-execution/persistence/status` and must not call
   `/workflow/record`, broker endpoints, Risk Engine mutation paths, OMS mutation paths,

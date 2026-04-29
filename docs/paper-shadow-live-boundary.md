@@ -220,7 +220,12 @@ Paper Approval Workflow Foundation is local paper governance scaffolding:
 
 - It creates a separate approval queue under `/api/paper-execution/approvals`.
 - The Web Command Center may display approval status, queue, and history through
-  read-only GET endpoints only.
+  read-only GET endpoints.
+- The Web Command Center may record paper-only reviewer decisions through
+  `POST /api/paper-execution/approvals/requests/{approval_request_id}/decisions`.
+  This is local approval workflow scaffolding only, not production identity,
+  production RBAC, regulated compliance approval, broker authorization, or live
+  readiness approval.
 - `research_approved` is a first review only; it does not authorize paper simulation.
 - `approved_for_paper_simulation` requires a distinct second reviewer after
   `research_approved`.
@@ -317,9 +322,13 @@ Future live work requires:
   live trading, or expose live controls.
 - No Paper Approval Workflow API may be treated as production authentication,
   regulated compliance approval, live-readiness approval, or broker authorization.
-- No Paper Approval Queue UI may create approval requests, submit reviewer
-  decisions, mutate SQLite, collect credentials, call brokers, approve paper
-  execution, or expose live controls.
+- No Paper Approval Queue UI may create approval requests, collect credentials,
+  call brokers, create paper simulations, create order intents, or expose live
+  controls.
+- Paper Approval Decision UI may mutate only local SQLite approval-decision records
+  through the paper-only decision endpoint. It must not create approval requests,
+  create paper simulations, call Risk Engine, call OMS, call Broker Gateway,
+  collect credentials, connect brokers, or expose live controls.
 - No Paper OMS / Audit Query Viewer UI panel may mutate persisted records, trigger
   paper simulation, grant approval escalation, connect brokers, call Risk Engine,
   call OMS, create order intents, show performance claims, or expose live controls.

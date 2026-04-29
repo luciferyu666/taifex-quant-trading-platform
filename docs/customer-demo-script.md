@@ -114,10 +114,16 @@ Show:
   - Show the read-only paper approval status, pending queue, approval history,
     required review sequence, reviewer history, hash-chain references, and safety
     flags.
-  - Explain that this validates the reviewer workflow model only. It does not
-    create approval requests, submit reviewer decisions, approve paper execution,
-    approve live trading, collect credentials, call brokers, or write databases
-    from the UI.
+  - Explain that the queue/history panel is read-only and validates the reviewer
+    workflow model.
+- Paper Approval Decision UI:
+  - Use it only with an existing local approval request in the pending queue.
+  - Record a paper-only reviewer decision such as `research_approved`,
+    `approved_for_paper_simulation`, `rejected`, or `needs_data_review`.
+  - Confirm it writes only a local approval decision record and does not create
+    approval requests, paper simulations, orders, live approval, credential flows,
+    broker calls, Risk Engine calls, OMS calls, or Broker Gateway calls.
+  - Refresh the queue/history after recording a decision.
 - Paper Simulation Controlled Submit UI:
   - Use it only when a local FastAPI backend is running and the evaluator understands
     the action writes one local SQLite paper workflow record.
