@@ -1374,6 +1374,64 @@ Viewer scope:
   `broker_api_called=false`, `approval_for_live=false`,
   `real_order_created=false`.
 
+## Paper OMS Reliability Viewer Verification
+
+Commit:
+
+```text
+1555638 Add paper OMS reliability viewer
+```
+
+GitHub Actions:
+
+```text
+Workflow: Release Readiness
+Run ID: 25136797634
+Status: passed
+```
+
+Vercel deployment:
+
+```text
+Deployment URL: https://taifex-quant-trading-platform-frontend-f50e4b1qn.vercel.app
+Deployment ID: dpl_FEstxs5sgHSMLQ98vtMpnQowTpXo
+Production alias: https://taifex-quant-trading-platform-front.vercel.app
+Status: Ready
+```
+
+Validation commands:
+
+```bash
+make frontend-i18n-check
+cd frontend && npm run typecheck
+cd frontend && npm run build
+make check
+make frontend-production-smoke-check
+```
+
+Observed result:
+
+```text
+All listed checks passed. The Paper OMS Reliability Viewer displays local-only
+reliability metadata in the Web Command Center: outbox records, idempotency key
+counts, execution report metadata, timeout candidates, and explicit
+non-production OMS gaps. Production smoke gate confirmed deployment id
+dpl_FEstxs5sgHSMLQ98vtMpnQowTpXo and required safety copy on English and
+Traditional Chinese pages.
+```
+
+Viewer scope:
+
+- Read-only display surface.
+- Reads only paper reliability query endpoints.
+- Does not process outbox workers.
+- Does not mutate OMS state or mark orders timed out.
+- Does not write databases from the UI.
+- Does not submit orders or approve execution.
+- Does not call brokers or collect credentials.
+- Keeps `production_oms_ready=false`.
+- Live trading remains disabled by default.
+
 ## Marketing Website Reachability
 
 Command:
