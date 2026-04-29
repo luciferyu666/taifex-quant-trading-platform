@@ -1134,6 +1134,66 @@ Decision UI scope:
   customer financial data.
 - It does not expose live approval or production authorization controls.
 
+## Paper Approval Request UI Verification
+
+Verification date: 2026-04-29
+
+Commit:
+
+```text
+b23febf Add paper approval request UI
+```
+
+GitHub Actions:
+
+```text
+Workflow: Release Readiness
+Run ID: 25109530007
+Status: passed
+```
+
+Vercel deployment:
+
+```text
+Deployment URL: https://taifex-quant-trading-platform-frontend-jzdyjuhfc.vercel.app
+Deployment ID: dpl_9ooYPH9s6Z83rWknJ4SPe99WjRrR
+Production alias: https://taifex-quant-trading-platform-front.vercel.app
+Status: Ready
+```
+
+Validation commands:
+
+```bash
+make frontend-i18n-check
+cd frontend && npm run typecheck
+cd frontend && npm run build
+make paper-approval-workflow-check
+make paper-simulation-submit-check
+make check
+make frontend-production-smoke-check
+```
+
+Observed result:
+
+```text
+All listed checks passed. Production smoke gate confirmed deployment id
+dpl_9ooYPH9s6Z83rWknJ4SPe99WjRrR and required safety copy on English and
+Traditional Chinese pages.
+```
+
+Request UI scope:
+
+- The UI creates one local Paper Only approval request through
+  `POST /api/paper-execution/approvals/requests`.
+- New requests start at `pending_review`.
+- The request payload contains a signals-only `StrategySignal` and
+  `paper_only=true`.
+- The UI refreshes server-rendered approval queue/history data after request
+  creation.
+- It does not create reviewer decisions, paper simulations, order intents, OMS
+  records, Risk Engine calls, Broker Gateway calls, broker connections,
+  credential flows, account login, or live approval.
+
 ## Marketing Website Reachability
 
 Command:
