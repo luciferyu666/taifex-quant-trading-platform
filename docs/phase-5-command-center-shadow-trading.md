@@ -101,6 +101,10 @@ Expose roadmap phase status, contracts, safety mode, risk status, and paper-only
 - Refresh/retry only reloads frontend status. It must not call mutation endpoints.
 - Backend-unavailable troubleshooting panel explains safe fallback behavior and
   shows `make seed-paper-execution-demo` as an explicit local demo setup command.
+- Paper demo evidence export is available through the explicit local command
+  `make paper-demo-evidence-export`. It reads local SQLite in read-only mode and
+  produces stdout evidence by default, with optional local JSON or Markdown output
+  only when `--output` is supplied.
 - Paper Execution Approval Workflow panel is read-only and displays only paper
   simulation status, required route, and safety indicators.
 - Paper Execution Approval Workflow panel does not include submit buttons,

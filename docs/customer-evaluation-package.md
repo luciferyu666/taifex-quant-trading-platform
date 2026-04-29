@@ -113,6 +113,7 @@ Use this sequence for a 30-45 minute customer session:
 
 ```bash
 make seed-paper-execution-demo
+make paper-demo-evidence-export
 ```
 
 6. Optional local-only paper simulation:
@@ -128,8 +129,11 @@ make paper-simulation-submit-check
 7. Demonstrate local Research Review Packet JSON loading using a safe sample packet only.
 8. If a local demo seed or controlled paper submit was used, show the paper workflow summary, OMS
    timeline, and audit timeline.
-9. Explain what the current system does not do: no live trading, no broker integration, no customer execution.
-10. Collect structured feedback using `docs/customer-feedback-form.md`.
+9. If the customer needs a handoff artifact, export a local Paper Demo Evidence
+   JSON or Markdown summary. The default export is stdout; explicit `--output`
+   writes only a small local file.
+10. Explain what the current system does not do: no live trading, no broker integration, no customer execution.
+11. Collect structured feedback using `docs/customer-feedback-form.md`.
 
 ## Success Criteria
 
@@ -150,7 +154,9 @@ A successful customer evaluation should produce:
 - Release verification record: `docs/release-verification-record-2026-04-28.md`
 - Production verification runbook: `docs/frontend-command-center-deployment-verification.md`
 - Customer demo UI smoke test: `docs/customer-demo-ui-smoke-test.md`
+- Paper demo evidence export: `docs/paper-demo-evidence-export.md`
 - Paper execution demo seed: `scripts/seed-paper-execution-demo.py`
+- Paper demo evidence exporter: `scripts/export-paper-demo-evidence.py`
 
 ## Safety Statement
 

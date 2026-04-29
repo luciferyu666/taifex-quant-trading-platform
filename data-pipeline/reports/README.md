@@ -58,3 +58,22 @@ The sample is local metadata only. It is ignored by git, is never uploaded by th
 frontend JSON loader, and keeps `approval_for_live=false`,
 `approval_for_paper_execution=false`, `execution_eligible=false`, and
 `persisted=false`.
+
+Paper demo evidence export:
+
+```bash
+backend/.venv/bin/python scripts/export-paper-demo-evidence.py \
+  --output data-pipeline/reports/paper_demo_evidence.preview.json
+```
+
+Markdown output is also supported with explicit intent:
+
+```bash
+backend/.venv/bin/python scripts/export-paper-demo-evidence.py \
+  --format markdown \
+  --output data-pipeline/reports/paper_demo_evidence.preview.md
+```
+
+Paper demo evidence files are local handoff artifacts only. They are ignored by
+git, are not uploaded, and must not include secrets, broker credentials, real
+account identifiers, or customer financial data.

@@ -90,6 +90,7 @@ for required_file in \
   docs/customer-demo-script.md \
   docs/customer-evaluation-checklist.md \
   docs/customer-feedback-form.md \
+  docs/paper-demo-evidence-export.md \
   docs/paper-simulation-submit-verification.md \
   docs/paper-approval-ui-flow-smoke-drill.md \
   docs/paper-approval-workflow.md \
@@ -153,6 +154,7 @@ for required_file in \
   backend/app/services/paper_execution_store.py \
   backend/app/services/paper_approval_store.py \
   scripts/seed-paper-execution-demo.py \
+  scripts/export-paper-demo-evidence.py \
   scripts/paper-simulation-submit-check.py \
   backend/app/api/data_routes.py \
   backend/app/api/continuous_futures_routes.py \
@@ -394,6 +396,14 @@ if [[ -x "${BACKEND_PYTHON}" ]]; then
 
   printf 'Running Paper Only submit UX audit trace drill...\n'
   "${BACKEND_PYTHON}" scripts/paper-simulation-submit-check.py
+
+  printf 'Running Paper Only demo evidence export dry-run...\n'
+  paper_evidence_tmp="$(mktemp -d)"
+  PAPER_EXECUTION_AUDIT_DB_PATH="${paper_evidence_tmp}/paper_demo.sqlite" \
+    "${BACKEND_PYTHON}" scripts/seed-paper-execution-demo.py >/dev/null
+  PAPER_EXECUTION_AUDIT_DB_PATH="${paper_evidence_tmp}/paper_demo.sqlite" \
+    "${BACKEND_PYTHON}" scripts/export-paper-demo-evidence.py >/dev/null
+  rm -rf "${paper_evidence_tmp}"
 else
   printf 'backend/.venv/bin/python is missing; skipping backend runtime checks. Run bash scripts/bootstrap.sh.\n' >&2
 fi

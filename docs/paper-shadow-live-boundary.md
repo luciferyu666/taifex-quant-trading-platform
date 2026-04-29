@@ -216,6 +216,21 @@ Paper Execution Demo Seed is an explicit local-only sample generator:
   only. It is not a broker confirmation, account record, performance report, trading
   recommendation, or live-readiness approval.
 
+Paper Demo Evidence Export is an explicit local-only evidence handoff:
+
+- `make paper-demo-evidence-export` runs
+  `scripts/export-paper-demo-evidence.py`.
+- It reads the local SQLite paper execution audit store in read-only mode.
+- It prints a small evidence summary to stdout by default and writes a local JSON
+  or Markdown file only when the user explicitly passes `--output`.
+- It includes approval request ID, reviewer decisions, workflow run ID, order ID,
+  final OMS status, OMS event count, audit event count, safety flags, local SQLite
+  path, and timestamp.
+- It must not upload data, write external databases, call brokers, collect
+  credentials, create orders, approve live trading, or produce investment advice.
+- It is a customer demo traceability artifact only; it is not a production WORM
+  ledger, broker confirmation, performance report, or live-readiness approval.
+
 Paper Approval Workflow Foundation is local paper governance scaffolding:
 
 - It creates a separate approval queue under `/api/paper-execution/approvals`.

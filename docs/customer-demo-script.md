@@ -33,11 +33,17 @@ Optional local-only setup for demonstrating the Paper OMS / Audit Query Viewer:
 
 ```bash
 make seed-paper-execution-demo
+make paper-demo-evidence-export
 ```
 
 This creates one small paper workflow record in the local SQLite path configured by
 `PAPER_EXECUTION_AUDIT_DB_PATH`. It does not call the FastAPI server, broker APIs, an
 external database, or any live order path.
+
+`make paper-demo-evidence-export` prints a small customer-demo evidence summary to
+stdout. It includes the approval request, reviewer decisions, workflow run, order ID,
+final OMS status, OMS event count, audit event count, safety flags, local SQLite path,
+and timestamp. It is read-only and does not upload data or write external databases.
 
 Optional local-only verification for the controlled Paper Simulation Submit UI:
 
@@ -179,6 +185,16 @@ UI submit
   - If the backend is not available, show the troubleshooting state and use
     `make paper-simulation-submit-check` to verify the same flow locally without a
     running server.
+- Paper Demo Evidence Export:
+  - After running a local seed or controlled submit, run
+    `make paper-demo-evidence-export`.
+  - Show the generated `approval_request_id`, reviewer decisions,
+    `workflow_run_id`, order ID, final OMS status, OMS event count, audit event
+    count, and safety flags.
+  - Explain that explicit `--output` can write a small local JSON or Markdown
+    summary for customer feedback, but the default is stdout and there is no upload.
+  - Do not present this evidence as a broker confirmation, investment report,
+    performance claim, or live approval.
 - Customer Demo Guided Flow:
   - Use the guided tour panel to walk through Release, Paper OMS, Research Packet,
     and Contracts in a predictable order.
