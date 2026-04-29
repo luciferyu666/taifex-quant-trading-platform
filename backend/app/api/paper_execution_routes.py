@@ -16,6 +16,12 @@ from app.domain.paper_execution_records import (
     PaperExecutionRunRecord,
     PaperOmsEventRecord,
 )
+from app.domain.paper_oms_reliability import (
+    PaperExecutionReport,
+    PaperOmsOutboxItem,
+    PaperOmsReliabilityStatus,
+    PaperOrderTimeoutCandidate,
+)
 from app.domain.risk_rules import RiskPolicy
 from app.services.paper_approval_store import PaperApprovalStore
 from app.services.paper_execution_store import PaperExecutionStore
@@ -130,6 +136,13 @@ def paper_execution_persistence_status(
     return _paper_execution_store(settings).status()
 
 
+@router.get("/reliability/status", response_model=PaperOmsReliabilityStatus)
+def paper_execution_reliability_status(
+    settings: SettingsDep,
+) -> PaperOmsReliabilityStatus:
+    return _paper_execution_store(settings).reliability_status()
+
+
 @router.get("/runs", response_model=list[PaperExecutionRunRecord])
 def paper_execution_runs(
     settings: SettingsDep,
@@ -176,6 +189,17 @@ def paper_execution_order_oms_events(
     return _paper_execution_store(settings).list_oms_events(order_id=order_id)
 
 
+@router.get(
+    "/orders/{order_id}/execution-reports",
+    response_model=list[PaperExecutionReport],
+)
+def paper_execution_order_execution_reports(
+    order_id: str,
+    settings: SettingsDep,
+) -> list[PaperExecutionReport]:
+    return _paper_execution_store(settings).list_execution_reports(order_id=order_id)
+
+
 @router.get("/audit-events", response_model=list[PaperAuditEventRecord])
 def paper_execution_audit_events(
     settings: SettingsDep,
@@ -183,3 +207,30 @@ def paper_execution_audit_events(
 ) -> list[PaperAuditEventRecord]:
     safe_limit = max(1, min(limit, 500))
     return _paper_execution_store(settings).list_audit_events(limit=safe_limit)
+
+
+@router.get("/outbox", response_model=list[PaperOmsOutboxItem])
+def paper_execution_outbox_items(
+    settings: SettingsDep,
+    status: str | None = None,
+    limit: int = 100,
+) -> list[PaperOmsOutboxItem]:
+    safe_limit = max(1, min(limit, 500))
+    return _paper_execution_store(settings).list_outbox_items(
+        status=status,
+        limit=safe_limit,
+    )
+
+
+@router.get(
+    "/reliability/timeout-candidates",
+    response_model=list[PaperOrderTimeoutCandidate],
+)
+def paper_execution_timeout_candidates(
+    settings: SettingsDep,
+    timeout_seconds: int = 30,
+) -> list[PaperOrderTimeoutCandidate]:
+    safe_timeout = max(1, min(timeout_seconds, 86_400))
+    return _paper_execution_store(settings).list_timeout_candidates(
+        timeout_seconds=safe_timeout,
+    )

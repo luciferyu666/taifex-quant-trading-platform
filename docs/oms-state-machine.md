@@ -44,6 +44,12 @@ Current implementation is in-memory and paper-only.
 
 Every order requires an idempotency key before it enters OMS. Future durable OMS storage should reject duplicate idempotency keys for active order intents.
 
+Current paper-only persistence records idempotency keys in local SQLite and rejects
+duplicate keys when a second workflow session attempts to persist a different
+paper workflow or order with the same idempotency key. This protects local paper
+demo records from duplicate submit artifacts, but it is not a distributed
+production idempotency service.
+
 ## Event-Sourced Future Design
 
 Long-term OMS state should be rebuilt from immutable events. Event records should include source, sequence, timestamp, actor, reason, payload, and causation/correlation IDs.
@@ -74,6 +80,17 @@ queryable for audit review. It is not a production OMS database, not an external
 database integration, not a broker reconciliation source, and not connected to any
 real broker.
 
+The paper reliability foundation also records:
+
+- local idempotency keys for duplicate prevention across local workflow sessions
+- local outbox metadata for completed paper workflow submissions
+- paper execution report metadata derived from simulated OMS events
+- read-only timeout candidates for nonterminal paper orders
+
+These records support customer demos and reviewer audits. They do not provide
+asynchronous order processing, production durable queues, amend/replace,
+real broker execution reports, or reconciliation loops.
+
 ## Acceptance Criteria
 
 - Invalid transitions raise an error.
@@ -84,6 +101,9 @@ real broker.
   cancellation simulations.
 - Local paper persistence tests cover run records, OMS event records, audit event
   records, and query endpoints.
+- Paper OMS reliability tests cover duplicate idempotency rejection, execution
+  report metadata, completed local outbox metadata, reliability status, and
+  read-only timeout candidate scans.
 
 ## Testing Plan
 
@@ -91,4 +111,5 @@ real broker.
 cd backend && pytest tests/test_order_state_machine.py
 make paper-execution-workflow-check
 make paper-execution-persistence-check
+make paper-oms-reliability-check
 ```

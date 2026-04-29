@@ -49,6 +49,12 @@ Customers may evaluate:
 - Research review packet viewer behavior using approved local sample JSON fixtures.
 - Paper OMS / Audit Query Viewer behavior using an explicitly generated local paper
   demo seed record.
+- Paper OMS reliability metadata review:
+  - local idempotency key count
+  - completed local outbox metadata
+  - simulated execution report count
+  - read-only timeout candidate scan
+  - explicit `production_oms_ready=false`
 - Paper Simulation Controlled Submit UI when a local backend is running:
   - Creates one bounded Paper Only workflow record through
     `/api/paper-execution/workflow/record`.

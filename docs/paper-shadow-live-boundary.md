@@ -8,6 +8,13 @@ Paper mode is the default and only executable mode in the current roadmap implem
 - `ENABLE_LIVE_TRADING=false`
 - `BROKER_PROVIDER=paper`
 - PaperBrokerGateway returns simulated acknowledgements only.
+- Paper OMS reliability metadata is local-only:
+  - idempotency keys are stored in local SQLite for duplicate prevention in local
+    paper workflow sessions
+  - outbox records are completed local metadata, not an asynchronous broker queue
+  - execution reports are simulated paper metadata, not broker execution reports
+  - timeout candidate scans are read-only and do not mutate OMS state
+  - `production_oms_ready=false` remains explicit
 
 Phase 3 strategy research is even narrower than paper execution:
 

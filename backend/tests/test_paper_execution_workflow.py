@@ -12,6 +12,7 @@ from app.domain.paper_approval import (
     build_paper_approval_request_record,
 )
 from app.domain.paper_execution import PaperExecutionWorkflowRequest
+from app.domain.paper_oms_reliability import build_execution_reports
 from app.domain.risk_rules import RiskPolicy
 from app.domain.signals import StrategySignal
 from app.services.paper_execution_workflow import PaperExecutionWorkflow
@@ -158,6 +159,41 @@ def test_paper_broker_can_simulate_partial_fill_reject_and_cancel() -> None:
     assert rejected.paper_broker_ack.accepted is False
     assert cancelled.oms_state is not None
     assert cancelled.oms_state.status == OrderStatus.CANCELLED
+
+
+def test_paper_workflow_builds_execution_reports_with_fill_accounting() -> None:
+    signal = _signal(exposure=0.05)
+    history = _approved_history(signal)
+    request = PaperExecutionWorkflowRequest(
+        signal=signal,
+        approval_request_id=history.request.approval_request_id,
+        quantity=3,
+        broker_simulation="partial_fill",
+    )
+
+    response = PaperExecutionWorkflow(RiskPolicy()).preview(request, history)
+
+    assert response.oms_state is not None
+    assert response.execution_reports
+    assert [report.execution_type for report in response.execution_reports] == [
+        "ACKNOWLEDGED",
+        "PARTIAL_FILL",
+    ]
+    partial_report = response.execution_reports[-1]
+    assert partial_report.paper_only is True
+    assert partial_report.live_trading_enabled is False
+    assert partial_report.broker_api_called is False
+    assert partial_report.last_quantity == 2
+    assert partial_report.cumulative_filled_quantity == 2
+    assert partial_report.leaves_quantity == 1
+
+    rebuilt_reports = build_execution_reports(
+        workflow_run_id=response.workflow_run_id,
+        order_state=response.oms_state,
+    )
+    assert [report.report_id for report in rebuilt_reports] == [
+        report.report_id for report in response.execution_reports
+    ]
 
 
 def test_risk_rejection_records_oms_rejection_without_broker_call() -> None:

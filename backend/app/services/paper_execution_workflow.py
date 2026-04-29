@@ -17,6 +17,7 @@ from app.domain.paper_execution import (
     paper_order_intent_from_signal,
     workflow_audit_event,
 )
+from app.domain.paper_oms_reliability import build_execution_reports
 from app.domain.risk_rules import RiskPolicy, evaluate_paper_order
 from app.services.paper_broker_gateway import PaperBrokerGateway
 
@@ -115,7 +116,12 @@ class PaperExecutionWorkflow:
         oms_state = apply_paper_broker_outcome(
             oms_state,
             request.broker_simulation,
+            quantity=intent.quantity,
             reason=paper_ack.message,
+        )
+        execution_reports = build_execution_reports(
+            workflow_run_id=workflow_run_id,
+            order_state=oms_state,
         )
         audit_events.append(
             workflow_audit_event(
@@ -124,6 +130,7 @@ class PaperExecutionWorkflow:
                 metadata={
                     "final_status": oms_state.status,
                     "event_count": len(oms_state.history),
+                    "execution_report_count": len(execution_reports),
                     "paper_only": True,
                 },
             )
@@ -138,6 +145,7 @@ class PaperExecutionWorkflow:
             risk_evaluation=risk_evaluation,
             oms_state=oms_state,
             paper_broker_ack=paper_ack,
+            execution_reports=execution_reports,
             audit_events=audit_events,
             message=(
                 "Paper-only workflow completed through Risk Engine, OMS, and Paper "
@@ -165,8 +173,10 @@ class PaperExecutionWorkflow:
 def apply_paper_broker_outcome(
     state: OrderState,
     outcome: str,
+    quantity: int = 0,
     reason: str | None = None,
 ) -> OrderState:
+    requested_quantity = max(0, quantity)
     if outcome == "reject":
         return apply_order_event(
             state,
@@ -175,6 +185,12 @@ def apply_paper_broker_outcome(
                 order_id=state.order_id,
                 event_type=OrderEventType.REJECT,
                 reason=reason,
+                payload={
+                    "last_quantity": 0,
+                    "cumulative_filled_quantity": 0,
+                    "leaves_quantity": requested_quantity,
+                    "paper_only": True,
+                },
             ),
         )
 
@@ -185,9 +201,16 @@ def apply_paper_broker_outcome(
             order_id=state.order_id,
             event_type=OrderEventType.ACKNOWLEDGE,
             reason=reason,
+            payload={
+                "last_quantity": 0,
+                "cumulative_filled_quantity": 0,
+                "leaves_quantity": requested_quantity,
+                "paper_only": True,
+            },
         ),
     )
     if outcome == "partial_fill":
+        last_quantity = max(0, requested_quantity - 1)
         return apply_order_event(
             state,
             OrderEvent(
@@ -195,6 +218,16 @@ def apply_paper_broker_outcome(
                 order_id=state.order_id,
                 event_type=OrderEventType.PARTIAL_FILL,
                 reason=reason,
+                payload={
+                    "last_quantity": last_quantity,
+                    "cumulative_filled_quantity": last_quantity,
+                    "leaves_quantity": max(0, requested_quantity - last_quantity),
+                    "paper_only": True,
+                    "note": (
+                        "Fixture-only partial fill accounting; not a production "
+                        "execution report."
+                    ),
+                },
             ),
         )
     if outcome == "fill":
@@ -205,6 +238,12 @@ def apply_paper_broker_outcome(
                 order_id=state.order_id,
                 event_type=OrderEventType.FILL,
                 reason=reason,
+                payload={
+                    "last_quantity": requested_quantity,
+                    "cumulative_filled_quantity": requested_quantity,
+                    "leaves_quantity": 0,
+                    "paper_only": True,
+                },
             ),
         )
     if outcome == "cancel":
@@ -215,6 +254,12 @@ def apply_paper_broker_outcome(
                 order_id=state.order_id,
                 event_type=OrderEventType.CANCEL_REQUEST,
                 reason=reason,
+                payload={
+                    "last_quantity": 0,
+                    "cumulative_filled_quantity": 0,
+                    "leaves_quantity": requested_quantity,
+                    "paper_only": True,
+                },
             ),
         )
         return apply_order_event(
@@ -224,6 +269,12 @@ def apply_paper_broker_outcome(
                 order_id=state.order_id,
                 event_type=OrderEventType.CANCEL,
                 reason=reason,
+                payload={
+                    "last_quantity": 0,
+                    "cumulative_filled_quantity": 0,
+                    "leaves_quantity": requested_quantity,
+                    "paper_only": True,
+                },
             ),
         )
     return state

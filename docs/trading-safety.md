@@ -104,12 +104,20 @@ Paper simulation is allowed only through a platform-owned workflow:
 - Every workflow run must emit audit events.
 - `POST /api/paper-execution/workflow/record` may persist paper workflow metadata,
   OMS events, and audit events to local SQLite for audit review.
+- Paper OMS reliability metadata may persist local idempotency keys, completed
+  local outbox metadata, and simulated execution report records.
+- Timeout candidate scans are read-only and must not mutate OMS state.
+- Duplicate idempotency checks are local SQLite safeguards only; they are not a
+  production distributed idempotency system.
 - Local paper persistence defaults to `data/paper_execution_audit.sqlite` through
   `PAPER_EXECUTION_AUDIT_DB_PATH`.
 - Local `.sqlite` files remain ignored by git and must not contain broker secrets,
   account IDs, API keys, certificates, or live orders.
 - No real broker SDK is called.
 - No real order is placed.
+- No paper execution report may be presented as a real broker execution report.
+- Local outbox metadata must not be presented as asynchronous production order
+  processing.
 - `ENABLE_LIVE_TRADING=false` remains required.
 
 ## Paper Approval Workflow Foundation
@@ -133,6 +141,11 @@ Paper approval productization starts with a separate local approval queue and hi
 ## Risk and OMS Rule
 
 Every future order must pass pre-trade checks and be represented in the OMS state machine with idempotency. Broker Gateway is an adapter boundary, not a strategy execution surface.
+
+The current Paper OMS reliability foundation is still non-production. Missing
+production requirements include asynchronous workers, a distributed durable queue,
+amend/replace, real execution report ingestion, broker reconciliation loops,
+operator recovery workflows, and WORM-grade audit storage.
 
 ## Secrets Policy
 

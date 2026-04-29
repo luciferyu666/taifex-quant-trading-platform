@@ -146,6 +146,7 @@ for required_file in \
   backend/app/domain/paper_approval.py \
   backend/app/domain/paper_execution.py \
   backend/app/domain/paper_execution_records.py \
+  backend/app/domain/paper_oms_reliability.py \
   backend/app/domain/exposure.py \
   backend/app/services/risk_engine.py \
   backend/app/services/oms.py \
@@ -267,6 +268,7 @@ for required_file in \
   backend/app/domain/risk_rules.py \
   backend/app/domain/paper_execution.py \
   backend/app/domain/paper_execution_records.py \
+  backend/app/domain/paper_oms_reliability.py \
   backend/app/services/paper_broker_gateway.py \
   backend/app/services/paper_execution_workflow.py \
   backend/app/services/paper_execution_store.py \

@@ -9,6 +9,7 @@ from pydantic import BaseModel, Field, field_validator
 
 from app.domain.events import AuditEvent
 from app.domain.order_state_machine import OrderState
+from app.domain.paper_oms_reliability import PaperExecutionReport
 from app.domain.risk_rules import PaperOrderIntent, RiskEvaluation
 from app.domain.signals import StrategySignal
 from app.services.paper_broker_gateway import PaperBrokerAck
@@ -74,6 +75,7 @@ class PaperExecutionWorkflowResponse(BaseModel):
     risk_evaluation: RiskEvaluation | None = None
     oms_state: OrderState | None = None
     paper_broker_ack: PaperBrokerAck | None = None
+    execution_reports: list[PaperExecutionReport] = Field(default_factory=list)
     audit_events: list[AuditEvent] = Field(default_factory=list)
     message: str
 

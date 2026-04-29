@@ -37,6 +37,16 @@ Create a paper-only execution core where order intents are evaluated by Risk Eng
   - Query APIs expose persisted paper workflow runs, OMS events, and audit events.
   - The default path is `data/paper_execution_audit.sqlite`.
   - Generated `.sqlite` files remain ignored by git.
+- Paper OMS reliability foundation:
+  - Local SQLite records idempotency keys to reject duplicate paper order intents
+    across workflow sessions.
+  - Local outbox metadata records completed paper workflow submission records for
+    review. This is not an asynchronous worker or distributed durable queue.
+  - Execution report records summarize simulated acknowledgements, fills,
+    partial fills, rejections, cancellations, and expirations.
+  - Read-only timeout candidate scans identify nonterminal paper orders that may
+    need review without mutating OMS state.
+  - Reliability status explicitly reports `production_oms_ready=false`.
 - Controlled Paper Simulation UI:
   - The Web Command Center may call only
     `/api/paper-execution/workflow/record`.
@@ -62,6 +72,8 @@ Create a paper-only execution core where order intents are evaluated by Risk Eng
   list endpoints.
 - Persistence status reports local-only SQLite counts for runs, OMS events, and audit
   events.
+- Paper OMS reliability status reports local-only outbox metadata, idempotency key
+  count, execution report count, timeout candidates, and known production gaps.
 - Controlled UI submissions create local SQLite paper records only and preserve
   `paper_only=true`, `ENABLE_LIVE_TRADING=false`, and `BROKER_PROVIDER=paper`.
 - Paper approval queue and history can be queried without broker calls, credentials,
@@ -82,6 +94,10 @@ Create a paper-only execution core where order intents are evaluated by Risk Eng
   approval, or live readiness.
 - Do not let a client-supplied `approval_decision` become the source of authority
   for paper simulation. Controlled Paper Submit must use persisted approval history.
+- Do not treat the local outbox metadata as asynchronous production processing.
+- Do not treat paper execution reports as broker execution reports.
+- Do not implement amend/replace or reconciliation loops without a separate paper-only
+  design and tests.
 
 ## Suggested Commands
 
@@ -89,13 +105,14 @@ Create a paper-only execution core where order intents are evaluated by Risk Eng
 make paper-approval-workflow-check
 make paper-execution-workflow-check
 make paper-execution-persistence-check
+make paper-oms-reliability-check
 cd backend && pytest tests/test_exposure_allocator.py tests/test_risk_engine.py tests/test_roadmap_routes.py
 make check
 ```
 
 ## Next Implementation Notes
 
-Next safe slice: add read-only filters and export tooling around persisted paper
-workflow records. Do not move to external databases, live adapters, or real broker
-execution until paper-only persistence, audit querying, and release readiness gates
-remain stable under tests.
+Next safe slice: add read-only UI panels for OMS reliability metadata if needed.
+Do not add asynchronous workers, external databases, live adapters, amend/replace,
+real broker execution reports, or reconciliation loops until the paper-only
+contracts and release readiness gates remain stable under tests.

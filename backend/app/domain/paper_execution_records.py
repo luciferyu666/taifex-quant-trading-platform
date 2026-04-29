@@ -55,4 +55,8 @@ class PaperExecutionPersistenceStatus(BaseModel):
     runs_count: int = 0
     oms_events_count: int = 0
     audit_events_count: int = 0
+    execution_reports_count: int = 0
+    outbox_items_count: int = 0
+    idempotency_keys_count: int = 0
+    production_oms_ready: bool = False
     message: str

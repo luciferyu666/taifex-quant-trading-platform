@@ -109,6 +109,11 @@ GitHub Actions should report the `Release readiness gate` workflow as passing fo
 - No real broker adapter exists.
 - No live execution path exists.
 - Risk Engine, OMS, Broker Gateway, reconciliation, and audit remain incomplete for production use.
+- Paper OMS now records local idempotency keys, completed local outbox metadata,
+  simulated execution reports, and read-only timeout candidates, but it still has
+  no asynchronous order worker, distributed durable queue, amend/replace, real
+  broker execution report ingestion, reconciliation loop, or WORM-grade audit
+  ledger.
 - Data platform is based on local fixtures, dry-run validation, and schema scaffolding.
 - Backtest outputs are simulated research artifacts, not performance reports.
 - Web Command Center is read-only for research review packet inspection.

@@ -244,6 +244,21 @@ def test_paper_execution_workflow_record_persists_and_exposes_query_endpoints(
         assert status["live_trading_enabled"] is False
         assert status["broker_api_called"] is False
         assert status["runs_count"] == 1
+        assert status["execution_reports_count"] == 2
+        assert status["outbox_items_count"] == 1
+        assert status["idempotency_keys_count"] == 1
+        assert status["production_oms_ready"] is False
+
+        reliability_status = client.get(
+            "/api/paper-execution/reliability/status"
+        ).json()
+        assert reliability_status["paper_only"] is True
+        assert reliability_status["production_oms_ready"] is False
+        assert reliability_status["async_order_processing_enabled"] is False
+        assert reliability_status["durable_outbox_metadata_enabled"] is True
+        assert reliability_status["duplicate_order_prevention_enabled"] is True
+        assert reliability_status["execution_report_model_enabled"] is True
+        assert reliability_status["outbox_items_count"] == 1
 
         runs = client.get("/api/paper-execution/runs").json()
         assert runs[0]["workflow_run_id"] == workflow_run_id
@@ -264,6 +279,24 @@ def test_paper_execution_workflow_record_persists_and_exposes_query_endpoints(
             "FILL",
         ]
 
+        execution_reports = client.get(
+            f"/api/paper-execution/orders/{order_id}/execution-reports"
+        ).json()
+        assert [report["execution_type"] for report in execution_reports] == [
+            "ACKNOWLEDGED",
+            "FILL",
+        ]
+        assert execution_reports[-1]["cumulative_filled_quantity"] == 1
+        assert execution_reports[-1]["leaves_quantity"] == 0
+        assert execution_reports[-1]["paper_only"] is True
+        assert execution_reports[-1]["broker_api_called"] is False
+
+        outbox_items = client.get("/api/paper-execution/outbox").json()
+        assert len(outbox_items) == 1
+        assert outbox_items[0]["status"] == "completed"
+        assert outbox_items[0]["paper_only"] is True
+        assert outbox_items[0]["broker_api_called"] is False
+
         audit_events = client.get(
             f"/api/paper-execution/runs/{workflow_run_id}/audit-events"
         ).json()
@@ -272,5 +305,38 @@ def test_paper_execution_workflow_record_persists_and_exposes_query_endpoints(
             event["action"] == "paper_execution.paper_broker_simulated"
             for event in audit_events
         )
+    finally:
+        get_settings.cache_clear()
+
+
+def test_paper_execution_timeout_candidates_are_read_only(
+    tmp_path: Path,
+    monkeypatch,
+) -> None:
+    db_path = tmp_path / "paper_execution_audit.sqlite"
+    monkeypatch.setenv("PAPER_EXECUTION_AUDIT_DB_PATH", str(db_path))
+    get_settings.cache_clear()
+    client = TestClient(app)
+
+    try:
+        signal = _signal_payload()
+        approval_request_id = _create_approved_approval_request(client, signal)
+        response = client.post(
+            "/api/paper-execution/workflow/record",
+            json={
+                "signal": signal,
+                "approval_request_id": approval_request_id,
+                "broker_simulation": "partial_fill",
+            },
+        )
+        assert response.status_code == 200
+        payload = response.json()
+        assert payload["oms_state"]["status"] == "PARTIALLY_FILLED"
+
+        timeout_candidates = client.get(
+            "/api/paper-execution/reliability/timeout-candidates?timeout_seconds=1"
+        ).json()
+
+        assert timeout_candidates == []
     finally:
         get_settings.cache_clear()
