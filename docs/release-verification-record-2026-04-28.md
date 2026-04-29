@@ -1312,6 +1312,68 @@ Evidence scope:
 - Evidence is a demo traceability artifact only. It is not a production WORM
   ledger, broker confirmation, performance report, or live-readiness approval.
 
+## Paper Demo Evidence Viewer Verification
+
+The Paper Demo Evidence Viewer was committed to `main`, verified by GitHub
+Actions, deployed through Vercel, and checked through the production safety
+smoke gate.
+
+Commit:
+
+```text
+0671a15 Add paper demo evidence viewer
+```
+
+GitHub Actions:
+
+```text
+Workflow: Release Readiness
+Run ID: 25118138000
+Status: passed
+```
+
+Vercel deployment:
+
+```text
+Deployment URL: https://taifex-quant-trading-platform-frontend-5bm3ot5qm.vercel.app
+Deployment ID: dpl_GcbTw9mygiQafPCSJXNZEyra9K6X
+Production alias: https://taifex-quant-trading-platform-front.vercel.app
+Status: Ready
+```
+
+Validation commands:
+
+```bash
+make frontend-i18n-check
+cd frontend && npm run typecheck
+cd frontend && npm run build
+make check
+make frontend-production-smoke-check
+```
+
+Observed result:
+
+```text
+All listed checks passed. The Paper Demo Evidence Viewer accepts an explicit
+local JSON file, validates paper-only safety flags client-side, and displays
+approval request, reviewer decision, workflow, order, OMS count, audit count,
+SQLite path, and warning metadata. Production smoke gate confirmed deployment
+id dpl_GcbTw9mygiQafPCSJXNZEyra9K6X and required safety copy on English and
+Traditional Chinese pages.
+```
+
+Viewer scope:
+
+- Client-side local JSON parsing only.
+- No upload to backend APIs.
+- No database writes.
+- No broker calls or broker credential collection.
+- No live approval, paper execution escalation, or real order creation.
+- Required safety flags checked by the UI:
+  `paper_only=true`, `live_trading_enabled=false`,
+  `broker_api_called=false`, `approval_for_live=false`,
+  `real_order_created=false`.
+
 ## Marketing Website Reachability
 
 Command:
