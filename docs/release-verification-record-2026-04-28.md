@@ -992,7 +992,8 @@ Controlled submit scope:
 - UI is labeled Paper Only.
 - The UI calls only `POST /api/paper-execution/workflow/record`.
 - `StrategySignal` remains signal-only.
-- Approval is fixed to `approved_for_paper_simulation`.
+- Initial approval handling was fixed to `approved_for_paper_simulation`; this
+  was later superseded by the persisted `approval_request_id` requirement below.
 - No live approval control is present.
 - No broker credentials are collected.
 - No broker SDK calls are made.
@@ -1000,6 +1001,76 @@ Controlled submit scope:
 - Backend CORS allows the Command Center origin without credentials.
 - Persistence remains local paper OMS / audit storage only.
 - Live trading remains disabled by default.
+
+## Persisted Approval Requirement Verification
+
+The Paper Only submit path was upgraded so controlled paper execution must
+reference a persisted `approval_request_id` whose local approval history has
+completed the required review sequence and reached
+`approved_for_paper_simulation`.
+
+Commit:
+
+```text
+afa3d3d Require persisted approval for paper submit
+```
+
+GitHub Actions:
+
+```text
+Workflow: Release Readiness
+Run ID: 25105951074
+Status: passed
+```
+
+Vercel deployment:
+
+```text
+Deployment URL: https://taifex-quant-trading-platform-frontend-5kzx9zupr.vercel.app
+Deployment ID: dpl_HjGNgwBurDowigTJikAxy5328YzL
+Production alias: https://taifex-quant-trading-platform-front.vercel.app
+Status: Ready
+```
+
+Validation commands:
+
+```bash
+make paper-simulation-submit-check
+make paper-approval-workflow-check
+make paper-execution-persistence-check
+make frontend-i18n-check
+cd frontend && npm run typecheck
+cd frontend && npm run build
+make check
+make frontend-production-smoke-check
+make customer-demo-ui-smoke-check
+```
+
+Observed result:
+
+```text
+All listed checks passed. Production smoke gates confirmed deployment id
+dpl_HjGNgwBurDowigTJikAxy5328YzL and required safety copy on English and
+Traditional Chinese pages.
+```
+
+Persisted approval scope:
+
+- `POST /api/paper-execution/workflow/preview` and `/record` now load approval
+  history from the local paper approval store.
+- Paper submit requests must include `approval_request_id`.
+- Client-supplied `approval_decision`, `reviewer_id`, and `approval_reason` are
+  no longer accepted as the source of paper execution authority.
+- Backend verifies the required approval sequence, distinct persisted decisions,
+  paper-only flags, no live approval, no broker API call, and signal identity
+  consistency before creating a paper order intent.
+- The Web Command Center submit UI only uses approved approval histories and
+  submits the persisted approval request reference.
+- Demo seed and submit verification scripts create local approval requests and
+  decisions before creating a paper workflow record.
+- Persistence remains local SQLite only.
+- No broker SDK calls, credential collection, real orders, or live trading path
+  were added.
 
 ## Marketing Website Reachability
 
