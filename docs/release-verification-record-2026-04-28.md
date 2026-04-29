@@ -1254,6 +1254,64 @@ UI drill scope:
 - Does not call a real broker, collect credentials, write external databases,
   enable live trading, or create real orders.
 
+## Paper Demo Evidence Export Verification
+
+Commit:
+
+```text
+6118058 Add paper demo evidence export
+```
+
+GitHub Actions:
+
+```text
+Workflow: Release Readiness
+Run ID: 25115477705
+Status: passed
+```
+
+Vercel deployment:
+
+```text
+Deployment URL: https://taifex-quant-trading-platform-frontend-chv4428o6.vercel.app
+Deployment ID: dpl_5oQxjQP3ej5PYn7qFWcr6yR72Pb1
+Production alias: https://taifex-quant-trading-platform-front.vercel.app
+Status: Ready
+```
+
+Validation commands:
+
+```bash
+make seed-paper-execution-demo
+make paper-demo-evidence-export
+cd backend && .venv/bin/python -m pytest tests/test_paper_demo_evidence_export_script.py
+make paper-execution-persistence-check
+make check
+make frontend-production-smoke-check
+```
+
+Observed result:
+
+```text
+All listed checks passed. Paper demo evidence export reads local SQLite in
+read-only mode, prints evidence JSON to stdout by default, and writes a local
+JSON or Markdown file only with explicit --output. Production smoke gate
+confirmed deployment id dpl_5oQxjQP3ej5PYn7qFWcr6yR72Pb1 and required safety
+copy on English and Traditional Chinese pages.
+```
+
+Evidence scope:
+
+- Includes approval request ID, reviewer decisions, workflow run ID, order ID,
+  final OMS status, OMS event count, audit event count, safety flags, local
+  SQLite path, and timestamp.
+- Uses local SQLite only.
+- Does not upload files, write external databases, collect credentials, call
+  brokers, enable live trading, create real orders, or produce investment
+  advice.
+- Evidence is a demo traceability artifact only. It is not a production WORM
+  ledger, broker confirmation, performance report, or live-readiness approval.
+
 ## Marketing Website Reachability
 
 Command:
