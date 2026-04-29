@@ -773,6 +773,82 @@ Safety scope:
 - Credential collection: none.
 - Live trading remains disabled by default.
 
+## Customer Demo Guided Flow Verification
+
+The Customer Demo Guided Flow was committed to `main`, verified by GitHub Actions,
+deployed through the Web Command Center Vercel project, and rechecked with the
+production smoke gate.
+
+Verification time:
+
+```text
+2026-04-29 10:37 CST (+0800)
+```
+
+Verified commit:
+
+```text
+61ce678 Add customer demo guided flow
+```
+
+GitHub Actions verification:
+
+```text
+workflow: Release Readiness
+run: 25087844047
+event: push
+branch: main
+status: completed
+conclusion: success
+duration: 1m25s
+created: 2026-04-29T02:24:51Z
+```
+
+Production alias inspection:
+
+```text
+alias: https://taifex-quant-trading-platform-front.vercel.app
+url: https://taifex-quant-trading-platform-frontend-3qu680z7h.vercel.app
+id: dpl_6BgWm4KLx5cQBtJiX6u2Z1ZgzLym
+target: production
+status: Ready
+created: Wed Apr 29 2026 10:24:50 GMT+0800
+```
+
+Production smoke gate:
+
+```text
+Production Command Center smoke check passed.
+Production root returned HTTP 200.
+Traditional Chinese page returned HTTP 200.
+English page returned HTTP 200.
+All checked pages use deployment id dpl_6BgWm4KLx5cQBtJiX6u2Z1ZgzLym.
+```
+
+Guided flow scope:
+
+- Seven-step customer demo tour.
+- Bilingual English and Traditional Chinese guide copy.
+- Previous / Next / Reset / Copy checklist controls.
+- Release, safety default, paper OMS, audit record, research packet, contract spec,
+  and prohibited-action walkthrough.
+- Prohibited-action list for live trading, broker login, real orders, credential
+  upload, customer onboarding, and trading recommendations.
+
+Safety scope:
+
+- Read-only UI behavior only.
+- Backend mutation endpoints: none.
+- Order submission: none.
+- Broker SDK calls: none.
+- Database writes: none.
+- File uploads: none.
+- Credential collection: none.
+- Paper execution approval escalation: none.
+- Live approval controls: none.
+- Production trading readiness claim: none.
+- Live trading remains disabled by default.
+
 ## Marketing Website Reachability
 
 Command:
