@@ -1078,6 +1078,10 @@ th {
   margin-top: 44px;
 }
 
+.paper-reliability-section {
+  margin-top: 44px;
+}
+
 .paper-records-section .section-heading p:not(.eyebrow) {
   max-width: 900px;
   margin: 10px 0 0;
@@ -1107,6 +1111,53 @@ th {
 
 .paper-evidence-wide {
   grid-column: 1 / -1;
+}
+
+.paper-reliability-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(340px, 0.9fr);
+  gap: 16px;
+  margin-top: 16px;
+}
+
+.paper-reliability-grid.secondary {
+  grid-template-columns: minmax(0, 1.05fr) minmax(320px, 0.95fr);
+}
+
+.paper-reliability-grid.tertiary {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  align-items: start;
+}
+
+.reliability-wide {
+  min-width: 0;
+}
+
+.reliability-metrics {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.reliability-flags {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.reliability-list {
+  display: grid;
+  gap: 12px;
+  margin: 18px 0 0;
+  padding-left: 22px;
+}
+
+.reliability-list li {
+  min-width: 0;
+}
+
+.muted-copy {
+  color: var(--muted);
+  line-height: 1.5;
 }
 
 .paper-records-layout,
@@ -1507,6 +1558,9 @@ dd {
   .paper-approval-grid,
   .paper-evidence-loader,
   .paper-evidence-layout,
+  .paper-reliability-grid,
+  .paper-reliability-grid.secondary,
+  .paper-reliability-grid.tertiary,
   .paper-records-layout,
   .paper-timeline-layout,
   .packet-loader,

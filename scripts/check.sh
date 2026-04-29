@@ -201,6 +201,7 @@ for required_file in \
   frontend/test-fixtures/research-review-packets/invalid-decision-summary.json \
   frontend/app/components/PaperApprovalQueuePanel.tsx \
   frontend/app/components/PaperExecutionRecordsPanel.tsx \
+  frontend/app/components/PaperOmsReliabilityPanel.tsx \
   frontend/app/components/PaperSimulationSubmitPanel.tsx \
   frontend/app/components/PaperOmsTimelinePanel.tsx \
   frontend/app/components/PaperAuditTimelinePanel.tsx \

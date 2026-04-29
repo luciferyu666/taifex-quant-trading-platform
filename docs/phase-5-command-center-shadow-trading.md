@@ -184,6 +184,12 @@ Expose roadmap phase status, contracts, safety mode, risk status, and paper-only
 - The Paper OMS / Audit Query Viewer is a display surface only. It must not call
   `/api/paper-execution/workflow/record`, any paper simulation submit endpoint, any
   approval escalation endpoint, any broker endpoint, or any live-control path.
+- The Paper OMS Reliability Viewer is a display surface only. It may read
+  `/api/paper-execution/reliability/status`, `/api/paper-execution/outbox`,
+  `/api/paper-execution/orders/{order_id}/execution-reports`, and
+  `/api/paper-execution/reliability/timeout-candidates`. It must not process
+  outbox workers, mutate OMS state, write databases, approve execution, call
+  brokers, collect credentials, or imply production OMS readiness.
 - The Safe Read-Only Interaction Layer may expose refresh, tab switching, row
   selection, clipboard copy, bundled sample loading, and local JSON clearing only.
   It must not create orders, write databases, upload local JSON, call broker
@@ -256,3 +262,9 @@ productized paper simulation submit flow. The current frontend still uses the
 controlled demo submit path, while the Command Center can now show approval
 queue/history as read-only workflow context. Future UI should require persisted
 approval history before allowing paper simulation submission.
+The Paper OMS Reliability Viewer now surfaces local-only outbox metadata,
+idempotency key counts, simulated execution report metadata, timeout candidates,
+and non-production gaps. Future work should keep this panel read-only until a
+separate backend slice introduces durable queues, asynchronous processing, timeout
+mutation handling, amend/replace, and reconciliation under explicit paper-only
+tests.

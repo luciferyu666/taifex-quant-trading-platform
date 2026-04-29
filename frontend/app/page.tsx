@@ -13,6 +13,13 @@ import type { PaperAuditEventRecord } from "./components/PaperAuditTimelinePanel
 import { PaperApprovalDecisionPanel } from "./components/PaperApprovalDecisionPanel";
 import { PaperApprovalRequestPanel } from "./components/PaperApprovalRequestPanel";
 import { PaperDemoEvidencePanel } from "./components/PaperDemoEvidencePanel";
+import {
+  PaperOmsReliabilityPanel,
+  type PaperExecutionReport,
+  type PaperOmsOutboxItem,
+  type PaperOmsReliabilityStatus,
+  type PaperOrderTimeoutCandidate,
+} from "./components/PaperOmsReliabilityPanel";
 import type { PaperOmsEventRecord } from "./components/PaperOmsTimelinePanel";
 import { PaperSimulationSubmitPanel } from "./components/PaperSimulationSubmitPanel";
 import { ResearchReviewPacketJsonLoader } from "./components/ResearchReviewPacketJsonLoader";
@@ -74,6 +81,10 @@ type PaperExecutionPersistenceStatus = {
   runs_count: number;
   oms_events_count: number;
   audit_events_count: number;
+  execution_reports_count: number;
+  outbox_items_count: number;
+  idempotency_keys_count: number;
+  production_oms_ready: boolean;
   message: string;
 };
 
@@ -172,12 +183,46 @@ const fallbackPaperExecutionPersistenceStatus: PaperExecutionPersistenceStatus =
   runs_count: 0,
   oms_events_count: 0,
   audit_events_count: 0,
+  execution_reports_count: 0,
+  outbox_items_count: 0,
+  idempotency_keys_count: 0,
+  production_oms_ready: false,
   message: "Fallback local persistence status. Backend is unavailable.",
 };
 
 const fallbackPaperExecutionRuns: PaperExecutionRunRecord[] = [];
 const fallbackPaperOmsEvents: PaperOmsEventRecord[] = [];
 const fallbackPaperAuditEvents: PaperAuditEventRecord[] = [];
+const fallbackPaperOmsReliabilityStatus: PaperOmsReliabilityStatus = {
+  paper_only: true,
+  live_trading_enabled: false,
+  broker_api_called: false,
+  production_oms_ready: false,
+  local_sqlite_only: true,
+  async_order_processing_enabled: false,
+  durable_outbox_metadata_enabled: true,
+  duplicate_order_prevention_enabled: true,
+  timeout_candidate_scan_enabled: true,
+  execution_report_model_enabled: true,
+  amend_replace_enabled: false,
+  reconciliation_loop_enabled: false,
+  outbox_items_count: 0,
+  idempotency_keys_count: 0,
+  execution_reports_count: 0,
+  timeout_candidates_count: 0,
+  known_gaps: [
+    "No asynchronous order worker exists.",
+    "No distributed durable queue or outbox worker exists.",
+    "No amend or replace workflow exists.",
+    "No production reconciliation loop exists.",
+    "Local SQLite reliability metadata is not a production WORM ledger.",
+  ],
+  message:
+    "Fallback Paper OMS reliability metadata. The production OMS path is not ready and remains paper-only.",
+};
+const fallbackPaperOmsOutboxItems: PaperOmsOutboxItem[] = [];
+const fallbackPaperExecutionReports: PaperExecutionReport[] = [];
+const fallbackPaperTimeoutCandidates: PaperOrderTimeoutCandidate[] = [];
 
 const fallbackPaperApprovalStatus: PaperApprovalStatus = {
   trading_mode: "paper",
@@ -321,6 +366,9 @@ export default async function Home({ searchParams }: HomeProps) {
     paperStatus,
     paperExecutionStatus,
     paperExecutionPersistence,
+    paperOmsReliability,
+    paperOmsOutbox,
+    paperTimeoutCandidates,
     paperExecutionRuns,
     paperApprovalStatus,
     paperApprovalQueue,
@@ -340,6 +388,18 @@ export default async function Home({ searchParams }: HomeProps) {
       fetchJson<PaperExecutionPersistenceStatus>(
         "/api/paper-execution/persistence/status",
         fallbackPaperExecutionPersistenceStatus,
+      ),
+      fetchJson<PaperOmsReliabilityStatus>(
+        "/api/paper-execution/reliability/status",
+        fallbackPaperOmsReliabilityStatus,
+      ),
+      fetchJson<PaperOmsOutboxItem[]>(
+        "/api/paper-execution/outbox?limit=5",
+        fallbackPaperOmsOutboxItems,
+      ),
+      fetchJson<PaperOrderTimeoutCandidate[]>(
+        "/api/paper-execution/reliability/timeout-candidates?timeout_seconds=30",
+        fallbackPaperTimeoutCandidates,
       ),
       fetchJson<PaperExecutionRunRecord[]>(
         "/api/paper-execution/runs?limit=5",
@@ -366,6 +426,7 @@ export default async function Home({ searchParams }: HomeProps) {
 
   const contracts = contractsResponse.data.contracts;
   const selectedPaperRunId = paperExecutionRuns.data[0]?.workflow_run_id;
+  const selectedPaperOrderId = paperExecutionRuns.data[0]?.order_id;
   const [paperOmsEvents, paperAuditEvents] = selectedPaperRunId
     ? await Promise.all([
         fetchJson<PaperOmsEventRecord[]>(
@@ -381,6 +442,12 @@ export default async function Home({ searchParams }: HomeProps) {
         { available: true as const, data: fallbackPaperOmsEvents },
         { available: true as const, data: fallbackPaperAuditEvents },
       ];
+  const paperExecutionReports = selectedPaperOrderId
+    ? await fetchJson<PaperExecutionReport[]>(
+        `/api/paper-execution/orders/${selectedPaperOrderId}/execution-reports`,
+        fallbackPaperExecutionReports,
+      )
+    : { available: true as const, data: fallbackPaperExecutionReports };
   const paperRecordsAvailable =
     paperExecutionRuns.available && paperOmsEvents.available && paperAuditEvents.available;
   const paperRecordsError = [
@@ -401,6 +468,16 @@ export default async function Home({ searchParams }: HomeProps) {
     paperExecutionPersistence.available
       ? undefined
       : `paper persistence: ${paperExecutionPersistence.error}`,
+    paperOmsReliability.available
+      ? undefined
+      : `paper reliability: ${paperOmsReliability.error}`,
+    paperOmsOutbox.available ? undefined : `paper outbox: ${paperOmsOutbox.error}`,
+    paperTimeoutCandidates.available
+      ? undefined
+      : `paper timeout candidates: ${paperTimeoutCandidates.error}`,
+    paperExecutionReports.available
+      ? undefined
+      : `paper execution reports: ${paperExecutionReports.error}`,
     paperExecutionRuns.available ? undefined : `paper records: ${paperExecutionRuns.error}`,
     paperApprovalStatus.available
       ? undefined
@@ -581,6 +658,18 @@ export default async function Home({ searchParams }: HomeProps) {
                   {paperExecutionPersistence.data.audit_events_count}
                 </span>
                 <span>
+                  {copy.paperExecution.executionReports}:{" "}
+                  {paperExecutionPersistence.data.execution_reports_count}
+                </span>
+                <span>
+                  {copy.paperExecution.outboxItems}:{" "}
+                  {paperExecutionPersistence.data.outbox_items_count}
+                </span>
+                <span>
+                  {copy.paperExecution.productionOmsReady}:{" "}
+                  {String(paperExecutionPersistence.data.production_oms_ready)}
+                </span>
+                <span>
                   {copy.paperExecution.dbPath}: {paperExecutionPersistence.data.db_path}
                 </span>
               </div>
@@ -634,6 +723,31 @@ export default async function Home({ searchParams }: HomeProps) {
               auditEvents={paperAuditEvents.data}
               omsEvents={paperOmsEvents.data}
               runs={paperExecutionRuns.data}
+            />
+
+            <PaperOmsReliabilityPanel
+              available={
+                paperOmsReliability.available &&
+                paperOmsOutbox.available &&
+                paperTimeoutCandidates.available &&
+                paperExecutionReports.available
+              }
+              copy={copy}
+              error={
+                [
+                  paperOmsReliability.available ? undefined : paperOmsReliability.error,
+                  paperOmsOutbox.available ? undefined : paperOmsOutbox.error,
+                  paperTimeoutCandidates.available ? undefined : paperTimeoutCandidates.error,
+                  paperExecutionReports.available ? undefined : paperExecutionReports.error,
+                ]
+                  .filter(Boolean)
+                  .join("; ") || undefined
+              }
+              executionReports={paperExecutionReports.data}
+              latestOrderId={selectedPaperOrderId}
+              outboxItems={paperOmsOutbox.data}
+              reliability={paperOmsReliability.data}
+              timeoutCandidates={paperTimeoutCandidates.data}
             />
 
             <PaperDemoEvidencePanel copy={copy} />

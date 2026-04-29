@@ -11,6 +11,7 @@ const files = {
   paperApprovalRequest: "frontend/app/components/PaperApprovalRequestPanel.tsx",
   paperApprovalDecision: "frontend/app/components/PaperApprovalDecisionPanel.tsx",
   paperDemoEvidence: "frontend/app/components/PaperDemoEvidencePanel.tsx",
+  paperOmsReliability: "frontend/app/components/PaperOmsReliabilityPanel.tsx",
   paperRecords: "frontend/app/components/PaperExecutionRecordsPanel.tsx",
   paperSubmit: "frontend/app/components/PaperSimulationSubmitPanel.tsx",
   paperOmsTimeline: "frontend/app/components/PaperOmsTimelinePanel.tsx",
@@ -301,6 +302,25 @@ requireContains("Paper records rows are selectable", sourceByFile.paperRecords, 
 requireContains("Paper records workflow copy action exists", sourceByFile.i18n, "Copy workflow ID");
 requireContains("Paper records order copy action exists", sourceByFile.i18n, "Copy order ID");
 requireContains("Paper records panel avoids broker calls", combinedSource, "broker_api_called");
+requireContains("English paper OMS reliability copy exists", sourceByFile.i18n, "Paper OMS reliability metadata");
+requireContains("Traditional Chinese paper OMS reliability copy exists", sourceByFile.i18n, "紙上 OMS reliability metadata");
+requireContains("Paper OMS reliability panel is implemented", sourceByFile.paperOmsReliability, "PaperOmsReliabilityPanel");
+requireContains("Paper OMS reliability status endpoint is read on page", sourceByFile.page, "/api/paper-execution/reliability/status");
+requireContains("Paper OMS outbox endpoint is read on page", sourceByFile.page, "/api/paper-execution/outbox");
+requireContains("Paper OMS execution reports endpoint is read on page", sourceByFile.page, "/execution-reports");
+requireContains("Paper OMS timeout candidates endpoint is read on page", sourceByFile.page, "/api/paper-execution/reliability/timeout-candidates");
+requireContains("Paper OMS reliability panel shows production_oms_ready", sourceByFile.paperOmsReliability, "production_oms_ready");
+requireContains("Paper OMS reliability panel shows async_order_processing_enabled", sourceByFile.paperOmsReliability, "async_order_processing_enabled");
+requireContains("Paper OMS reliability panel shows execution report model", sourceByFile.paperOmsReliability, "execution_report_model_enabled");
+requireContains("Paper OMS reliability panel shows duplicate prevention", sourceByFile.paperOmsReliability, "duplicate_order_prevention_enabled");
+requireContains("Paper OMS reliability panel shows timeout scan", sourceByFile.paperOmsReliability, "timeout_candidate_scan_enabled");
+requireContains("Paper OMS reliability panel is mounted on page", sourceByFile.page, "PaperOmsReliabilityPanel");
+requireNotContains("Paper OMS reliability panel does not fetch backend", sourceByFile.paperOmsReliability, "fetch(");
+requireNotContains("Paper OMS reliability panel does not call workflow record", sourceByFile.paperOmsReliability, "/api/paper-execution/workflow/record");
+requireNotContains("Paper OMS reliability panel does not call approval decisions", sourceByFile.paperOmsReliability, "/decisions");
+requireNotContains("Paper OMS reliability panel does not collect API keys", sourceByFile.paperOmsReliability.toLowerCase(), "api_key");
+requireNotContains("Paper OMS reliability panel does not collect account IDs", sourceByFile.paperOmsReliability.toLowerCase(), "account_id");
+requireNotContains("Paper OMS reliability panel does not collect certificates", sourceByFile.paperOmsReliability.toLowerCase(), "certificate");
 requireContains("Packet loader bundled sample action exists", sourceByFile.i18n, "Load safe sample");
 requireContains("Packet loader clear local JSON action exists", sourceByFile.i18n, "Clear local JSON");
 requireContains("Packet loader still performs local validation", sourceByFile.packetLoader, "validateResearchReviewPacket");

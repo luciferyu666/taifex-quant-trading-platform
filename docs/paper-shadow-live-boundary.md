@@ -365,6 +365,10 @@ Future live work requires:
 - No Paper OMS / Audit Query Viewer UI panel may mutate persisted records, trigger
   paper simulation, grant approval escalation, connect brokers, call Risk Engine,
   call OMS, create order intents, show performance claims, or expose live controls.
+- No Paper OMS Reliability Viewer UI panel may process outbox records, mutate OMS
+  state, mark orders timed out, amend or replace orders, run reconciliation, write
+  databases, call brokers, collect credentials, approve execution, or claim
+  production OMS readiness.
 - No local packet JSON loader may accept unsafe approval, execution, ranking,
   persistence, broker, Risk Engine, OMS, external download, or performance-claim
   flags.
