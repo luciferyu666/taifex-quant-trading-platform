@@ -106,6 +106,41 @@ make paper-demo-evidence-export
 
 Then open the Web Command Center and inspect the Paper OMS / Audit viewer. The evidence output gives the reviewer a compact reference for the same workflow run shown in the UI.
 
+## Web Command Center Evidence Viewer
+
+The Web Command Center includes a read-only Paper Demo Evidence Viewer in the
+Paper OMS tab. It lets a reviewer explicitly select a local `.json` evidence file
+and inspect it in the browser.
+
+The viewer:
+
+- Parses the JSON client-side.
+- Does not upload the file.
+- Does not call backend mutation APIs.
+- Does not write a database.
+- Does not call brokers.
+- Does not collect credentials.
+- Rejects evidence unless `paper_only=true`, `live_trading_enabled=false`,
+  `broker_api_called=false`, `approval_for_live=false`, and
+  `real_order_created=false`.
+
+Suggested UI flow:
+
+1. Run `make seed-paper-execution-demo`.
+2. Export evidence with explicit output:
+
+```bash
+backend/.venv/bin/python scripts/export-paper-demo-evidence.py \
+  --output data-pipeline/reports/paper_demo_evidence.preview.json
+```
+
+3. Open the Web Command Center.
+4. Go to the Paper OMS tab.
+5. Select `data-pipeline/reports/paper_demo_evidence.preview.json` in the
+   Paper Demo Evidence Viewer.
+6. Confirm the approval request, reviewer decisions, workflow run, order ID,
+   OMS/audit counts, warnings, and safety flags.
+
 ## Review Notes
 
 - Evidence export is for test/demo traceability only.

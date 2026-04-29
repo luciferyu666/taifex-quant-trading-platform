@@ -1074,11 +1074,39 @@ th {
   margin-top: 44px;
 }
 
+.paper-evidence-section {
+  margin-top: 44px;
+}
+
 .paper-records-section .section-heading p:not(.eyebrow) {
   max-width: 900px;
   margin: 10px 0 0;
   color: var(--muted);
   line-height: 1.55;
+}
+
+.paper-evidence-loader {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 16px;
+  align-items: center;
+}
+
+.paper-evidence-loader p {
+  margin: 8px 0 0;
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+.paper-evidence-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(320px, 0.9fr) minmax(320px, 0.9fr);
+  gap: 16px;
+  margin-top: 16px;
+}
+
+.paper-evidence-wide {
+  grid-column: 1 / -1;
 }
 
 .paper-records-layout,
@@ -1477,6 +1505,8 @@ dd {
   .paper-approval-request-grid,
   .paper-approval-decision-grid,
   .paper-approval-grid,
+  .paper-evidence-loader,
+  .paper-evidence-layout,
   .paper-records-layout,
   .paper-timeline-layout,
   .packet-loader,

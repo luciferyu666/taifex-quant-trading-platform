@@ -230,6 +230,11 @@ Paper Demo Evidence Export is an explicit local-only evidence handoff:
   credentials, create orders, approve live trading, or produce investment advice.
 - It is a customer demo traceability artifact only; it is not a production WORM
   ledger, broker confirmation, performance report, or live-readiness approval.
+- The Web Command Center Paper Demo Evidence Viewer may load an explicitly
+  selected local evidence JSON file client-side for read-only display.
+- The viewer must reject unsafe evidence flags and must not upload files, call
+  backend mutation APIs, write databases, collect credentials, call brokers,
+  create orders, or grant live approval.
 
 Paper Approval Workflow Foundation is local paper governance scaffolding:
 

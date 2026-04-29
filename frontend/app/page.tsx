@@ -12,6 +12,7 @@ import { DemoGuidePanel } from "./components/DemoGuidePanel";
 import type { PaperAuditEventRecord } from "./components/PaperAuditTimelinePanel";
 import { PaperApprovalDecisionPanel } from "./components/PaperApprovalDecisionPanel";
 import { PaperApprovalRequestPanel } from "./components/PaperApprovalRequestPanel";
+import { PaperDemoEvidencePanel } from "./components/PaperDemoEvidencePanel";
 import type { PaperOmsEventRecord } from "./components/PaperOmsTimelinePanel";
 import { PaperSimulationSubmitPanel } from "./components/PaperSimulationSubmitPanel";
 import { ResearchReviewPacketJsonLoader } from "./components/ResearchReviewPacketJsonLoader";
@@ -634,6 +635,8 @@ export default async function Home({ searchParams }: HomeProps) {
               omsEvents={paperOmsEvents.data}
               runs={paperExecutionRuns.data}
             />
+
+            <PaperDemoEvidencePanel copy={copy} />
           </>
         }
         packet={

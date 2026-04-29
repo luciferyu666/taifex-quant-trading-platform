@@ -132,8 +132,11 @@ make paper-simulation-submit-check
 9. If the customer needs a handoff artifact, export a local Paper Demo Evidence
    JSON or Markdown summary. The default export is stdout; explicit `--output`
    writes only a small local file.
-10. Explain what the current system does not do: no live trading, no broker integration, no customer execution.
-11. Collect structured feedback using `docs/customer-feedback-form.md`.
+10. Optionally load the exported local JSON into the Web Command Center Paper Demo
+    Evidence Viewer. This is client-side only and does not upload files, write
+    databases, call brokers, collect credentials, or create orders.
+11. Explain what the current system does not do: no live trading, no broker integration, no customer execution.
+12. Collect structured feedback using `docs/customer-feedback-form.md`.
 
 ## Success Criteria
 

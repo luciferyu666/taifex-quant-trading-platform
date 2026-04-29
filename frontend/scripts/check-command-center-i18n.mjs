@@ -10,6 +10,7 @@ const files = {
   paperApprovals: "frontend/app/components/PaperApprovalQueuePanel.tsx",
   paperApprovalRequest: "frontend/app/components/PaperApprovalRequestPanel.tsx",
   paperApprovalDecision: "frontend/app/components/PaperApprovalDecisionPanel.tsx",
+  paperDemoEvidence: "frontend/app/components/PaperDemoEvidencePanel.tsx",
   paperRecords: "frontend/app/components/PaperExecutionRecordsPanel.tsx",
   paperSubmit: "frontend/app/components/PaperSimulationSubmitPanel.tsx",
   paperOmsTimeline: "frontend/app/components/PaperOmsTimelinePanel.tsx",
@@ -224,6 +225,27 @@ requireContains("Command Center refresh action exists", sourceByFile.i18n, "Refr
 requireContains("Command Center backend troubleshooting exists", sourceByFile.commandTabs, "troubleshooting-panel");
 requireContains("English paper records copy exists", sourceByFile.i18n, "Persisted paper workflow records");
 requireContains("Traditional Chinese paper records copy exists", sourceByFile.i18n, "已持久化紙上流程紀錄");
+requireContains("English paper evidence copy exists", sourceByFile.i18n, "Paper demo evidence viewer");
+requireContains("Traditional Chinese paper evidence copy exists", sourceByFile.i18n, "紙上 demo evidence viewer");
+requireContains("Paper demo evidence panel is implemented", sourceByFile.paperDemoEvidence, "PaperDemoEvidencePanel");
+requireContains("Paper demo evidence panel validates local JSON", sourceByFile.paperDemoEvidence, "validatePaperDemoEvidence");
+requireContains("Paper demo evidence panel accepts explicit JSON only", sourceByFile.paperDemoEvidence, "accept=\".json,application/json\"");
+requireContains("Paper demo evidence panel does not upload files", sourceByFile.i18n, "not uploaded");
+requireContains("Paper demo evidence panel checks paper_only=true", sourceByFile.paperDemoEvidence, "paper_only: true");
+requireContains("Paper demo evidence panel checks live_trading_enabled=false", sourceByFile.paperDemoEvidence, "live_trading_enabled: false");
+requireContains("Paper demo evidence panel checks broker_api_called=false", sourceByFile.paperDemoEvidence, "broker_api_called: false");
+requireContains("Paper demo evidence panel checks approval_for_live=false", sourceByFile.paperDemoEvidence, "approval_for_live: false");
+requireContains("Paper demo evidence panel checks real_order_created=false", sourceByFile.paperDemoEvidence, "real_order_created: false");
+requireContains("Paper demo evidence panel displays approval_request_id", sourceByFile.paperDemoEvidence, "approval_request_id");
+requireContains("Paper demo evidence panel displays workflow_run_id", sourceByFile.paperDemoEvidence, "workflow_run_id");
+requireContains("Paper demo evidence panel displays OMS event count", sourceByFile.paperDemoEvidence, "oms_event_count");
+requireContains("Paper demo evidence panel displays audit event count", sourceByFile.paperDemoEvidence, "audit_event_count");
+requireContains("Paper demo evidence panel is mounted on page", sourceByFile.page, "PaperDemoEvidencePanel");
+requireNotContains("Paper demo evidence panel does not fetch backend", sourceByFile.paperDemoEvidence, "fetch(");
+requireNotContains("Paper demo evidence panel does not call workflow record", sourceByFile.paperDemoEvidence, "/api/paper-execution/workflow/record");
+requireNotContains("Paper demo evidence panel does not collect API keys", sourceByFile.paperDemoEvidence.toLowerCase(), "api_key");
+requireNotContains("Paper demo evidence panel does not collect account IDs", sourceByFile.paperDemoEvidence.toLowerCase(), "account_id");
+requireNotContains("Paper demo evidence panel does not collect certificates", sourceByFile.paperDemoEvidence.toLowerCase(), "certificate");
 requireContains("English paper submit copy exists", sourceByFile.i18n, "Create a paper simulation record");
 requireContains("Traditional Chinese paper submit copy exists", sourceByFile.i18n, "建立紙上模擬紀錄");
 requireContains("Paper submit component is implemented", sourceByFile.paperSubmit, "PaperSimulationSubmitPanel");

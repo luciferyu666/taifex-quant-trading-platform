@@ -105,6 +105,10 @@ Expose roadmap phase status, contracts, safety mode, risk status, and paper-only
   `make paper-demo-evidence-export`. It reads local SQLite in read-only mode and
   produces stdout evidence by default, with optional local JSON or Markdown output
   only when `--output` is supplied.
+- Paper Demo Evidence Viewer is a read-only local JSON viewer in the Paper OMS
+  tab. It parses explicitly selected evidence JSON client-side, validates safety
+  flags, and never uploads files, calls backend mutation APIs, writes databases,
+  collects credentials, calls brokers, creates orders, or grants live approval.
 - Paper Execution Approval Workflow panel is read-only and displays only paper
   simulation status, required route, and safety indicators.
 - Paper Execution Approval Workflow panel does not include submit buttons,

@@ -193,6 +193,11 @@ UI submit
     count, and safety flags.
   - Explain that explicit `--output` can write a small local JSON or Markdown
     summary for customer feedback, but the default is stdout and there is no upload.
+  - If using the Web Command Center, explicitly select the exported local JSON in
+    the Paper Demo Evidence Viewer under the Paper OMS tab.
+  - Confirm that the viewer parses the file client-side, validates paper-only
+    safety flags, and does not upload files, call backend mutation APIs, write
+    databases, collect credentials, call brokers, or create orders.
   - Do not present this evidence as a broker confirmation, investment report,
     performance claim, or live approval.
 - Customer Demo Guided Flow:
