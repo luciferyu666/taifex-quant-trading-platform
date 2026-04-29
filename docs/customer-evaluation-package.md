@@ -86,6 +86,7 @@ Suggested commands:
 git status --short --branch
 make customer-evaluation-check
 make frontend-production-smoke-check
+make customer-demo-ui-smoke-check
 make release-readiness-check
 ```
 
@@ -128,6 +129,7 @@ A successful customer evaluation should produce:
 - Release baseline: `docs/release-baseline-v0.1.0.md`
 - Release verification record: `docs/release-verification-record-2026-04-28.md`
 - Production verification runbook: `docs/frontend-command-center-deployment-verification.md`
+- Customer demo UI smoke test: `docs/customer-demo-ui-smoke-test.md`
 - Paper execution demo seed: `scripts/seed-paper-execution-demo.py`
 
 ## Safety Statement

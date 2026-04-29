@@ -14,12 +14,14 @@ Before the session:
 git status --short --branch
 make customer-evaluation-check
 make frontend-production-smoke-check
+make customer-demo-ui-smoke-check
 ```
 
 Confirm:
 
 - `Release Readiness` GitHub Actions is passing.
 - Web Command Center production alias is `Ready`.
+- Customer Demo Guided Flow production smoke check is passing.
 - `TRADING_MODE=paper`.
 - `ENABLE_LIVE_TRADING=false`.
 - `BROKER_PROVIDER=paper`.

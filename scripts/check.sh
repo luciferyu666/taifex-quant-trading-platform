@@ -413,6 +413,9 @@ if command -v node >/dev/null 2>&1; then
   printf 'Checking deployed frontend Command Center production safety copy...\n'
   node frontend/scripts/check-production-command-center.mjs
 
+  printf 'Checking deployed frontend Customer Demo Guided Flow UI...\n'
+  node frontend/scripts/check-customer-demo-ui.mjs
+
   printf 'Checking frontend Research Review Packet loader fixtures...\n'
   node --experimental-strip-types frontend/scripts/validate-research-review-packet-fixtures.mjs
 else

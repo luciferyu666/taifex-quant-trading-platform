@@ -205,7 +205,7 @@ requireContains("English local JSON loader copy exists", sourceByFile.i18n, "Sel
 requireContains("Traditional Chinese local JSON loader copy exists", sourceByFile.i18n, "選擇本地 .json");
 requireContains("English no-upload copy exists", sourceByFile.i18n, "The file was not uploaded");
 requireContains("Traditional Chinese no-upload copy exists", sourceByFile.i18n, "檔案未上傳");
-requireContains("English demo guide copy exists", sourceByFile.i18n, "Customer evaluation flow");
+requireContains("English demo guide copy exists", sourceByFile.i18n, "Customer Demo Guided Flow");
 requireContains("Traditional Chinese demo guide copy exists", sourceByFile.i18n, "客戶測試導覽流程");
 requireContains("Demo guide component is implemented", sourceByFile.demoGuide, "DemoGuidePanel");
 requireContains("Demo guide previous action exists", sourceByFile.demoGuide, "goToPreviousStep");

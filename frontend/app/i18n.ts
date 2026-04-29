@@ -39,7 +39,7 @@ export const dashboardCopy = {
     demoGuide: {
       ariaLabel: "Customer demo guided flow",
       eyebrow: "Demo Tour",
-      title: "Customer evaluation flow",
+      title: "Customer Demo Guided Flow",
       description:
         "A read-only walkthrough for understanding release level, safety defaults, paper OMS records, research packets, and contract specs. The tour changes only local UI state.",
       readOnlyBadge: "Read-only tour",
