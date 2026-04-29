@@ -91,8 +91,10 @@ for required_file in \
   docs/customer-evaluation-checklist.md \
   docs/customer-feedback-form.md \
   docs/paper-simulation-submit-verification.md \
+  docs/paper-approval-ui-flow-smoke-drill.md \
   docs/paper-approval-workflow.md \
-  scripts/customer-evaluation-check.sh; do
+  scripts/customer-evaluation-check.sh \
+  frontend/scripts/check-paper-approval-ui-flow.mjs; do
   if [[ ! -f "${required_file}" ]]; then
     printf 'Missing required customer evaluation file: %s\n' "${required_file}" >&2
     missing_customer_eval_file=1

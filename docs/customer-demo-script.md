@@ -15,6 +15,7 @@ git status --short --branch
 make customer-evaluation-check
 make frontend-production-smoke-check
 make customer-demo-ui-smoke-check
+make paper-approval-ui-flow-smoke-check
 ```
 
 Confirm:
@@ -22,6 +23,8 @@ Confirm:
 - `Release Readiness` GitHub Actions is passing.
 - Web Command Center production alias is `Ready`.
 - Customer Demo Guided Flow production smoke check is passing.
+- Local Paper Approval UI Flow smoke drill is passing if the customer will test
+  the full browser-based paper request / decision / submit path.
 - `TRADING_MODE=paper`.
 - `ENABLE_LIVE_TRADING=false`.
 - `BROKER_PROVIDER=paper`.
@@ -46,6 +49,18 @@ This posts a bounded Paper Only payload to
 `/api/paper-execution/workflow/record` through FastAPI `TestClient`, verifies the
 Risk Engine / OMS / Paper Broker Gateway / audit trace, and uses a temporary local
 SQLite database by default.
+
+Optional browser-level verification for the full Web UI paper approval flow:
+
+```bash
+make paper-approval-ui-flow-smoke-check
+```
+
+This starts a local backend, local frontend, temporary SQLite database, and
+headless browser. It creates one paper approval request through the UI, records
+two reviewer decisions through the UI, submits one controlled Paper Only
+simulation through the UI, and confirms the OMS / Audit Viewer displays the
+persisted workflow.
 
 ## 1. Opening Positioning
 

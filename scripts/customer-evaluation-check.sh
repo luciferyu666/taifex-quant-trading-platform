@@ -13,9 +13,11 @@ for required_file in \
   docs/customer-demo-script.md \
   docs/customer-evaluation-checklist.md \
   docs/customer-feedback-form.md \
+  docs/paper-approval-ui-flow-smoke-drill.md \
   docs/release-baseline-v0.1.0.md \
   docs/release-verification-record-2026-04-28.md \
-  docs/frontend-command-center-deployment-verification.md; do
+  docs/frontend-command-center-deployment-verification.md \
+  frontend/scripts/check-paper-approval-ui-flow.mjs; do
   if [[ ! -f "${required_file}" ]]; then
     printf 'Missing customer evaluation file: %s\n' "${required_file}" >&2
     missing=1

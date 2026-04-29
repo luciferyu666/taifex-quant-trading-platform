@@ -166,6 +166,7 @@ persisted approval request has completed the required review sequence.
 ## Validation
 
 ```bash
+make paper-approval-ui-flow-smoke-check
 make paper-approval-workflow-check
 cd backend && .venv/bin/python -m pytest \
   tests/test_paper_approval_store.py \

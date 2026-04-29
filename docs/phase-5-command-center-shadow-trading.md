@@ -195,6 +195,7 @@ Expose roadmap phase status, contracts, safety mode, risk status, and paper-only
 cd frontend && npm run typecheck
 cd frontend && npm run build
 make frontend-i18n-check
+make paper-approval-ui-flow-smoke-check
 make paper-execution-workflow-check
 make paper-execution-persistence-check
 make sample-research-review-packet

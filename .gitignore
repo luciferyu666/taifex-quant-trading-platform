@@ -39,6 +39,7 @@ yarn-error.log*
 pnpm-debug.log*
 
 # Logs and local runtime state
+.tmp/
 logs/
 *.log
 *.pid

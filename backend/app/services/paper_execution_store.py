@@ -185,6 +185,7 @@ class PaperExecutionStore:
     def list_runs(self, limit: int = 50) -> list[PaperExecutionRunRecord]:
         if not self.db_path.exists():
             return []
+        self.initialize()
         with self._connect() as connection:
             rows = connection.execute(
                 """
@@ -199,6 +200,7 @@ class PaperExecutionStore:
     def get_run(self, workflow_run_id: str) -> PaperExecutionRunRecord | None:
         if not self.db_path.exists():
             return None
+        self.initialize()
         with self._connect() as connection:
             row = connection.execute(
                 "SELECT * FROM paper_execution_runs WHERE workflow_run_id = ?",
@@ -214,6 +216,7 @@ class PaperExecutionStore:
     ) -> list[PaperOmsEventRecord]:
         if not self.db_path.exists():
             return []
+        self.initialize()
         query = "SELECT * FROM paper_oms_events"
         params: list[str] = []
         clauses = []
@@ -239,6 +242,7 @@ class PaperExecutionStore:
     ) -> list[PaperAuditEventRecord]:
         if not self.db_path.exists():
             return []
+        self.initialize()
         if workflow_run_id:
             query = """
                 SELECT * FROM paper_audit_events
@@ -269,6 +273,7 @@ class PaperExecutionStore:
                     "when /api/paper-execution/workflow/record is called."
                 ),
             )
+        self.initialize()
         with self._connect() as connection:
             runs_count = count_table(connection, "paper_execution_runs")
             oms_events_count = count_table(connection, "paper_oms_events")

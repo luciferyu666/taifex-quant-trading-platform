@@ -95,6 +95,7 @@ git status --short --branch
 make customer-evaluation-check
 make frontend-production-smoke-check
 make customer-demo-ui-smoke-check
+make paper-approval-ui-flow-smoke-check
 make paper-simulation-submit-check
 make release-readiness-check
 ```
@@ -117,9 +118,10 @@ make seed-paper-execution-demo
 6. Optional local-only paper simulation:
    use the controlled Paper Only submit panel only with a running local backend, then
    refresh records and inspect the generated local SQLite audit record.
-   Before a customer session, validate the same trace without a running server:
+   Before a customer session, validate both the browser UI flow and API trace:
 
 ```bash
+make paper-approval-ui-flow-smoke-check
 make paper-simulation-submit-check
 ```
 

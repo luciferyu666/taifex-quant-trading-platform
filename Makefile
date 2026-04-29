@@ -1,6 +1,6 @@
 SHELL := /usr/bin/env bash
 
-.PHONY: help init infra dev backend frontend frontend-i18n-check frontend-production-smoke-check customer-demo-ui-smoke-check website website-build website-preview website-check website-content-check website-deploy roadmap-status release-readiness-check customer-evaluation-check seed-paper-execution-demo paper-simulation-submit-check paper-approval-workflow-check paper-execution-workflow-check paper-execution-persistence-check data-fixtures-check rollover-fixtures-check continuous-futures-preview feature-manifest-preview strategy-research-preview backtest-preview backtest-result-preview toy-backtest backtest-artifact-preview backtest-artifact-index-preview backtest-artifact-comparison-preview backtest-research-bundle-preview backtest-research-bundle-index-preview research-review-queue-preview research-review-decision-preview research-review-decision-index-preview research-review-packet-preview sample-research-review-packet research-review-packet-fixtures-check data-quality-reports-dry-run data-version-register-dry-run data-migrations-dry-run data-platform-verify architecture-status architecture-docs-check architecture-safety-check business-docs-check business-compliance-check business-status check test codex-prompt clean
+.PHONY: help init infra dev backend frontend frontend-i18n-check frontend-production-smoke-check customer-demo-ui-smoke-check paper-approval-ui-flow-smoke-check website website-build website-preview website-check website-content-check website-deploy roadmap-status release-readiness-check customer-evaluation-check seed-paper-execution-demo paper-simulation-submit-check paper-approval-workflow-check paper-execution-workflow-check paper-execution-persistence-check data-fixtures-check rollover-fixtures-check continuous-futures-preview feature-manifest-preview strategy-research-preview backtest-preview backtest-result-preview toy-backtest backtest-artifact-preview backtest-artifact-index-preview backtest-artifact-comparison-preview backtest-research-bundle-preview backtest-research-bundle-index-preview research-review-queue-preview research-review-decision-preview research-review-decision-index-preview research-review-packet-preview sample-research-review-packet research-review-packet-fixtures-check data-quality-reports-dry-run data-version-register-dry-run data-migrations-dry-run data-platform-verify architecture-status architecture-docs-check architecture-safety-check business-docs-check business-compliance-check business-status check test codex-prompt clean
 
 help:
 	@printf 'Taifex Quant Trading Platform commands\n'
@@ -13,6 +13,7 @@ help:
 	@printf '  make frontend-i18n-check Validate Command Center bilingual safety copy\n'
 	@printf '  make frontend-production-smoke-check Validate deployed Command Center safety copy\n'
 	@printf '  make customer-demo-ui-smoke-check Validate deployed customer demo guide UI copy\n'
+	@printf '  make paper-approval-ui-flow-smoke-check Run local browser drill for request -> decision -> submit -> audit viewer\n'
 	@printf '  make website       Run Astro marketing website locally\n'
 	@printf '  make website-build Build Astro marketing website\n'
 	@printf '  make website-preview Preview built Astro website locally\n'
@@ -94,6 +95,9 @@ frontend-production-smoke-check:
 
 customer-demo-ui-smoke-check:
 	node frontend/scripts/check-customer-demo-ui.mjs
+
+paper-approval-ui-flow-smoke-check:
+	node frontend/scripts/check-paper-approval-ui-flow.mjs
 
 website:
 	cd website && npm run dev
