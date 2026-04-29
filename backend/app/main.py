@@ -19,6 +19,7 @@ from app.api.continuous_futures_routes import router as continuous_futures_route
 from app.api.data_routes import router as data_router
 from app.api.data_version_routes import router as data_version_router
 from app.api.feature_manifest_routes import router as feature_manifest_router
+from app.api.paper_approval_routes import router as paper_approval_router
 from app.api.paper_execution_routes import router as paper_execution_router
 from app.api.release_baseline_routes import router as release_baseline_router
 from app.api.research_review_decision_index_routes import (
@@ -74,6 +75,7 @@ def create_app() -> FastAPI:
     app.include_router(research_review_decision_router)
     app.include_router(research_review_decision_index_router)
     app.include_router(research_review_packet_router)
+    app.include_router(paper_approval_router)
     app.include_router(paper_execution_router)
     app.include_router(release_baseline_router)
     return app

@@ -21,6 +21,16 @@ Create a paper-only execution core where order intents are evaluated by Risk Eng
 - Paper Broker Gateway simulates outcomes only and never submits real orders.
 - Audit events are emitted for approval, intent creation, risk evaluation,
   broker simulation, and OMS lifecycle recording.
+- Paper approval workflow foundation:
+  - `POST /api/paper-execution/approvals/requests` creates local paper-only
+    approval queue entries.
+  - `POST /api/paper-execution/approvals/requests/{approval_request_id}/decisions`
+    appends review decisions.
+  - `approved_for_paper_simulation` requires prior `research_approved` and a
+    distinct second reviewer.
+  - Approval history is queryable and hash-chained for local tamper-evidence.
+  - This is not production login, production RBAC, production WORM storage, or live
+    approval.
 - Local paper OMS/audit persistence:
   - `POST /api/paper-execution/workflow/record` records a paper workflow run to
     local SQLite only.
@@ -52,6 +62,8 @@ Create a paper-only execution core where order intents are evaluated by Risk Eng
   events.
 - Controlled UI submissions create local SQLite paper records only and preserve
   `paper_only=true`, `ENABLE_LIVE_TRADING=false`, and `BROKER_PROVIDER=paper`.
+- Paper approval queue and history can be queried without broker calls, credentials,
+  external databases, or live approval.
 
 ## Safety Constraints
 
@@ -64,10 +76,16 @@ Create a paper-only execution core where order intents are evaluated by Risk Eng
 - Do not treat local SQLite persistence as production OMS storage.
 - Do not write paper execution records to external databases without a separate
   reviewed persistence design.
+- Do not treat local approval queue records as production identity, final compliance
+  approval, or live readiness.
+- Do not let the client-supplied `approval_decision` remain the long-term source of
+  authority for paper simulation. Future work should reference persisted approval
+  history.
 
 ## Suggested Commands
 
 ```bash
+make paper-approval-workflow-check
 make paper-execution-workflow-check
 make paper-execution-persistence-check
 cd backend && pytest tests/test_exposure_allocator.py tests/test_risk_engine.py tests/test_roadmap_routes.py

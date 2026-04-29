@@ -215,6 +215,20 @@ Paper Execution Demo Seed is an explicit local-only sample generator:
   only. It is not a broker confirmation, account record, performance report, trading
   recommendation, or live-readiness approval.
 
+Paper Approval Workflow Foundation is local paper governance scaffolding:
+
+- It creates a separate approval queue under `/api/paper-execution/approvals`.
+- `research_approved` is a first review only; it does not authorize paper simulation.
+- `approved_for_paper_simulation` requires a distinct second reviewer after
+  `research_approved`.
+- Approval records are append-only through the API and hash-chained in local SQLite.
+- It is not production login, production RBAC, production WORM storage, live approval,
+  or broker authorization.
+- It does not collect credentials, call brokers, create orders, call OMS, or call
+  Broker Gateway.
+- Future UI work should use persisted approval history instead of trusting a client
+  supplied `approval_decision` payload.
+
 Phase 5 Research Review Packet Viewer is read-only UI:
 
 - It may fetch `GET /api/strategy/research-review/packet/sample` or render fallback
@@ -298,6 +312,8 @@ Future live work requires:
 - No Paper Execution persistence status UI panel may call `/workflow/record`, create
   simulations, mutate databases, connect brokers, approve paper execution, approve
   live trading, or expose live controls.
+- No Paper Approval Workflow API may be treated as production authentication,
+  regulated compliance approval, live-readiness approval, or broker authorization.
 - No Paper OMS / Audit Query Viewer UI panel may mutate persisted records, trigger
   paper simulation, grant approval escalation, connect brokers, call Risk Engine,
   call OMS, create order intents, show performance claims, or expose live controls.

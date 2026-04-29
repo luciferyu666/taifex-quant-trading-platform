@@ -91,6 +91,7 @@ for required_file in \
   docs/customer-evaluation-checklist.md \
   docs/customer-feedback-form.md \
   docs/paper-simulation-submit-verification.md \
+  docs/paper-approval-workflow.md \
   scripts/customer-evaluation-check.sh; do
   if [[ ! -f "${required_file}" ]]; then
     printf 'Missing required customer evaluation file: %s\n' "${required_file}" >&2
@@ -139,6 +140,7 @@ for required_file in \
   backend/app/domain/research_review_decision.py \
   backend/app/domain/research_review_decision_index.py \
   backend/app/domain/research_review_packet.py \
+  backend/app/domain/paper_approval.py \
   backend/app/domain/paper_execution.py \
   backend/app/domain/paper_execution_records.py \
   backend/app/domain/exposure.py \
@@ -147,6 +149,7 @@ for required_file in \
   backend/app/services/broker_gateway.py \
   backend/app/services/paper_execution_workflow.py \
   backend/app/services/paper_execution_store.py \
+  backend/app/services/paper_approval_store.py \
   scripts/seed-paper-execution-demo.py \
   scripts/paper-simulation-submit-check.py \
   backend/app/api/data_routes.py \
@@ -166,6 +169,7 @@ for required_file in \
   backend/app/api/research_review_decision_routes.py \
   backend/app/api/research_review_decision_index_routes.py \
   backend/app/api/research_review_packet_routes.py \
+  backend/app/api/paper_approval_routes.py \
   backend/app/api/paper_execution_routes.py \
   backend/app/api/roadmap_routes.py \
   data-pipeline/migrations/001_phase_2_data_platform.sql \

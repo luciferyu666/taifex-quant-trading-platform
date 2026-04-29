@@ -112,6 +112,24 @@ Paper simulation is allowed only through a platform-owned workflow:
 - No real order is placed.
 - `ENABLE_LIVE_TRADING=false` remains required.
 
+## Paper Approval Workflow Foundation
+
+Paper approval productization starts with a separate local approval queue and history:
+
+- Approval requests are created through
+  `POST /api/paper-execution/approvals/requests`.
+- Decisions are recorded through
+  `POST /api/paper-execution/approvals/requests/{approval_request_id}/decisions`.
+- Queue and history are queryable through read-only endpoints.
+- `approved_for_paper_simulation` requires a prior `research_approved` decision.
+- The two approval steps require distinct `reviewer_id` values.
+- Approval records are append-only through the API and hash-chained for local
+  tamper-evidence.
+- This foundation is not production login, production RBAC, production WORM storage,
+  or live-trading approval.
+- The current controlled submit UI still uses the paper workflow record endpoint;
+  future work should wire it to persisted approval history before paper simulation.
+
 ## Risk and OMS Rule
 
 Every future order must pass pre-trade checks and be represented in the OMS state machine with idempotency. Broker Gateway is an adapter boundary, not a strategy execution surface.
