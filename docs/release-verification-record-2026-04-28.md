@@ -1072,6 +1072,68 @@ Persisted approval scope:
 - No broker SDK calls, credential collection, real orders, or live trading path
   were added.
 
+## Paper Approval Decision UI Verification
+
+The Web Command Center now includes a narrow paper-only reviewer decision form for
+existing approval requests. This UI records local reviewer decisions only; it does
+not create approval requests, create paper simulations, call brokers, collect
+credentials, or grant live-trading access.
+
+Commit:
+
+```text
+760fd77 Add paper approval decision UI
+```
+
+GitHub Actions:
+
+```text
+Workflow: Release Readiness
+Run ID: 25108010416
+Status: passed
+```
+
+Vercel deployment:
+
+```text
+Deployment URL: https://taifex-quant-trading-platform-frontend-d4u3kvgqr.vercel.app
+Deployment ID: dpl_F6GNqokYf1j1fknN2FSfsXJPBwDB
+Production alias: https://taifex-quant-trading-platform-front.vercel.app
+Status: Ready
+```
+
+Validation commands:
+
+```bash
+make frontend-i18n-check
+cd frontend && npm run typecheck
+cd frontend && npm run build
+make paper-approval-workflow-check
+make check
+make frontend-production-smoke-check
+```
+
+Observed result:
+
+```text
+All listed checks passed. Production smoke gate confirmed deployment id
+dpl_F6GNqokYf1j1fknN2FSfsXJPBwDB and required safety copy on English and
+Traditional Chinese pages.
+```
+
+Decision UI scope:
+
+- The UI selects an existing local approval request from the pending queue.
+- It may submit only `research_approved`, `approved_for_paper_simulation`,
+  `rejected`, or `needs_data_review`.
+- It sends `paper_only=true` to the existing paper approval decision endpoint.
+- It does not create approval requests.
+- It does not create paper simulations, order intents, OMS records, or broker
+  gateway calls.
+- It does not collect API keys, account IDs, certificates, broker credentials, or
+  customer financial data.
+- It does not expose live approval or production authorization controls.
+
 ## Marketing Website Reachability
 
 Command:
