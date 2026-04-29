@@ -95,6 +95,7 @@ git status --short --branch
 make customer-evaluation-check
 make frontend-production-smoke-check
 make customer-demo-ui-smoke-check
+make paper-simulation-submit-check
 make release-readiness-check
 ```
 
@@ -116,6 +117,12 @@ make seed-paper-execution-demo
 6. Optional local-only paper simulation:
    use the controlled Paper Only submit panel only with a running local backend, then
    refresh records and inspect the generated local SQLite audit record.
+   Before a customer session, validate the same trace without a running server:
+
+```bash
+make paper-simulation-submit-check
+```
+
 7. Demonstrate local Research Review Packet JSON loading using a safe sample packet only.
 8. If a local demo seed or controlled paper submit was used, show the paper workflow summary, OMS
    timeline, and audit timeline.

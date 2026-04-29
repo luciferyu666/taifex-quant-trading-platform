@@ -90,6 +90,7 @@ for required_file in \
   docs/customer-demo-script.md \
   docs/customer-evaluation-checklist.md \
   docs/customer-feedback-form.md \
+  docs/paper-simulation-submit-verification.md \
   scripts/customer-evaluation-check.sh; do
   if [[ ! -f "${required_file}" ]]; then
     printf 'Missing required customer evaluation file: %s\n' "${required_file}" >&2
@@ -147,6 +148,7 @@ for required_file in \
   backend/app/services/paper_execution_workflow.py \
   backend/app/services/paper_execution_store.py \
   scripts/seed-paper-execution-demo.py \
+  scripts/paper-simulation-submit-check.py \
   backend/app/api/data_routes.py \
   backend/app/api/continuous_futures_routes.py \
   backend/app/api/feature_manifest_routes.py \
@@ -382,6 +384,9 @@ if [[ -x "${BACKEND_PYTHON}" ]]; then
 
   printf 'Running local data platform verification dry-run...\n'
   "${BACKEND_PYTHON}" data-pipeline/migrations/verify_local_data_platform.py
+
+  printf 'Running Paper Only submit UX audit trace drill...\n'
+  "${BACKEND_PYTHON}" scripts/paper-simulation-submit-check.py
 else
   printf 'backend/.venv/bin/python is missing; skipping backend runtime checks. Run bash scripts/bootstrap.sh.\n' >&2
 fi
