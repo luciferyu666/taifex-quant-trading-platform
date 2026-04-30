@@ -305,3 +305,10 @@ status, latest event-level checks, known gaps, and warnings. It is read-only and
 does not repair audit chains, write databases, upload records, call brokers,
 collect credentials, create orders, grant live approval, or claim WORM / immutable
 audit compliance.
+The Paper Audit Integrity Evidence Viewer now lets reviewers explicitly select a
+local JSON evidence file exported by `scripts/verify-paper-audit-integrity.py`.
+It validates paper-only safety flags and displays the verification summary,
+event checks, and warnings client-side only. It must not upload evidence, call
+backend APIs, write databases, repair hash chains, call brokers, collect
+credentials, create orders, grant live approval, or claim WORM / immutable audit
+compliance.

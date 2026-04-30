@@ -16,6 +16,7 @@ const files = {
   paperRisk: "frontend/app/components/PaperRiskGuardrailsPanel.tsx",
   paperOmsReliability: "frontend/app/components/PaperOmsReliabilityPanel.tsx",
   paperAuditIntegrity: "frontend/app/components/PaperAuditIntegrityPanel.tsx",
+  paperAuditIntegrityEvidence: "frontend/app/components/PaperAuditIntegrityEvidencePanel.tsx",
   paperRecords: "frontend/app/components/PaperExecutionRecordsPanel.tsx",
   paperSubmit: "frontend/app/components/PaperSimulationSubmitPanel.tsx",
   paperOmsTimeline: "frontend/app/components/PaperOmsTimelinePanel.tsx",
@@ -402,6 +403,29 @@ requireNotContains("Paper audit integrity panel does not call workflow record", 
 requireNotContains("Paper audit integrity panel does not collect API keys", sourceByFile.paperAuditIntegrity.toLowerCase(), "api_key");
 requireNotContains("Paper audit integrity panel does not collect account IDs", sourceByFile.paperAuditIntegrity.toLowerCase(), "account_id");
 requireNotContains("Paper audit integrity panel does not collect certificates", sourceByFile.paperAuditIntegrity.toLowerCase(), "certificate");
+requireContains("English paper audit evidence copy exists", sourceByFile.i18n, "Paper audit integrity evidence viewer");
+requireContains("Traditional Chinese paper audit evidence copy exists", sourceByFile.i18n, "紙上稽核完整性 evidence viewer");
+requireContains("Paper audit evidence panel is implemented", sourceByFile.paperAuditIntegrityEvidence, "PaperAuditIntegrityEvidencePanel");
+requireContains("Paper audit evidence panel validates local JSON", sourceByFile.paperAuditIntegrityEvidence, "validatePaperAuditIntegrityEvidence");
+requireContains("Paper audit evidence panel accepts explicit JSON only", sourceByFile.paperAuditIntegrityEvidence, 'accept=".json,application/json"');
+requireContains("Paper audit evidence panel checks paper_only=true", sourceByFile.paperAuditIntegrityEvidence, "paper_only: true");
+requireContains("Paper audit evidence panel checks live_trading_enabled=false", sourceByFile.paperAuditIntegrityEvidence, "live_trading_enabled: false");
+requireContains("Paper audit evidence panel checks broker_api_called=false", sourceByFile.paperAuditIntegrityEvidence, "broker_api_called: false");
+requireContains("Paper audit evidence panel checks database_written=false", sourceByFile.paperAuditIntegrityEvidence, "database_written: false");
+requireContains("Paper audit evidence panel checks external_db_written=false", sourceByFile.paperAuditIntegrityEvidence, "external_db_written: false");
+requireContains("Paper audit evidence panel checks WORM false", sourceByFile.paperAuditIntegrityEvidence, "worm_ledger: false");
+requireContains("Paper audit evidence panel checks centralized audit false", sourceByFile.paperAuditIntegrityEvidence, "centralized_audit_service: false");
+requireContains("Paper audit evidence panel displays verification result", sourceByFile.paperAuditIntegrityEvidence, "evidence.verified");
+requireContains("Paper audit evidence panel displays audit events", sourceByFile.paperAuditIntegrityEvidence, "audit_events_count");
+requireContains("Paper audit evidence panel displays broken chain count", sourceByFile.paperAuditIntegrityEvidence, "broken_chain_count");
+requireContains("Paper audit evidence panel displays duplicate audit IDs", sourceByFile.paperAuditIntegrityEvidence, "duplicate_audit_ids_count");
+requireContains("Paper audit evidence panel is mounted on page", sourceByFile.page, "PaperAuditIntegrityEvidencePanel");
+requireNotContains("Paper audit evidence panel does not fetch backend", sourceByFile.paperAuditIntegrityEvidence, "fetch(");
+requireNotContains("Paper audit evidence panel does not call workflow record", sourceByFile.paperAuditIntegrityEvidence, "/api/paper-execution/workflow/record");
+requireNotContains("Paper audit evidence panel does not call audit integrity API", sourceByFile.paperAuditIntegrityEvidence, "/api/paper-execution/audit-integrity");
+requireNotContains("Paper audit evidence panel does not collect API keys", sourceByFile.paperAuditIntegrityEvidence.toLowerCase(), "api_key");
+requireNotContains("Paper audit evidence panel does not collect account IDs", sourceByFile.paperAuditIntegrityEvidence.toLowerCase(), "account_id");
+requireNotContains("Paper audit evidence panel does not collect certificates", sourceByFile.paperAuditIntegrityEvidence.toLowerCase(), "certificate");
 requireContains("Packet loader bundled sample action exists", sourceByFile.i18n, "Load safe sample");
 requireContains("Packet loader clear local JSON action exists", sourceByFile.i18n, "Clear local JSON");
 requireContains("Packet loader still performs local validation", sourceByFile.packetLoader, "validateResearchReviewPacket");

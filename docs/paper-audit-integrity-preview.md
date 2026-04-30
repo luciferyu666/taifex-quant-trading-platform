@@ -107,6 +107,18 @@ It must remain read-only. It must not repair chains, upload records, write
 databases, call brokers, collect credentials, create orders, or grant live
 approval.
 
+The Web Command Center may also provide a Paper Audit Integrity Evidence Viewer.
+That viewer may load only an explicitly selected local `.json` file exported by
+`scripts/verify-paper-audit-integrity.py`. The file is parsed client-side in the
+browser, validated for paper-only safety flags, and displayed as read-only
+evidence for reviewers or customers. The viewer must reject unsafe flags such as
+`live_trading_enabled=true`, `broker_api_called=true`, `database_written=true`,
+`worm_ledger=true`, or `production_audit_compliance=true`.
+
+The evidence viewer must not upload files, send evidence to backend APIs, write
+databases, repair hash chains, call brokers, collect credentials, create orders,
+or imply WORM / immutable audit compliance.
+
 ## Validation
 
 ```bash

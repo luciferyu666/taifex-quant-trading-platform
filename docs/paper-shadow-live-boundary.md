@@ -415,6 +415,12 @@ Future live work requires:
   readiness. It verifies local SQLite `previous_hash` / `event_hash` metadata for
   paper audit events only and must not repair records, write external databases,
   call brokers, collect credentials, create orders, or enable live trading.
+- No Paper Audit Integrity Evidence Viewer may be treated as a production audit
+  console, WORM verifier, signing service, or live-readiness attestation. It may
+  load only an explicitly selected local JSON evidence file client-side, reject
+  unsafe safety flags, and display the paper-only verification result without
+  uploading files, writing databases, repairing chains, calling brokers,
+  collecting credentials, creating orders, or enabling live trading.
 - No local Research Review Packet sample export may be used as paper execution
   approval, live readiness, persisted audit record, broker instruction, performance
   report, ranking, or recommendation.

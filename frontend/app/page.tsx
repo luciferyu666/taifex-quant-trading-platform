@@ -17,6 +17,7 @@ import {
   type PaperAuditIntegrityStatus,
   type PaperAuditIntegrityVerification,
 } from "./components/PaperAuditIntegrityPanel";
+import { PaperAuditIntegrityEvidencePanel } from "./components/PaperAuditIntegrityEvidencePanel";
 import { PaperBrokerSimulationEvidencePanel } from "./components/PaperBrokerSimulationEvidencePanel";
 import { PaperBrokerSimulationModelPanel } from "./components/PaperBrokerSimulationModelPanel";
 import { PaperDemoEvidencePanel } from "./components/PaperDemoEvidencePanel";
@@ -909,6 +910,8 @@ export default async function Home({ searchParams }: HomeProps) {
               status={paperAuditIntegrityStatus.data}
               verification={paperAuditIntegrityVerification.data}
             />
+
+            <PaperAuditIntegrityEvidencePanel copy={copy} />
 
             <PaperDemoEvidencePanel copy={copy} />
           </>
