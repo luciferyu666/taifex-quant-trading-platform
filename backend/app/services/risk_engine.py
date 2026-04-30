@@ -1,4 +1,11 @@
+from app.domain.paper_risk_state import PaperRiskState
 from app.domain.risk import OrderIntent, RiskConfig, RiskDecision
+from app.domain.risk_rules import (
+    PaperOrderIntent,
+    RiskEvaluation,
+    RiskPolicy,
+    evaluate_paper_order,
+)
 
 
 class RiskEngine:
@@ -43,3 +50,16 @@ class RiskEngine:
             reason="Approved for paper-only simulation.",
             checks=checks,
         )
+
+
+class PaperRiskEngine:
+    def __init__(
+        self,
+        policy: RiskPolicy | None = None,
+        state: PaperRiskState | None = None,
+    ) -> None:
+        self.policy = policy or RiskPolicy()
+        self.state = state or PaperRiskState()
+
+    def evaluate_order_intent(self, order_intent: PaperOrderIntent) -> RiskEvaluation:
+        return evaluate_paper_order(order_intent, self.policy, self.state)

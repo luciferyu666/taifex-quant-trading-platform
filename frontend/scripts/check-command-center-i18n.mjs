@@ -13,6 +13,7 @@ const files = {
   paperDemoEvidence: "frontend/app/components/PaperDemoEvidencePanel.tsx",
   paperBrokerEvidence: "frontend/app/components/PaperBrokerSimulationEvidencePanel.tsx",
   paperBrokerSimulation: "frontend/app/components/PaperBrokerSimulationModelPanel.tsx",
+  paperRisk: "frontend/app/components/PaperRiskGuardrailsPanel.tsx",
   paperOmsReliability: "frontend/app/components/PaperOmsReliabilityPanel.tsx",
   paperRecords: "frontend/app/components/PaperExecutionRecordsPanel.tsx",
   paperSubmit: "frontend/app/components/PaperSimulationSubmitPanel.tsx",
@@ -258,6 +259,23 @@ requireContains("Paper submit uses approved approval history", sourceByFile.pape
 requireNotContains("Paper submit no longer sends client approval decision", sourceByFile.paperSubmit, "approval_decision:");
 requireNotContains("Paper submit does not create approval requests", sourceByFile.paperSubmit, "/api/paper-execution/approvals/requests");
 requireContains("Paper submit is mounted on page", sourceByFile.page, "PaperSimulationSubmitPanel");
+requireContains("English paper risk copy exists", sourceByFile.i18n, "Paper risk guardrail expansion");
+requireContains("Traditional Chinese paper risk copy exists", sourceByFile.i18n, "紙上風控 Guardrail 擴充");
+requireContains("Paper risk panel is implemented", sourceByFile.paperRisk, "PaperRiskGuardrailsPanel");
+requireContains("Paper risk status endpoint is read on page", sourceByFile.page, "/api/paper-risk/status");
+requireContains("Paper risk panel is mounted on page", sourceByFile.page, "PaperRiskGuardrailsPanel");
+requireContains("Paper risk panel shows price reasonability", sourceByFile.paperRisk, "price_reasonability_band_pct");
+requireContains("Paper risk panel shows max order size", sourceByFile.paperRisk, "max_order_size_by_contract");
+requireContains("Paper risk panel shows margin proxy", sourceByFile.paperRisk, "max_margin_proxy_twd");
+requireContains("Paper risk panel shows duplicate prevention", sourceByFile.i18n, "duplicate_order_prevention");
+requireContains("Paper risk panel shows kill switch", sourceByFile.paperRisk, "kill_switch_active");
+requireContains("Paper risk panel shows broker heartbeat", sourceByFile.paperRisk, "broker_heartbeat_healthy");
+requireNotContains("Paper risk panel does not call workflow record", sourceByFile.paperRisk, "/api/paper-execution/workflow/record");
+requireNotContains("Paper risk panel does not call broker simulation", sourceByFile.paperRisk, "/api/paper-execution/broker-simulation/preview");
+requireNotContains("Paper risk panel does not call mutation endpoints", sourceByFile.paperRisk, "fetch(");
+requireNotContains("Paper risk panel does not collect API keys", sourceByFile.paperRisk.toLowerCase(), "api_key");
+requireNotContains("Paper risk panel does not collect account IDs", sourceByFile.paperRisk.toLowerCase(), "account_id");
+requireNotContains("Paper risk panel does not collect certificates", sourceByFile.paperRisk.toLowerCase(), "certificate");
 requireContains("English paper broker simulation copy exists", sourceByFile.i18n, "Local quote-based simulation preview");
 requireContains("Traditional Chinese paper broker simulation copy exists", sourceByFile.i18n, "本地 quote-based 模擬預覽");
 requireContains("Paper broker simulation component is implemented", sourceByFile.paperBrokerSimulation, "PaperBrokerSimulationModelPanel");

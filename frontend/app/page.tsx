@@ -23,6 +23,10 @@ import {
   type PaperOrderTimeoutCandidate,
 } from "./components/PaperOmsReliabilityPanel";
 import type { PaperOmsEventRecord } from "./components/PaperOmsTimelinePanel";
+import {
+  PaperRiskGuardrailsPanel,
+  type PaperRiskStatus,
+} from "./components/PaperRiskGuardrailsPanel";
 import { PaperSimulationSubmitPanel } from "./components/PaperSimulationSubmitPanel";
 import { ResearchReviewPacketJsonLoader } from "./components/ResearchReviewPacketJsonLoader";
 import type { ResearchReviewPacket } from "./components/ResearchReviewPacketPanel";
@@ -225,6 +229,56 @@ const fallbackPaperOmsReliabilityStatus: PaperOmsReliabilityStatus = {
 const fallbackPaperOmsOutboxItems: PaperOmsOutboxItem[] = [];
 const fallbackPaperExecutionReports: PaperExecutionReport[] = [];
 const fallbackPaperTimeoutCandidates: PaperOrderTimeoutCandidate[] = [];
+const fallbackPaperRiskStatus: PaperRiskStatus = {
+  trading_mode: "paper",
+  live_trading_enabled: false,
+  broker_provider: "paper",
+  paper_only: true,
+  broker_api_called: false,
+  state: {
+    seen_idempotency_keys: [],
+    daily_realized_loss_twd: 0,
+    current_position_tx_equivalent: 0,
+    kill_switch_active: false,
+    broker_heartbeat_healthy: true,
+    paper_only: true,
+    live_trading_enabled: false,
+    broker_api_called: false,
+    updated_at: "fallback",
+  },
+  policy: {
+    trading_mode: "paper",
+    live_trading_enabled: false,
+    broker_provider: "paper",
+    max_tx_equivalent_exposure: 0.25,
+    max_daily_loss_twd: 5000,
+    stale_quote_seconds: 3,
+    price_reasonability_band_pct: 0.02,
+    max_order_size_by_contract: { TX: 1, MTX: 4, TMF: 20 },
+    margin_proxy_per_tx_equivalent_twd: 200000,
+    max_margin_proxy_twd: 50000,
+    max_position_tx_equivalent: 0.25,
+    kill_switch_active: false,
+    broker_heartbeat_healthy: true,
+  },
+  supported_checks: [
+    "LIVE_TRADING_DISABLED",
+    "PAPER_BROKER_ONLY",
+    "IDEMPOTENCY_KEY_PRESENT",
+    "PAPER_ONLY_INTENT",
+    "MAX_EXPOSURE",
+    "STALE_QUOTE",
+    "PRICE_REASONABILITY",
+    "MAX_ORDER_SIZE_BY_CONTRACT",
+    "MARGIN_PROXY",
+    "DUPLICATE_ORDER_PREVENTION",
+    "DAILY_LOSS_LIMIT",
+    "POSITION_LIMIT",
+    "KILL_SWITCH",
+    "BROKER_HEARTBEAT",
+  ],
+  message: "Fallback paper risk guardrail status. Backend is unavailable.",
+};
 
 const fallbackPaperApprovalStatus: PaperApprovalStatus = {
   trading_mode: "paper",
@@ -371,6 +425,7 @@ export default async function Home({ searchParams }: HomeProps) {
     paperOmsReliability,
     paperOmsOutbox,
     paperTimeoutCandidates,
+    paperRiskStatus,
     paperExecutionRuns,
     paperApprovalStatus,
     paperApprovalQueue,
@@ -403,6 +458,7 @@ export default async function Home({ searchParams }: HomeProps) {
         "/api/paper-execution/reliability/timeout-candidates?timeout_seconds=30",
         fallbackPaperTimeoutCandidates,
       ),
+      fetchJson<PaperRiskStatus>("/api/paper-risk/status", fallbackPaperRiskStatus),
       fetchJson<PaperExecutionRunRecord[]>(
         "/api/paper-execution/runs?limit=5",
         fallbackPaperExecutionRuns,
@@ -477,6 +533,7 @@ export default async function Home({ searchParams }: HomeProps) {
     paperTimeoutCandidates.available
       ? undefined
       : `paper timeout candidates: ${paperTimeoutCandidates.error}`,
+    paperRiskStatus.available ? undefined : `paper risk: ${paperRiskStatus.error}`,
     paperExecutionReports.available
       ? undefined
       : `paper execution reports: ${paperExecutionReports.error}`,
@@ -676,6 +733,13 @@ export default async function Home({ searchParams }: HomeProps) {
                 </span>
               </div>
             </section>
+
+            <PaperRiskGuardrailsPanel
+              available={paperRiskStatus.available}
+              copy={copy}
+              error={paperRiskStatus.available ? undefined : paperRiskStatus.error}
+              status={paperRiskStatus.data}
+            />
 
             <PaperApprovalQueuePanel
               available={

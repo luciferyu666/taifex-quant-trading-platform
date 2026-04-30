@@ -401,6 +401,10 @@ Future live work requires:
 - No Paper Broker Simulation Evidence artifact may be treated as a persisted
   workflow record, broker confirmation, live approval, production matching result,
   execution report, investment advice, strategy ranking, or performance claim.
+- No Paper Risk Guardrail Expansion API or UI may be treated as production risk
+  approval, broker heartbeat verification, margin confirmation, live position
+  validation, or live readiness. Its kill switch and heartbeat are paper-only
+  placeholders, and its daily loss / position state is local paper state only.
 - No local Research Review Packet sample export may be used as paper execution
   approval, live readiness, persisted audit record, broker instruction, performance
   report, ranking, or recommendation.

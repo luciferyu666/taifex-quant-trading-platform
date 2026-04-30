@@ -157,6 +157,7 @@ for required_file in \
   backend/app/domain/paper_execution.py \
   backend/app/domain/paper_execution_records.py \
   backend/app/domain/paper_oms_reliability.py \
+  backend/app/domain/paper_risk_state.py \
   backend/app/domain/exposure.py \
   backend/app/services/risk_engine.py \
   backend/app/services/oms.py \
@@ -187,6 +188,7 @@ for required_file in \
   backend/app/api/research_review_packet_routes.py \
   backend/app/api/paper_approval_routes.py \
   backend/app/api/paper_execution_routes.py \
+  backend/app/api/paper_risk_routes.py \
   backend/app/api/roadmap_routes.py \
   data-pipeline/migrations/001_phase_2_data_platform.sql \
   data-pipeline/migrations/apply_local_migrations.py \
@@ -282,11 +284,13 @@ for required_file in \
   backend/app/domain/paper_execution.py \
   backend/app/domain/paper_execution_records.py \
   backend/app/domain/paper_oms_reliability.py \
+  backend/app/domain/paper_risk_state.py \
   backend/app/services/paper_broker_gateway.py \
   backend/app/services/paper_execution_workflow.py \
   backend/app/services/paper_execution_store.py \
   backend/app/services/reconciliation.py \
   backend/app/api/paper_execution_routes.py \
+  backend/app/api/paper_risk_routes.py \
   backend/app/api/architecture_routes.py \
   infra/k8s/control-plane/README.md \
   infra/k8s/trading-data-plane/README.md \
@@ -411,6 +415,9 @@ if [[ -x "${BACKEND_PYTHON}" ]]; then
 
   printf 'Running Paper Only submit UX audit trace drill...\n'
   "${BACKEND_PYTHON}" scripts/paper-simulation-submit-check.py
+
+  printf 'Running expanded Paper Risk guardrail tests...\n'
+  (cd backend && .venv/bin/python -m pytest tests/test_paper_risk_guardrails.py)
 
   printf 'Running Paper Only demo evidence export dry-run...\n'
   paper_evidence_tmp="$(mktemp -d)"

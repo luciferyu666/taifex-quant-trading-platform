@@ -1485,6 +1485,13 @@ dd {
   margin-top: 18px;
 }
 
+.tag-cloud {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 18px;
+}
+
 .flag {
   display: grid;
   min-height: 48px;

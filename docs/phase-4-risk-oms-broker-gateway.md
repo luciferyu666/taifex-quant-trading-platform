@@ -124,6 +124,7 @@ Create a paper-only execution core where order intents are evaluated by Risk Eng
 ## Suggested Commands
 
 ```bash
+make paper-risk-guardrails-check
 make paper-broker-simulation-model-check
 make paper-approval-workflow-check
 make paper-execution-workflow-check
@@ -141,3 +142,22 @@ Command Center as an explicit Paper Only demo control if needed. Do not add exte
 market data downloads, asynchronous workers, external databases, live adapters,
 amend/replace, real broker execution reports, or reconciliation loops until the
 paper-only contracts and release readiness gates remain stable under tests.
+
+## Paper Risk Guardrail Expansion
+
+The Phase 4 paper risk layer now includes a paper-only guardrail set for:
+
+- price reasonability
+- max order size by TX / MTX / TMF contract
+- margin proxy
+- duplicate idempotency key detection
+- daily loss state tracking
+- position limit tracking
+- paper kill switch placeholder
+- simulated broker heartbeat placeholder
+
+The guardrails return `RiskEvaluation` check details and are exposed through
+`/api/paper-risk/status`, `/api/paper-risk/evaluate`, and
+`/api/paper-risk/state/reset`. This is still a local paper simulation layer. It is
+not a production risk engine, does not place orders, does not call broker APIs, and
+does not enable live trading.
