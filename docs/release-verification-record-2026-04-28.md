@@ -1699,6 +1699,84 @@ Paper risk evidence export scope:
 - The export is not production risk approval.
 - Live trading remains disabled by default.
 
+## Paper Audit Integrity Preview Verification
+
+Paper Audit Integrity Preview was added to verify local SQLite paper audit
+events with hash-chain metadata. This is a paper-only integrity preview for
+customer demo and engineering review. It is not WORM storage, not a
+centralized audit service, and not production audit compliance.
+
+Verification time:
+
+```text
+2026-04-30 21:59:30 CST (+0800)
+```
+
+Commit:
+
+```text
+1dee55c Add paper audit integrity preview
+```
+
+GitHub Actions:
+
+```text
+Workflow: Release Readiness
+Run ID: 25169546661
+Status: passed
+```
+
+Vercel deployment:
+
+```text
+Deployment URL: https://taifex-quant-trading-platform-frontend-psdlwv7c4.vercel.app
+Deployment ID: dpl_AoY1BeUVkvNnBfbSji5f8rYo3bRY
+Production alias: https://taifex-quant-trading-platform-front.vercel.app
+Status: Ready
+```
+
+Validation commands:
+
+```bash
+make paper-audit-integrity-check
+cd backend && .venv/bin/python -m pytest tests/test_audit_integrity.py
+cd backend && .venv/bin/python -m ruff check app tests
+make frontend-i18n-check
+cd frontend && npm run typecheck
+cd frontend && npm run build
+make check
+make frontend-production-smoke-check
+```
+
+Observed result:
+
+```text
+All listed checks passed. Release Readiness CI passed on run 25169546661.
+Production smoke gate confirmed deployment id
+dpl_AoY1BeUVkvNnBfbSji5f8rYo3bRY and required safety copy on English and
+Traditional Chinese pages.
+```
+
+Paper audit integrity scope:
+
+- Added local SQLite audit hash-chain metadata for paper audit events:
+  `previous_hash` and `event_hash`.
+- Added read-only audit integrity API endpoints for status, global
+  verification, and per-workflow verification.
+- Added `scripts/verify-paper-audit-integrity.py` for stdout verification
+  evidence and explicit local JSON output.
+- Added `make paper-audit-integrity-check`.
+- Added Web Command Center read-only Audit Integrity panel.
+- Verification detects missing hash metadata, broken hash chains, duplicate
+  audit IDs, and workflow continuity issues.
+- Existing local SQLite audit records remain demo/paper records only.
+- This is not WORM storage, not external signing, not centralized audit, and
+  not production audit compliance.
+- The UI does not submit orders, approve execution, write databases, collect
+  credentials, or call brokers.
+- No broker SDK is called.
+- Live trading remains disabled by default.
+
 ## Marketing Website Reachability
 
 Command:
