@@ -7,6 +7,7 @@ const files = {
   page: "frontend/app/page.tsx",
   demoGuide: "frontend/app/components/DemoGuidePanel.tsx",
   commandTabs: "frontend/app/components/CommandCenterTabs.tsx",
+  localBackendMode: "frontend/app/components/LocalBackendDemoModePanel.tsx",
   paperApprovals: "frontend/app/components/PaperApprovalQueuePanel.tsx",
   paperApprovalRequest: "frontend/app/components/PaperApprovalRequestPanel.tsx",
   paperApprovalDecision: "frontend/app/components/PaperApprovalDecisionPanel.tsx",
@@ -229,6 +230,21 @@ requireContains("Traditional Chinese read-only interaction copy exists", sourceB
 requireContains("Command Center tabs are implemented", sourceByFile.commandTabs, "role=\"tablist\"");
 requireContains("Command Center refresh action exists", sourceByFile.i18n, "Refresh status");
 requireContains("Command Center backend troubleshooting exists", sourceByFile.commandTabs, "troubleshooting-panel");
+requireContains("English local backend demo copy exists", sourceByFile.i18n, "Local Backend Demo Mode");
+requireContains("Traditional Chinese local backend demo copy exists", sourceByFile.i18n, "本地後端 Demo 模式");
+requireContains("Local backend demo component is implemented", sourceByFile.localBackendMode, "LocalBackendDemoModePanel");
+requireContains("Local backend demo panel states Vercel SQLite boundary", sourceByFile.i18n, "cannot directly read your local SQLite");
+requireContains("Local backend demo panel states Chinese Vercel SQLite boundary", sourceByFile.i18n, "無法直接讀取你的本機 SQLite");
+requireContains("Local backend demo panel exposes backend command", sourceByFile.localBackendMode, "make backend");
+requireContains("Local backend demo panel exposes frontend command", sourceByFile.localBackendMode, "make frontend");
+requireContains("Local backend demo panel exposes demo seed command", sourceByFile.localBackendMode, "make seed-paper-execution-demo");
+requireContains("Local backend demo panel exposes persistence check command", sourceByFile.localBackendMode, "make paper-execution-persistence-check");
+requireContains("Local backend demo panel is mounted on page", sourceByFile.page, "LocalBackendDemoModePanel");
+requireNotContains("Local backend demo panel does not fetch backend", sourceByFile.localBackendMode, "fetch(");
+requireNotContains("Local backend demo panel does not call workflow record", sourceByFile.localBackendMode, "/api/paper-execution/workflow/record");
+requireNotContains("Local backend demo panel does not collect API keys", sourceByFile.localBackendMode.toLowerCase(), "api_key");
+requireNotContains("Local backend demo panel does not collect account IDs", sourceByFile.localBackendMode.toLowerCase(), "account_id");
+requireNotContains("Local backend demo panel does not collect certificates", sourceByFile.localBackendMode.toLowerCase(), "certificate");
 requireContains("English paper records copy exists", sourceByFile.i18n, "Persisted paper workflow records");
 requireContains("Traditional Chinese paper records copy exists", sourceByFile.i18n, "已持久化紙上流程紀錄");
 requireContains("English paper evidence copy exists", sourceByFile.i18n, "Paper demo evidence viewer");

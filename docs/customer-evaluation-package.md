@@ -49,6 +49,11 @@ Customers may evaluate:
 - Research review packet viewer behavior using approved local sample JSON fixtures.
 - Paper OMS / Audit Query Viewer behavior using an explicitly generated local paper
   demo seed record.
+- Local Backend Demo Mode boundary:
+  - Production Vercel cannot directly read local SQLite paper records.
+  - Actual persisted paper OMS / audit records require local backend + local SQLite.
+  - Future hosted record display requires a controlled backend/API and governed
+    data layer.
 - Paper OMS reliability metadata review:
   - local idempotency key count
   - completed local outbox metadata
@@ -118,11 +123,16 @@ Use this sequence for a 30-45 minute customer session:
 5. Optional local-only setup for the Paper OMS / Audit Query Viewer:
 
 ```bash
+make backend
+make frontend
 make seed-paper-execution-demo
 make paper-demo-evidence-export
 ```
 
-6. Optional local-only paper simulation:
+6. Confirm the evaluator understands that production Vercel may show fallback or
+   empty paper records because it cannot directly read local SQLite. Use the local
+   frontend at `http://localhost:3000` with local backend for actual records.
+7. Optional local-only paper simulation:
    use the controlled Paper Only submit panel only with a running local backend, then
    refresh records and inspect the generated local SQLite audit record.
    Before a customer session, validate both the browser UI flow and API trace:

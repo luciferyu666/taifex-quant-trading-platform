@@ -324,6 +324,33 @@ Phase 5 Research Review Packet loader fixtures are local test inputs only:
   as approval records, rankings, recommendations, order instructions, or
   performance reports.
 
+## Production Vercel vs Local SQLite Boundary
+
+The production Vercel Web Command Center cannot directly read a user's local
+SQLite paper execution audit database. Production Vercel can display read-only
+UI, safe fallback content, release status, safety copy, and explicit local JSON
+evidence selected by the user in the browser.
+
+Actual persisted paper workflow runs, OMS timelines, audit timelines, approval
+records, risk state, reliability metadata, and audit-integrity status require
+one of these paths:
+
+- local backend + local SQLite demo mode
+- future controlled hosted backend/API + governed data layer
+
+The current safe local path is:
+
+```bash
+make backend
+make frontend
+make seed-paper-execution-demo
+make paper-execution-persistence-check
+```
+
+This boundary must not be bypassed by attempting to expose local SQLite directly
+from production Vercel. Future hosted API work requires separate architecture,
+identity, RBAC/ABAC, audit, data governance, and operational review.
+
 ## Shadow
 
 Shadow trading is a future validation stage. It may observe live-like data and theoretical orders, but it must not submit broker-bound orders.

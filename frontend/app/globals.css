@@ -442,6 +442,36 @@ h3 {
   font-weight: 800;
 }
 
+.local-backend-panel {
+  display: grid;
+  gap: 16px;
+  margin-top: 18px;
+}
+
+.local-backend-panel .section-heading p:not(.eyebrow) {
+  max-width: 920px;
+  margin: 10px 0 0;
+  color: var(--muted);
+  line-height: 1.55;
+}
+
+.local-demo-commands {
+  border-color: rgba(180, 83, 9, 0.22);
+  background: rgba(180, 83, 9, 0.05);
+}
+
+.local-demo-commands pre {
+  overflow-x: auto;
+  margin: 0;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 14px;
+  background: #0f172a;
+  color: #dbeafe;
+  font-size: 0.82rem;
+  line-height: 1.55;
+}
+
 .tabs-shell {
   margin-top: 16px;
 }

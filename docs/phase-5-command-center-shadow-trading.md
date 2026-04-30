@@ -54,6 +54,9 @@ Expose roadmap phase status, contracts, safety mode, risk status, and paper-only
   research packet sample, contract specs, and prohibited actions.
 - Demo guide Previous / Next / Reset / Copy checklist controls that modify only
   frontend local state or clipboard contents.
+- Local Backend Demo Mode panel explaining that the production Vercel frontend
+  cannot directly read local SQLite paper records, and that actual paper records
+  require local backend + local SQLite or a future controlled hosted backend/API.
 
 ## Acceptance Criteria
 
@@ -96,6 +99,11 @@ Expose roadmap phase status, contracts, safety mode, risk status, and paper-only
   Research Packet, and Contracts sections without adding mutation paths.
 - Customer Demo Guided Flow provides a customer-safe walkthrough and keeps all
   steps presentation-only.
+- Local Backend Demo Mode must clearly distinguish production Vercel fallback /
+  local JSON evidence inspection from actual local paper record querying through
+  a local backend.
+- Local Backend Demo Mode must show the local commands needed to run backend,
+  frontend, demo seed, and persistence verification without enabling live trading.
 - Demo guide controls may change the active guide step or copy a checklist, but
   they must not call backend mutation APIs.
 - Refresh/retry only reloads frontend status. It must not call mutation endpoints.
@@ -204,6 +212,10 @@ Expose roadmap phase status, contracts, safety mode, risk status, and paper-only
   and Copy checklist controls only. It must not submit simulations, create orders,
   write databases, upload files, call brokers, call Risk Engine mutation paths, call
   OMS mutation paths, collect credentials, or imply production readiness.
+- The Local Backend Demo Mode panel is explanatory and clipboard-only. It must
+  not make production Vercel read local SQLite, write databases, upload local
+  files, call brokers, create orders, collect credentials, or imply that Vercel
+  production can display local SQLite records without a local backend/API.
 - The Paper Broker Simulation Model UI may preview local quote-based paper outcomes
   through `/api/paper-execution/broker-simulation/preview` only. It must not submit
   workflow records, write databases, download market data, call Risk Engine, call

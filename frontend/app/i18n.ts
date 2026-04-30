@@ -162,6 +162,40 @@ export const dashboardCopy = {
       copied: "Copied to clipboard.",
       copyFailed: "Copy failed. Copy the command manually.",
     },
+    localBackendMode: {
+      eyebrow: "Deployment Boundary",
+      title: "Local Backend Demo Mode",
+      description:
+        "The production Vercel frontend cannot directly read your local SQLite paper audit store. It can show read-only UI, checked fallback data, and explicitly selected local JSON evidence. To inspect actual paper records, run the backend and frontend locally against the same local SQLite file.",
+      modes: [
+        {
+          kicker: "Production Vercel",
+          title: "Read-only presentation surface",
+          text:
+            "Shows safety copy, release status, fallback data, and local JSON viewers. It does not access local SQLite, write databases, call brokers, or create orders.",
+        },
+        {
+          kicker: "Local Demo",
+          title: "Backend + local SQLite required",
+          text:
+            "Start the FastAPI backend and Next.js frontend locally, then seed a paper demo record. The Web Command Center can query the local backend for actual paper OMS and audit records.",
+        },
+        {
+          kicker: "Future Cloud",
+          title: "Controlled hosted API and data layer",
+          text:
+            "A future deployment may use a controlled backend/API and governed data layer. That is separate from local SQLite and still must preserve paper/live boundaries.",
+        },
+      ],
+      commandsKicker: "Local setup",
+      commandsTitle: "Commands for actual paper records",
+      commandsText:
+        "Run these locally when a reviewer needs to see persisted paper records in the Command Center. These commands do not enable live trading or connect brokers.",
+      copyCommands: "Copy local demo commands",
+      copied: "Local demo commands copied.",
+      copyFailed: "Copy failed. Copy the commands manually.",
+      safetyLabel: "Local backend demo safety flags",
+    },
     paperExecution: {
       eyebrow: "Paper Execution",
       title: "Paper simulation approval workflow",
@@ -1214,6 +1248,40 @@ export const dashboardCopy = {
       copyCommand: "複製指令",
       copied: "已複製到剪貼簿。",
       copyFailed: "複製失敗，請手動複製指令。",
+    },
+    localBackendMode: {
+      eyebrow: "部署邊界",
+      title: "本地後端 Demo 模式",
+      description:
+        "Production Vercel 前端無法直接讀取你的本機 SQLite 紙上稽核資料庫。它可以顯示只讀 UI、已檢查的備援資料，以及使用者明確選取的本地 JSON evidence。若要檢視實際 paper records，必須在本機啟動 backend 與 frontend，並使用同一個本地 SQLite 檔案。",
+      modes: [
+        {
+          kicker: "Production Vercel",
+          title: "只讀展示介面",
+          text:
+            "可顯示安全文案、版本狀態、備援資料與本地 JSON viewer；不讀取本機 SQLite、不寫資料庫、不呼叫券商，也不建立訂單。",
+        },
+        {
+          kicker: "本地 Demo",
+          title: "需要 backend + local SQLite",
+          text:
+            "在本機啟動 FastAPI backend 與 Next.js frontend，並 seed 一筆 paper demo record。Web Command Center 即可透過本地 backend 查詢實際 paper OMS 與 audit records。",
+        },
+        {
+          kicker: "未來 Cloud",
+          title: "受控 hosted API 與資料層",
+          text:
+            "未來部署可導入受控 backend/API 與治理資料層；這與本地 SQLite 分離，且仍必須維持 paper/live 邊界。",
+        },
+      ],
+      commandsKicker: "本地設定",
+      commandsTitle: "檢視實際 paper records 的指令",
+      commandsText:
+        "Reviewer 需要在 Command Center 檢視已持久化紙上紀錄時，請在本機執行這些指令。這些指令不會啟用實盤，也不會連接券商。",
+      copyCommands: "複製本地 demo 指令",
+      copied: "已複製本地 demo 指令。",
+      copyFailed: "複製失敗，請手動複製指令。",
+      safetyLabel: "本地後端 demo 安全旗標",
     },
     paperExecution: {
       eyebrow: "紙上執行",

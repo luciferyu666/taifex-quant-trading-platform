@@ -94,6 +94,7 @@ for required_file in \
   docs/paper-broker-simulation-evidence-export.md \
   docs/paper-risk-evidence-export.md \
   docs/paper-audit-integrity-preview.md \
+  docs/frontend-local-backend-demo-mode.md \
   docs/paper-simulation-submit-verification.md \
   docs/paper-approval-ui-flow-smoke-drill.md \
   docs/paper-approval-workflow.md \
@@ -219,6 +220,7 @@ for required_file in \
   frontend/test-fixtures/research-review-packets/invalid-checksum.json \
   frontend/test-fixtures/research-review-packets/invalid-decision-summary.json \
   frontend/app/components/PaperApprovalQueuePanel.tsx \
+  frontend/app/components/LocalBackendDemoModePanel.tsx \
   frontend/app/components/PaperExecutionRecordsPanel.tsx \
   frontend/app/components/PaperOmsReliabilityPanel.tsx \
   frontend/app/components/PaperSimulationSubmitPanel.tsx \

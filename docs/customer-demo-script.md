@@ -131,6 +131,22 @@ Open:
 https://taifex-quant-trading-platform-front.vercel.app
 ```
 
+Set expectation before showing paper records:
+
+- Production Vercel cannot directly read the evaluator's local SQLite paper
+  records.
+- Production Vercel is suitable for read-only UI, release status, safety copy,
+  fallback content, and explicit local JSON evidence viewers.
+- To show actual persisted paper OMS / audit records, run local backend + local
+  frontend against the same local SQLite store:
+
+```bash
+make backend
+make frontend
+make seed-paper-execution-demo
+make paper-execution-persistence-check
+```
+
 Show:
 
 - English / Traditional Chinese language switch.

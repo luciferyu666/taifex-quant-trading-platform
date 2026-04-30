@@ -9,6 +9,7 @@ import {
 } from "./components/PaperApprovalQueuePanel";
 import { CommandCenterTabs } from "./components/CommandCenterTabs";
 import { DemoGuidePanel } from "./components/DemoGuidePanel";
+import { LocalBackendDemoModePanel } from "./components/LocalBackendDemoModePanel";
 import type { PaperAuditEventRecord } from "./components/PaperAuditTimelinePanel";
 import { PaperApprovalDecisionPanel } from "./components/PaperApprovalDecisionPanel";
 import { PaperApprovalRequestPanel } from "./components/PaperApprovalRequestPanel";
@@ -692,12 +693,15 @@ export default async function Home({ searchParams }: HomeProps) {
         backendIssues={backendIssues}
         copy={copy.interactions}
         release={
-          <ReleaseBaselinePanel
-            available={releaseBaseline.available}
-            baseline={releaseBaseline.data}
-            copy={copy.release}
-            error={releaseBaseline.available ? undefined : releaseBaseline.error}
-          />
+          <>
+            <ReleaseBaselinePanel
+              available={releaseBaseline.available}
+              baseline={releaseBaseline.data}
+              copy={copy.release}
+              error={releaseBaseline.available ? undefined : releaseBaseline.error}
+            />
+            <LocalBackendDemoModePanel copy={copy.localBackendMode} />
+          </>
         }
         paper={
           <>

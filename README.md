@@ -137,6 +137,11 @@ Broker SDK access must stay isolated behind `broker-gateway`. Strategies must ne
 
 The frontend is intended to become a command center for health, portfolio state, strategy status, paper trading, risk limits, and audit review.
 
+Production Vercel is a read-only presentation and evaluation surface. It cannot
+directly read a user's local SQLite paper records; actual paper OMS / audit
+records require local backend demo mode or a future controlled hosted API/data
+layer. See `docs/frontend-local-backend-demo-mode.md`.
+
 ### Audit and Observability
 
 Enterprise users need logs, metrics, traces, audit records, and replayable state transitions. The current repository includes the development skeleton; production-grade observability is a future direction.

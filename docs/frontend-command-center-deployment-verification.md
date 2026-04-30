@@ -170,6 +170,33 @@ Expected result:
 
 The Web Command Center must remain read-only. It must not expose live trading approval, paper execution approval, real broker login, account opening, order submission, or strategy ranking controls.
 
+## 9. Local SQLite Boundary Confirmation
+
+Production Vercel cannot directly read a user's local SQLite paper execution
+audit database. This is expected.
+
+Expected production behavior:
+
+- release status, safety defaults, fallback content, and local JSON evidence
+  viewers render correctly
+- paper records from local SQLite may be empty or unavailable
+- actual paper OMS / audit records are displayed only when running local backend
+  + local SQLite, or through a future controlled hosted API/data layer
+
+Local demo commands for actual records:
+
+```bash
+cd "/mnt/f/From C download/taifex-quant-trading-platform"
+make backend
+make frontend
+make seed-paper-execution-demo
+make paper-execution-persistence-check
+```
+
+Do not attempt to make production Vercel read local SQLite directly. Do not add
+credential upload, broker login, live approval, or direct database access from
+the production frontend.
+
 ## Troubleshooting
 
 ### `vercel ls` does not show the latest push
