@@ -1777,6 +1777,87 @@ Paper audit integrity scope:
 - No broker SDK is called.
 - Live trading remains disabled by default.
 
+## Paper Audit Integrity Evidence Viewer Verification
+
+Paper Audit Integrity Evidence Viewer was added to let reviewers and customers
+inspect local JSON evidence exported by `scripts/verify-paper-audit-integrity.py`.
+The viewer is a read-only browser-side parser for paper-only audit integrity
+verification evidence. It is not a production audit console, WORM verifier,
+signing service, centralized audit service, or live-readiness attestation.
+
+Verification time:
+
+```text
+2026-05-01 04:31:00 CST (+0800)
+```
+
+Commit:
+
+```text
+8ad95ec Add paper audit integrity evidence viewer
+```
+
+GitHub Actions:
+
+```text
+Workflow: Release Readiness
+Run ID: 25187732669
+Status: passed
+```
+
+Vercel deployment:
+
+```text
+Deployment URL: https://taifex-quant-trading-platform-frontend-r88iydhua.vercel.app
+Deployment ID: dpl_DtYYcNzFsDTN3xKRzvX7XwbwivcW
+Production alias: https://taifex-quant-trading-platform-front.vercel.app
+Status: Ready
+```
+
+Validation commands:
+
+```bash
+make frontend-i18n-check
+cd frontend && npm run typecheck
+cd frontend && npm run build
+make paper-audit-integrity-check
+make check
+make frontend-production-smoke-check
+```
+
+Observed result:
+
+```text
+All listed checks passed. Release Readiness CI passed on run 25187732669.
+Production smoke gate confirmed deployment id
+dpl_DtYYcNzFsDTN3xKRzvX7XwbwivcW and required safety copy on English and
+Traditional Chinese pages.
+```
+
+Paper audit integrity evidence viewer scope:
+
+- Added `frontend/app/components/PaperAuditIntegrityEvidencePanel.tsx`.
+- Added English and Traditional Chinese Web Command Center copy for the viewer.
+- Added Command Center i18n/safety checks for the new viewer.
+- The viewer loads only an explicitly selected local `.json` file.
+- The viewer parses evidence client-side only and does not upload files.
+- The viewer validates `evidence_type=paper_audit_integrity_verification`.
+- The viewer validates paper-only safety flags including:
+  `paper_only=true`, `local_sqlite_only=true`,
+  `live_trading_enabled=false`, `broker_api_called=false`,
+  `database_written=false`, `external_db_written=false`,
+  `worm_ledger=false`, `centralized_audit_service=false`, and
+  `production_audit_compliance=false`.
+- The viewer displays verification summary, event checks, warnings, and safety
+  flags for reviewer/customer inspection.
+- The viewer does not call backend APIs, write databases, repair hash chains,
+  call brokers, collect credentials, create orders, approve paper execution, or
+  grant live approval.
+- The viewer does not claim WORM storage, immutable audit compliance,
+  centralized audit service, production signing, or production audit compliance.
+- No broker SDK is called.
+- Live trading remains disabled by default.
+
 ## Marketing Website Reachability
 
 Command:
