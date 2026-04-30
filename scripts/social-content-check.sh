@@ -7,6 +7,7 @@ cd "${REPO_ROOT}"
 required_files=(
   "docs/facebook-community-launch-plan.md"
   "docs/facebook-content-calendar.md"
+  "docs/facebook-human-launch-runbook.md"
 )
 
 for file in "${required_files[@]}"; do

@@ -51,11 +51,13 @@ Artifacts:
 
 - `docs/facebook-community-launch-plan.md`
 - `docs/facebook-content-calendar.md`
+- `docs/facebook-human-launch-runbook.md`
 
 Safety check:
 
 ```bash
 make social-content-check
+make facebook-launch-check
 ```
 
 The social media plan is educational and infrastructure-focused. It does not provide investment advice, real order instructions, broker login, credential collection, live trading approval, or profit claims.
