@@ -405,6 +405,11 @@ Future live work requires:
   approval, broker heartbeat verification, margin confirmation, live position
   validation, or live readiness. Its kill switch and heartbeat are paper-only
   placeholders, and its daily loss / position state is local paper state only.
+- No Paper Risk Evidence Export may be treated as production risk approval,
+  broker confirmation, live readiness, investment advice, or a real order record.
+  It is a local JSON evidence artifact for one paper risk evaluation and must not
+  write databases, call OMS, call Broker Gateway, call brokers, collect
+  credentials, or enable live trading.
 - No local Research Review Packet sample export may be used as paper execution
   approval, live readiness, persisted audit record, broker instruction, performance
   report, ranking, or recommendation.

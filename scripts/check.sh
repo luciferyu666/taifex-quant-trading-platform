@@ -92,6 +92,7 @@ for required_file in \
   docs/customer-feedback-form.md \
   docs/paper-demo-evidence-export.md \
   docs/paper-broker-simulation-evidence-export.md \
+  docs/paper-risk-evidence-export.md \
   docs/paper-simulation-submit-verification.md \
   docs/paper-approval-ui-flow-smoke-drill.md \
   docs/paper-approval-workflow.md \
@@ -168,6 +169,7 @@ for required_file in \
   scripts/seed-paper-execution-demo.py \
   scripts/export-paper-demo-evidence.py \
   scripts/export-paper-broker-simulation-evidence.py \
+  scripts/export-paper-risk-evidence.py \
   scripts/paper-simulation-submit-check.py \
   backend/app/api/data_routes.py \
   backend/app/api/continuous_futures_routes.py \
@@ -429,6 +431,9 @@ if [[ -x "${BACKEND_PYTHON}" ]]; then
 
   printf 'Running Paper Broker simulation evidence export dry-run...\n'
   "${BACKEND_PYTHON}" scripts/export-paper-broker-simulation-evidence.py >/dev/null
+
+  printf 'Running Paper Risk evidence export dry-run...\n'
+  "${BACKEND_PYTHON}" scripts/export-paper-risk-evidence.py >/dev/null
 else
   printf 'backend/.venv/bin/python is missing; skipping backend runtime checks. Run bash scripts/bootstrap.sh.\n' >&2
 fi

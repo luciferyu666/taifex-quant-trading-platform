@@ -161,3 +161,9 @@ The guardrails return `RiskEvaluation` check details and are exposed through
 `/api/paper-risk/state/reset`. This is still a local paper simulation layer. It is
 not a production risk engine, does not place orders, does not call broker APIs, and
 does not enable live trading.
+
+`make paper-risk-evidence-export` exports one paper risk evaluation evidence JSON
+to stdout by default. With explicit `--output`, it writes a small local `.json`
+artifact that captures the input intent, policy, local state, passed checks, failed
+checks, and safety flags. The export does not write databases, create orders, call
+OMS, call Broker Gateway, collect credentials, or call brokers.
