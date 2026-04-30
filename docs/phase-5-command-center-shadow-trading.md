@@ -215,6 +215,13 @@ Expose roadmap phase status, contracts, safety mode, risk status, and paper-only
   create orders, call Risk Engine, call OMS, call Broker Gateway execution paths,
   collect credentials, or imply production matching logic. A local `.json` file may
   be written only when `--output` is explicitly supplied.
+- Paper Broker Simulation Evidence Viewer is a read-only local JSON viewer in the
+  Paper OMS tab. It parses explicitly selected evidence JSON client-side, validates
+  `paper_only=true`, `live_trading_enabled=false`, `broker_api_called=false`,
+  `external_market_data_downloaded=false`, and `production_execution_model=false`,
+  and never uploads files, writes databases, calls backend mutation APIs, calls
+  brokers, creates orders, calls Risk Engine, calls OMS, calls Broker Gateway
+  execution paths, collects credentials, or grants live approval.
 - Persisted paper records shown in the viewer are audit metadata only. They must not
   be presented as execution performance, investment advice, strategy ranking, or
   production trading readiness.

@@ -1113,6 +1113,10 @@ th {
   grid-column: 1 / -1;
 }
 
+.paper-broker-evidence-section .paper-record-panel {
+  align-self: start;
+}
+
 .paper-reliability-grid {
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(340px, 0.9fr);

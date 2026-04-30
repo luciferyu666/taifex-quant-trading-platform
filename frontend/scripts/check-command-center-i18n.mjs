@@ -11,6 +11,7 @@ const files = {
   paperApprovalRequest: "frontend/app/components/PaperApprovalRequestPanel.tsx",
   paperApprovalDecision: "frontend/app/components/PaperApprovalDecisionPanel.tsx",
   paperDemoEvidence: "frontend/app/components/PaperDemoEvidencePanel.tsx",
+  paperBrokerEvidence: "frontend/app/components/PaperBrokerSimulationEvidencePanel.tsx",
   paperBrokerSimulation: "frontend/app/components/PaperBrokerSimulationModelPanel.tsx",
   paperOmsReliability: "frontend/app/components/PaperOmsReliabilityPanel.tsx",
   paperRecords: "frontend/app/components/PaperExecutionRecordsPanel.tsx",
@@ -275,6 +276,28 @@ requireNotContains("Paper broker simulation does not call approval decisions", s
 requireNotContains("Paper broker simulation does not collect API keys", sourceByFile.paperBrokerSimulation.toLowerCase(), "api_key");
 requireNotContains("Paper broker simulation does not collect account IDs", sourceByFile.paperBrokerSimulation.toLowerCase(), "account_id");
 requireNotContains("Paper broker simulation does not collect certificates", sourceByFile.paperBrokerSimulation.toLowerCase(), "certificate");
+requireContains("English paper broker evidence copy exists", sourceByFile.i18n, "Paper broker simulation evidence viewer");
+requireContains("Traditional Chinese paper broker evidence copy exists", sourceByFile.i18n, "紙上券商模擬 evidence viewer");
+requireContains("Paper broker evidence panel is implemented", sourceByFile.paperBrokerEvidence, "PaperBrokerSimulationEvidencePanel");
+requireContains("Paper broker evidence panel validates local JSON", sourceByFile.paperBrokerEvidence, "validatePaperBrokerSimulationEvidence");
+requireContains("Paper broker evidence panel accepts explicit JSON only", sourceByFile.paperBrokerEvidence, "accept=\".json,application/json\"");
+requireContains("Paper broker evidence panel checks paper_only=true", sourceByFile.paperBrokerEvidence, "paper_only: true");
+requireContains("Paper broker evidence panel checks live_trading_enabled=false", sourceByFile.paperBrokerEvidence, "live_trading_enabled: false");
+requireContains("Paper broker evidence panel checks broker_api_called=false", sourceByFile.paperBrokerEvidence, "broker_api_called: false");
+requireContains("Paper broker evidence panel checks external data flag", sourceByFile.paperBrokerEvidence, "external_market_data_downloaded: false");
+requireContains("Paper broker evidence panel checks production model flag", sourceByFile.paperBrokerEvidence, "production_execution_model: false");
+requireContains("Paper broker evidence panel displays evidence_id", sourceByFile.paperBrokerEvidence, "evidence_id");
+requireContains("Paper broker evidence panel displays quote snapshot", sourceByFile.paperBrokerEvidence, "quote_age_seconds");
+requireContains("Paper broker evidence panel displays simulation outcome", sourceByFile.paperBrokerEvidence, "simulation_outcome");
+requireContains("Paper broker evidence panel displays fill quantity", sourceByFile.paperBrokerEvidence, "simulated_fill_quantity");
+requireContains("Paper broker evidence panel displays safety flags", sourceByFile.paperBrokerEvidence, "safety_flags");
+requireContains("Paper broker evidence panel is mounted on page", sourceByFile.page, "PaperBrokerSimulationEvidencePanel");
+requireNotContains("Paper broker evidence panel does not fetch backend", sourceByFile.paperBrokerEvidence, "fetch(");
+requireNotContains("Paper broker evidence panel does not call workflow record", sourceByFile.paperBrokerEvidence, "/api/paper-execution/workflow/record");
+requireNotContains("Paper broker evidence panel does not call broker simulation endpoint", sourceByFile.paperBrokerEvidence, "/api/paper-execution/broker-simulation/preview");
+requireNotContains("Paper broker evidence panel does not collect API keys", sourceByFile.paperBrokerEvidence.toLowerCase(), "api_key");
+requireNotContains("Paper broker evidence panel does not collect account IDs", sourceByFile.paperBrokerEvidence.toLowerCase(), "account_id");
+requireNotContains("Paper broker evidence panel does not collect certificates", sourceByFile.paperBrokerEvidence.toLowerCase(), "certificate");
 requireContains("English paper approval queue copy exists", sourceByFile.i18n, "Paper-only approval queue and history");
 requireContains("Traditional Chinese paper approval queue copy exists", sourceByFile.i18n, "紙上審批佇列與歷史");
 requireContains("Paper approval queue panel is implemented", sourceByFile.paperApprovals, "PaperApprovalQueuePanel");

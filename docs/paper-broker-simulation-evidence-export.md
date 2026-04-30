@@ -65,6 +65,26 @@ Generated report JSON files under `data-pipeline/reports/*.json` are ignored by
 git. Keep artifacts small and attach them manually to review notes only when
 needed.
 
+## Web Command Center Viewer
+
+The Web Command Center includes a read-only Paper Broker Simulation Evidence
+Viewer in the Paper OMS tab.
+
+Viewer behavior:
+
+- The user must explicitly select a local `.json` file.
+- The file is parsed client-side in the browser.
+- The file is not uploaded to the backend.
+- The viewer validates the evidence type, quote snapshot fields, simulation
+  result fields, and safety flags.
+- Unsafe evidence is rejected before display.
+- The viewer displays input quote snapshot, simulated outcome, fill quantity,
+  fill price, remaining quantity, model checks, warnings, and safety flags.
+
+The viewer must not write databases, call brokers, create orders, call Risk
+Engine, call OMS, call Broker Gateway execution paths, collect credentials, or
+grant live approval.
+
 ## Safety Flags
 
 Every evidence payload must preserve these flags:

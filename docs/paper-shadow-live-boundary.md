@@ -168,6 +168,11 @@ Phase 4 paper execution approval workflow is the first controlled paper simulati
   supplied. It must not write databases, download market data, call brokers,
   create orders, call Risk Engine, call OMS, call Broker Gateway execution paths,
   collect credentials, or claim production matching behavior.
+- Paper Broker Simulation Evidence Viewer may load an explicitly selected local
+  evidence JSON file client-side for read-only display. It must reject unsafe
+  safety flags and must not upload files, write databases, call backend mutation
+  APIs, call brokers, create orders, call Risk Engine, call OMS, call Broker
+  Gateway execution paths, collect credentials, or grant live approval.
 - Audit events are emitted for approval, intent creation, risk evaluation, paper
   broker simulation, and OMS lifecycle recording.
 - `/api/paper-execution/workflow/record` can persist a completed paper workflow run to

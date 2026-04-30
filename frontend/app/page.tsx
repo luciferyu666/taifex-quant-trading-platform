@@ -12,6 +12,7 @@ import { DemoGuidePanel } from "./components/DemoGuidePanel";
 import type { PaperAuditEventRecord } from "./components/PaperAuditTimelinePanel";
 import { PaperApprovalDecisionPanel } from "./components/PaperApprovalDecisionPanel";
 import { PaperApprovalRequestPanel } from "./components/PaperApprovalRequestPanel";
+import { PaperBrokerSimulationEvidencePanel } from "./components/PaperBrokerSimulationEvidencePanel";
 import { PaperBrokerSimulationModelPanel } from "./components/PaperBrokerSimulationModelPanel";
 import { PaperDemoEvidencePanel } from "./components/PaperDemoEvidencePanel";
 import {
@@ -718,6 +719,8 @@ export default async function Home({ searchParams }: HomeProps) {
             />
 
             <PaperBrokerSimulationModelPanel copy={copy} />
+
+            <PaperBrokerSimulationEvidencePanel copy={copy} />
 
             <PaperExecutionRecordsPanel
               available={paperRecordsAvailable}
