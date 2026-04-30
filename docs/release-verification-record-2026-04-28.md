@@ -1496,6 +1496,73 @@ Timeout handling scope:
 - No outbox worker, asynchronous order processor, reconciliation loop, amend/replace path, or production OMS timeout engine is enabled.
 - Live trading remains disabled by default.
 
+## Paper Broker Simulation Evidence Export Verification
+
+Verification date:
+
+```text
+2026-04-30
+```
+
+Commit:
+
+```text
+7343c50 Add paper broker simulation evidence export
+```
+
+GitHub Actions:
+
+```text
+Workflow: Release Readiness
+Run ID: 25146936140
+Status: passed
+```
+
+Vercel deployment:
+
+```text
+Deployment URL: https://taifex-quant-trading-platform-frontend-njcarrxmh.vercel.app
+Deployment ID: dpl_BtMPKkMWvvG5vBH3sd1vkjpmrbCU
+Production alias: https://taifex-quant-trading-platform-front.vercel.app
+Status: Ready
+```
+
+Validation commands:
+
+```bash
+make paper-broker-simulation-evidence-export
+cd backend && .venv/bin/python -m pytest tests/test_paper_broker_simulation_evidence_export_script.py
+make paper-broker-simulation-model-check
+make paper-broker-simulation-ui-check
+make check
+make frontend-production-smoke-check
+```
+
+Observed result:
+
+```text
+All listed checks passed. The Paper Broker Simulation Evidence Export captures
+one local quote-based paper preview input/output pair with explicit safety flags.
+Production smoke gate confirmed deployment id
+dpl_BtMPKkMWvvG5vBH3sd1vkjpmrbCU and required safety copy on English and
+Traditional Chinese pages.
+```
+
+Evidence export scope:
+
+- `make paper-broker-simulation-evidence-export` prints stdout JSON by default.
+- A local `.json` artifact is written only when `--output` is explicitly supplied.
+- The evidence includes symbol, side, order type, quantity, bid, ask, last, quote age, size, liquidity score, simulation outcome, fill quantity, fill price, remaining quantity, and reason.
+- Safety flags remain `paper_only=true`, `live_trading_enabled=false`, `broker_api_called=false`, `external_market_data_downloaded=false`, and `production_execution_model=false`.
+- No database write occurs.
+- No market data is downloaded.
+- No order is created.
+- No Risk Engine, OMS, or Broker Gateway execution path is called.
+- No broker SDK is called.
+- No credentials are collected.
+- The artifact is not a broker confirmation, production matching result, performance claim, investment advice, or live trading approval.
+- Live trading remains disabled by default.
+
 ## Marketing Website Reachability
 
 Command:
