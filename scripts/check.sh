@@ -95,6 +95,7 @@ for required_file in \
   docs/paper-risk-evidence-export.md \
   docs/paper-audit-integrity-preview.md \
   docs/frontend-local-backend-demo-mode.md \
+  docs/local-backend-demo-browser-drill.md \
   docs/paper-simulation-submit-verification.md \
   docs/paper-approval-ui-flow-smoke-drill.md \
   docs/paper-approval-workflow.md \

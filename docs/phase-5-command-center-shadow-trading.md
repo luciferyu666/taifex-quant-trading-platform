@@ -57,6 +57,9 @@ Expose roadmap phase status, contracts, safety mode, risk status, and paper-only
 - Local Backend Demo Mode panel explaining that the production Vercel frontend
   cannot directly read local SQLite paper records, and that actual paper records
   require local backend + local SQLite or a future controlled hosted backend/API.
+- Local Backend Demo Browser Drill that starts local backend/frontend, seeds a
+  temporary local SQLite paper workflow record, and verifies the browser can see
+  actual OMS / audit timelines.
 
 ## Acceptance Criteria
 
@@ -104,6 +107,9 @@ Expose roadmap phase status, contracts, safety mode, risk status, and paper-only
   a local backend.
 - Local Backend Demo Mode must show the local commands needed to run backend,
   frontend, demo seed, and persistence verification without enabling live trading.
+- `make local-backend-demo-browser-drill` must verify the complete seeded local
+  demo read path without creating real orders, calling brokers, or using
+  production Vercel direct SQLite access.
 - Demo guide controls may change the active guide step or copy a checklist, but
   they must not call backend mutation APIs.
 - Refresh/retry only reloads frontend status. It must not call mutation endpoints.

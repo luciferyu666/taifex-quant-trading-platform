@@ -25,6 +25,8 @@ Confirm:
 - Customer Demo Guided Flow production smoke check is passing.
 - Local Paper Approval UI Flow smoke drill is passing if the customer will test
   the full browser-based paper request / decision / submit path.
+- Local Backend Demo Browser Drill is passing if the customer will test seeded
+  local SQLite OMS / audit records through the Web Command Center.
 - `TRADING_MODE=paper`.
 - `ENABLE_LIVE_TRADING=false`.
 - `BROKER_PROVIDER=paper`.
@@ -145,6 +147,12 @@ make backend
 make frontend
 make seed-paper-execution-demo
 make paper-execution-persistence-check
+```
+
+Automated verification for this local backend demo path:
+
+```bash
+make local-backend-demo-browser-drill
 ```
 
 Show:

@@ -132,6 +132,12 @@ make paper-demo-evidence-export
 6. Confirm the evaluator understands that production Vercel may show fallback or
    empty paper records because it cannot directly read local SQLite. Use the local
    frontend at `http://localhost:3000` with local backend for actual records.
+   The automated browser check for this path is:
+
+```bash
+make local-backend-demo-browser-drill
+```
+
 7. Optional local-only paper simulation:
    use the controlled Paper Only submit panel only with a running local backend, then
    refresh records and inspect the generated local SQLite audit record.

@@ -193,6 +193,12 @@ make seed-paper-execution-demo
 make paper-execution-persistence-check
 ```
 
+Automated local browser drill for the same boundary:
+
+```bash
+make local-backend-demo-browser-drill
+```
+
 Do not attempt to make production Vercel read local SQLite directly. Do not add
 credential upload, broker login, live approval, or direct database access from
 the production frontend.

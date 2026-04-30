@@ -45,6 +45,14 @@ http://localhost:3000/?lang=zh
 http://localhost:3000/?lang=en
 ```
 
+For an automated browser drill that starts local backend/frontend, seeds one
+temporary local SQLite paper workflow record, and verifies the UI can see OMS /
+audit timelines, run:
+
+```bash
+make local-backend-demo-browser-drill
+```
+
 ## Production Vercel Expectations
 
 Production URL:

@@ -12,6 +12,9 @@ const frontendDir = join(repoRoot, "frontend");
 const backendPython = join(backendDir, ".venv", "bin", "python");
 const timeoutMs = Number(process.env.PAPER_UI_SMOKE_TIMEOUT_MS || 180000);
 const requestTimeoutMs = Number(process.env.PAPER_UI_SMOKE_REQUEST_TIMEOUT_MS || 30000);
+const smokeMode = process.argv.includes("--local-backend-demo")
+  ? "local-backend-demo"
+  : process.env.PAPER_UI_SMOKE_MODE || "approval-ui-flow";
 
 const checks = [];
 const failures = [];
@@ -603,6 +606,119 @@ async function runBrowserDrill({ chromePath, chromeProfilePath, cdpHost, cdpPort
   printPassedChecks(approvalRequestId, workflowRunId, orderId);
 }
 
+async function runLocalBackendDemoBrowserDrill({
+  chromePath,
+  chromeProfilePath,
+  cdpHost,
+  cdpPort,
+  frontendUrl,
+}) {
+  spawnLogged(
+    "chrome",
+    chromePath,
+    [
+      "--headless=new",
+      "--no-first-run",
+      "--disable-background-networking",
+      "--disable-extensions",
+      "--disable-gpu",
+      "--no-default-browser-check",
+      "--remote-debugging-address=0.0.0.0",
+      `--remote-debugging-port=${cdpPort}`,
+      `--user-data-dir=${chromeProfilePath}`,
+      "about:blank",
+    ],
+    {
+      cwd: repoRoot,
+      env: process.env,
+    },
+  );
+
+  await waitForChrome(cdpHost, cdpPort);
+  const client = await createPage(cdpHost, cdpPort, frontendUrl);
+  await verifyLocalBackendDemoPanel(client);
+  await openPaperTab(client);
+  const { workflowRunId, orderId } = await verifySeededPaperRecords(client);
+  printLocalBackendDemoChecks(workflowRunId, orderId);
+}
+
+async function verifyLocalBackendDemoPanel(client) {
+  await client.evaluate(`${browserHelpers}
+    (async () => {
+      const section = sectionByTitle("local-backend-demo-title");
+      await waitFor(
+        () =>
+          section.innerText.includes("Local Backend Demo Mode") &&
+          section.innerText.includes("cannot directly read your local SQLite") &&
+          section.innerText.includes("make backend") &&
+          section.innerText.includes("make frontend") &&
+          section.innerText.includes("make seed-paper-execution-demo") &&
+          section.innerText.includes("make paper-execution-persistence-check") &&
+          section.innerText.includes("PRODUCTION_SQLITE_ACCESS=false") &&
+          section.innerText.includes("ENABLE_LIVE_TRADING=false"),
+        "local backend demo mode panel",
+        30000,
+      );
+      return section.innerText;
+    })()
+  `);
+  addCheck("Verified Local Backend Demo Mode panel and local setup commands");
+}
+
+async function verifySeededPaperRecords(client) {
+  const result = await client.evaluate(`${browserHelpers}
+    (async () => {
+      const section = sectionByTitle("paper-records-title");
+      await waitFor(
+        () =>
+          section.innerText.includes("demo-paper-strategy") &&
+          section.innerText.includes("PARTIALLY_FILLED") &&
+          /paper-workflow-[a-f0-9]+/.test(section.innerText) &&
+          /paper-order-[a-f0-9]+/.test(section.innerText),
+        "seeded paper workflow record",
+        30000,
+      );
+      const workflowMatch = section.innerText.match(/paper-workflow-[a-f0-9]+/);
+      const orderMatch = section.innerText.match(/paper-order-[a-f0-9]+/);
+      const omsPanel = document.getElementById("paper-oms-title")?.closest("article");
+      const auditPanel = document.getElementById("paper-audit-title")?.closest("article");
+      if (!workflowMatch || !orderMatch) {
+        throw new Error("Seeded workflow/order IDs were not visible.");
+      }
+      if (!omsPanel || !auditPanel) {
+        throw new Error("OMS or Audit timeline panel was not visible.");
+      }
+      if (!omsPanel.innerText.includes("PARTIAL_FILL")) {
+        throw new Error("OMS timeline did not include PARTIAL_FILL.");
+      }
+      if (!auditPanel.innerText.includes("paper_execution.paper_broker_simulated")) {
+        throw new Error("Audit timeline did not include paper broker simulation audit event.");
+      }
+      return {
+        workflowRunId: workflowMatch[0],
+        orderId: orderMatch[0],
+      };
+    })()
+  `);
+  addCheck(`Verified seeded paper OMS/Audit viewer record: ${result.workflowRunId}`);
+  return result;
+}
+
+function printLocalBackendDemoChecks(workflowRunId, orderId) {
+  console.log("Local backend demo browser drill passed:");
+  for (const check of checks) {
+    console.log(`- ${check}`);
+  }
+  console.log(`- workflow_run_id=${workflowRunId}`);
+  console.log(`- order_id=${orderId}`);
+  console.log("- paper_only=true");
+  console.log("- live_trading_enabled=false");
+  console.log("- broker_api_called=false");
+  console.log("- local_sqlite_only=true");
+  console.log("- production_vercel_sqlite_access=false");
+  console.log("- Live trading remains disabled by default.");
+}
+
 async function waitForChild(child, label) {
   return new Promise((resolveChild, rejectChild) => {
     child.on("exit", (code, signal) => {
@@ -628,6 +744,7 @@ async function runWindowsBrowserWorker({ chromePath, chromeProfilePath, cdpPort,
     ["PAPER_UI_SMOKE_CHROME_PROFILE_PATH", chromeProfilePath],
     ["PAPER_UI_SMOKE_CDP_PORT", String(cdpPort)],
     ["PAPER_UI_SMOKE_FRONTEND_URL", frontendUrl],
+    ["PAPER_UI_SMOKE_MODE", smokeMode],
   ]
     .map(([key, value]) => `$env:${key}=${quotePowerShell(value)}`)
     .join("; ");
@@ -647,10 +764,12 @@ async function browserWorkerMain() {
   const chromeProfilePath = process.env.PAPER_UI_SMOKE_CHROME_PROFILE_PATH;
   const frontendUrl = process.env.PAPER_UI_SMOKE_FRONTEND_URL;
   const cdpPort = Number(process.env.PAPER_UI_SMOKE_CDP_PORT || 0);
+  const mode = process.env.PAPER_UI_SMOKE_MODE || "approval-ui-flow";
   if (!chromePath || !chromeProfilePath || !frontendUrl || !cdpPort) {
     throw new Error("Browser worker is missing required paper UI smoke environment variables.");
   }
-  await runBrowserDrill({
+  const drill = mode === "local-backend-demo" ? runLocalBackendDemoBrowserDrill : runBrowserDrill;
+  await drill({
     chromePath,
     chromeProfilePath,
     cdpHost: "127.0.0.1",
@@ -747,6 +866,10 @@ async function main() {
   await waitForHttp(`http://127.0.0.1:${backendPort}/health`, "Backend health");
   await waitForHttp(frontendUrl, "Frontend Command Center");
 
+  if (smokeMode === "local-backend-demo") {
+    await seedLocalDemoRecord(dbPath);
+  }
+
   if (chromeRunsAsWindowsProcess && process.env.PAPER_UI_SMOKE_FORCE_WSL_CDP !== "1") {
     cleanupTempDir = false;
     await runWindowsBrowserWorker({
@@ -758,13 +881,35 @@ async function main() {
     return;
   }
 
-  await runBrowserDrill({
+  const drill =
+    smokeMode === "local-backend-demo" ? runLocalBackendDemoBrowserDrill : runBrowserDrill;
+  await drill({
     chromePath,
     chromeProfilePath,
     cdpHost,
     cdpPort,
     frontendUrl,
   });
+}
+
+async function seedLocalDemoRecord(dbPath) {
+  const child = spawnLogged(
+    "seed-demo",
+    backendPython,
+    [join(repoRoot, "scripts", "seed-paper-execution-demo.py")],
+    {
+      cwd: repoRoot,
+      env: {
+        ...process.env,
+        PAPER_EXECUTION_AUDIT_DB_PATH: dbPath,
+        TRADING_MODE: "paper",
+        ENABLE_LIVE_TRADING: "false",
+        BROKER_PROVIDER: "paper",
+      },
+    },
+  );
+  await waitForChild(child, "Local paper demo seed");
+  addCheck("Seeded one local SQLite paper OMS/audit demo record");
 }
 
 const entrypoint = process.argv.includes("--browser-worker") ? browserWorkerMain : main;
