@@ -8,6 +8,7 @@ from app.domain.order_state_machine import (
     new_order_state,
 )
 from app.domain.paper_approval import PaperApprovalHistory
+from app.domain.paper_broker_simulation import simulate_paper_broker_outcome
 from app.domain.paper_execution import (
     PaperExecutionWorkflowRequest,
     PaperExecutionWorkflowResponse,
@@ -100,10 +101,30 @@ class PaperExecutionWorkflow:
 
         oms_state = self._apply_oms_event(oms_state, OrderEventType.RISK_APPROVE)
         oms_state = self._apply_oms_event(oms_state, OrderEventType.SUBMIT)
+        simulation_result = None
+        effective_simulation = request.broker_simulation
+        if request.broker_simulation_model is not None:
+            simulation_result = simulate_paper_broker_outcome(
+                intent,
+                request.broker_simulation_model,
+            )
+            effective_simulation = simulation_result.simulation_outcome
+            audit_events.append(
+                workflow_audit_event(
+                    action="paper_execution.broker_simulation_model_evaluated",
+                    resource=intent.order_id,
+                    metadata=simulation_result.model_dump(mode="json"),
+                )
+            )
         paper_ack = self.paper_broker_gateway.submit_order(
             intent,
             risk_evaluation,
-            simulation=request.broker_simulation,
+            simulation=effective_simulation,
+            simulation_model_payload=(
+                simulation_result.model_dump(mode="json")
+                if simulation_result is not None
+                else None
+            ),
         )
         audit_events.append(
             workflow_audit_event(
@@ -115,7 +136,7 @@ class PaperExecutionWorkflow:
 
         oms_state = apply_paper_broker_outcome(
             oms_state,
-            request.broker_simulation,
+            effective_simulation,
             quantity=intent.quantity,
             reason=paper_ack.message,
         )
@@ -145,6 +166,7 @@ class PaperExecutionWorkflow:
             risk_evaluation=risk_evaluation,
             oms_state=oms_state,
             paper_broker_ack=paper_ack,
+            paper_broker_simulation_result=simulation_result,
             execution_reports=execution_reports,
             audit_events=audit_events,
             message=(

@@ -161,6 +161,45 @@ def test_paper_broker_can_simulate_partial_fill_reject_and_cancel() -> None:
     assert cancelled.oms_state.status == OrderStatus.CANCELLED
 
 
+def test_paper_workflow_can_use_local_broker_simulation_model() -> None:
+    signal = _signal(exposure=0.05)
+    history = _approved_history(signal)
+    request = PaperExecutionWorkflowRequest(
+        signal=signal,
+        approval_request_id=history.request.approval_request_id,
+        quantity=4,
+        broker_simulation_model={
+            "market_snapshot": {
+                "symbol": "TMF",
+                "bid_price": 19999,
+                "ask_price": 20000,
+                "last_price": 19999.5,
+                "bid_size": 5,
+                "ask_size": 4,
+                "quote_age_seconds": 0,
+                "liquidity_score": 1,
+                "paper_only": True,
+            },
+            "order_type": "MARKET",
+            "paper_only": True,
+        },
+    )
+
+    response = PaperExecutionWorkflow(RiskPolicy()).preview(request, history)
+
+    assert response.oms_state is not None
+    assert response.oms_state.status == OrderStatus.FILLED
+    assert response.paper_broker_simulation_result is not None
+    assert response.paper_broker_simulation_result.simulation_outcome == "fill"
+    assert response.paper_broker_simulation_result.simulated_fill_price == 20000
+    assert response.paper_broker_ack is not None
+    assert response.paper_broker_ack.payload["simulation_model"]["paper_only"] is True
+    assert any(
+        event.action == "paper_execution.broker_simulation_model_evaluated"
+        for event in response.audit_events
+    )
+
+
 def test_paper_workflow_builds_execution_reports_with_fill_accounting() -> None:
     signal = _signal(exposure=0.05)
     history = _approved_history(signal)

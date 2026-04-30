@@ -17,11 +17,13 @@ def test_paper_broker_returns_ack_only_when_approved() -> None:
     ack = gateway.submit_order(
         intent,
         RiskEvaluation(approved=True, checks=[], reason="approved"),
+        simulation_model_payload={"simulation_outcome": "fill"},
     )
 
     assert ack.accepted is True
     assert ack.broker_provider == "paper"
     assert ack.payload["idempotency_key"] == "idem-paper-gateway"
+    assert ack.payload["simulation_model"]["simulation_outcome"] == "fill"
     assert "No real order was placed" in ack.message
 
 

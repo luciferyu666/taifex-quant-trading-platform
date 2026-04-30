@@ -6,6 +6,11 @@ from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel
 
 from app.core.config import Settings, get_settings
+from app.domain.paper_broker_simulation import (
+    PaperBrokerSimulationModelResult,
+    PaperBrokerSimulationPreviewRequest,
+    simulate_paper_broker_outcome,
+)
 from app.domain.paper_execution import (
     PaperExecutionWorkflowRequest,
     PaperExecutionWorkflowResponse,
@@ -90,6 +95,19 @@ def paper_execution_status(settings: SettingsDep) -> PaperExecutionStatusRespons
             "Live trading remains disabled by default."
         ),
     )
+
+
+@router.post(
+    "/broker-simulation/preview",
+    response_model=PaperBrokerSimulationModelResult,
+)
+def paper_broker_simulation_preview(
+    request: PaperBrokerSimulationPreviewRequest,
+) -> PaperBrokerSimulationModelResult:
+    try:
+        return simulate_paper_broker_outcome(request.intent, request.simulation)
+    except ValueError as exc:
+        raise HTTPException(status_code=400, detail=str(exc)) from exc
 
 
 @router.post("/workflow/preview", response_model=PaperExecutionWorkflowResponse)

@@ -9,6 +9,10 @@ from pydantic import BaseModel, Field, field_validator
 
 from app.domain.events import AuditEvent
 from app.domain.order_state_machine import OrderState
+from app.domain.paper_broker_simulation import (
+    PaperBrokerSimulationModelInput,
+    PaperBrokerSimulationModelResult,
+)
 from app.domain.paper_oms_reliability import PaperExecutionReport
 from app.domain.risk_rules import PaperOrderIntent, RiskEvaluation
 from app.domain.signals import StrategySignal
@@ -51,6 +55,7 @@ class PaperExecutionWorkflowRequest(BaseModel):
     quantity: int = Field(default=1, gt=0)
     quote_age_seconds: float = Field(default=0, ge=0)
     broker_simulation: PaperBrokerSimulationOutcome = "acknowledge"
+    broker_simulation_model: PaperBrokerSimulationModelInput | None = None
     paper_only: bool = True
 
     @field_validator("paper_only")
@@ -75,6 +80,7 @@ class PaperExecutionWorkflowResponse(BaseModel):
     risk_evaluation: RiskEvaluation | None = None
     oms_state: OrderState | None = None
     paper_broker_ack: PaperBrokerAck | None = None
+    paper_broker_simulation_result: PaperBrokerSimulationModelResult | None = None
     execution_reports: list[PaperExecutionReport] = Field(default_factory=list)
     audit_events: list[AuditEvent] = Field(default_factory=list)
     message: str
@@ -110,6 +116,11 @@ def create_workflow_run_id(
         "symbol": request.symbol,
         "quantity": request.quantity,
         "broker_simulation": request.broker_simulation,
+        "broker_simulation_model": (
+            request.broker_simulation_model.model_dump(mode="json")
+            if request.broker_simulation_model is not None
+            else None
+        ),
         "paper_only": True,
     }
     return f"paper-workflow-{sha256_json(workflow_core)[:16]}"

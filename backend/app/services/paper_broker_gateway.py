@@ -27,9 +27,22 @@ class PaperBrokerGateway:
         intent: PaperOrderIntent,
         risk_evaluation: RiskEvaluation,
         simulation: PaperBrokerSimulationOutcome = "acknowledge",
+        simulation_model_payload: dict[str, Any] | None = None,
     ) -> PaperBrokerAck:
         if not risk_evaluation.approved:
             raise ValueError("PaperBrokerGateway refuses unapproved order intents")
+
+        payload = {
+            "order_id": intent.order_id,
+            "idempotency_key": intent.idempotency_key,
+            "symbol": intent.symbol,
+            "side": intent.side,
+            "quantity": intent.quantity,
+            "paper_only": True,
+            "simulation": simulation,
+        }
+        if simulation_model_payload is not None:
+            payload["simulation_model"] = simulation_model_payload
 
         if simulation == "reject":
             return PaperBrokerAck(
@@ -38,15 +51,7 @@ class PaperBrokerGateway:
                 message=(
                     "Paper broker simulated rejection only. No real order was placed."
                 ),
-                payload={
-                    "order_id": intent.order_id,
-                    "idempotency_key": intent.idempotency_key,
-                    "symbol": intent.symbol,
-                    "side": intent.side,
-                    "quantity": intent.quantity,
-                    "paper_only": True,
-                    "simulation": simulation,
-                },
+                payload=payload,
             )
 
         return PaperBrokerAck(
@@ -55,13 +60,5 @@ class PaperBrokerGateway:
             message=(
                 f"Paper broker simulated {simulation}. No real order was placed."
             ),
-            payload={
-                "order_id": intent.order_id,
-                "idempotency_key": intent.idempotency_key,
-                "symbol": intent.symbol,
-                "side": intent.side,
-                "quantity": intent.quantity,
-                "paper_only": True,
-                "simulation": simulation,
-            },
+            payload=payload,
         )

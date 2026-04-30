@@ -152,6 +152,7 @@ for required_file in \
   backend/app/domain/research_review_decision_index.py \
   backend/app/domain/research_review_packet.py \
   backend/app/domain/paper_approval.py \
+  backend/app/domain/paper_broker_simulation.py \
   backend/app/domain/paper_execution.py \
   backend/app/domain/paper_execution_records.py \
   backend/app/domain/paper_oms_reliability.py \
@@ -275,6 +276,7 @@ for required_file in \
   backend/app/domain/order_state_machine.py \
   backend/app/domain/allocator.py \
   backend/app/domain/risk_rules.py \
+  backend/app/domain/paper_broker_simulation.py \
   backend/app/domain/paper_execution.py \
   backend/app/domain/paper_execution_records.py \
   backend/app/domain/paper_oms_reliability.py \

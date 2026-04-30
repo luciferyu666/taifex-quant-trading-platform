@@ -152,6 +152,11 @@ Phase 4 paper execution approval workflow is the first controlled paper simulati
   submit, acknowledgement, rejection, partial fill, fill, and cancellation.
 - Paper Broker Gateway simulates acknowledgement, rejection, partial fill, fill, or
   cancellation only. It never submits real orders or calls a real broker SDK.
+- Paper Broker Gateway may derive a paper outcome from caller-provided local quote
+  snapshots through the quote-based simulation model preview. This model uses
+  local bid/ask, order type, limit price, available size, quote age, spread, and
+  liquidity score only. It does not download market data, call brokers, write
+  databases, or represent production matching logic.
 - Audit events are emitted for approval, intent creation, risk evaluation, paper
   broker simulation, and OMS lifecycle recording.
 - `/api/paper-execution/workflow/record` can persist a completed paper workflow run to
@@ -191,6 +196,9 @@ allowed in this release:
 - It keeps `approval_for_live=false`.
 - It lets the user choose only TX/MTX/TMF symbol, small quantity, and paper broker
   simulation outcome after approval history is selected.
+- Future UI slices may expose quote-based paper broker simulation inputs, but only
+  as Paper Only local demo controls with no broker calls and no external data
+  downloads.
 - It writes only local SQLite paper OMS/audit records through the backend.
 - It must not collect broker credentials, account IDs, API keys, certificates, or
   customer financial information.

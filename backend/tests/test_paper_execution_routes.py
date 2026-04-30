@@ -118,6 +118,50 @@ def test_paper_execution_cors_allows_command_center_without_credentials() -> Non
     assert "access-control-allow-credentials" not in response.headers
 
 
+def test_paper_broker_simulation_preview_uses_local_snapshot_only() -> None:
+    client = TestClient(app)
+
+    response = client.post(
+        "/api/paper-execution/broker-simulation/preview",
+        json={
+            "intent": {
+                "order_id": "paper-order-route-simulation",
+                "idempotency_key": "paper-idem-route-simulation",
+                "symbol": "TMF",
+                "side": "BUY",
+                "quantity": 3,
+                "tx_equivalent_exposure": 0.05,
+                "paper_only": True,
+            },
+            "simulation": {
+                "market_snapshot": {
+                    "symbol": "TMF",
+                    "bid_price": 19999,
+                    "ask_price": 20000,
+                    "last_price": 19999.5,
+                    "bid_size": 5,
+                    "ask_size": 2,
+                    "quote_age_seconds": 0,
+                    "liquidity_score": 1,
+                    "paper_only": True,
+                },
+                "order_type": "MARKET",
+                "paper_only": True,
+            },
+            "paper_only": True,
+        },
+    )
+
+    assert response.status_code == 200
+    payload = response.json()
+    assert payload["simulation_outcome"] == "partial_fill"
+    assert payload["simulated_fill_quantity"] == 2
+    assert payload["remaining_quantity"] == 1
+    assert payload["broker_api_called"] is False
+    assert payload["external_market_data_downloaded"] is False
+    assert payload["production_execution_model"] is False
+
+
 def test_paper_execution_workflow_preview_runs_full_paper_path(
     tmp_path: Path,
     monkeypatch,

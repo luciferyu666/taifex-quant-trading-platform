@@ -15,6 +15,13 @@ simulation outcomes. It can simulate acknowledgement, rejection, partial fill, f
 and cancellation for workflow testing. It never places real orders and never imports
 broker SDKs.
 
+The current paper adapter can also attach a local quote-based simulation preview from
+`backend/app/domain/paper_broker_simulation.py`. That model uses caller-provided
+paper market snapshots, order type, limit price, available size, spread, quote age,
+and liquidity score to derive `acknowledge`, `partial_fill`, `fill`, or `reject`.
+It is still a fixture/local simulation model, not a production matching engine,
+broker execution report, live liquidity model, or external market data feed.
+
 Paper Broker Gateway acknowledgements can be recorded by
 `backend/app/services/paper_execution_store.py` as local audit metadata after the
 workflow completes. The gateway itself still does not own persistence, does not call
@@ -50,3 +57,5 @@ Strategy Runner must never see plaintext broker keys. Future credentials should 
 - Paper Broker Gateway output is recorded as simulated audit metadata only.
 - Paper Gateway audit persistence remains local SQLite only in the current
   implementation.
+- Quote-based paper simulation previews remain local, caller-provided, paper-only,
+  and report `broker_api_called=false`.

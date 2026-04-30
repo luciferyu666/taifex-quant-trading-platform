@@ -19,6 +19,15 @@ Create a paper-only execution core where order intents are evaluated by Risk Eng
   - OMS records lifecycle transitions for acknowledgement, rejection,
     partial fill, fill, and cancellation.
 - Paper Broker Gateway simulates outcomes only and never submits real orders.
+- Paper Broker Gateway simulation model preview:
+  - `POST /api/paper-execution/broker-simulation/preview` derives a paper outcome
+    from a caller-provided local quote snapshot, order type, limit price, available
+    size, quote age, spread, and liquidity score.
+  - `PaperExecutionWorkflowRequest.broker_simulation_model` can optionally use that
+    same local model to derive the paper broker outcome instead of relying only on a
+    directly supplied deterministic `broker_simulation`.
+  - This is still paper-only, local, and not a production matching engine or live
+    liquidity model.
 - Audit events are emitted for approval, intent creation, risk evaluation,
   broker simulation, and OMS lifecycle recording.
 - Paper approval workflow foundation:
@@ -71,6 +80,9 @@ Create a paper-only execution core where order intents are evaluated by Risk Eng
   platform-owned `PaperOrderIntent` objects.
 - Paper broker simulations can produce acknowledgement, rejection, partial fill,
   fill, and cancellation states without any real broker SDK call.
+- Paper broker simulation model preview can derive acknowledgement, rejection,
+  partial fill, or fill from local quote and liquidity inputs without downloading
+  market data, calling brokers, or writing databases.
 - Paper workflow records can be queried by workflow run ID, order ID, and audit event
   list endpoints.
 - Persistence status reports local-only SQLite counts for runs, OMS events, and audit
@@ -105,10 +117,14 @@ Create a paper-only execution core where order intents are evaluated by Risk Eng
 - Do not treat explicit paper timeout mark as production timeout processing.
 - Do not implement amend/replace or reconciliation loops without a separate paper-only
   design and tests.
+- Do not treat the local quote-based paper broker simulation model as production
+  matching logic, certified liquidity modeling, broker execution reporting, or
+  investment advice.
 
 ## Suggested Commands
 
 ```bash
+make paper-broker-simulation-model-check
 make paper-approval-workflow-check
 make paper-execution-workflow-check
 make paper-execution-persistence-check
@@ -120,7 +136,8 @@ make check
 
 ## Next Implementation Notes
 
-Next safe slice: improve paper-only timeout handling evidence and UI verification
-if needed. Do not add asynchronous workers, external databases, live adapters,
+Next safe slice: expose quote-based paper broker simulation model inputs in the Web
+Command Center as an explicit Paper Only demo control if needed. Do not add external
+market data downloads, asynchronous workers, external databases, live adapters,
 amend/replace, real broker execution reports, or reconciliation loops until the
 paper-only contracts and release readiness gates remain stable under tests.
