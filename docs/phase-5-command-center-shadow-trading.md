@@ -208,6 +208,13 @@ Expose roadmap phase status, contracts, safety mode, risk status, and paper-only
   through `/api/paper-execution/broker-simulation/preview` only. It must not submit
   workflow records, write databases, download market data, call Risk Engine, call
   OMS, call real brokers, collect credentials, or imply production matching logic.
+- Paper Broker Simulation Evidence Export is an explicit local command:
+  `make paper-broker-simulation-evidence-export`. It captures one quote-based
+  preview input/output pair with paper-only safety flags and prints JSON to stdout
+  by default. It must not write databases, download market data, call brokers,
+  create orders, call Risk Engine, call OMS, call Broker Gateway execution paths,
+  collect credentials, or imply production matching logic. A local `.json` file may
+  be written only when `--output` is explicitly supplied.
 - Persisted paper records shown in the viewer are audit metadata only. They must not
   be presented as execution performance, investment advice, strategy ranking, or
   production trading readiness.
@@ -221,6 +228,7 @@ make frontend-i18n-check
 make paper-approval-ui-flow-smoke-check
 make paper-execution-workflow-check
 make paper-execution-persistence-check
+make paper-broker-simulation-evidence-export
 make paper-broker-simulation-ui-check
 make sample-research-review-packet
 make research-review-packet-fixtures-check

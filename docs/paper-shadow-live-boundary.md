@@ -162,6 +162,12 @@ Phase 4 paper execution approval workflow is the first controlled paper simulati
   `/api/paper-execution/broker-simulation/preview` and must remain preview-only.
   It must not create workflow records, write databases, call Risk Engine, call OMS,
   call broker gateways for execution, collect credentials, or download market data.
+- Paper Broker Simulation Evidence Export may capture one preview as local evidence
+  through `make paper-broker-simulation-evidence-export`. It prints stdout by
+  default and writes a small local `.json` only when `--output` is explicitly
+  supplied. It must not write databases, download market data, call brokers,
+  create orders, call Risk Engine, call OMS, call Broker Gateway execution paths,
+  collect credentials, or claim production matching behavior.
 - Audit events are emitted for approval, intent creation, risk evaluation, paper
   broker simulation, and OMS lifecycle recording.
 - `/api/paper-execution/workflow/record` can persist a completed paper workflow run to
@@ -387,6 +393,9 @@ Future live work requires:
 - No local packet JSON loader may accept unsafe approval, execution, ranking,
   persistence, broker, Risk Engine, OMS, external download, or performance-claim
   flags.
+- No Paper Broker Simulation Evidence artifact may be treated as a persisted
+  workflow record, broker confirmation, live approval, production matching result,
+  execution report, investment advice, strategy ranking, or performance claim.
 - No local Research Review Packet sample export may be used as paper execution
   approval, live readiness, persisted audit record, broker instruction, performance
   report, ranking, or recommendation.

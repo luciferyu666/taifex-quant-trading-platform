@@ -56,6 +56,19 @@ This posts a bounded Paper Only payload to
 Risk Engine / OMS / Paper Broker Gateway / audit trace, and uses a temporary local
 SQLite database by default.
 
+Optional local-only evidence export for the Paper Broker Simulation Model preview:
+
+```bash
+make paper-broker-simulation-evidence-export
+```
+
+This prints a small Paper Only broker simulation preview evidence JSON to stdout.
+It captures caller-provided local quote inputs, simulated outcome, fill quantity,
+fill price, remaining quantity, reason, and safety flags. It does not write
+databases, download market data, call brokers, create orders, or call Risk Engine /
+OMS / Broker Gateway execution paths. Use explicit `--output` only when a reviewer
+needs a small local JSON artifact under `data-pipeline/reports/`.
+
 Optional browser-level verification for the full Web UI paper approval flow:
 
 ```bash
@@ -200,6 +213,16 @@ UI submit
     databases, collect credentials, call brokers, or create orders.
   - Do not present this evidence as a broker confirmation, investment report,
     performance claim, or live approval.
+- Paper Broker Simulation Preview Evidence Export:
+  - After using the Paper Broker Simulation Model UI, run
+    `make paper-broker-simulation-evidence-export` to show a stdout-only example
+    of the same evidence shape.
+  - Explain that the evidence records local quote inputs and preview outcome only.
+    It is not a workflow record, broker confirmation, production matching result,
+    performance claim, or live approval.
+  - If a reviewer needs a local artifact, use explicit `--output` with a small
+    `.json` path. Do not upload it through the Command Center and do not commit
+    generated report JSON.
 - Customer Demo Guided Flow:
   - Use the guided tour panel to walk through Release, Paper OMS, Research Packet,
     and Contracts in a predictable order.
