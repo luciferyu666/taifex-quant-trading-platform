@@ -8,6 +8,7 @@ const productionUrl = (
 ).replace(/\/$/, "");
 
 const timeoutMs = Number(process.env.FRONTEND_PRODUCTION_TIMEOUT_MS || 15000);
+const fetchAttempts = Number(process.env.FRONTEND_PRODUCTION_FETCH_ATTEMPTS || 3);
 
 const checks = [];
 const failures = [];
@@ -22,7 +23,9 @@ const addFailure = (message) => {
 
 const normalizeWhitespace = (value) => value.replace(/\s+/g, " ");
 
-const fetchText = async (url) => {
+const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+const fetchTextOnce = async (url) => {
   const controller = new AbortController();
   const timeout = setTimeout(() => controller.abort(), timeoutMs);
 
@@ -45,6 +48,22 @@ const fetchText = async (url) => {
   } finally {
     clearTimeout(timeout);
   }
+};
+
+const fetchText = async (url) => {
+  let lastError;
+  for (let attempt = 1; attempt <= fetchAttempts; attempt += 1) {
+    try {
+      return await fetchTextOnce(url);
+    } catch (error) {
+      lastError = error;
+      if (attempt < fetchAttempts) {
+        await delay(1000 * attempt);
+      }
+    }
+  }
+
+  throw lastError;
 };
 
 const requireStatusOk = (label, response) => {

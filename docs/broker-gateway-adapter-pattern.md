@@ -22,6 +22,11 @@ and liquidity score to derive `acknowledge`, `partial_fill`, `fill`, or `reject`
 It is still a fixture/local simulation model, not a production matching engine,
 broker execution report, live liquidity model, or external market data feed.
 
+Web Command Center exposes this model as a Paper Only preview control. The UI calls
+`/api/paper-execution/broker-simulation/preview` only, validates returned safety
+flags, and does not create orders, write databases, download market data, or call
+real broker adapters.
+
 Paper Broker Gateway acknowledgements can be recorded by
 `backend/app/services/paper_execution_store.py` as local audit metadata after the
 workflow completes. The gateway itself still does not own persistence, does not call
@@ -59,3 +64,5 @@ Strategy Runner must never see plaintext broker keys. Future credentials should 
   implementation.
 - Quote-based paper simulation previews remain local, caller-provided, paper-only,
   and report `broker_api_called=false`.
+- Quote-based simulation UI controls remain preview-only and must not be connected
+  to live approval, broker credentials, or production execution paths.

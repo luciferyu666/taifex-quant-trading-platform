@@ -157,6 +157,11 @@ Phase 4 paper execution approval workflow is the first controlled paper simulati
   local bid/ask, order type, limit price, available size, quote age, spread, and
   liquidity score only. It does not download market data, call brokers, write
   databases, or represent production matching logic.
+- Web Command Center may expose that quote-based simulation model as Paper Only UI
+  controls. The panel may call only
+  `/api/paper-execution/broker-simulation/preview` and must remain preview-only.
+  It must not create workflow records, write databases, call Risk Engine, call OMS,
+  call broker gateways for execution, collect credentials, or download market data.
 - Audit events are emitted for approval, intent creation, risk evaluation, paper
   broker simulation, and OMS lifecycle recording.
 - `/api/paper-execution/workflow/record` can persist a completed paper workflow run to
@@ -196,9 +201,9 @@ allowed in this release:
 - It keeps `approval_for_live=false`.
 - It lets the user choose only TX/MTX/TMF symbol, small quantity, and paper broker
   simulation outcome after approval history is selected.
-- Future UI slices may expose quote-based paper broker simulation inputs, but only
-  as Paper Only local demo controls with no broker calls and no external data
-  downloads.
+- The separate Paper Broker Simulation Model UI may preview quote-based inputs, but
+  controlled submit still writes workflow records only after persisted paper
+  approval and must not bypass Risk Engine, OMS, or audit recording.
 - It writes only local SQLite paper OMS/audit records through the backend.
 - It must not collect broker credentials, account IDs, API keys, certificates, or
   customer financial information.

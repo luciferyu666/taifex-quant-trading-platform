@@ -11,6 +11,7 @@ const files = {
   paperApprovalRequest: "frontend/app/components/PaperApprovalRequestPanel.tsx",
   paperApprovalDecision: "frontend/app/components/PaperApprovalDecisionPanel.tsx",
   paperDemoEvidence: "frontend/app/components/PaperDemoEvidencePanel.tsx",
+  paperBrokerSimulation: "frontend/app/components/PaperBrokerSimulationModelPanel.tsx",
   paperOmsReliability: "frontend/app/components/PaperOmsReliabilityPanel.tsx",
   paperRecords: "frontend/app/components/PaperExecutionRecordsPanel.tsx",
   paperSubmit: "frontend/app/components/PaperSimulationSubmitPanel.tsx",
@@ -256,6 +257,24 @@ requireContains("Paper submit uses approved approval history", sourceByFile.pape
 requireNotContains("Paper submit no longer sends client approval decision", sourceByFile.paperSubmit, "approval_decision:");
 requireNotContains("Paper submit does not create approval requests", sourceByFile.paperSubmit, "/api/paper-execution/approvals/requests");
 requireContains("Paper submit is mounted on page", sourceByFile.page, "PaperSimulationSubmitPanel");
+requireContains("English paper broker simulation copy exists", sourceByFile.i18n, "Local quote-based simulation preview");
+requireContains("Traditional Chinese paper broker simulation copy exists", sourceByFile.i18n, "本地 quote-based 模擬預覽");
+requireContains("Paper broker simulation component is implemented", sourceByFile.paperBrokerSimulation, "PaperBrokerSimulationModelPanel");
+requireContains("Paper broker simulation calls preview endpoint only", sourceByFile.paperBrokerSimulation, "/api/paper-execution/broker-simulation/preview");
+requireContains("Paper broker simulation uses caller-provided local quote snapshot", sourceByFile.i18n, "caller-provided local quote");
+requireContains("Paper broker simulation keeps paper_only=true", sourceByFile.paperBrokerSimulation, "paper_only: true");
+requireContains("Paper broker simulation checks live_trading_enabled=false", sourceByFile.paperBrokerSimulation, "live_trading_enabled !== false");
+requireContains("Paper broker simulation checks broker_api_called=false", sourceByFile.paperBrokerSimulation, "broker_api_called !== false");
+requireContains("Paper broker simulation checks external data flag", sourceByFile.paperBrokerSimulation, "external_market_data_downloaded !== false");
+requireContains("Paper broker simulation checks production model flag", sourceByFile.paperBrokerSimulation, "production_execution_model !== false");
+requireContains("Paper broker simulation exposes quote inputs", sourceByFile.paperBrokerSimulation, "quoteAgeSeconds");
+requireContains("Paper broker simulation exposes liquidity input", sourceByFile.paperBrokerSimulation, "liquidityScore");
+requireContains("Paper broker simulation is mounted on page", sourceByFile.page, "PaperBrokerSimulationModelPanel");
+requireNotContains("Paper broker simulation does not call workflow record", sourceByFile.paperBrokerSimulation, "/api/paper-execution/workflow/record");
+requireNotContains("Paper broker simulation does not call approval decisions", sourceByFile.paperBrokerSimulation, "/decisions");
+requireNotContains("Paper broker simulation does not collect API keys", sourceByFile.paperBrokerSimulation.toLowerCase(), "api_key");
+requireNotContains("Paper broker simulation does not collect account IDs", sourceByFile.paperBrokerSimulation.toLowerCase(), "account_id");
+requireNotContains("Paper broker simulation does not collect certificates", sourceByFile.paperBrokerSimulation.toLowerCase(), "certificate");
 requireContains("English paper approval queue copy exists", sourceByFile.i18n, "Paper-only approval queue and history");
 requireContains("Traditional Chinese paper approval queue copy exists", sourceByFile.i18n, "紙上審批佇列與歷史");
 requireContains("Paper approval queue panel is implemented", sourceByFile.paperApprovals, "PaperApprovalQueuePanel");

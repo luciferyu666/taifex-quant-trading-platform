@@ -204,6 +204,10 @@ Expose roadmap phase status, contracts, safety mode, risk status, and paper-only
   and Copy checklist controls only. It must not submit simulations, create orders,
   write databases, upload files, call brokers, call Risk Engine mutation paths, call
   OMS mutation paths, collect credentials, or imply production readiness.
+- The Paper Broker Simulation Model UI may preview local quote-based paper outcomes
+  through `/api/paper-execution/broker-simulation/preview` only. It must not submit
+  workflow records, write databases, download market data, call Risk Engine, call
+  OMS, call real brokers, collect credentials, or imply production matching logic.
 - Persisted paper records shown in the viewer are audit metadata only. They must not
   be presented as execution performance, investment advice, strategy ranking, or
   production trading readiness.
@@ -217,6 +221,7 @@ make frontend-i18n-check
 make paper-approval-ui-flow-smoke-check
 make paper-execution-workflow-check
 make paper-execution-persistence-check
+make paper-broker-simulation-ui-check
 make sample-research-review-packet
 make research-review-packet-fixtures-check
 cd backend && .venv/bin/python -m pytest tests/test_release_baseline_routes.py
@@ -273,3 +278,9 @@ non-production gaps, and explicit paper-only timeout preview/mark actions. Futur
 work should keep this panel bounded to local paper metadata until a separate
 backend slice introduces durable queues, asynchronous processing, amend/replace,
 and reconciliation under explicit paper-only tests.
+The Paper Broker Simulation Model UI now exposes quote, size, spread, quote-age,
+order-type, limit-price, and liquidity-score inputs for previewing a local paper
+broker outcome. Future UI work may connect this preview to controlled paper submit
+payloads only after a separate approval and audit review; it must not download
+external market data, call brokers, bypass Risk Engine/OMS, or imply production
+execution modeling.

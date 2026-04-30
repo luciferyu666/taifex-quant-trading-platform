@@ -1,6 +1,6 @@
 SHELL := /usr/bin/env bash
 
-.PHONY: help init infra dev backend frontend frontend-i18n-check frontend-production-smoke-check customer-demo-ui-smoke-check paper-approval-ui-flow-smoke-check website website-build website-preview website-check website-content-check website-deploy roadmap-status release-readiness-check customer-evaluation-check social-content-check facebook-launch-check seed-paper-execution-demo paper-demo-evidence-export paper-simulation-submit-check paper-approval-workflow-check paper-execution-workflow-check paper-execution-persistence-check paper-broker-simulation-model-check paper-oms-reliability-check paper-oms-timeout-check data-fixtures-check rollover-fixtures-check continuous-futures-preview feature-manifest-preview strategy-research-preview backtest-preview backtest-result-preview toy-backtest backtest-artifact-preview backtest-artifact-index-preview backtest-artifact-comparison-preview backtest-research-bundle-preview backtest-research-bundle-index-preview research-review-queue-preview research-review-decision-preview research-review-decision-index-preview research-review-packet-preview sample-research-review-packet research-review-packet-fixtures-check data-quality-reports-dry-run data-version-register-dry-run data-migrations-dry-run data-platform-verify architecture-status architecture-docs-check architecture-safety-check business-docs-check business-compliance-check business-status check test codex-prompt clean
+.PHONY: help init infra dev backend frontend frontend-i18n-check frontend-production-smoke-check customer-demo-ui-smoke-check paper-approval-ui-flow-smoke-check website website-build website-preview website-check website-content-check website-deploy roadmap-status release-readiness-check customer-evaluation-check social-content-check facebook-launch-check seed-paper-execution-demo paper-demo-evidence-export paper-simulation-submit-check paper-approval-workflow-check paper-execution-workflow-check paper-execution-persistence-check paper-broker-simulation-model-check paper-broker-simulation-ui-check paper-oms-reliability-check paper-oms-timeout-check data-fixtures-check rollover-fixtures-check continuous-futures-preview feature-manifest-preview strategy-research-preview backtest-preview backtest-result-preview toy-backtest backtest-artifact-preview backtest-artifact-index-preview backtest-artifact-comparison-preview backtest-research-bundle-preview backtest-research-bundle-index-preview research-review-queue-preview research-review-decision-preview research-review-decision-index-preview research-review-packet-preview sample-research-review-packet research-review-packet-fixtures-check data-quality-reports-dry-run data-version-register-dry-run data-migrations-dry-run data-platform-verify architecture-status architecture-docs-check architecture-safety-check business-docs-check business-compliance-check business-status check test codex-prompt clean
 
 help:
 	@printf 'Taifex Quant Trading Platform commands\n'
@@ -32,6 +32,7 @@ help:
 	@printf '  make paper-execution-workflow-check Validate paper-only execution approval workflow\n'
 	@printf '  make paper-execution-persistence-check Validate local paper OMS/audit persistence\n'
 	@printf '  make paper-broker-simulation-model-check Validate local quote-based paper broker simulation model\n'
+	@printf '  make paper-broker-simulation-ui-check Validate paper broker simulation UI controls\n'
 	@printf '  make paper-oms-reliability-check Validate local paper OMS reliability metadata\n'
 	@printf '  make paper-oms-timeout-check Validate paper-only OMS timeout preview/mark flow\n'
 	@printf '  make data-fixtures-check Validate local market data CSV fixtures\n'
@@ -161,6 +162,10 @@ paper-execution-persistence-check:
 
 paper-broker-simulation-model-check:
 	cd backend && . .venv/bin/activate && pytest tests/test_paper_broker_simulation.py tests/test_paper_broker_gateway.py tests/test_paper_execution_workflow.py tests/test_paper_execution_routes.py
+
+paper-broker-simulation-ui-check:
+	node frontend/scripts/check-command-center-i18n.mjs
+	cd frontend && npm run typecheck
 
 paper-oms-reliability-check:
 	cd backend && . .venv/bin/activate && pytest tests/test_paper_execution_workflow.py tests/test_paper_execution_store.py tests/test_paper_execution_routes.py
