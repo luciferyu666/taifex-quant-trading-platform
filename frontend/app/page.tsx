@@ -12,6 +12,11 @@ import { DemoGuidePanel } from "./components/DemoGuidePanel";
 import type { PaperAuditEventRecord } from "./components/PaperAuditTimelinePanel";
 import { PaperApprovalDecisionPanel } from "./components/PaperApprovalDecisionPanel";
 import { PaperApprovalRequestPanel } from "./components/PaperApprovalRequestPanel";
+import {
+  PaperAuditIntegrityPanel,
+  type PaperAuditIntegrityStatus,
+  type PaperAuditIntegrityVerification,
+} from "./components/PaperAuditIntegrityPanel";
 import { PaperBrokerSimulationEvidencePanel } from "./components/PaperBrokerSimulationEvidencePanel";
 import { PaperBrokerSimulationModelPanel } from "./components/PaperBrokerSimulationModelPanel";
 import { PaperDemoEvidencePanel } from "./components/PaperDemoEvidencePanel";
@@ -229,6 +234,53 @@ const fallbackPaperOmsReliabilityStatus: PaperOmsReliabilityStatus = {
 const fallbackPaperOmsOutboxItems: PaperOmsOutboxItem[] = [];
 const fallbackPaperExecutionReports: PaperExecutionReport[] = [];
 const fallbackPaperTimeoutCandidates: PaperOrderTimeoutCandidate[] = [];
+const fallbackPaperAuditIntegrityVerification: PaperAuditIntegrityVerification = {
+  verified: true,
+  workflow_run_id: null,
+  generated_at: "fallback",
+  db_path: "data/paper_execution_audit.sqlite",
+  audit_events_count: 0,
+  workflows_checked: 0,
+  missing_hash_count: 0,
+  broken_chain_count: 0,
+  duplicate_audit_ids_count: 0,
+  paper_only: true,
+  live_trading_enabled: false,
+  broker_api_called: false,
+  local_sqlite_only: true,
+  worm_ledger: false,
+  immutable_audit_log: false,
+  centralized_audit_service: false,
+  production_audit_compliance: false,
+  checks: [],
+  warnings: [
+    "Fallback paper audit integrity verification. Backend is unavailable.",
+    "Local SQLite audit records are not WORM storage or production compliance.",
+  ],
+  message: "Fallback paper audit integrity verification. No local audit events are loaded.",
+};
+const fallbackPaperAuditIntegrityStatus: PaperAuditIntegrityStatus = {
+  enabled: true,
+  db_path: "data/paper_execution_audit.sqlite",
+  local_sqlite_only: true,
+  paper_only: true,
+  live_trading_enabled: false,
+  broker_api_called: false,
+  worm_ledger: false,
+  immutable_audit_log: false,
+  centralized_audit_service: false,
+  production_audit_compliance: false,
+  audit_events_count: 0,
+  workflows_checked: 0,
+  latest_verification: fallbackPaperAuditIntegrityVerification,
+  known_gaps: [
+    "Local SQLite is not WORM storage.",
+    "No centralized audit service is enabled.",
+    "No external timestamping, signing, or notarization is enabled.",
+    "No retention policy enforcement is enabled.",
+  ],
+  message: "Fallback paper audit integrity status. Backend is unavailable.",
+};
 const fallbackPaperRiskStatus: PaperRiskStatus = {
   trading_mode: "paper",
   live_trading_enabled: false,
@@ -425,6 +477,8 @@ export default async function Home({ searchParams }: HomeProps) {
     paperOmsReliability,
     paperOmsOutbox,
     paperTimeoutCandidates,
+    paperAuditIntegrityStatus,
+    paperAuditIntegrityVerification,
     paperRiskStatus,
     paperExecutionRuns,
     paperApprovalStatus,
@@ -457,6 +511,14 @@ export default async function Home({ searchParams }: HomeProps) {
       fetchJson<PaperOrderTimeoutCandidate[]>(
         "/api/paper-execution/reliability/timeout-candidates?timeout_seconds=30",
         fallbackPaperTimeoutCandidates,
+      ),
+      fetchJson<PaperAuditIntegrityStatus>(
+        "/api/paper-execution/audit-integrity/status",
+        fallbackPaperAuditIntegrityStatus,
+      ),
+      fetchJson<PaperAuditIntegrityVerification>(
+        "/api/paper-execution/audit-integrity/verify",
+        fallbackPaperAuditIntegrityVerification,
       ),
       fetchJson<PaperRiskStatus>("/api/paper-risk/status", fallbackPaperRiskStatus),
       fetchJson<PaperExecutionRunRecord[]>(
@@ -533,6 +595,12 @@ export default async function Home({ searchParams }: HomeProps) {
     paperTimeoutCandidates.available
       ? undefined
       : `paper timeout candidates: ${paperTimeoutCandidates.error}`,
+    paperAuditIntegrityStatus.available
+      ? undefined
+      : `paper audit integrity status: ${paperAuditIntegrityStatus.error}`,
+    paperAuditIntegrityVerification.available
+      ? undefined
+      : `paper audit integrity verification: ${paperAuditIntegrityVerification.error}`,
     paperRiskStatus.available ? undefined : `paper risk: ${paperRiskStatus.error}`,
     paperExecutionReports.available
       ? undefined
@@ -818,6 +886,28 @@ export default async function Home({ searchParams }: HomeProps) {
               outboxItems={paperOmsOutbox.data}
               reliability={paperOmsReliability.data}
               timeoutCandidates={paperTimeoutCandidates.data}
+            />
+
+            <PaperAuditIntegrityPanel
+              available={
+                paperAuditIntegrityStatus.available &&
+                paperAuditIntegrityVerification.available
+              }
+              copy={copy}
+              error={
+                [
+                  paperAuditIntegrityStatus.available
+                    ? undefined
+                    : paperAuditIntegrityStatus.error,
+                  paperAuditIntegrityVerification.available
+                    ? undefined
+                    : paperAuditIntegrityVerification.error,
+                ]
+                  .filter(Boolean)
+                  .join("; ") || undefined
+              }
+              status={paperAuditIntegrityStatus.data}
+              verification={paperAuditIntegrityVerification.data}
             />
 
             <PaperDemoEvidencePanel copy={copy} />

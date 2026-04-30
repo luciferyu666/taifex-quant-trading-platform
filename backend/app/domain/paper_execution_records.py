@@ -43,6 +43,8 @@ class PaperAuditEventRecord(BaseModel):
     timestamp: datetime
     paper_only: bool = True
     metadata: dict[str, Any] = Field(default_factory=dict)
+    previous_hash: str | None = None
+    event_hash: str | None = None
 
 
 class PaperExecutionPersistenceStatus(BaseModel):

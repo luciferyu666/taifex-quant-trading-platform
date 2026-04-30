@@ -167,3 +167,19 @@ to stdout by default. With explicit `--output`, it writes a small local `.json`
 artifact that captures the input intent, policy, local state, passed checks, failed
 checks, and safety flags. The export does not write databases, create orders, call
 OMS, call Broker Gateway, collect credentials, or call brokers.
+
+## Paper Audit Integrity Preview
+
+Paper audit integrity preview adds local SQLite hash-chain metadata to new paper
+audit events and exposes read-only verification through:
+
+- `GET /api/paper-execution/audit-integrity/status`
+- `GET /api/paper-execution/audit-integrity/verify`
+- `GET /api/paper-execution/runs/{workflow_run_id}/audit-integrity`
+- `make paper-audit-integrity-check`
+
+The preview verifies `previous_hash` / `event_hash` continuity for local paper
+audit events and can detect missing hash metadata, broken chains, duplicate
+`audit_id` values, and workflow continuity issues. It is still local paper
+metadata only. It is not WORM storage, not an immutable audit log, not a
+centralized audit service, and not production compliance certification.

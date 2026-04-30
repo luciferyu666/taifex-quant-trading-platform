@@ -7,6 +7,10 @@ from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 
+from app.domain.audit_integrity import (
+    PAPER_AUDIT_GENESIS_HASH,
+    compute_paper_audit_event_hash,
+)
 from app.domain.order_state_machine import (
     ALLOWED_TRANSITIONS,
     OrderEvent,
@@ -83,6 +87,8 @@ class PaperExecutionStore:
                     timestamp TEXT NOT NULL,
                     paper_only INTEGER NOT NULL,
                     metadata_json TEXT NOT NULL,
+                    previous_hash TEXT,
+                    event_hash TEXT,
                     PRIMARY KEY (workflow_run_id, audit_id)
                 );
 
@@ -145,6 +151,8 @@ class PaperExecutionStore:
                     ON paper_oms_outbox(status);
                 """
             )
+            ensure_column(connection, "paper_audit_events", "previous_hash", "TEXT")
+            ensure_column(connection, "paper_audit_events", "event_hash", "TEXT")
 
     def persist_workflow(
         self,
@@ -232,7 +240,12 @@ class PaperExecutionStore:
                         json_dumps(record.payload),
                     ),
                 )
+            previous_audit_hash = PAPER_AUDIT_GENESIS_HASH
             for record in self._audit_event_records_from_response(response):
+                event_hash = compute_paper_audit_event_hash(
+                    record,
+                    previous_audit_hash,
+                )
                 connection.execute(
                     """
                     INSERT INTO paper_audit_events (
@@ -243,8 +256,10 @@ class PaperExecutionStore:
                         resource,
                         timestamp,
                         paper_only,
-                        metadata_json
-                    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+                        metadata_json,
+                        previous_hash,
+                        event_hash
+                    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                     """,
                     (
                         record.workflow_run_id,
@@ -255,8 +270,11 @@ class PaperExecutionStore:
                         record.timestamp.isoformat(),
                         int(record.paper_only),
                         json_dumps(record.metadata),
+                        previous_audit_hash,
+                        event_hash,
                     ),
                 )
+                previous_audit_hash = event_hash
             for report in self._execution_reports_from_response(response):
                 connection.execute(
                     """
@@ -618,6 +636,11 @@ class PaperExecutionStore:
                     json_dumps(response.oms_event.payload),
                 ),
             )
+            previous_audit_hash = latest_audit_hash(connection, response.workflow_run_id)
+            audit_event_hash = compute_paper_audit_event_hash(
+                response.audit_event,
+                previous_audit_hash,
+            )
             connection.execute(
                 """
                 INSERT INTO paper_audit_events (
@@ -628,8 +651,10 @@ class PaperExecutionStore:
                     resource,
                     timestamp,
                     paper_only,
-                    metadata_json
-                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+                    metadata_json,
+                    previous_hash,
+                    event_hash
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                 """,
                 (
                     response.audit_event.workflow_run_id,
@@ -640,6 +665,8 @@ class PaperExecutionStore:
                     response.audit_event.timestamp.isoformat(),
                     int(response.audit_event.paper_only),
                     json_dumps(response.audit_event.metadata),
+                    previous_audit_hash,
+                    audit_event_hash,
                 ),
             )
             connection.execute(
@@ -1116,6 +1143,39 @@ def count_table(connection: sqlite3.Connection, table: str) -> int:
     return int(connection.execute(f"SELECT COUNT(*) FROM {table}").fetchone()[0])
 
 
+def ensure_column(
+    connection: sqlite3.Connection,
+    table: str,
+    column: str,
+    column_type: str,
+) -> None:
+    columns = {
+        row["name"]
+        for row in connection.execute(f"PRAGMA table_info({table})").fetchall()
+    }
+    if column not in columns:
+        connection.execute(f"ALTER TABLE {table} ADD COLUMN {column} {column_type}")
+
+
+def latest_audit_hash(
+    connection: sqlite3.Connection,
+    workflow_run_id: str,
+) -> str:
+    row = connection.execute(
+        """
+        SELECT event_hash
+        FROM paper_audit_events
+        WHERE workflow_run_id = ?
+        ORDER BY timestamp DESC, audit_id DESC
+        LIMIT 1
+        """,
+        (workflow_run_id,),
+    ).fetchone()
+    if row is None or not row["event_hash"]:
+        return PAPER_AUDIT_GENESIS_HASH
+    return str(row["event_hash"])
+
+
 def run_record_from_row(row: sqlite3.Row) -> PaperExecutionRunRecord:
     return PaperExecutionRunRecord(
         workflow_run_id=row["workflow_run_id"],
@@ -1158,6 +1218,8 @@ def audit_record_from_row(row: sqlite3.Row) -> PaperAuditEventRecord:
         timestamp=datetime.fromisoformat(row["timestamp"]),
         paper_only=bool(row["paper_only"]),
         metadata=json.loads(row["metadata_json"]),
+        previous_hash=row["previous_hash"] if "previous_hash" in row.keys() else None,
+        event_hash=row["event_hash"] if "event_hash" in row.keys() else None,
     )
 
 

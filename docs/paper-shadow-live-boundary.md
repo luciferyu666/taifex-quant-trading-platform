@@ -410,6 +410,11 @@ Future live work requires:
   It is a local JSON evidence artifact for one paper risk evaluation and must not
   write databases, call OMS, call Broker Gateway, call brokers, collect
   credentials, or enable live trading.
+- No Paper Audit Integrity Layer Preview may be treated as WORM storage,
+  immutable audit compliance, centralized audit, production signing, or live
+  readiness. It verifies local SQLite `previous_hash` / `event_hash` metadata for
+  paper audit events only and must not repair records, write external databases,
+  call brokers, collect credentials, create orders, or enable live trading.
 - No local Research Review Packet sample export may be used as paper execution
   approval, live readiness, persisted audit record, broker instruction, performance
   report, ranking, or recommendation.

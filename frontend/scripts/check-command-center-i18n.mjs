@@ -15,6 +15,7 @@ const files = {
   paperBrokerSimulation: "frontend/app/components/PaperBrokerSimulationModelPanel.tsx",
   paperRisk: "frontend/app/components/PaperRiskGuardrailsPanel.tsx",
   paperOmsReliability: "frontend/app/components/PaperOmsReliabilityPanel.tsx",
+  paperAuditIntegrity: "frontend/app/components/PaperAuditIntegrityPanel.tsx",
   paperRecords: "frontend/app/components/PaperExecutionRecordsPanel.tsx",
   paperSubmit: "frontend/app/components/PaperSimulationSubmitPanel.tsx",
   paperOmsTimeline: "frontend/app/components/PaperOmsTimelinePanel.tsx",
@@ -384,6 +385,23 @@ requireNotContains("Paper OMS reliability panel does not call approval decisions
 requireNotContains("Paper OMS reliability panel does not collect API keys", sourceByFile.paperOmsReliability.toLowerCase(), "api_key");
 requireNotContains("Paper OMS reliability panel does not collect account IDs", sourceByFile.paperOmsReliability.toLowerCase(), "account_id");
 requireNotContains("Paper OMS reliability panel does not collect certificates", sourceByFile.paperOmsReliability.toLowerCase(), "certificate");
+requireContains("English paper audit integrity copy exists", sourceByFile.i18n, "Local audit hash-chain verification");
+requireContains("Traditional Chinese paper audit integrity copy exists", sourceByFile.i18n, "本地 audit hash-chain 驗證");
+requireContains("Paper audit integrity panel is implemented", sourceByFile.paperAuditIntegrity, "PaperAuditIntegrityPanel");
+requireContains("Paper audit integrity status endpoint is read on page", sourceByFile.page, "/api/paper-execution/audit-integrity/status");
+requireContains("Paper audit integrity verify endpoint is read on page", sourceByFile.page, "/api/paper-execution/audit-integrity/verify");
+requireContains("Paper audit integrity panel is mounted on page", sourceByFile.page, "PaperAuditIntegrityPanel");
+requireContains("Paper audit integrity panel shows verified status", sourceByFile.paperAuditIntegrity, "verification.verified");
+requireContains("Paper audit integrity panel shows missing hash count", sourceByFile.paperAuditIntegrity, "missing_hash_count");
+requireContains("Paper audit integrity panel shows broken chain count", sourceByFile.paperAuditIntegrity, "broken_chain_count");
+requireContains("Paper audit integrity panel shows duplicate audit IDs", sourceByFile.paperAuditIntegrity, "duplicate_audit_id");
+requireContains("Paper audit integrity panel shows WORM false", sourceByFile.paperAuditIntegrity, "worm_ledger");
+requireContains("Paper audit integrity panel shows centralized audit false", sourceByFile.paperAuditIntegrity, "centralized_audit_service");
+requireNotContains("Paper audit integrity panel does not fetch backend", sourceByFile.paperAuditIntegrity, "fetch(");
+requireNotContains("Paper audit integrity panel does not call workflow record", sourceByFile.paperAuditIntegrity, "/api/paper-execution/workflow/record");
+requireNotContains("Paper audit integrity panel does not collect API keys", sourceByFile.paperAuditIntegrity.toLowerCase(), "api_key");
+requireNotContains("Paper audit integrity panel does not collect account IDs", sourceByFile.paperAuditIntegrity.toLowerCase(), "account_id");
+requireNotContains("Paper audit integrity panel does not collect certificates", sourceByFile.paperAuditIntegrity.toLowerCase(), "certificate");
 requireContains("Packet loader bundled sample action exists", sourceByFile.i18n, "Load safe sample");
 requireContains("Packet loader clear local JSON action exists", sourceByFile.i18n, "Clear local JSON");
 requireContains("Packet loader still performs local validation", sourceByFile.packetLoader, "validateResearchReviewPacket");

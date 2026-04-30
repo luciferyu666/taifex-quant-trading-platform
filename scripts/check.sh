@@ -93,6 +93,7 @@ for required_file in \
   docs/paper-demo-evidence-export.md \
   docs/paper-broker-simulation-evidence-export.md \
   docs/paper-risk-evidence-export.md \
+  docs/paper-audit-integrity-preview.md \
   docs/paper-simulation-submit-verification.md \
   docs/paper-approval-ui-flow-smoke-drill.md \
   docs/paper-approval-workflow.md \
@@ -157,6 +158,7 @@ for required_file in \
   backend/app/domain/paper_broker_simulation.py \
   backend/app/domain/paper_execution.py \
   backend/app/domain/paper_execution_records.py \
+  backend/app/domain/audit_integrity.py \
   backend/app/domain/paper_oms_reliability.py \
   backend/app/domain/paper_risk_state.py \
   backend/app/domain/exposure.py \
@@ -165,11 +167,13 @@ for required_file in \
   backend/app/services/broker_gateway.py \
   backend/app/services/paper_execution_workflow.py \
   backend/app/services/paper_execution_store.py \
+  backend/app/services/audit_integrity_service.py \
   backend/app/services/paper_approval_store.py \
   scripts/seed-paper-execution-demo.py \
   scripts/export-paper-demo-evidence.py \
   scripts/export-paper-broker-simulation-evidence.py \
   scripts/export-paper-risk-evidence.py \
+  scripts/verify-paper-audit-integrity.py \
   scripts/paper-simulation-submit-check.py \
   backend/app/api/data_routes.py \
   backend/app/api/continuous_futures_routes.py \
@@ -434,6 +438,14 @@ if [[ -x "${BACKEND_PYTHON}" ]]; then
 
   printf 'Running Paper Risk evidence export dry-run...\n'
   "${BACKEND_PYTHON}" scripts/export-paper-risk-evidence.py >/dev/null
+
+  printf 'Running Paper Audit integrity verification dry-run...\n'
+  paper_integrity_tmp="$(mktemp -d)"
+  PAPER_EXECUTION_AUDIT_DB_PATH="${paper_integrity_tmp}/paper_integrity.sqlite" \
+    "${BACKEND_PYTHON}" scripts/seed-paper-execution-demo.py >/dev/null
+  PAPER_EXECUTION_AUDIT_DB_PATH="${paper_integrity_tmp}/paper_integrity.sqlite" \
+    "${BACKEND_PYTHON}" scripts/verify-paper-audit-integrity.py >/dev/null
+  rm -rf "${paper_integrity_tmp}"
 else
   printf 'backend/.venv/bin/python is missing; skipping backend runtime checks. Run bash scripts/bootstrap.sh.\n' >&2
 fi

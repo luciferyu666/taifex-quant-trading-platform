@@ -1,6 +1,6 @@
 SHELL := /usr/bin/env bash
 
-.PHONY: help init infra dev backend frontend frontend-i18n-check frontend-production-smoke-check customer-demo-ui-smoke-check paper-approval-ui-flow-smoke-check website website-build website-preview website-check website-content-check website-deploy roadmap-status release-readiness-check customer-evaluation-check social-content-check facebook-launch-check seed-paper-execution-demo paper-demo-evidence-export paper-broker-simulation-evidence-export paper-risk-evidence-export paper-simulation-submit-check paper-approval-workflow-check paper-execution-workflow-check paper-execution-persistence-check paper-risk-guardrails-check paper-broker-simulation-model-check paper-broker-simulation-ui-check paper-oms-reliability-check paper-oms-timeout-check data-fixtures-check rollover-fixtures-check continuous-futures-preview feature-manifest-preview strategy-research-preview backtest-preview backtest-result-preview toy-backtest backtest-artifact-preview backtest-artifact-index-preview backtest-artifact-comparison-preview backtest-research-bundle-preview backtest-research-bundle-index-preview research-review-queue-preview research-review-decision-preview research-review-decision-index-preview research-review-packet-preview sample-research-review-packet research-review-packet-fixtures-check data-quality-reports-dry-run data-version-register-dry-run data-migrations-dry-run data-platform-verify architecture-status architecture-docs-check architecture-safety-check business-docs-check business-compliance-check business-status check test codex-prompt clean
+.PHONY: help init infra dev backend frontend frontend-i18n-check frontend-production-smoke-check customer-demo-ui-smoke-check paper-approval-ui-flow-smoke-check website website-build website-preview website-check website-content-check website-deploy roadmap-status release-readiness-check customer-evaluation-check social-content-check facebook-launch-check seed-paper-execution-demo paper-demo-evidence-export paper-broker-simulation-evidence-export paper-risk-evidence-export paper-audit-integrity-check paper-simulation-submit-check paper-approval-workflow-check paper-execution-workflow-check paper-execution-persistence-check paper-risk-guardrails-check paper-broker-simulation-model-check paper-broker-simulation-ui-check paper-oms-reliability-check paper-oms-timeout-check data-fixtures-check rollover-fixtures-check continuous-futures-preview feature-manifest-preview strategy-research-preview backtest-preview backtest-result-preview toy-backtest backtest-artifact-preview backtest-artifact-index-preview backtest-artifact-comparison-preview backtest-research-bundle-preview backtest-research-bundle-index-preview research-review-queue-preview research-review-decision-preview research-review-decision-index-preview research-review-packet-preview sample-research-review-packet research-review-packet-fixtures-check data-quality-reports-dry-run data-version-register-dry-run data-migrations-dry-run data-platform-verify architecture-status architecture-docs-check architecture-safety-check business-docs-check business-compliance-check business-status check test codex-prompt clean
 
 help:
 	@printf 'Taifex Quant Trading Platform commands\n'
@@ -29,6 +29,7 @@ help:
 	@printf '  make paper-demo-evidence-export Export local Paper Only demo evidence to stdout\n'
 	@printf '  make paper-broker-simulation-evidence-export Export Paper Only broker simulation preview evidence\n'
 	@printf '  make paper-risk-evidence-export Export Paper Only risk evaluation evidence\n'
+	@printf '  make paper-audit-integrity-check Verify Paper Only local audit hash-chain metadata\n'
 	@printf '  make paper-simulation-submit-check Verify Paper Only submit trace through API, OMS, and audit queries\n'
 	@printf '  make paper-approval-workflow-check Validate paper-only approval queue and history\n'
 	@printf '  make paper-execution-workflow-check Validate paper-only execution approval workflow\n'
@@ -156,6 +157,15 @@ paper-broker-simulation-evidence-export:
 
 paper-risk-evidence-export:
 	backend/.venv/bin/python scripts/export-paper-risk-evidence.py
+
+paper-audit-integrity-check:
+	tmp_dir="$$(mktemp -d)"; \
+	PAPER_EXECUTION_AUDIT_DB_PATH="$$tmp_dir/paper_audit_integrity.sqlite" \
+		backend/.venv/bin/python scripts/seed-paper-execution-demo.py >/dev/null; \
+	PAPER_EXECUTION_AUDIT_DB_PATH="$$tmp_dir/paper_audit_integrity.sqlite" \
+		backend/.venv/bin/python scripts/verify-paper-audit-integrity.py >/dev/null; \
+	rm -rf "$$tmp_dir"
+	cd backend && . .venv/bin/activate && pytest tests/test_audit_integrity.py
 
 paper-simulation-submit-check:
 	backend/.venv/bin/python scripts/paper-simulation-submit-check.py

@@ -237,6 +237,7 @@ make paper-execution-workflow-check
 make paper-execution-persistence-check
 make paper-broker-simulation-evidence-export
 make paper-broker-simulation-ui-check
+make paper-audit-integrity-check
 make sample-research-review-packet
 make research-review-packet-fixtures-check
 cd backend && .venv/bin/python -m pytest tests/test_release_baseline_routes.py
@@ -299,3 +300,8 @@ broker outcome. Future UI work may connect this preview to controlled paper subm
 payloads only after a separate approval and audit review; it must not download
 external market data, call brokers, bypass Risk Engine/OMS, or imply production
 execution modeling.
+The Paper Audit Integrity panel now shows local SQLite audit hash-chain verification
+status, latest event-level checks, known gaps, and warnings. It is read-only and
+does not repair audit chains, write databases, upload records, call brokers,
+collect credentials, create orders, grant live approval, or claim WORM / immutable
+audit compliance.
