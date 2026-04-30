@@ -1563,6 +1563,67 @@ Evidence export scope:
 - The artifact is not a broker confirmation, production matching result, performance claim, investment advice, or live trading approval.
 - Live trading remains disabled by default.
 
+## Paper Risk Guardrail Expansion Verification
+
+Commit:
+
+```text
+c4e38f0 Add paper risk guardrails
+```
+
+GitHub Actions:
+
+```text
+Workflow: Release Readiness
+Run ID: 25151383681
+Status: passed
+```
+
+Vercel deployment:
+
+```text
+Deployment URL: https://taifex-quant-trading-platform-frontend-3l03sm5n0.vercel.app
+Deployment ID: dpl_223mK7UCUwXQvhkqQA48rb58kvuD
+Production alias: https://taifex-quant-trading-platform-front.vercel.app
+Status: Ready
+```
+
+Validation commands:
+
+```bash
+make paper-risk-guardrails-check
+cd backend && .venv/bin/python -m pytest tests/test_paper_risk_guardrails.py
+cd backend && .venv/bin/python -m ruff check app tests
+cd backend && .venv/bin/python -m pytest
+make frontend-i18n-check
+cd frontend && npm run typecheck
+cd frontend && npm run build
+make check
+make frontend-production-smoke-check
+```
+
+Observed result:
+
+```text
+All listed checks passed. Release Readiness CI passed on run 25151383681.
+Production smoke gate confirmed deployment id
+dpl_223mK7UCUwXQvhkqQA48rb58kvuD and required safety copy on English and
+Traditional Chinese pages.
+```
+
+Paper risk guardrail scope:
+
+- Added paper-only `RiskEvaluation` checks for price reasonability, max order size by contract, margin proxy, duplicate idempotency key prevention, daily loss state, position limit, kill switch placeholder, and simulated broker heartbeat.
+- Added `/api/paper-risk/status`, `/api/paper-risk/evaluate`, and `/api/paper-risk/state/reset`.
+- Added Web Command Center read-only Paper Risk Guardrails panel.
+- The panel displays policy, local paper state, supported checks, contract limits, and safety flags.
+- The UI does not submit orders, approve execution, write databases, collect credentials, or call brokers.
+- The API remains paper-only and does not create real orders.
+- Kill switch and broker heartbeat are paper-only placeholders, not production controls.
+- Daily loss and position state are local paper state only.
+- No broker SDK is called.
+- Live trading remains disabled by default.
+
 ## Marketing Website Reachability
 
 Command:
