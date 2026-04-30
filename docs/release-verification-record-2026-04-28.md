@@ -1624,6 +1624,81 @@ Paper risk guardrail scope:
 - No broker SDK is called.
 - Live trading remains disabled by default.
 
+## Paper Risk Evidence Export Verification
+
+Paper Risk Evidence Export was added to capture one paper-only risk evaluation
+as a small local JSON evidence artifact for customer demo, reviewer handoff, and
+audit review. The export is not a production risk approval and does not create
+orders.
+
+Verification time:
+
+```text
+2026-04-30 20:14:44 CST (+0800)
+```
+
+Commit:
+
+```text
+2c35399 Add paper risk evidence export
+```
+
+GitHub Actions:
+
+```text
+Workflow: Release Readiness
+Run ID: 25158761617
+Status: passed
+```
+
+Vercel deployment:
+
+```text
+Deployment URL: https://taifex-quant-trading-platform-frontend-2e1rcdm2a.vercel.app
+Deployment ID: dpl_GVk2UNT5f6bXxttdiTy9mtrAKD1J
+Production alias: https://taifex-quant-trading-platform-front.vercel.app
+Status: Ready
+```
+
+Validation commands:
+
+```bash
+make paper-risk-evidence-export
+cd backend && .venv/bin/python -m pytest tests/test_paper_risk_evidence_export_script.py
+make paper-risk-guardrails-check
+make check
+make frontend-production-smoke-check
+```
+
+Observed result:
+
+```text
+All listed checks passed. Release Readiness CI passed on run 25158761617.
+Production smoke gate confirmed deployment id
+dpl_GVk2UNT5f6bXxttdiTy9mtrAKD1J and required safety copy on English and
+Traditional Chinese pages.
+```
+
+Paper risk evidence export scope:
+
+- Added `scripts/export-paper-risk-evidence.py`.
+- Added `make paper-risk-evidence-export`.
+- Added `docs/paper-risk-evidence-export.md`.
+- Added backend script tests for stdout export, explicit local JSON output,
+  rejection evidence, duplicate idempotency evidence, unsafe environment
+  rejection, and non-JSON output rejection.
+- Evidence includes the paper order intent, policy, local paper risk state,
+  `RiskEvaluation`, passed checks, failed checks, warnings, and safety flags.
+- `--output` is required before writing a local JSON file.
+- The default path is stdout only.
+- The export does not write a database.
+- The export does not call a broker.
+- The export does not create an order.
+- The export does not call OMS or Broker Gateway execution paths.
+- The export does not collect broker credentials.
+- The export is not production risk approval.
+- Live trading remains disabled by default.
+
 ## Marketing Website Reachability
 
 Command:
