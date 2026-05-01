@@ -142,7 +142,8 @@ Production Vercel is a read-only presentation and evaluation surface. It cannot
 directly read a user's local SQLite paper records; actual paper OMS / audit
 records require local backend demo mode or a future controlled hosted API/data
 layer. See `docs/frontend-local-backend-demo-mode.md` and
-`docs/production-local-data-boundary.md`.
+`docs/production-local-data-boundary.md`. The customer self-service path is
+tracked in `docs/customer-self-service-paper-demo-roadmap.md`.
 
 ### Audit and Observability
 

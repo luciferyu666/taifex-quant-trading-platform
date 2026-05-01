@@ -57,6 +57,8 @@ Customers may evaluate:
   - The Release tab includes a Data Access Boundary matrix. Review
     [production-local-data-boundary.md](production-local-data-boundary.md) before
     asking customers to inspect actual paper records.
+  - The self-service productization path is tracked in
+    [customer-self-service-paper-demo-roadmap.md](customer-self-service-paper-demo-roadmap.md).
 - Paper OMS reliability metadata review:
   - local idempotency key count
   - completed local outbox metadata

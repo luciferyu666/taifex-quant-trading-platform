@@ -97,10 +97,12 @@ for required_file in \
   docs/frontend-local-backend-demo-mode.md \
   docs/local-backend-demo-browser-drill.md \
   docs/production-local-data-boundary.md \
+  docs/customer-self-service-paper-demo-roadmap.md \
   docs/paper-simulation-submit-verification.md \
   docs/paper-approval-ui-flow-smoke-drill.md \
   docs/paper-approval-workflow.md \
   scripts/customer-evaluation-check.sh \
+  scripts/self-service-paper-demo-check.sh \
   frontend/scripts/check-paper-approval-ui-flow.mjs; do
   if [[ ! -f "${required_file}" ]]; then
     printf 'Missing required customer evaluation file: %s\n' "${required_file}" >&2
@@ -113,11 +115,17 @@ if [[ ! -x scripts/customer-evaluation-check.sh ]]; then
   missing_customer_eval_file=1
 fi
 
+if [[ ! -x scripts/self-service-paper-demo-check.sh ]]; then
+  printf 'scripts/self-service-paper-demo-check.sh must be executable.\n' >&2
+  missing_customer_eval_file=1
+fi
+
 if [[ "${missing_customer_eval_file}" -ne 0 ]]; then
   exit 1
 fi
 
 bash scripts/customer-evaluation-check.sh
+bash scripts/self-service-paper-demo-check.sh
 
 printf 'Checking Facebook community launch content...\n'
 if [[ -x scripts/social-content-check.sh ]]; then

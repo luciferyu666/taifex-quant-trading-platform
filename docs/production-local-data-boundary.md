@@ -65,6 +65,29 @@ make frontend-local-backend-demo-check
 make frontend-i18n-check
 ```
 
+Use the self-service roadmap gate to keep this boundary from regressing:
+
+```bash
+make self-service-paper-demo-check
+```
+
+## Productization Direction
+
+The next product step is not to make Production Vercel read local SQLite. The
+safe path is to productize one of these modes:
+
+1. Local self-service demo package:
+   - customer runs local backend and frontend
+   - local SQLite path is explicit
+   - demo records are seeded or created locally
+   - evidence can be exported as small local JSON or Markdown
+2. Future hosted paper backend/API:
+   - deployed backend with governed data layer
+   - authentication, RBAC/ABAC, tenant isolation, retention, and audit integrity
+   - paper-only execution boundary preserved
+
+See [customer-self-service-paper-demo-roadmap.md](customer-self-service-paper-demo-roadmap.md).
+
 ## Safety Rules
 
 - `TRADING_MODE=paper`
