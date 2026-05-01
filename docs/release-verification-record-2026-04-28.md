@@ -2099,6 +2099,67 @@ Hosted Paper Tenant Boundary Evidence Viewer scope:
 - No broker SDK is called.
 - Live trading remains disabled by default.
 
+## Hosted Paper Tenant Boundary Evidence Viewer Record Refresh
+
+Verification time:
+
+```text
+2026-05-02 04:16:06 CST (+0800)
+```
+
+Refresh commit:
+
+```text
+77396c2 Update release verification for hosted paper tenant evidence viewer
+```
+
+GitHub Actions:
+
+```text
+Workflow: Release Readiness
+Run ID: 25231105461
+Status: passed
+```
+
+Vercel deployment refresh:
+
+```text
+Deployment URL: https://taifex-quant-trading-platform-frontend-3a0qmcrzo.vercel.app
+Deployment ID: dpl_7LHbiphcGciLZMQPvddbf654zass
+Production alias: https://taifex-quant-trading-platform-front.vercel.app
+Status: Ready
+```
+
+Validation commands:
+
+```bash
+gh run watch 25231105461 --exit-status
+cd frontend && vercel inspect https://taifex-quant-trading-platform-front.vercel.app
+make frontend-production-smoke-check
+git status --short --branch
+```
+
+Observed result:
+
+```text
+Release Readiness CI passed on run 25231105461.
+Production alias resolved to deployment dpl_7LHbiphcGciLZMQPvddbf654zass.
+Production smoke gate passed and confirmed required safety copy on English and
+Traditional Chinese pages.
+Local git state was clean: ## main...origin/main.
+```
+
+Refresh scope:
+
+- Documentation-only release verification refresh.
+- No application behavior was changed by the refresh commit.
+- The Hosted Paper Tenant Boundary Evidence Viewer remains read-only,
+  explicit-local-JSON only, client-side parse only, no upload, no database
+  write, no hosted datastore, no local SQLite access from Production Vercel,
+  no broker API call, no credential collection, no order creation, and no live
+  trading path.
+- Live trading remains disabled by default.
+
 ## Marketing Website Reachability
 
 Command:
