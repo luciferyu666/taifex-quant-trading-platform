@@ -14,6 +14,11 @@ import {
   HostedPaperReadinessPanel,
   type HostedPaperReadiness,
 } from "./components/HostedPaperReadinessPanel";
+import {
+  HostedPaperMockSessionPanel,
+  type HostedPaperMockSession,
+  type HostedPaperTenantContext,
+} from "./components/HostedPaperMockSessionPanel";
 import { LocalBackendDemoModePanel } from "./components/LocalBackendDemoModePanel";
 import type { PaperAuditEventRecord } from "./components/PaperAuditTimelinePanel";
 import { PaperApprovalDecisionPanel } from "./components/PaperApprovalDecisionPanel";
@@ -462,6 +467,181 @@ const fallbackHostedPaperReadiness: HostedPaperReadiness = {
   ],
 };
 
+const fallbackHostedPaperTenant: HostedPaperTenantContext = {
+  tenant_id: "mock-tenant-paper-evaluation",
+  tenant_name: "Mock Paper Evaluation Tenant",
+  tenant_mode: "paper_only_mock",
+  tenant_isolation_required: true,
+  hosted_datastore_enabled: false,
+  local_sqlite_access: false,
+  live_trading_enabled: false,
+  broker_provider: "paper",
+};
+
+const fallbackHostedPaperMockSession: HostedPaperMockSession = {
+  service: "hosted-paper-mock-session-contract",
+  contract_state: "mock_read_only",
+  summary:
+    "Read-only mock session contract for future hosted paper mode. This is not real authentication and does not create a hosted session.",
+  session: {
+    user_id: "mock-user-read-only",
+    session_id: "mock-session-read-only",
+    authenticated: false,
+    authentication_provider: "none",
+    authentication_mode: "mock_contract_only",
+    roles: ["viewer"],
+    attributes: {
+      environment: "hosted-paper-preview",
+      paper_only: true,
+      read_only: true,
+      tenant_scope: "mock-tenant-paper-evaluation",
+    },
+  },
+  tenant: fallbackHostedPaperTenant,
+  role_schema: [
+    {
+      role: "viewer",
+      description:
+        "Read hosted readiness, mock session, tenant context, and evidence metadata.",
+      paper_only: true,
+      can_enable_live_trading: false,
+      can_upload_broker_credentials: false,
+    },
+    {
+      role: "research_reviewer",
+      description: "Future paper-only role for research review decisions.",
+      paper_only: true,
+      can_enable_live_trading: false,
+      can_upload_broker_credentials: false,
+    },
+    {
+      role: "risk_reviewer",
+      description: "Future paper-only role for risk review decisions.",
+      paper_only: true,
+      can_enable_live_trading: false,
+      can_upload_broker_credentials: false,
+    },
+    {
+      role: "paper_operator",
+      description: "Future paper-only role for submitting approved paper workflows.",
+      paper_only: true,
+      can_enable_live_trading: false,
+      can_upload_broker_credentials: false,
+    },
+    {
+      role: "tenant_admin",
+      description: "Future paper-only role for tenant workspace administration.",
+      paper_only: true,
+      can_enable_live_trading: false,
+      can_upload_broker_credentials: false,
+    },
+  ],
+  permission_schema: [
+    {
+      permission: "read_hosted_readiness",
+      description: "Read hosted paper readiness metadata.",
+      granted_in_mock_session: true,
+      mutation: false,
+      requires_rbac: true,
+      requires_abac: true,
+      requires_completed_approval_request: false,
+    },
+    {
+      permission: "read_mock_session",
+      description: "Read the mock session contract sample.",
+      granted_in_mock_session: true,
+      mutation: false,
+      requires_rbac: true,
+      requires_abac: true,
+      requires_completed_approval_request: false,
+    },
+    {
+      permission: "read_current_tenant",
+      description: "Read the mock tenant context sample.",
+      granted_in_mock_session: true,
+      mutation: false,
+      requires_rbac: true,
+      requires_abac: true,
+      requires_completed_approval_request: false,
+    },
+    {
+      permission: "create_paper_approval_request",
+      description: "Future paper-only mutation for creating approval requests.",
+      granted_in_mock_session: false,
+      mutation: true,
+      requires_rbac: true,
+      requires_abac: true,
+      requires_completed_approval_request: false,
+    },
+    {
+      permission: "record_paper_reviewer_decision",
+      description: "Future paper-only mutation for reviewer decisions.",
+      granted_in_mock_session: false,
+      mutation: true,
+      requires_rbac: true,
+      requires_abac: true,
+      requires_completed_approval_request: false,
+    },
+    {
+      permission: "submit_approved_paper_workflow",
+      description: "Future paper-only mutation requiring a completed approval_request_id.",
+      granted_in_mock_session: false,
+      mutation: true,
+      requires_rbac: true,
+      requires_abac: true,
+      requires_completed_approval_request: true,
+    },
+    {
+      permission: "enable_live_trading",
+      description: "Forbidden in hosted paper mode.",
+      granted_in_mock_session: false,
+      mutation: true,
+      requires_rbac: true,
+      requires_abac: true,
+      requires_completed_approval_request: false,
+    },
+    {
+      permission: "upload_broker_credentials",
+      description: "Forbidden in hosted paper mode.",
+      granted_in_mock_session: false,
+      mutation: true,
+      requires_rbac: true,
+      requires_abac: true,
+      requires_completed_approval_request: false,
+    },
+  ],
+  safety_defaults: {
+    trading_mode: "paper",
+    enable_live_trading: false,
+    broker_provider: "paper",
+  },
+  safety_flags: {
+    paper_only: true,
+    read_only: true,
+    live_trading_enabled: false,
+    broker_api_called: false,
+    order_created: false,
+    credentials_collected: false,
+    broker_credentials_collected: false,
+    hosted_auth_provider_enabled: false,
+    session_cookie_issued: false,
+    hosted_datastore_written: false,
+    external_db_written: false,
+    production_trading_ready: false,
+  },
+  docs: {
+    hosted_paper_auth_boundary: "docs/hosted-paper-auth-boundary-spec.md",
+    hosted_paper_mock_session: "docs/hosted-paper-mock-session-contract.md",
+    hosted_paper_readiness: "docs/hosted-paper-backend-api-readiness.md",
+  },
+  warnings: [
+    "This endpoint is a mock contract only; no hosted authentication provider is enabled.",
+    "No credentials are collected, no session cookie is issued, and no hosted datastore is written.",
+    "Mock permissions do not authorize paper workflow mutations or live trading.",
+    "Production Trading Platform remains NOT READY.",
+  ],
+};
+
 const fallbackResearchReviewPacket: ResearchReviewPacket = {
   packet_id: "fallback-research-review-packet",
   packet_label: "fallback-research-review-packet",
@@ -554,6 +734,8 @@ export default async function Home({ searchParams }: HomeProps) {
     paperApprovalHistory,
     releaseBaseline,
     hostedPaperReadiness,
+    hostedPaperMockSession,
+    hostedPaperTenant,
     reviewPacket,
   ] =
     await Promise.all([
@@ -610,6 +792,14 @@ export default async function Home({ searchParams }: HomeProps) {
       fetchJson<HostedPaperReadiness>(
         "/api/hosted-paper/readiness",
         fallbackHostedPaperReadiness,
+      ),
+      fetchJson<HostedPaperMockSession>(
+        "/api/hosted-paper/session",
+        fallbackHostedPaperMockSession,
+      ),
+      fetchJson<HostedPaperTenantContext>(
+        "/api/hosted-paper/tenants/current",
+        fallbackHostedPaperTenant,
       ),
       fetchJson<ResearchReviewPacket>(
         "/api/strategy/research-review/packet/sample",
@@ -692,6 +882,12 @@ export default async function Home({ searchParams }: HomeProps) {
     hostedPaperReadiness.available
       ? undefined
       : `hosted paper readiness: ${hostedPaperReadiness.error}`,
+    hostedPaperMockSession.available
+      ? undefined
+      : `hosted paper mock session: ${hostedPaperMockSession.error}`,
+    hostedPaperTenant.available
+      ? undefined
+      : `hosted paper current tenant: ${hostedPaperTenant.error}`,
     reviewPacket.available ? undefined : `research packet: ${reviewPacket.error}`,
   ].filter((issue): issue is string => Boolean(issue));
   const backendAvailable = backendIssues.length === 0;
@@ -780,6 +976,22 @@ export default async function Home({ searchParams }: HomeProps) {
               copy={copy.hostedPaperReadiness}
               error={hostedPaperReadiness.available ? undefined : hostedPaperReadiness.error}
               readiness={hostedPaperReadiness.data}
+            />
+            <HostedPaperMockSessionPanel
+              available={hostedPaperMockSession.available && hostedPaperTenant.available}
+              copy={copy.hostedPaperSession}
+              error={
+                [
+                  hostedPaperMockSession.available
+                    ? undefined
+                    : hostedPaperMockSession.error,
+                  hostedPaperTenant.available ? undefined : hostedPaperTenant.error,
+                ]
+                  .filter(Boolean)
+                  .join("; ") || undefined
+              }
+              session={hostedPaperMockSession.data}
+              tenant={hostedPaperTenant.data}
             />
             <LocalBackendDemoModePanel copy={copy.localBackendMode} />
           </>

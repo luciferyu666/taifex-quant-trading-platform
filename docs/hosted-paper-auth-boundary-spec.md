@@ -158,6 +158,9 @@ They do not issue session cookies, write hosted datastore records, create paper
 workflow records, collect credentials, call brokers, or enable live trading.
 
 See [hosted-paper-mock-session-contract.md](hosted-paper-mock-session-contract.md).
+The Web Command Center may display this mock metadata as a read-only panel only.
+That UI must not create login buttons, hosted sessions, credential forms,
+database writes, broker calls, or paper workflow mutations.
 
 ## Future Endpoint Shape
 

@@ -23,6 +23,12 @@ real authenticated session.
 `GET /api/hosted-paper/tenants/current` returns the same mock tenant context
 from the session contract. It is not backed by a hosted tenant datastore.
 
+The Web Command Center displays these endpoints in a read-only Hosted Paper Mock
+Session panel. The panel renders mock session, tenant, role, permission, and
+safety flag metadata only. It does not create login flows, issue sessions, write
+databases, collect credentials, call brokers, or authorize paper workflow
+mutations.
+
 ## Mock Session Response
 
 The mock session response must include:
@@ -135,6 +141,7 @@ production_trading_ready=false
 
 - `GET /api/hosted-paper/session` returns HTTP 200.
 - `GET /api/hosted-paper/tenants/current` returns HTTP 200.
+- Web Command Center displays both endpoints as read-only mock contract status.
 - `session.authenticated=false`.
 - `session.authentication_provider=none`.
 - `tenant.hosted_datastore_enabled=false`.
@@ -152,6 +159,7 @@ production_trading_ready=false
 
 ```bash
 make hosted-paper-mock-session-check
+make frontend-i18n-check
 make hosted-paper-auth-boundary-check
 make hosted-paper-api-readiness-check
 make check

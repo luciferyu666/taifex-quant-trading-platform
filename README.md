@@ -152,7 +152,8 @@ hosted paper API readiness is tracked in
 responses only. Future hosted login, session, RBAC, ABAC, and tenant boundaries
 are specified in `docs/hosted-paper-auth-boundary-spec.md`; the read-only mock
 session contract is documented in `docs/hosted-paper-mock-session-contract.md`.
-No hosted customer login is enabled yet.
+The Web Command Center displays the mock session and tenant context as read-only
+contract metadata. No hosted customer login is enabled yet.
 
 ### Audit and Observability
 

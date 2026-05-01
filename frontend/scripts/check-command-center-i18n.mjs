@@ -9,6 +9,7 @@ const files = {
   commandTabs: "frontend/app/components/CommandCenterTabs.tsx",
   deploymentDataBoundary: "frontend/app/components/DeploymentDataBoundaryPanel.tsx",
   hostedPaperReadiness: "frontend/app/components/HostedPaperReadinessPanel.tsx",
+  hostedPaperSession: "frontend/app/components/HostedPaperMockSessionPanel.tsx",
   localBackendMode: "frontend/app/components/LocalBackendDemoModePanel.tsx",
   paperApprovals: "frontend/app/components/PaperApprovalQueuePanel.tsx",
   paperApprovalRequest: "frontend/app/components/PaperApprovalRequestPanel.tsx",
@@ -268,6 +269,31 @@ requireNotContains("Hosted paper readiness panel does not call paper approval mu
 requireNotContains("Hosted paper readiness panel does not collect API keys", sourceByFile.hostedPaperReadiness.toLowerCase(), "api_key");
 requireNotContains("Hosted paper readiness panel does not collect account IDs", sourceByFile.hostedPaperReadiness.toLowerCase(), "account_id");
 requireNotContains("Hosted paper readiness panel does not collect certificates", sourceByFile.hostedPaperReadiness.toLowerCase(), "certificate");
+requireContains("English hosted paper session copy exists", sourceByFile.i18n, "Mock session and tenant contract");
+requireContains("Traditional Chinese hosted paper session copy exists", sourceByFile.i18n, "Mock session 與 tenant contract");
+requireContains("Hosted paper mock session component is implemented", sourceByFile.hostedPaperSession, "HostedPaperMockSessionPanel");
+requireContains("Hosted paper mock session endpoint is fetched on page", sourceByFile.page, "/api/hosted-paper/session");
+requireContains("Hosted paper current tenant endpoint is fetched on page", sourceByFile.page, "/api/hosted-paper/tenants/current");
+requireContains("Hosted paper mock session panel is mounted on page", sourceByFile.page, "HostedPaperMockSessionPanel");
+requireContains("Hosted paper mock session panel shows mock_read_only", sourceByFile.hostedPaperSession, "contract_state");
+requireContains("Hosted paper mock session panel shows authenticated=false", sourceByFile.hostedPaperSession, "authenticated");
+requireContains("Hosted paper mock session panel shows authentication provider", sourceByFile.hostedPaperSession, "authentication_provider");
+requireContains("Hosted paper mock session panel shows session cookie flag", sourceByFile.hostedPaperSession, "session_cookie_issued");
+requireContains("Hosted paper mock session panel shows tenant id", sourceByFile.hostedPaperSession, "tenant_id");
+requireContains("Hosted paper mock session panel shows tenant isolation", sourceByFile.hostedPaperSession, "tenant_isolation_required");
+requireContains("Hosted paper mock session panel shows hosted datastore disabled", sourceByFile.hostedPaperSession, "hosted_datastore_enabled");
+requireContains("Hosted paper mock session panel shows role schema", sourceByFile.hostedPaperSession, "role_schema");
+requireContains("Hosted paper mock session panel shows permission schema", sourceByFile.hostedPaperSession, "permission_schema");
+requireContains("Hosted paper mock session panel shows denied mutation permissions", sourceByFile.hostedPaperSession, "deniedMutationPermissions");
+requireContains("Hosted paper mock session panel shows credential collection flag", sourceByFile.hostedPaperSession, "credentials_collected");
+requireContains("Hosted paper mock session panel shows broker credential flag", sourceByFile.hostedPaperSession, "broker_credentials_collected");
+requireContains("Hosted paper mock session panel shows production readiness flag", sourceByFile.hostedPaperSession, "production_trading_ready");
+requireNotContains("Hosted paper mock session panel does not fetch directly", sourceByFile.hostedPaperSession, "fetch(");
+requireNotContains("Hosted paper mock session panel does not call workflow record", sourceByFile.hostedPaperSession, "/api/paper-execution/workflow/record");
+requireNotContains("Hosted paper mock session panel does not call paper approval mutations", sourceByFile.hostedPaperSession, "/api/paper-execution/approvals/requests");
+requireNotContains("Hosted paper mock session panel does not collect API keys", sourceByFile.hostedPaperSession.toLowerCase(), "api_key");
+requireNotContains("Hosted paper mock session panel does not collect account IDs", sourceByFile.hostedPaperSession.toLowerCase(), "account_id");
+requireNotContains("Hosted paper mock session panel does not collect certificates", sourceByFile.hostedPaperSession.toLowerCase(), "certificate");
 requireContains("Local backend demo component is implemented", sourceByFile.localBackendMode, "LocalBackendDemoModePanel");
 requireContains("Local backend demo panel states Vercel SQLite boundary", sourceByFile.i18n, "cannot directly read your local SQLite");
 requireContains("Local backend demo panel states Chinese Vercel SQLite boundary", sourceByFile.i18n, "無法直接讀取你的本機 SQLite");

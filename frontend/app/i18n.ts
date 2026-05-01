@@ -316,6 +316,88 @@ export const dashboardCopy = {
           "Production Trading Platform remains NOT READY.",
       },
     },
+    hostedPaperSession: {
+      eyebrow: "Hosted Paper Session",
+      title: "Mock session and tenant contract",
+      description:
+        "Read-only view of the future hosted paper session, tenant, roles, and permissions schema. It does not authenticate users, issue session cookies, write hosted records, collect credentials, call brokers, and does not enable live trading.",
+      fallbackPrefix: "Hosted paper mock session unavailable. Rendering safe fallback:",
+      endpointLabel: "Read-only endpoints",
+      stateLabel: "Contract state",
+      sessionLabel: "Mock session",
+      tenantLabel: "Mock tenant context",
+      rolesLabel: "Future RBAC roles",
+      grantedPermissionsLabel: "Granted in mock session",
+      deniedMutationPermissionsLabel: "Denied mutation permissions",
+      safetyFlagsLabel: "Safety flags",
+      warningLabel: "Boundary warnings",
+      fields: {
+        userId: "User ID",
+        sessionId: "Session ID",
+        authenticated: "Authenticated",
+        authenticationProvider: "Authentication provider",
+        authenticationMode: "Authentication mode",
+        tenantId: "Tenant ID",
+        tenantMode: "Tenant mode",
+        tenantIsolation: "Tenant isolation required",
+        hostedDatastore: "Hosted datastore enabled",
+        localSqliteAccess: "Local SQLite access",
+      },
+      roleLabels: {
+        viewer: "Viewer",
+        research_reviewer: "Research reviewer",
+        risk_reviewer: "Risk reviewer",
+        paper_operator: "Paper operator",
+        tenant_admin: "Tenant admin",
+      },
+      roleDescriptionLabels: {
+        "Read hosted readiness, mock session, tenant context, and evidence metadata.":
+          "Read hosted readiness, mock session, tenant context, and evidence metadata.",
+        "Future paper-only role for research review decisions.":
+          "Future paper-only role for research review decisions.",
+        "Future paper-only role for risk review decisions.":
+          "Future paper-only role for risk review decisions.",
+        "Future paper-only role for submitting approved paper workflows.":
+          "Future paper-only role for submitting approved paper workflows.",
+        "Future paper-only role for tenant workspace administration.":
+          "Future paper-only role for tenant workspace administration.",
+      },
+      permissionLabels: {
+        read_hosted_readiness: "Read hosted readiness",
+        read_mock_session: "Read mock session",
+        read_current_tenant: "Read current tenant",
+        read_tenant_paper_records: "Read tenant paper records",
+        create_paper_approval_request: "Create paper approval request",
+        record_paper_reviewer_decision: "Record paper reviewer decision",
+        submit_approved_paper_workflow: "Submit approved paper workflow",
+        enable_live_trading: "Live trading permission denied",
+        upload_broker_credentials: "Upload broker credentials",
+      },
+      safetyFlagLabels: {
+        paper_only: "paper_only",
+        read_only: "read_only",
+        live_trading_enabled: "live_trading_enabled",
+        broker_api_called: "broker_api_called",
+        order_created: "order_created",
+        credentials_collected: "credentials_collected",
+        broker_credentials_collected: "broker_credentials_collected",
+        hosted_auth_provider_enabled: "hosted_auth_provider_enabled",
+        session_cookie_issued: "session_cookie_issued",
+        hosted_datastore_written: "hosted_datastore_written",
+        external_db_written: "external_db_written",
+        production_trading_ready: "production_trading_ready",
+      },
+      warningLabels: {
+        "This endpoint is a mock contract only; no hosted authentication provider is enabled.":
+          "This endpoint is a mock contract only; no hosted authentication provider is enabled.",
+        "No credentials are collected, no session cookie is issued, and no hosted datastore is written.":
+          "No credentials are collected, no session cookie is issued, and no hosted datastore is written.",
+        "Mock permissions do not authorize paper workflow mutations or live trading.":
+          "Mock permissions do not authorize paper workflow mutations or live trading.",
+        "Production Trading Platform remains NOT READY.":
+          "Production Trading Platform remains NOT READY.",
+      },
+    },
     paperExecution: {
       eyebrow: "Paper Execution",
       title: "Paper simulation approval workflow",
@@ -1518,6 +1600,88 @@ export const dashboardCopy = {
           "此 endpoint 只是只讀 readiness metadata，不是 hosted paper backend。",
         "It does not authenticate users, write records, call brokers, create orders, or turn live trading on.":
           "它不驗證使用者、不寫入 records、不呼叫券商、不建立訂單，也不啟用實盤交易。",
+        "Production Trading Platform remains NOT READY.":
+          "Production Trading Platform 仍為 NOT READY。",
+      },
+    },
+    hostedPaperSession: {
+      eyebrow: "Hosted Paper Session",
+      title: "Mock session 與 tenant contract",
+      description:
+        "只讀檢視未來 hosted paper session、tenant、roles 與 permissions schema。它不驗證使用者、不發 session cookie、不寫 hosted records、不收 credentials、不呼叫券商，也不啟用實盤交易。",
+      fallbackPrefix: "Hosted paper mock session 無法取得，正在顯示安全備援資料：",
+      endpointLabel: "只讀 endpoints",
+      stateLabel: "Contract state",
+      sessionLabel: "Mock session",
+      tenantLabel: "Mock tenant context",
+      rolesLabel: "未來 RBAC roles",
+      grantedPermissionsLabel: "Mock session 已授權",
+      deniedMutationPermissionsLabel: "被拒絕的 mutation permissions",
+      safetyFlagsLabel: "安全旗標",
+      warningLabel: "邊界警示",
+      fields: {
+        userId: "User ID",
+        sessionId: "Session ID",
+        authenticated: "Authenticated",
+        authenticationProvider: "Authentication provider",
+        authenticationMode: "Authentication mode",
+        tenantId: "Tenant ID",
+        tenantMode: "Tenant mode",
+        tenantIsolation: "需要 tenant isolation",
+        hostedDatastore: "Hosted datastore 已啟用",
+        localSqliteAccess: "Local SQLite access",
+      },
+      roleLabels: {
+        viewer: "Viewer",
+        research_reviewer: "Research reviewer",
+        risk_reviewer: "Risk reviewer",
+        paper_operator: "Paper operator",
+        tenant_admin: "Tenant admin",
+      },
+      roleDescriptionLabels: {
+        "Read hosted readiness, mock session, tenant context, and evidence metadata.":
+          "讀取 hosted readiness、mock session、tenant context 與 evidence metadata。",
+        "Future paper-only role for research review decisions.":
+          "未來 paper-only research review decisions 角色。",
+        "Future paper-only role for risk review decisions.":
+          "未來 paper-only risk review decisions 角色。",
+        "Future paper-only role for submitting approved paper workflows.":
+          "未來提交已審批 paper workflows 的 paper-only 角色。",
+        "Future paper-only role for tenant workspace administration.":
+          "未來 tenant workspace 管理的 paper-only 角色。",
+      },
+      permissionLabels: {
+        read_hosted_readiness: "讀取 hosted readiness",
+        read_mock_session: "讀取 mock session",
+        read_current_tenant: "讀取 current tenant",
+        read_tenant_paper_records: "讀取 tenant paper records",
+        create_paper_approval_request: "建立 paper approval request",
+        record_paper_reviewer_decision: "記錄 paper reviewer decision",
+        submit_approved_paper_workflow: "提交已審批 paper workflow",
+        enable_live_trading: "實盤權限（拒絕）",
+        upload_broker_credentials: "上傳券商 credentials",
+      },
+      safetyFlagLabels: {
+        paper_only: "paper_only",
+        read_only: "read_only",
+        live_trading_enabled: "live_trading_enabled",
+        broker_api_called: "broker_api_called",
+        order_created: "order_created",
+        credentials_collected: "credentials_collected",
+        broker_credentials_collected: "broker_credentials_collected",
+        hosted_auth_provider_enabled: "hosted_auth_provider_enabled",
+        session_cookie_issued: "session_cookie_issued",
+        hosted_datastore_written: "hosted_datastore_written",
+        external_db_written: "external_db_written",
+        production_trading_ready: "production_trading_ready",
+      },
+      warningLabels: {
+        "This endpoint is a mock contract only; no hosted authentication provider is enabled.":
+          "此 endpoint 只是 mock contract；沒有啟用 hosted authentication provider。",
+        "No credentials are collected, no session cookie is issued, and no hosted datastore is written.":
+          "不收 credentials、不發 session cookie，也不寫入 hosted datastore。",
+        "Mock permissions do not authorize paper workflow mutations or live trading.":
+          "Mock permissions 不授權 paper workflow mutations 或實盤交易。",
         "Production Trading Platform remains NOT READY.":
           "Production Trading Platform 仍為 NOT READY。",
       },

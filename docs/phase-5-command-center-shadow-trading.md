@@ -64,6 +64,10 @@ Expose roadmap phase status, contracts, safety mode, risk status, and paper-only
   `GET /api/hosted-paper/readiness` and displays hosted backend status,
   hosted datastore status, customer login status, local demo primary status,
   paper-only safety defaults, and future hosted requirements.
+- Hosted Paper Mock Session panel that reads `GET /api/hosted-paper/session`
+  and `GET /api/hosted-paper/tenants/current`, then displays mock session,
+  tenant context, future RBAC roles, permission schema, denied mutation
+  permissions, and safety flags as read-only contract metadata.
 - Local Backend Demo Browser Drill that starts local backend/frontend, seeds a
   temporary local SQLite paper workflow record, and verifies the browser can see
   actual OMS / audit timelines.
@@ -124,6 +128,13 @@ Expose roadmap phase status, contracts, safety mode, risk status, and paper-only
   `ENABLE_LIVE_TRADING=false`, `BROKER_PROVIDER=paper`,
   `broker_api_called=false`, `order_created=false`, and
   `production_trading_ready=false` visible.
+- Hosted Paper Mock Session panel must show `mock_read_only`,
+  `authenticated=false`, `authentication_provider=none`,
+  `session_cookie_issued=false`, `hosted_datastore_written=false`,
+  `credentials_collected=false`, `broker_credentials_collected=false`, and
+  `production_trading_ready=false`.
+- Hosted Paper Mock Session panel must display roles and permissions without
+  granting paper workflow mutations, broker credential upload, or live trading.
 - `make local-backend-demo-browser-drill` must verify the complete seeded local
   demo read path without creating real orders, calling brokers, or using
   production Vercel direct SQLite access.
@@ -189,6 +200,12 @@ Expose roadmap phase status, contracts, safety mode, risk status, and paper-only
   write databases, create paper records, submit approval requests, submit paper
   workflows, call brokers, collect credentials, expose live controls, or imply
   that hosted paper mode is enabled.
+- The Hosted Paper Mock Session panel is a read-only contract surface. It may
+  display `GET /api/hosted-paper/session` and
+  `GET /api/hosted-paper/tenants/current`, but it must not create login flows,
+  issue sessions or cookies, write databases, create approval requests, submit
+  paper workflows, call brokers, collect credentials, expose live controls, or
+  imply that hosted paper mode is enabled.
 - The Paper Execution Approval Workflow panel is a display surface only. It must not
   create paper simulations, create order intents, call Risk Engine, call OMS, call
   Broker Gateway, write databases, connect brokers, or expose live controls.

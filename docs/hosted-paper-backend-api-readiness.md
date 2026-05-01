@@ -136,6 +136,7 @@ for future session, tenant, roles, and permissions. They do not authenticate
 users, issue session cookies, write hosted datastore records, collect
 credentials, or authorize paper workflow mutations. See
 [hosted-paper-mock-session-contract.md](hosted-paper-mock-session-contract.md).
+The Web Command Center displays this mock contract as read-only status only.
 
 The Web Command Center displays this endpoint in a read-only Hosted Paper API
 Readiness panel. The panel is a status view only; it does not create hosted
@@ -214,6 +215,7 @@ Current readiness gate:
 ```bash
 make hosted-paper-auth-boundary-check
 make hosted-paper-mock-session-check
+make frontend-i18n-check
 make hosted-paper-api-readiness-check
 cd backend && .venv/bin/python -m pytest tests/test_hosted_paper_readiness_routes.py
 make check

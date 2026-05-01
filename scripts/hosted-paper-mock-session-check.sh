@@ -13,6 +13,7 @@ required_files=(
   "backend/app/domain/hosted_paper_session.py"
   "backend/app/api/hosted_paper_routes.py"
   "backend/tests/test_hosted_paper_mock_session_routes.py"
+  "frontend/app/components/HostedPaperMockSessionPanel.tsx"
 )
 
 for required_file in "${required_files[@]}"; do
@@ -26,6 +27,7 @@ required_doc_text=(
   "Hosted Paper Mock Session Contract"
   "GET /api/hosted-paper/session"
   "GET /api/hosted-paper/tenants/current"
+  "Web Command Center displays these endpoints"
   "hosted-paper-mock-session-contract"
   "mock_read_only"
   "session.authenticated"
@@ -67,10 +69,11 @@ required_code_text=(
   "mock_read_only"
   "@router.get(\"/session\""
   "@router.get(\"/tenants/current\""
+  "HostedPaperMockSessionPanel"
 )
 
 for text in "${required_code_text[@]}"; do
-  if ! grep -R -Fq "${text}" backend/app/domain/hosted_paper_session.py backend/app/api/hosted_paper_routes.py backend/tests/test_hosted_paper_mock_session_routes.py; then
+  if ! grep -R -Fq "${text}" backend/app/domain/hosted_paper_session.py backend/app/api/hosted_paper_routes.py backend/tests/test_hosted_paper_mock_session_routes.py frontend/app/components/HostedPaperMockSessionPanel.tsx; then
     printf 'Hosted paper mock session implementation must contain: %s\n' "${text}" >&2
     exit 1
   fi
@@ -102,7 +105,7 @@ for forbidden_text in \
   'real broker login enabled' \
   'guaranteed profit' \
   'risk-free'; do
-  if grep -R -Fiq "${forbidden_text}" docs/hosted-paper-mock-session-contract.md backend/app/domain/hosted_paper_session.py backend/app/api/hosted_paper_routes.py; then
+  if grep -R -Fiq "${forbidden_text}" docs/hosted-paper-mock-session-contract.md backend/app/domain/hosted_paper_session.py backend/app/api/hosted_paper_routes.py frontend/app/components/HostedPaperMockSessionPanel.tsx; then
     printf 'Hosted paper mock session contains forbidden text: %s\n' "${forbidden_text}" >&2
     exit 1
   fi
