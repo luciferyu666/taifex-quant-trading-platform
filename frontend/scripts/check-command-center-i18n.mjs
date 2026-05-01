@@ -8,6 +8,7 @@ const files = {
   demoGuide: "frontend/app/components/DemoGuidePanel.tsx",
   commandTabs: "frontend/app/components/CommandCenterTabs.tsx",
   deploymentDataBoundary: "frontend/app/components/DeploymentDataBoundaryPanel.tsx",
+  hostedPaperReadiness: "frontend/app/components/HostedPaperReadinessPanel.tsx",
   localBackendMode: "frontend/app/components/LocalBackendDemoModePanel.tsx",
   paperApprovals: "frontend/app/components/PaperApprovalQueuePanel.tsx",
   paperApprovalRequest: "frontend/app/components/PaperApprovalRequestPanel.tsx",
@@ -247,6 +248,26 @@ requireNotContains("Deployment data boundary panel does not call workflow record
 requireNotContains("Deployment data boundary panel does not collect API keys", sourceByFile.deploymentDataBoundary.toLowerCase(), "api_key");
 requireNotContains("Deployment data boundary panel does not collect account IDs", sourceByFile.deploymentDataBoundary.toLowerCase(), "account_id");
 requireNotContains("Deployment data boundary panel does not collect certificates", sourceByFile.deploymentDataBoundary.toLowerCase(), "certificate");
+requireContains("English hosted paper readiness copy exists", sourceByFile.i18n, "Hosted Paper API Readiness");
+requireContains("Traditional Chinese hosted paper readiness copy exists", sourceByFile.i18n, "Hosted Paper API 就緒狀態");
+requireContains("Hosted paper readiness component is implemented", sourceByFile.hostedPaperReadiness, "HostedPaperReadinessPanel");
+requireContains("Hosted paper readiness endpoint is fetched on page", sourceByFile.page, "/api/hosted-paper/readiness");
+requireContains("Hosted paper readiness panel is mounted on page", sourceByFile.page, "HostedPaperReadinessPanel");
+requireContains("Hosted paper readiness panel shows hosted backend status", sourceByFile.hostedPaperReadiness, "hosted_backend_enabled");
+requireContains("Hosted paper readiness panel shows hosted datastore status", sourceByFile.hostedPaperReadiness, "hosted_datastore_enabled");
+requireContains("Hosted paper readiness panel shows customer login status", sourceByFile.hostedPaperReadiness, "customer_login_enabled");
+requireContains("Hosted paper readiness panel shows local demo primary status", sourceByFile.hostedPaperReadiness, "local_demo_mode_primary");
+requireContains("Hosted paper readiness panel shows safety defaults", sourceByFile.hostedPaperReadiness, "TRADING_MODE");
+requireContains("Hosted paper readiness panel shows live disabled flag", sourceByFile.hostedPaperReadiness, "ENABLE_LIVE_TRADING");
+requireContains("Hosted paper readiness panel shows paper broker provider", sourceByFile.hostedPaperReadiness, "BROKER_PROVIDER");
+requireContains("Hosted paper readiness panel shows credential collection flag", sourceByFile.hostedPaperReadiness, "broker_credentials_collected");
+requireContains("Hosted paper readiness panel shows production readiness flag", sourceByFile.hostedPaperReadiness, "production_trading_ready");
+requireNotContains("Hosted paper readiness panel does not fetch directly", sourceByFile.hostedPaperReadiness, "fetch(");
+requireNotContains("Hosted paper readiness panel does not call workflow record", sourceByFile.hostedPaperReadiness, "/api/paper-execution/workflow/record");
+requireNotContains("Hosted paper readiness panel does not call paper approval mutations", sourceByFile.hostedPaperReadiness, "/api/paper-execution/approvals/requests");
+requireNotContains("Hosted paper readiness panel does not collect API keys", sourceByFile.hostedPaperReadiness.toLowerCase(), "api_key");
+requireNotContains("Hosted paper readiness panel does not collect account IDs", sourceByFile.hostedPaperReadiness.toLowerCase(), "account_id");
+requireNotContains("Hosted paper readiness panel does not collect certificates", sourceByFile.hostedPaperReadiness.toLowerCase(), "certificate");
 requireContains("Local backend demo component is implemented", sourceByFile.localBackendMode, "LocalBackendDemoModePanel");
 requireContains("Local backend demo panel states Vercel SQLite boundary", sourceByFile.i18n, "cannot directly read your local SQLite");
 requireContains("Local backend demo panel states Chinese Vercel SQLite boundary", sourceByFile.i18n, "無法直接讀取你的本機 SQLite");

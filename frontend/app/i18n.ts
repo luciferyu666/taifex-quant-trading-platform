@@ -242,6 +242,80 @@ export const dashboardCopy = {
         "If a customer must see real seeded paper OMS or audit records, use local backend demo mode. Production Vercel should be treated as a read-only presentation surface unless a future controlled backend/API is deployed.",
       safetyLabel: "Deployment data boundary safety flags",
     },
+    hostedPaperReadiness: {
+      eyebrow: "Hosted Paper API",
+      title: "Hosted Paper API Readiness",
+      description:
+        "Read-only status from the backend readiness endpoint. It explains that hosted paper backend/API mode is not enabled yet, so actual paper workflow records still require local backend + local SQLite.",
+      fallbackPrefix: "Hosted paper readiness unavailable. Rendering safe fallback:",
+      endpointLabel: "Read-only endpoint",
+      stateLabel: "Readiness state",
+      capabilitiesLabel: "Current capability status",
+      safetyDefaultsLabel: "Safety defaults",
+      safetyFlagsLabel: "Safety flags",
+      currentPathLabel: "Current customer path",
+      unavailableLabel: "Unavailable until hosted backend exists",
+      futureRequirementsLabel: "Future requirements",
+      warningLabel: "Boundary warnings",
+      capabilityLabels: {
+        customer_login_enabled: "Customer login enabled",
+        hosted_backend_enabled: "Hosted backend enabled",
+        hosted_datastore_enabled: "Hosted datastore enabled",
+        rbac_abac_enabled: "RBAC / ABAC enabled",
+        paper_workflow_online_enabled: "Online paper workflow enabled",
+        local_demo_mode_primary: "Local demo mode remains primary",
+      },
+      safetyFlagLabels: {
+        paper_only: "paper_only",
+        live_trading_enabled: "live_trading_enabled",
+        broker_api_called: "broker_api_called",
+        order_created: "order_created",
+        database_written: "database_written",
+        external_db_written: "external_db_written",
+        broker_credentials_collected: "broker_credentials_collected",
+        production_trading_ready: "production_trading_ready",
+      },
+      customerPathLabels: {
+        "Use the Production Vercel Web Command Center for read-only UI and fallback samples.":
+          "Use the Production Vercel Web Command Center for read-only UI and fallback samples.",
+        "Use local backend + local SQLite to create and inspect actual paper workflow records.":
+          "Use local backend + local SQLite to create and inspect actual paper workflow records.",
+        "Use explicit local evidence export/import for customer review artifacts.":
+          "Use explicit local evidence export/import for customer review artifacts.",
+      },
+      unavailableLabels: {
+        "Customer login to an online paper workspace.":
+          "Customer login to an online paper workspace.",
+        "Tenant-scoped hosted paper records.": "Tenant-scoped hosted paper records.",
+        "Hosted approval queue and decision persistence.":
+          "Hosted approval queue and decision persistence.",
+        "Hosted paper OMS/audit query APIs backed by a managed datastore.":
+          "Hosted paper OMS/audit query APIs backed by a managed datastore.",
+      },
+      futureRequirementLabels: {
+        "Authenticated session context.": "Authenticated session context.",
+        "Tenant-scoped managed hosted datastore.":
+          "Tenant-scoped managed hosted datastore.",
+        "RBAC/ABAC checks for reviewer and operator actions.":
+          "RBAC/ABAC checks for reviewer and operator actions.",
+        "Paper-only approval workflow backed by hosted persistence.":
+          "Paper-only approval workflow backed by hosted persistence.",
+        "Paper-only workflow submit that references a persisted approval_request_id.":
+          "Paper-only workflow submit that references a persisted approval_request_id.",
+        "Append-only hosted paper audit events with integrity verification.":
+          "Append-only hosted paper audit events with integrity verification.",
+        "Security and operations review before any customer pilot.":
+          "Security and operations review before any customer pilot.",
+      },
+      warningLabels: {
+        "This endpoint is read-only readiness metadata, not a hosted paper backend.":
+          "This endpoint is read-only readiness metadata, not a hosted paper backend.",
+        "It does not authenticate users, write records, call brokers, create orders, or turn live trading on.":
+          "It does not authenticate users, write records, call brokers, create orders, or turn live trading on.",
+        "Production Trading Platform remains NOT READY.":
+          "Production Trading Platform remains NOT READY.",
+      },
+    },
     paperExecution: {
       eyebrow: "Paper Execution",
       title: "Paper simulation approval workflow",
@@ -1374,6 +1448,79 @@ export const dashboardCopy = {
       operatorText:
         "若客戶需要看到已 seed 的真實 paper OMS 或 audit records，請使用本地後端 demo 模式。除非未來部署受控 backend/API，Production Vercel 應視為只讀展示介面。",
       safetyLabel: "部署資料邊界安全旗標",
+    },
+    hostedPaperReadiness: {
+      eyebrow: "Hosted Paper API",
+      title: "Hosted Paper API 就緒狀態",
+      description:
+        "由後端 readiness endpoint 提供的只讀狀態。它說明 hosted paper backend/API 尚未啟用，因此實際 paper workflow records 仍需要本地 backend + local SQLite。",
+      fallbackPrefix: "Hosted paper readiness 無法取得，正在顯示安全備援資料：",
+      endpointLabel: "只讀 endpoint",
+      stateLabel: "就緒狀態",
+      capabilitiesLabel: "目前能力狀態",
+      safetyDefaultsLabel: "安全預設",
+      safetyFlagsLabel: "安全旗標",
+      currentPathLabel: "目前客戶操作路徑",
+      unavailableLabel: "Hosted backend 建立前不可用",
+      futureRequirementsLabel: "未來必要條件",
+      warningLabel: "邊界警示",
+      capabilityLabels: {
+        customer_login_enabled: "客戶登入已啟用",
+        hosted_backend_enabled: "Hosted backend 已啟用",
+        hosted_datastore_enabled: "Hosted datastore 已啟用",
+        rbac_abac_enabled: "RBAC / ABAC 已啟用",
+        paper_workflow_online_enabled: "線上 paper workflow 已啟用",
+        local_demo_mode_primary: "本地 demo 模式仍是主要路徑",
+      },
+      safetyFlagLabels: {
+        paper_only: "paper_only",
+        live_trading_enabled: "live_trading_enabled",
+        broker_api_called: "broker_api_called",
+        order_created: "order_created",
+        database_written: "database_written",
+        external_db_written: "external_db_written",
+        broker_credentials_collected: "broker_credentials_collected",
+        production_trading_ready: "production_trading_ready",
+      },
+      customerPathLabels: {
+        "Use the Production Vercel Web Command Center for read-only UI and fallback samples.":
+          "使用 Production Vercel Web Command Center 檢視只讀 UI 與 fallback samples。",
+        "Use local backend + local SQLite to create and inspect actual paper workflow records.":
+          "使用本地 backend + local SQLite 建立並檢視實際 paper workflow records。",
+        "Use explicit local evidence export/import for customer review artifacts.":
+          "透過明確的本地 evidence 匯出 / 匯入，提供客戶 review artifacts。",
+      },
+      unavailableLabels: {
+        "Customer login to an online paper workspace.":
+          "客戶登入線上 paper workspace。",
+        "Tenant-scoped hosted paper records.": "Tenant-scoped hosted paper records。",
+        "Hosted approval queue and decision persistence.":
+          "Hosted approval queue 與 decision persistence。",
+        "Hosted paper OMS/audit query APIs backed by a managed datastore.":
+          "由 managed datastore 支撐的 hosted paper OMS / audit query APIs。",
+      },
+      futureRequirementLabels: {
+        "Authenticated session context.": "Authenticated session context。",
+        "Tenant-scoped managed hosted datastore.": "Tenant-scoped managed hosted datastore。",
+        "RBAC/ABAC checks for reviewer and operator actions.":
+          "針對 reviewer 與 operator actions 的 RBAC / ABAC checks。",
+        "Paper-only approval workflow backed by hosted persistence.":
+          "由 hosted persistence 支撐的 Paper-only approval workflow。",
+        "Paper-only workflow submit that references a persisted approval_request_id.":
+          "Paper-only workflow submit 必須引用 persisted approval_request_id。",
+        "Append-only hosted paper audit events with integrity verification.":
+          "具 integrity verification 的 append-only hosted paper audit events。",
+        "Security and operations review before any customer pilot.":
+          "任何 customer pilot 前必須完成 security 與 operations review。",
+      },
+      warningLabels: {
+        "This endpoint is read-only readiness metadata, not a hosted paper backend.":
+          "此 endpoint 只是只讀 readiness metadata，不是 hosted paper backend。",
+        "It does not authenticate users, write records, call brokers, create orders, or turn live trading on.":
+          "它不驗證使用者、不寫入 records、不呼叫券商、不建立訂單，也不啟用實盤交易。",
+        "Production Trading Platform remains NOT READY.":
+          "Production Trading Platform 仍為 NOT READY。",
+      },
     },
     paperExecution: {
       eyebrow: "紙上執行",

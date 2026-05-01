@@ -10,6 +10,10 @@ import {
 import { CommandCenterTabs } from "./components/CommandCenterTabs";
 import { DemoGuidePanel } from "./components/DemoGuidePanel";
 import { DeploymentDataBoundaryPanel } from "./components/DeploymentDataBoundaryPanel";
+import {
+  HostedPaperReadinessPanel,
+  type HostedPaperReadiness,
+} from "./components/HostedPaperReadinessPanel";
 import { LocalBackendDemoModePanel } from "./components/LocalBackendDemoModePanel";
 import type { PaperAuditEventRecord } from "./components/PaperAuditTimelinePanel";
 import { PaperApprovalDecisionPanel } from "./components/PaperApprovalDecisionPanel";
@@ -397,6 +401,67 @@ const fallbackReleaseBaseline: ReleaseBaseline = {
   },
 };
 
+const fallbackHostedPaperReadiness: HostedPaperReadiness = {
+  service: "hosted-paper-api-readiness",
+  readiness_state: "not_enabled",
+  summary:
+    "Hosted paper backend/API is not enabled. The local backend + local SQLite path remains primary for actual paper workflow records; Production Vercel remains read-only for UI, fallback samples, and explicit local JSON evidence.",
+  safety_defaults: {
+    trading_mode: "paper",
+    enable_live_trading: false,
+    broker_provider: "paper",
+  },
+  safety_flags: {
+    paper_only: true,
+    live_trading_enabled: false,
+    broker_api_called: false,
+    order_created: false,
+    database_written: false,
+    external_db_written: false,
+    broker_credentials_collected: false,
+    production_trading_ready: false,
+  },
+  capabilities: {
+    customer_login_enabled: false,
+    hosted_backend_enabled: false,
+    hosted_datastore_enabled: false,
+    rbac_abac_enabled: false,
+    paper_workflow_online_enabled: false,
+    local_demo_mode_primary: true,
+  },
+  current_customer_path: [
+    "Use the Production Vercel Web Command Center for read-only UI and fallback samples.",
+    "Use local backend + local SQLite to create and inspect actual paper workflow records.",
+    "Use explicit local evidence export/import for customer review artifacts.",
+  ],
+  unavailable_until_hosted_backend: [
+    "Customer login to an online paper workspace.",
+    "Tenant-scoped hosted paper records.",
+    "Hosted approval queue and decision persistence.",
+    "Hosted paper OMS/audit query APIs backed by a managed datastore.",
+  ],
+  future_requirements: [
+    "Authenticated session context.",
+    "Tenant-scoped managed hosted datastore.",
+    "RBAC/ABAC checks for reviewer and operator actions.",
+    "Paper-only approval workflow backed by hosted persistence.",
+    "Paper-only workflow submit that references a persisted approval_request_id.",
+    "Append-only hosted paper audit events with integrity verification.",
+    "Security and operations review before any customer pilot.",
+  ],
+  docs: {
+    hosted_paper_readiness: "docs/hosted-paper-backend-api-readiness.md",
+    local_backend_demo: "docs/frontend-local-backend-demo-mode.md",
+    production_local_data_boundary: "docs/production-local-data-boundary.md",
+    self_service_demo: "docs/customer-self-service-paper-demo-roadmap.md",
+  },
+  warnings: [
+    "This endpoint is read-only readiness metadata, not a hosted paper backend.",
+    "It does not authenticate users, write records, call brokers, create orders, or turn live trading on.",
+    "Production Trading Platform remains NOT READY.",
+  ],
+};
+
 const fallbackResearchReviewPacket: ResearchReviewPacket = {
   packet_id: "fallback-research-review-packet",
   packet_label: "fallback-research-review-packet",
@@ -488,6 +553,7 @@ export default async function Home({ searchParams }: HomeProps) {
     paperApprovalQueue,
     paperApprovalHistory,
     releaseBaseline,
+    hostedPaperReadiness,
     reviewPacket,
   ] =
     await Promise.all([
@@ -541,6 +607,10 @@ export default async function Home({ searchParams }: HomeProps) {
         fallbackPaperApprovalHistory,
       ),
       fetchJson<ReleaseBaseline>("/api/release/baseline", fallbackReleaseBaseline),
+      fetchJson<HostedPaperReadiness>(
+        "/api/hosted-paper/readiness",
+        fallbackHostedPaperReadiness,
+      ),
       fetchJson<ResearchReviewPacket>(
         "/api/strategy/research-review/packet/sample",
         fallbackResearchReviewPacket,
@@ -619,6 +689,9 @@ export default async function Home({ searchParams }: HomeProps) {
       ? undefined
       : `paper approval history: ${paperApprovalHistory.error}`,
     releaseBaseline.available ? undefined : `release baseline: ${releaseBaseline.error}`,
+    hostedPaperReadiness.available
+      ? undefined
+      : `hosted paper readiness: ${hostedPaperReadiness.error}`,
     reviewPacket.available ? undefined : `research packet: ${reviewPacket.error}`,
   ].filter((issue): issue is string => Boolean(issue));
   const backendAvailable = backendIssues.length === 0;
@@ -702,6 +775,12 @@ export default async function Home({ searchParams }: HomeProps) {
               error={releaseBaseline.available ? undefined : releaseBaseline.error}
             />
             <DeploymentDataBoundaryPanel copy={copy.deploymentDataBoundary} />
+            <HostedPaperReadinessPanel
+              available={hostedPaperReadiness.available}
+              copy={copy.hostedPaperReadiness}
+              error={hostedPaperReadiness.available ? undefined : hostedPaperReadiness.error}
+              readiness={hostedPaperReadiness.data}
+            />
             <LocalBackendDemoModePanel copy={copy.localBackendMode} />
           </>
         }

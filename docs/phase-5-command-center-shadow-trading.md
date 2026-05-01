@@ -60,6 +60,10 @@ Expose roadmap phase status, contracts, safety mode, risk status, and paper-only
 - Deployment Data Boundary panel that shows a reviewer-facing matrix for
   Production Vercel fallback UI, Local Backend + SQLite records, and the future
   hosted API/data-layer direction.
+- Hosted Paper API Readiness panel that reads
+  `GET /api/hosted-paper/readiness` and displays hosted backend status,
+  hosted datastore status, customer login status, local demo primary status,
+  paper-only safety defaults, and future hosted requirements.
 - Local Backend Demo Browser Drill that starts local backend/frontend, seeds a
   temporary local SQLite paper workflow record, and verifies the browser can see
   actual OMS / audit timelines.
@@ -113,6 +117,13 @@ Expose roadmap phase status, contracts, safety mode, risk status, and paper-only
   persistence verification without enabling live trading.
 - Deployment Data Boundary must show `PRODUCTION_SQLITE_ACCESS=false` and
   `LOCAL_BACKEND_REQUIRED_FOR_RECORDS=true`.
+- Hosted Paper API Readiness panel must show that hosted paper backend/API mode
+  is not enabled, customer login is not enabled, hosted datastore is not enabled,
+  and local backend + local SQLite remain the path for actual paper records.
+- Hosted Paper API Readiness panel must keep `TRADING_MODE=paper`,
+  `ENABLE_LIVE_TRADING=false`, `BROKER_PROVIDER=paper`,
+  `broker_api_called=false`, `order_created=false`, and
+  `production_trading_ready=false` visible.
 - `make local-backend-demo-browser-drill` must verify the complete seeded local
   demo read path without creating real orders, calling brokers, or using
   production Vercel direct SQLite access.
@@ -173,6 +184,11 @@ Expose roadmap phase status, contracts, safety mode, risk status, and paper-only
   must not write databases, call brokers, call Risk Engine, call OMS, create
   orders, approve paper execution, approve live trading, or imply production
   readiness.
+- The Hosted Paper API Readiness panel is a read-only status surface. It may
+  display `GET /api/hosted-paper/readiness`, but it must not authenticate users,
+  write databases, create paper records, submit approval requests, submit paper
+  workflows, call brokers, collect credentials, expose live controls, or imply
+  that hosted paper mode is enabled.
 - The Paper Execution Approval Workflow panel is a display surface only. It must not
   create paper simulations, create order intents, call Risk Engine, call OMS, call
   Broker Gateway, write databases, connect brokers, or expose live controls.

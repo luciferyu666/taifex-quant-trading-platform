@@ -125,6 +125,11 @@ It does not authenticate users, write records, create orders, call Risk Engine,
 call OMS, call Broker Gateway, call broker SDKs, collect credentials, or enable
 live trading.
 
+The Web Command Center displays this endpoint in a read-only Hosted Paper API
+Readiness panel. The panel is a status view only; it does not create hosted
+sessions, approval requests, paper workflow records, database writes, credential
+flows, or broker calls.
+
 ## Data Layer Requirements
 
 Hosted paper records require a managed data layer with:

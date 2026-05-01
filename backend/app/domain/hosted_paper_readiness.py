@@ -106,7 +106,7 @@ def get_hosted_paper_readiness(settings: Settings) -> HostedPaperReadinessRespon
             "This endpoint is read-only readiness metadata, not a hosted paper backend.",
             (
                 "It does not authenticate users, write records, call brokers, "
-                "create orders, or enable live trading."
+                "create orders, or turn live trading on."
             ),
             "Production Trading Platform remains NOT READY.",
         ],
