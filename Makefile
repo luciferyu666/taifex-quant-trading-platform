@@ -1,6 +1,6 @@
 SHELL := /usr/bin/env bash
 
-.PHONY: help init infra dev backend frontend frontend-i18n-check frontend-local-backend-demo-check frontend-production-smoke-check customer-demo-ui-smoke-check local-backend-demo-browser-drill paper-approval-ui-flow-smoke-check website website-build website-preview website-check website-content-check website-deploy roadmap-status release-readiness-check customer-evaluation-check self-service-paper-demo-check self-service-paper-demo-launcher-check hosted-paper-api-readiness-check launch-self-service-paper-demo social-content-check facebook-launch-check seed-paper-execution-demo paper-demo-evidence-export paper-broker-simulation-evidence-export paper-risk-evidence-export paper-audit-integrity-check paper-simulation-submit-check paper-approval-workflow-check paper-execution-workflow-check paper-execution-persistence-check paper-risk-guardrails-check paper-broker-simulation-model-check paper-broker-simulation-ui-check paper-oms-reliability-check paper-oms-timeout-check data-fixtures-check rollover-fixtures-check continuous-futures-preview feature-manifest-preview strategy-research-preview backtest-preview backtest-result-preview toy-backtest backtest-artifact-preview backtest-artifact-index-preview backtest-artifact-comparison-preview backtest-research-bundle-preview backtest-research-bundle-index-preview research-review-queue-preview research-review-decision-preview research-review-decision-index-preview research-review-packet-preview sample-research-review-packet research-review-packet-fixtures-check data-quality-reports-dry-run data-version-register-dry-run data-migrations-dry-run data-platform-verify architecture-status architecture-docs-check architecture-safety-check business-docs-check business-compliance-check business-status check test codex-prompt clean
+.PHONY: help init infra dev backend frontend frontend-i18n-check frontend-local-backend-demo-check frontend-production-smoke-check customer-demo-ui-smoke-check local-backend-demo-browser-drill paper-approval-ui-flow-smoke-check website website-build website-preview website-check website-content-check website-deploy roadmap-status release-readiness-check customer-evaluation-check self-service-paper-demo-check self-service-paper-demo-launcher-check hosted-paper-api-readiness-check hosted-paper-auth-boundary-check launch-self-service-paper-demo social-content-check facebook-launch-check seed-paper-execution-demo paper-demo-evidence-export paper-broker-simulation-evidence-export paper-risk-evidence-export paper-audit-integrity-check paper-simulation-submit-check paper-approval-workflow-check paper-execution-workflow-check paper-execution-persistence-check paper-risk-guardrails-check paper-broker-simulation-model-check paper-broker-simulation-ui-check paper-oms-reliability-check paper-oms-timeout-check data-fixtures-check rollover-fixtures-check continuous-futures-preview feature-manifest-preview strategy-research-preview backtest-preview backtest-result-preview toy-backtest backtest-artifact-preview backtest-artifact-index-preview backtest-artifact-comparison-preview backtest-research-bundle-preview backtest-research-bundle-index-preview research-review-queue-preview research-review-decision-preview research-review-decision-index-preview research-review-packet-preview sample-research-review-packet research-review-packet-fixtures-check data-quality-reports-dry-run data-version-register-dry-run data-migrations-dry-run data-platform-verify architecture-status architecture-docs-check architecture-safety-check business-docs-check business-compliance-check business-status check test codex-prompt clean
 
 help:
 	@printf 'Taifex Quant Trading Platform commands\n'
@@ -28,6 +28,7 @@ help:
 	@printf '  make self-service-paper-demo-check Validate customer self-service paper demo roadmap\n'
 	@printf '  make self-service-paper-demo-launcher-check Validate local demo launcher without starting services\n'
 	@printf '  make hosted-paper-api-readiness-check Validate hosted paper backend/API readiness boundary\n'
+	@printf '  make hosted-paper-auth-boundary-check Validate hosted paper auth/session/RBAC boundary\n'
 	@printf '  make launch-self-service-paper-demo Start local Paper Only customer demo launcher\n'
 	@printf '  make social-content-check Validate Facebook community launch safety copy\n'
 	@printf '  make facebook-launch-check Validate Facebook human launch runbook\n'
@@ -163,6 +164,9 @@ self-service-paper-demo-launcher-check:
 
 hosted-paper-api-readiness-check:
 	bash scripts/hosted-paper-api-readiness-check.sh
+
+hosted-paper-auth-boundary-check:
+	bash scripts/hosted-paper-auth-boundary-check.sh
 
 launch-self-service-paper-demo:
 	bash scripts/launch-self-service-paper-demo.sh

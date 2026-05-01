@@ -102,7 +102,11 @@ Required design gates before implementation:
 - production incident and rollback plan
 
 See [hosted-paper-backend-api-readiness.md](hosted-paper-backend-api-readiness.md)
-for the hosted paper backend/API readiness specification.
+for the hosted paper backend/API readiness specification. See
+[hosted-paper-auth-boundary-spec.md](hosted-paper-auth-boundary-spec.md) for the
+future login, session, RBAC, ABAC, and tenant boundary. The auth boundary spec is
+paper-only design work; it does not enable customer login, credential collection,
+hosted datastore writes, broker connectivity, or live trading.
 
 Hosted paper backend/API non-goals:
 
@@ -184,6 +188,7 @@ The future hosted paper API readiness gate is:
 
 ```bash
 make hosted-paper-api-readiness-check
+make hosted-paper-auth-boundary-check
 ```
 
 The current backend also exposes a read-only readiness response:

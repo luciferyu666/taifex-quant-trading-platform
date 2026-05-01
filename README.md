@@ -147,7 +147,10 @@ tracked in `docs/customer-self-service-paper-demo-roadmap.md`; the local launche
 is documented in `docs/customer-self-service-local-demo-launcher.md`. Future
 hosted paper API readiness is tracked in
 `docs/hosted-paper-backend-api-readiness.md`; the current backend exposes
-`GET /api/hosted-paper/readiness` as a read-only readiness response only.
+`GET /api/hosted-paper/readiness` as a read-only readiness response only. Future
+hosted login, session, RBAC, ABAC, and tenant boundaries are specified in
+`docs/hosted-paper-auth-boundary-spec.md`; no hosted customer login is enabled
+yet.
 
 ### Audit and Observability
 

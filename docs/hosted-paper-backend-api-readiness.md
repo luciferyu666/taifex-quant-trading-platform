@@ -103,7 +103,10 @@ GET  /api/hosted-paper/audit-integrity/verify
 ```
 
 Initial implementation should use paper-only mock/session scaffolding before any
-production identity provider is introduced.
+production identity provider is introduced. The future authentication, session,
+RBAC, ABAC, and tenant boundary is specified in
+[hosted-paper-auth-boundary-spec.md](hosted-paper-auth-boundary-spec.md). No
+hosted authentication provider is implemented today.
 
 The current implemented endpoint is:
 
@@ -200,6 +203,7 @@ Before hosted paper mode can be used for customer evaluation:
 Current readiness gate:
 
 ```bash
+make hosted-paper-auth-boundary-check
 make hosted-paper-api-readiness-check
 cd backend && .venv/bin/python -m pytest tests/test_hosted_paper_readiness_routes.py
 make check
