@@ -2160,6 +2160,89 @@ Refresh scope:
   trading path.
 - Live trading remains disabled by default.
 
+## Hosted Paper Identity Readiness Verification
+
+Verification timestamp:
+
+```text
+2026-05-02 05:29:01 CST (+0800)
+```
+
+Verified commit:
+
+```text
+c9a6e74 Add hosted paper identity readiness boundary
+```
+
+GitHub Actions:
+
+```text
+Workflow: Release Readiness
+Run ID: 25233033370
+Status: passed
+```
+
+Vercel deployment:
+
+```text
+Deployment URL: https://taifex-quant-trading-platform-frontend-72vsa6ub7.vercel.app
+Deployment ID: dpl_5xmCZin288dZmchMLZdqT9TkHxd1
+Production alias: https://taifex-quant-trading-platform-front.vercel.app
+Status: Ready
+```
+
+Validation commands:
+
+```bash
+make hosted-paper-identity-readiness-check
+cd backend && .venv/bin/python -m pytest tests/test_hosted_paper_identity_readiness_routes.py
+make frontend-i18n-check
+cd frontend && npm run typecheck
+cd frontend && npm run build
+make check
+gh run watch 25233033370 --exit-status
+cd frontend && vercel inspect https://taifex-quant-trading-platform-front.vercel.app
+make frontend-production-smoke-check
+git status --short --branch
+```
+
+Observed result:
+
+```text
+Hosted paper identity/RBAC/tenant readiness check passed.
+Backend route tests passed.
+Frontend i18n, typecheck, and build passed.
+Full repository check passed.
+Release Readiness CI passed on run 25233033370.
+Production alias resolved to deployment dpl_5xmCZin288dZmchMLZdqT9TkHxd1.
+Production smoke gate passed and confirmed required safety copy on English and
+Traditional Chinese pages.
+Local git state was clean: ## main...origin/main.
+```
+
+Hosted Paper Identity Readiness scope:
+
+- Added read-only `GET /api/hosted-paper/identity-readiness`.
+- Added Web Command Center read-only panel for reviewer login, customer
+  accounts, RBAC/ABAC, tenant isolation, future roles, blocked capabilities,
+  future requirements, safety defaults, and safety flags.
+- Added `docs/hosted-paper-identity-rbac-tenant-readiness.md`.
+- Added `make hosted-paper-identity-readiness-check` and included it in the
+  repository check path.
+
+Safety boundary:
+
+- Real reviewer login remains unavailable.
+- Formal RBAC/ABAC enforcement remains unavailable.
+- Customer account onboarding remains unavailable.
+- Hosted tenant creation and tenant-scoped datastore writes remain unavailable.
+- The endpoint and UI are read-only metadata only.
+- No session is issued, no credentials are collected, no database is written,
+  no broker API is called, no order is created, and no live trading path is
+  enabled.
+- Production Trading Platform remains NOT READY.
+- Live trading remains disabled by default.
+
 ## Marketing Website Reachability
 
 Command:
