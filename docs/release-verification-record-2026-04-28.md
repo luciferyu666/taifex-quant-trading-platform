@@ -2305,6 +2305,68 @@ Refresh scope:
 - Production Trading Platform remains NOT READY.
 - Live trading remains disabled by default.
 
+## Hosted Paper Identity Readiness Record Refresh 2
+
+Verification timestamp:
+
+```text
+2026-05-02 06:00:45 CST (+0800)
+```
+
+Refresh commit:
+
+```text
+9ac2b04 Update release verification for hosted paper identity refresh
+```
+
+GitHub Actions:
+
+```text
+Workflow: Release Readiness
+Run ID: 25234885238
+Status: passed
+```
+
+Vercel deployment refresh:
+
+```text
+Deployment URL: https://taifex-quant-trading-platform-frontend-8a90dy13m.vercel.app
+Deployment ID: dpl_GETwJUnTnW57gukQfH5iM4RGf2Ty
+Production alias: https://taifex-quant-trading-platform-front.vercel.app
+Status: Ready
+```
+
+Validation commands:
+
+```bash
+gh run watch 25234885238 --exit-status
+cd frontend && vercel inspect https://taifex-quant-trading-platform-front.vercel.app
+make frontend-production-smoke-check
+git status --short --branch
+```
+
+Observed result:
+
+```text
+Release Readiness CI passed on run 25234885238.
+Production alias resolved to deployment dpl_GETwJUnTnW57gukQfH5iM4RGf2Ty.
+Production smoke gate passed and confirmed required safety copy on English and
+Traditional Chinese pages.
+Local git state was clean: ## main...origin/main.
+```
+
+Refresh scope:
+
+- Documentation-only release verification refresh.
+- No application behavior was changed by the refresh commit.
+- The Hosted Paper Identity Readiness panel and API remain read-only metadata
+  surfaces.
+- Real reviewer login, formal RBAC/ABAC enforcement, customer accounts, hosted
+  tenant datastore writes, credential collection, broker API calls, order
+  creation, and live trading remain unavailable.
+- Production Trading Platform remains NOT READY.
+- Live trading remains disabled by default.
+
 ## Marketing Website Reachability
 
 Command:
