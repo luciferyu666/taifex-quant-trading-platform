@@ -9,6 +9,7 @@ printf 'Checking hosted paper auth/session/RBAC boundary specification...\n'
 
 required_files=(
   "docs/hosted-paper-auth-boundary-spec.md"
+  "docs/hosted-paper-mock-session-contract.md"
   "docs/hosted-paper-backend-api-readiness.md"
   "scripts/hosted-paper-api-readiness-check.sh"
 )

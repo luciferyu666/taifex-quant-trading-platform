@@ -107,6 +107,8 @@ for the hosted paper backend/API readiness specification. See
 future login, session, RBAC, ABAC, and tenant boundary. The auth boundary spec is
 paper-only design work; it does not enable customer login, credential collection,
 hosted datastore writes, broker connectivity, or live trading.
+The read-only mock session contract is documented in
+[hosted-paper-mock-session-contract.md](hosted-paper-mock-session-contract.md).
 
 Hosted paper backend/API non-goals:
 
@@ -189,15 +191,20 @@ The future hosted paper API readiness gate is:
 ```bash
 make hosted-paper-api-readiness-check
 make hosted-paper-auth-boundary-check
+make hosted-paper-mock-session-check
 ```
 
 The current backend also exposes a read-only readiness response:
 
 ```text
 GET /api/hosted-paper/readiness
+GET /api/hosted-paper/session
+GET /api/hosted-paper/tenants/current
 ```
 
-It reports that hosted paper backend/API mode is not enabled yet and that actual
-paper workflow records still require local backend + local SQLite demo mode.
+The readiness endpoint reports that hosted paper backend/API mode is not enabled
+yet and that actual paper workflow records still require local backend + local
+SQLite demo mode. The session and tenant endpoints are read-only mock contract
+samples; they do not create hosted sessions or write hosted records.
 
 Live trading remains disabled by default.

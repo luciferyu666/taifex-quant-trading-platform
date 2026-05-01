@@ -101,6 +101,7 @@ for required_file in \
   docs/customer-self-service-local-demo-launcher.md \
   docs/hosted-paper-backend-api-readiness.md \
   docs/hosted-paper-auth-boundary-spec.md \
+  docs/hosted-paper-mock-session-contract.md \
   docs/paper-simulation-submit-verification.md \
   docs/paper-approval-ui-flow-smoke-drill.md \
   docs/paper-approval-workflow.md \
@@ -109,6 +110,7 @@ for required_file in \
   scripts/launch-self-service-paper-demo.sh \
   scripts/hosted-paper-api-readiness-check.sh \
   scripts/hosted-paper-auth-boundary-check.sh \
+  scripts/hosted-paper-mock-session-check.sh \
   frontend/scripts/check-paper-approval-ui-flow.mjs; do
   if [[ ! -f "${required_file}" ]]; then
     printf 'Missing required customer evaluation file: %s\n' "${required_file}" >&2
@@ -141,6 +143,11 @@ if [[ ! -x scripts/hosted-paper-auth-boundary-check.sh ]]; then
   missing_customer_eval_file=1
 fi
 
+if [[ ! -x scripts/hosted-paper-mock-session-check.sh ]]; then
+  printf 'scripts/hosted-paper-mock-session-check.sh must be executable.\n' >&2
+  missing_customer_eval_file=1
+fi
+
 if [[ "${missing_customer_eval_file}" -ne 0 ]]; then
   exit 1
 fi
@@ -150,6 +157,7 @@ bash scripts/self-service-paper-demo-check.sh
 bash scripts/launch-self-service-paper-demo.sh --check-only
 bash scripts/hosted-paper-api-readiness-check.sh
 bash scripts/hosted-paper-auth-boundary-check.sh
+bash scripts/hosted-paper-mock-session-check.sh
 
 printf 'Checking Facebook community launch content...\n'
 if [[ -x scripts/social-content-check.sh ]]; then
@@ -196,6 +204,7 @@ for required_file in \
   backend/app/domain/audit_integrity.py \
   backend/app/domain/paper_oms_reliability.py \
   backend/app/domain/paper_risk_state.py \
+  backend/app/domain/hosted_paper_session.py \
   backend/app/domain/exposure.py \
   backend/app/services/risk_engine.py \
   backend/app/services/oms.py \
@@ -230,6 +239,7 @@ for required_file in \
   backend/app/api/paper_approval_routes.py \
   backend/app/api/paper_execution_routes.py \
   backend/app/api/paper_risk_routes.py \
+  backend/app/api/hosted_paper_routes.py \
   backend/app/api/roadmap_routes.py \
   data-pipeline/migrations/001_phase_2_data_platform.sql \
   data-pipeline/migrations/apply_local_migrations.py \

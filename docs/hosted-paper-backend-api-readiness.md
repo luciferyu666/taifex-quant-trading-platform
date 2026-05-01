@@ -108,13 +108,15 @@ RBAC, ABAC, and tenant boundary is specified in
 [hosted-paper-auth-boundary-spec.md](hosted-paper-auth-boundary-spec.md). No
 hosted authentication provider is implemented today.
 
-The current implemented endpoint is:
+The current implemented endpoints are:
 
 ```text
 GET /api/hosted-paper/readiness
+GET /api/hosted-paper/session
+GET /api/hosted-paper/tenants/current
 ```
 
-It returns a read-only readiness response showing:
+`GET /api/hosted-paper/readiness` returns a read-only readiness response showing:
 
 - hosted paper backend is not enabled
 - local demo mode remains the primary path for actual paper records
@@ -127,6 +129,13 @@ It returns a read-only readiness response showing:
 It does not authenticate users, write records, create orders, call Risk Engine,
 call OMS, call Broker Gateway, call broker SDKs, collect credentials, or enable
 live trading.
+
+`GET /api/hosted-paper/session` and
+`GET /api/hosted-paper/tenants/current` return mock read-only contract metadata
+for future session, tenant, roles, and permissions. They do not authenticate
+users, issue session cookies, write hosted datastore records, collect
+credentials, or authorize paper workflow mutations. See
+[hosted-paper-mock-session-contract.md](hosted-paper-mock-session-contract.md).
 
 The Web Command Center displays this endpoint in a read-only Hosted Paper API
 Readiness panel. The panel is a status view only; it does not create hosted
@@ -204,6 +213,7 @@ Current readiness gate:
 
 ```bash
 make hosted-paper-auth-boundary-check
+make hosted-paper-mock-session-check
 make hosted-paper-api-readiness-check
 cd backend && .venv/bin/python -m pytest tests/test_hosted_paper_readiness_routes.py
 make check

@@ -9,13 +9,17 @@ It is a boundary specification only. No hosted authentication provider is
 implemented, no credentials are collected, no hosted datastore writes are
 enabled, and no broker integration is introduced by this document.
 
-The current implemented hosted paper endpoint remains:
+The current implemented hosted paper endpoints are:
 
 ```text
 GET /api/hosted-paper/readiness
+GET /api/hosted-paper/session
+GET /api/hosted-paper/tenants/current
 ```
 
-That endpoint is read-only and reports that hosted paper mode is not enabled.
+These endpoints are read-only. The readiness endpoint reports that hosted paper
+mode is not enabled. The session and tenant endpoints return mock contract
+metadata only; they do not authenticate users or create hosted sessions.
 
 ## Current Posture
 
@@ -140,13 +144,27 @@ hosted authorization system yet.
 - Broker SDK calls remain forbidden.
 - Live trading remains disabled by default.
 
-## Future Endpoint Shape
+## Current Mock Contract Endpoint Shape
 
-The following endpoints are future design references only:
+The current mock contract endpoints are:
 
 ```text
 GET /api/hosted-paper/session
 GET /api/hosted-paper/tenants/current
+```
+
+They return schema samples for future session, tenant, roles, and permissions.
+They do not issue session cookies, write hosted datastore records, create paper
+workflow records, collect credentials, call brokers, or enable live trading.
+
+See [hosted-paper-mock-session-contract.md](hosted-paper-mock-session-contract.md).
+
+## Future Endpoint Shape
+
+The following mutation and hosted data endpoints are future design references
+only:
+
+```text
 GET /api/hosted-paper/approvals/queue
 POST /api/hosted-paper/approvals/requests
 POST /api/hosted-paper/approvals/requests/{approval_request_id}/decisions
@@ -157,12 +175,6 @@ GET /api/hosted-paper/audit-events
 
 They must not be exposed as hosted mutation paths until identity, tenancy,
 RBAC/ABAC, datastore, audit, rate limiting, and operations controls are reviewed.
-
-The only current hosted-paper endpoint is still:
-
-```text
-GET /api/hosted-paper/readiness
-```
 
 ## Hosted Data Boundary
 
@@ -193,6 +205,8 @@ Before any hosted paper auth implementation begins:
 - `ENABLE_LIVE_TRADING=false`
 - `BROKER_PROVIDER=paper`
 - `GET /api/hosted-paper/readiness` remains read-only
+- `GET /api/hosted-paper/session` remains a mock read-only contract
+- `GET /api/hosted-paper/tenants/current` remains a mock read-only contract
 - future session context requires `user_id`, `tenant_id`, and `session_id`
 - RBAC and ABAC policy boundaries are documented
 - all reviewer/operator mutation paths require tenant-scoped authorization
@@ -205,6 +219,7 @@ Before any hosted paper auth implementation begins:
 
 ```bash
 make hosted-paper-auth-boundary-check
+make hosted-paper-mock-session-check
 make hosted-paper-api-readiness-check
 make check
 ```
