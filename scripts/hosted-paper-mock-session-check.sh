@@ -10,9 +10,12 @@ printf 'Checking hosted paper mock session contract...\n'
 required_files=(
   "docs/hosted-paper-mock-session-contract.md"
   "docs/hosted-paper-auth-boundary-spec.md"
+  "docs/hosted-paper-tenant-boundary-evidence-export.md"
   "backend/app/domain/hosted_paper_session.py"
   "backend/app/api/hosted_paper_routes.py"
   "backend/tests/test_hosted_paper_mock_session_routes.py"
+  "backend/tests/test_hosted_paper_tenant_boundary_evidence_export_script.py"
+  "scripts/export-hosted-paper-tenant-boundary-evidence.py"
   "frontend/app/components/HostedPaperMockSessionPanel.tsx"
 )
 
@@ -61,6 +64,39 @@ for text in "${required_doc_text[@]}"; do
   fi
 done
 
+required_evidence_doc_text=(
+  "Hosted Paper Tenant Boundary Evidence Export"
+  "hosted_paper_tenant_boundary_evidence"
+  "mock_read_only"
+  "authenticated=false"
+  "authentication_provider=none"
+  "session_cookie_issued=false"
+  "hosted_paper_enabled=false"
+  "hosted_datastore_enabled=false"
+  "hosted_datastore_written=false"
+  "local_sqlite_access=false"
+  "credentials_collected=false"
+  "broker_credentials_collected=false"
+  "broker_api_called=false"
+  "live_trading_enabled=false"
+  "production_trading_ready=false"
+  "mutation_permissions_granted=false"
+  "create_paper_approval_request"
+  "record_paper_reviewer_decision"
+  "submit_approved_paper_workflow"
+  "enable_live_trading"
+  "upload_broker_credentials"
+  "make hosted-paper-tenant-boundary-evidence-export"
+  "Live trading remains disabled by default"
+)
+
+for text in "${required_evidence_doc_text[@]}"; do
+  if ! grep -Fq "${text}" docs/hosted-paper-tenant-boundary-evidence-export.md; then
+    printf 'Hosted paper tenant boundary evidence doc must contain: %s\n' "${text}" >&2
+    exit 1
+  fi
+done
+
 required_code_text=(
   "HostedPaperMockSessionResponse"
   "HostedPaperTenantContext"
@@ -70,10 +106,12 @@ required_code_text=(
   "@router.get(\"/session\""
   "@router.get(\"/tenants/current\""
   "HostedPaperMockSessionPanel"
+  "hosted_paper_tenant_boundary_evidence"
+  "export-hosted-paper-tenant-boundary-evidence"
 )
 
 for text in "${required_code_text[@]}"; do
-  if ! grep -R -Fq "${text}" backend/app/domain/hosted_paper_session.py backend/app/api/hosted_paper_routes.py backend/tests/test_hosted_paper_mock_session_routes.py frontend/app/components/HostedPaperMockSessionPanel.tsx; then
+  if ! grep -R -Fq "${text}" backend/app/domain/hosted_paper_session.py backend/app/api/hosted_paper_routes.py backend/tests/test_hosted_paper_mock_session_routes.py backend/tests/test_hosted_paper_tenant_boundary_evidence_export_script.py scripts/export-hosted-paper-tenant-boundary-evidence.py frontend/app/components/HostedPaperMockSessionPanel.tsx; then
     printf 'Hosted paper mock session implementation must contain: %s\n' "${text}" >&2
     exit 1
   fi

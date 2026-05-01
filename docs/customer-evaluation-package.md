@@ -189,8 +189,12 @@ A successful customer evaluation should produce:
 - Production verification runbook: `docs/frontend-command-center-deployment-verification.md`
 - Customer demo UI smoke test: `docs/customer-demo-ui-smoke-test.md`
 - Paper demo evidence export: `docs/paper-demo-evidence-export.md`
+- Hosted paper tenant boundary evidence export:
+  `docs/hosted-paper-tenant-boundary-evidence-export.md`
 - Paper execution demo seed: `scripts/seed-paper-execution-demo.py`
 - Paper demo evidence exporter: `scripts/export-paper-demo-evidence.py`
+- Hosted paper tenant boundary evidence exporter:
+  `scripts/export-hosted-paper-tenant-boundary-evidence.py`
 
 ## Safety Statement
 

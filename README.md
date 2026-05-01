@@ -153,7 +153,11 @@ responses only. Future hosted login, session, RBAC, ABAC, and tenant boundaries
 are specified in `docs/hosted-paper-auth-boundary-spec.md`; the read-only mock
 session contract is documented in `docs/hosted-paper-mock-session-contract.md`.
 The Web Command Center displays the mock session and tenant context as read-only
-contract metadata. No hosted customer login is enabled yet.
+contract metadata. Reviewers can export the same mock session and tenant
+boundary as local JSON evidence with
+`docs/hosted-paper-tenant-boundary-evidence-export.md` and
+`scripts/export-hosted-paper-tenant-boundary-evidence.py`. No hosted customer
+login is enabled yet.
 
 ### Audit and Observability
 

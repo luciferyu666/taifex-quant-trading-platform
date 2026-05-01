@@ -29,6 +29,11 @@ safety flag metadata only. It does not create login flows, issue sessions, write
 databases, collect credentials, call brokers, or authorize paper workflow
 mutations.
 
+The mock session and tenant boundary can also be exported as local JSON evidence
+with [hosted-paper-tenant-boundary-evidence-export.md](hosted-paper-tenant-boundary-evidence-export.md).
+That export is read-only reviewer evidence; it does not authenticate users,
+write databases, collect credentials, call brokers, or enable hosted paper mode.
+
 ## Mock Session Response
 
 The mock session response must include:
@@ -158,6 +163,7 @@ production_trading_ready=false
 ## Verification Commands
 
 ```bash
+make hosted-paper-tenant-boundary-evidence-export
 make hosted-paper-mock-session-check
 make frontend-i18n-check
 make hosted-paper-auth-boundary-check

@@ -109,6 +109,9 @@ paper-only design work; it does not enable customer login, credential collection
 hosted datastore writes, broker connectivity, or live trading.
 The read-only mock session contract is documented in
 [hosted-paper-mock-session-contract.md](hosted-paper-mock-session-contract.md).
+Reviewer evidence for that mock session, tenant context, role schema,
+permission schema, and denied mutation boundary is documented in
+[hosted-paper-tenant-boundary-evidence-export.md](hosted-paper-tenant-boundary-evidence-export.md).
 
 Hosted paper backend/API non-goals:
 
@@ -192,6 +195,7 @@ The future hosted paper API readiness gate is:
 make hosted-paper-api-readiness-check
 make hosted-paper-auth-boundary-check
 make hosted-paper-mock-session-check
+make hosted-paper-tenant-boundary-evidence-export
 ```
 
 The current backend also exposes a read-only readiness response:

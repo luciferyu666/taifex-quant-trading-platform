@@ -102,6 +102,7 @@ for required_file in \
   docs/hosted-paper-backend-api-readiness.md \
   docs/hosted-paper-auth-boundary-spec.md \
   docs/hosted-paper-mock-session-contract.md \
+  docs/hosted-paper-tenant-boundary-evidence-export.md \
   docs/paper-simulation-submit-verification.md \
   docs/paper-approval-ui-flow-smoke-drill.md \
   docs/paper-approval-workflow.md \
@@ -111,6 +112,7 @@ for required_file in \
   scripts/hosted-paper-api-readiness-check.sh \
   scripts/hosted-paper-auth-boundary-check.sh \
   scripts/hosted-paper-mock-session-check.sh \
+  scripts/export-hosted-paper-tenant-boundary-evidence.py \
   frontend/scripts/check-paper-approval-ui-flow.mjs; do
   if [[ ! -f "${required_file}" ]]; then
     printf 'Missing required customer evaluation file: %s\n' "${required_file}" >&2
@@ -217,6 +219,7 @@ for required_file in \
   scripts/export-paper-demo-evidence.py \
   scripts/export-paper-broker-simulation-evidence.py \
   scripts/export-paper-risk-evidence.py \
+  scripts/export-hosted-paper-tenant-boundary-evidence.py \
   scripts/verify-paper-audit-integrity.py \
   scripts/paper-simulation-submit-check.py \
   backend/app/api/data_routes.py \
@@ -492,6 +495,9 @@ if [[ -x "${BACKEND_PYTHON}" ]]; then
   PAPER_EXECUTION_AUDIT_DB_PATH="${paper_integrity_tmp}/paper_integrity.sqlite" \
     "${BACKEND_PYTHON}" scripts/verify-paper-audit-integrity.py >/dev/null
   rm -rf "${paper_integrity_tmp}"
+
+  printf 'Running Hosted Paper tenant boundary evidence export dry-run...\n'
+  "${BACKEND_PYTHON}" scripts/export-hosted-paper-tenant-boundary-evidence.py >/dev/null
 else
   printf 'backend/.venv/bin/python is missing; skipping backend runtime checks. Run bash scripts/bootstrap.sh.\n' >&2
 fi

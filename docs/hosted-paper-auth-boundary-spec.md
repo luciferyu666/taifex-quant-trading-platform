@@ -162,6 +162,12 @@ The Web Command Center may display this mock metadata as a read-only panel only.
 That UI must not create login buttons, hosted sessions, credential forms,
 database writes, broker calls, or paper workflow mutations.
 
+Reviewers can export the same mock session, tenant, role, permission, and denied
+mutation boundary as local JSON evidence with
+[hosted-paper-tenant-boundary-evidence-export.md](hosted-paper-tenant-boundary-evidence-export.md).
+The exporter is local-only and does not authenticate users, write hosted records,
+collect credentials, call brokers, or enable live trading.
+
 ## Future Endpoint Shape
 
 The following mutation and hosted data endpoints are future design references
@@ -223,6 +229,7 @@ Before any hosted paper auth implementation begins:
 ```bash
 make hosted-paper-auth-boundary-check
 make hosted-paper-mock-session-check
+make hosted-paper-tenant-boundary-evidence-export
 make hosted-paper-api-readiness-check
 make check
 ```

@@ -138,6 +138,11 @@ credentials, or authorize paper workflow mutations. See
 [hosted-paper-mock-session-contract.md](hosted-paper-mock-session-contract.md).
 The Web Command Center displays this mock contract as read-only status only.
 
+The same mock session and tenant boundary can be exported as local reviewer
+evidence with
+[hosted-paper-tenant-boundary-evidence-export.md](hosted-paper-tenant-boundary-evidence-export.md).
+The evidence proves the hosted paper path is still read-only and not enabled.
+
 The Web Command Center displays this endpoint in a read-only Hosted Paper API
 Readiness panel. The panel is a status view only; it does not create hosted
 sessions, approval requests, paper workflow records, database writes, credential
@@ -215,6 +220,7 @@ Current readiness gate:
 ```bash
 make hosted-paper-auth-boundary-check
 make hosted-paper-mock-session-check
+make hosted-paper-tenant-boundary-evidence-export
 make frontend-i18n-check
 make hosted-paper-api-readiness-check
 cd backend && .venv/bin/python -m pytest tests/test_hosted_paper_readiness_routes.py
