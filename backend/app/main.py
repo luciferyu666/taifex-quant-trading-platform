@@ -19,6 +19,7 @@ from app.api.continuous_futures_routes import router as continuous_futures_route
 from app.api.data_routes import router as data_router
 from app.api.data_version_routes import router as data_version_router
 from app.api.feature_manifest_routes import router as feature_manifest_router
+from app.api.hosted_paper_routes import router as hosted_paper_router
 from app.api.paper_approval_routes import router as paper_approval_router
 from app.api.paper_audit_integrity_routes import (
     router as paper_audit_integrity_router,
@@ -84,6 +85,7 @@ def create_app() -> FastAPI:
     app.include_router(paper_execution_router)
     app.include_router(paper_audit_integrity_router)
     app.include_router(paper_risk_router)
+    app.include_router(hosted_paper_router)
     app.include_router(release_baseline_router)
     return app
 

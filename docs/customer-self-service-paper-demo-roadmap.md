@@ -186,4 +186,13 @@ The future hosted paper API readiness gate is:
 make hosted-paper-api-readiness-check
 ```
 
+The current backend also exposes a read-only readiness response:
+
+```text
+GET /api/hosted-paper/readiness
+```
+
+It reports that hosted paper backend/API mode is not enabled yet and that actual
+paper workflow records still require local backend + local SQLite demo mode.
+
 Live trading remains disabled by default.

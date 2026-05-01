@@ -88,6 +88,7 @@ remains for local demo mode only.
 The future API should expose paper-only endpoints behind authentication:
 
 ```text
+GET  /api/hosted-paper/readiness
 GET  /api/hosted-paper/status
 GET  /api/hosted-paper/session
 GET  /api/hosted-paper/tenants/current
@@ -103,6 +104,26 @@ GET  /api/hosted-paper/audit-integrity/verify
 
 Initial implementation should use paper-only mock/session scaffolding before any
 production identity provider is introduced.
+
+The current implemented endpoint is:
+
+```text
+GET /api/hosted-paper/readiness
+```
+
+It returns a read-only readiness response showing:
+
+- hosted paper backend is not enabled
+- local demo mode remains the primary path for actual paper records
+- Production Vercel remains read-only for UI, fallback samples, and explicit
+  local JSON evidence
+- live trading is disabled
+- broker provider remains paper
+- Production Trading Platform remains `NOT READY`
+
+It does not authenticate users, write records, create orders, call Risk Engine,
+call OMS, call Broker Gateway, call broker SDKs, collect credentials, or enable
+live trading.
 
 ## Data Layer Requirements
 
@@ -175,6 +196,7 @@ Current readiness gate:
 
 ```bash
 make hosted-paper-api-readiness-check
+cd backend && .venv/bin/python -m pytest tests/test_hosted_paper_readiness_routes.py
 make check
 ```
 

@@ -146,7 +146,8 @@ layer. See `docs/frontend-local-backend-demo-mode.md` and
 tracked in `docs/customer-self-service-paper-demo-roadmap.md`; the local launcher
 is documented in `docs/customer-self-service-local-demo-launcher.md`. Future
 hosted paper API readiness is tracked in
-`docs/hosted-paper-backend-api-readiness.md`.
+`docs/hosted-paper-backend-api-readiness.md`; the current backend exposes
+`GET /api/hosted-paper/readiness` as a read-only readiness response only.
 
 ### Audit and Observability
 

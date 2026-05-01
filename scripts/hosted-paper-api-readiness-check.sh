@@ -12,6 +12,9 @@ required_files=(
   "docs/customer-self-service-paper-demo-roadmap.md"
   "docs/production-local-data-boundary.md"
   "docs/frontend-local-backend-demo-mode.md"
+  "backend/app/domain/hosted_paper_readiness.py"
+  "backend/app/api/hosted_paper_routes.py"
+  "backend/tests/test_hosted_paper_readiness_routes.py"
 )
 
 for required_file in "${required_files[@]}"; do
@@ -32,12 +35,23 @@ required_text=(
   "TRADING_MODE=paper"
   "ENABLE_LIVE_TRADING=false"
   "BROKER_PROVIDER=paper"
+  "GET /api/hosted-paper/readiness"
   "Live trading remains disabled by default"
 )
 
 for text in "${required_text[@]}"; do
   if ! grep -R -Fq "${text}" docs/hosted-paper-backend-api-readiness.md; then
     printf 'Hosted paper readiness doc must contain: %s\n' "${text}" >&2
+    exit 1
+  fi
+done
+
+for route_text in \
+  'prefix="/api/hosted-paper"' \
+  '@router.get("/readiness"' \
+  'get_hosted_paper_readiness'; do
+  if ! grep -R -Fq "${route_text}" backend/app/domain/hosted_paper_readiness.py backend/app/api/hosted_paper_routes.py backend/tests/test_hosted_paper_readiness_routes.py; then
+    printf 'Hosted paper readiness endpoint must contain: %s\n' "${route_text}" >&2
     exit 1
   fi
 done
