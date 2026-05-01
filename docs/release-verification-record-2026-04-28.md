@@ -1939,6 +1939,84 @@ Hosted Paper Readiness Panel scope:
 - No broker SDK is called.
 - Live trading remains disabled by default.
 
+## Hosted Paper Mock Session Panel Verification
+
+Verification time:
+
+```text
+2026-05-01 21:02:34 CST (+0800)
+```
+
+Commit:
+
+```text
+8ceeb53 Add hosted paper mock session panel
+```
+
+GitHub Actions:
+
+```text
+Workflow: Release Readiness
+Run ID: 25211252126
+Status: passed
+```
+
+Vercel deployment:
+
+```text
+Deployment URL: https://taifex-quant-trading-platform-frontend-9w8ctk397.vercel.app
+Deployment ID: dpl_6QGXFu4dWeSLZNgrTbHwc8vtVB8Y
+Production alias: https://taifex-quant-trading-platform-front.vercel.app
+Status: Ready
+```
+
+Validation commands:
+
+```bash
+make hosted-paper-mock-session-check
+make frontend-i18n-check
+cd frontend && npm run typecheck
+cd frontend && npm run build
+cd backend && .venv/bin/python -m pytest tests/test_hosted_paper_mock_session_routes.py tests/test_hosted_paper_readiness_routes.py
+make check
+make frontend-production-smoke-check
+```
+
+Observed result:
+
+```text
+All listed checks passed. Release Readiness CI passed on run 25211252126.
+Production smoke gate confirmed deployment id
+dpl_6QGXFu4dWeSLZNgrTbHwc8vtVB8Y and required safety copy on English and
+Traditional Chinese pages.
+```
+
+Hosted Paper Mock Session Panel scope:
+
+- Added `frontend/app/components/HostedPaperMockSessionPanel.tsx`.
+- Web Command Center Release tab now displays the read-only mock contract for
+  `GET /api/hosted-paper/session` and
+  `GET /api/hosted-paper/tenants/current`.
+- The panel shows mock session metadata, tenant context, future role schema,
+  future permission schema, granted read-only permissions, denied mutation
+  permissions, warnings, and safety flags.
+- The panel preserves the current hosted-paper boundary:
+  `contract_state=mock_read_only`, `authenticated=false`,
+  `authentication_provider=none`, `session_cookie_issued=false`,
+  `hosted_datastore_enabled=false`, `credentials_collected=false`,
+  `broker_credentials_collected=false`, and
+  `production_trading_ready=false`.
+- The panel is read-only. It does not introduce login, issue sessions or
+  cookies, write databases, create approval requests, submit paper workflows,
+  call Risk Engine mutation paths, call OMS mutation paths, call Broker Gateway,
+  call broker SDKs, collect credentials, expose live controls, or imply that
+  hosted paper mode is enabled.
+- The panel explicitly keeps mutation permissions denied, including approval
+  mutation, paper workflow submission, broker credential upload, and live
+  trading permission.
+- No broker SDK is called.
+- Live trading remains disabled by default.
+
 ## Marketing Website Reachability
 
 Command:
