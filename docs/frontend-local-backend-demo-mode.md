@@ -20,6 +20,13 @@ Use these commands when a reviewer must inspect actual persisted paper records i
 
 ```bash
 cd "/mnt/f/From C download/taifex-quant-trading-platform"
+make launch-self-service-paper-demo
+```
+
+Manual fallback:
+
+```bash
+cd "/mnt/f/From C download/taifex-quant-trading-platform"
 make backend
 ```
 
@@ -86,5 +93,8 @@ The Web Command Center now includes a `Data Access Boundary` panel in the Releas
 A future cloud deployment may expose paper records through a controlled backend/API and managed data layer. That future work requires separate review for authentication, RBAC/ABAC, retention, audit integrity, deployment topology, data governance, and operational monitoring.
 
 Until that work is complete, local SQLite remains a local demo store only.
+
+For the one-command local launcher, see
+[customer-self-service-local-demo-launcher.md](customer-self-service-local-demo-launcher.md).
 
 Live trading remains disabled by default.

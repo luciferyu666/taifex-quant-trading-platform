@@ -9,9 +9,11 @@ printf 'Checking customer self-service paper demo roadmap...\n'
 
 required_files=(
   "docs/customer-self-service-paper-demo-roadmap.md"
+  "docs/customer-self-service-local-demo-launcher.md"
   "docs/production-local-data-boundary.md"
   "docs/frontend-local-backend-demo-mode.md"
   "docs/customer-evaluation-package.md"
+  "scripts/launch-self-service-paper-demo.sh"
   "frontend/app/i18n.ts"
 )
 
@@ -27,6 +29,8 @@ required_text=(
   "local SQLite"
   "local backend demo"
   "future controlled hosted"
+  "make launch-self-service-paper-demo"
+  "make self-service-paper-demo-launcher-check"
   "TRADING_MODE=paper"
   "ENABLE_LIVE_TRADING=false"
   "BROKER_PROVIDER=paper"
@@ -36,6 +40,7 @@ required_text=(
 for text in "${required_text[@]}"; do
   if ! grep -R -Fq "${text}" \
     docs/customer-self-service-paper-demo-roadmap.md \
+    docs/customer-self-service-local-demo-launcher.md \
     docs/production-local-data-boundary.md \
     docs/frontend-local-backend-demo-mode.md; then
     printf 'Self-service paper demo docs must contain: %s\n' "${text}" >&2

@@ -9,6 +9,9 @@ type LocalBackendDemoModePanelProps = {
 };
 
 const commandLines = [
+  "make launch-self-service-paper-demo",
+  "",
+  "# Manual fallback:",
   "make backend",
   "make frontend",
   "make seed-paper-execution-demo",

@@ -143,7 +143,13 @@ Set expectation before showing paper records:
   Paper OMS records. It should state that actual paper records require local
   backend + local SQLite unless a future controlled hosted API is deployed.
 - To show actual persisted paper OMS / audit records, run local backend + local
-  frontend against the same local SQLite store:
+  frontend against the same local SQLite store. Preferred one-command launcher:
+
+```bash
+make launch-self-service-paper-demo
+```
+
+Manual fallback:
 
 ```bash
 make backend
@@ -155,6 +161,7 @@ make paper-execution-persistence-check
 Automated verification for this local backend demo path:
 
 ```bash
+make self-service-paper-demo-launcher-check
 make local-backend-demo-browser-drill
 ```
 

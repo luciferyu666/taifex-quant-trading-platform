@@ -87,6 +87,8 @@ safe path is to productize one of these modes:
    - paper-only execution boundary preserved
 
 See [customer-self-service-paper-demo-roadmap.md](customer-self-service-paper-demo-roadmap.md).
+For the implemented one-command local launcher, see
+[customer-self-service-local-demo-launcher.md](customer-self-service-local-demo-launcher.md).
 
 ## Safety Rules
 

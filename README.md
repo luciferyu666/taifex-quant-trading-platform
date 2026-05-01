@@ -143,7 +143,8 @@ directly read a user's local SQLite paper records; actual paper OMS / audit
 records require local backend demo mode or a future controlled hosted API/data
 layer. See `docs/frontend-local-backend-demo-mode.md` and
 `docs/production-local-data-boundary.md`. The customer self-service path is
-tracked in `docs/customer-self-service-paper-demo-roadmap.md`.
+tracked in `docs/customer-self-service-paper-demo-roadmap.md`; the local launcher
+is documented in `docs/customer-self-service-local-demo-launcher.md`.
 
 ### Audit and Observability
 

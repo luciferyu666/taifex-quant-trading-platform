@@ -190,7 +190,7 @@ export const dashboardCopy = {
       commandsKicker: "Local setup",
       commandsTitle: "Commands for actual paper records",
       commandsText:
-        "Run these locally when a reviewer needs to see persisted paper records in the Command Center. These commands do not enable live trading or connect brokers.",
+        "Run the one-command launcher locally when a reviewer needs to see persisted paper records in the Command Center. The manual fallback remains available. These commands do not enable live trading or connect brokers.",
       copyCommands: "Copy local demo commands",
       copied: "Local demo commands copied.",
       copyFailed: "Copy failed. Copy the commands manually.",
@@ -1323,7 +1323,7 @@ export const dashboardCopy = {
       commandsKicker: "本地設定",
       commandsTitle: "檢視實際 paper records 的指令",
       commandsText:
-        "Reviewer 需要在 Command Center 檢視已持久化紙上紀錄時，請在本機執行這些指令。這些指令不會啟用實盤，也不會連接券商。",
+        "Reviewer 需要在 Command Center 檢視已持久化紙上紀錄時，請優先在本機執行一鍵 launcher；也保留手動 fallback。這些指令不會啟用實盤，也不會連接券商。",
       copyCommands: "複製本地 demo 指令",
       copied: "已複製本地 demo 指令。",
       copyFailed: "複製失敗，請手動複製指令。",

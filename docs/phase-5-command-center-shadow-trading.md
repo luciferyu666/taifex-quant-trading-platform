@@ -108,8 +108,9 @@ Expose roadmap phase status, contracts, safety mode, risk status, and paper-only
 - Local Backend Demo Mode must clearly distinguish production Vercel fallback /
   local JSON evidence inspection from actual local paper record querying through
   a local backend.
-- Local Backend Demo Mode must show the local commands needed to run backend,
-  frontend, demo seed, and persistence verification without enabling live trading.
+- Local Backend Demo Mode must show `make launch-self-service-paper-demo` plus
+  the manual fallback commands needed to run backend, frontend, demo seed, and
+  persistence verification without enabling live trading.
 - Deployment Data Boundary must show `PRODUCTION_SQLITE_ACCESS=false` and
   `LOCAL_BACKEND_REQUIRED_FOR_RECORDS=true`.
 - `make local-backend-demo-browser-drill` must verify the complete seeded local

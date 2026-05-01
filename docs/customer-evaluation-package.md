@@ -59,6 +59,8 @@ Customers may evaluate:
     asking customers to inspect actual paper records.
   - The self-service productization path is tracked in
     [customer-self-service-paper-demo-roadmap.md](customer-self-service-paper-demo-roadmap.md).
+  - The one-command local launcher is documented in
+    [customer-self-service-local-demo-launcher.md](customer-self-service-local-demo-launcher.md).
 - Paper OMS reliability metadata review:
   - local idempotency key count
   - completed local outbox metadata

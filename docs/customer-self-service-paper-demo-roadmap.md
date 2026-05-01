@@ -73,6 +73,8 @@ Acceptance criteria:
 Existing commands that support this track:
 
 ```bash
+make launch-self-service-paper-demo
+make self-service-paper-demo-launcher-check
 make frontend-local-backend-demo-check
 make local-backend-demo-browser-drill
 make seed-paper-execution-demo
@@ -160,5 +162,19 @@ validates dependencies, creates a temporary paper-only SQLite path, seeds a safe
 record, starts local services, and prints browser URLs. It must not deploy a
 hosted backend, expose local SQLite to Production Vercel, connect brokers, or
 enable live trading.
+
+Implemented launcher:
+
+```bash
+make launch-self-service-paper-demo
+```
+
+The check-only gate is:
+
+```bash
+make self-service-paper-demo-launcher-check
+```
+
+See [customer-self-service-local-demo-launcher.md](customer-self-service-local-demo-launcher.md).
 
 Live trading remains disabled by default.

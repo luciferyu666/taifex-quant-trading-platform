@@ -250,6 +250,7 @@ requireNotContains("Deployment data boundary panel does not collect certificates
 requireContains("Local backend demo component is implemented", sourceByFile.localBackendMode, "LocalBackendDemoModePanel");
 requireContains("Local backend demo panel states Vercel SQLite boundary", sourceByFile.i18n, "cannot directly read your local SQLite");
 requireContains("Local backend demo panel states Chinese Vercel SQLite boundary", sourceByFile.i18n, "無法直接讀取你的本機 SQLite");
+requireContains("Local backend demo panel exposes one-command launcher", sourceByFile.localBackendMode, "make launch-self-service-paper-demo");
 requireContains("Local backend demo panel exposes backend command", sourceByFile.localBackendMode, "make backend");
 requireContains("Local backend demo panel exposes frontend command", sourceByFile.localBackendMode, "make frontend");
 requireContains("Local backend demo panel exposes demo seed command", sourceByFile.localBackendMode, "make seed-paper-execution-demo");
