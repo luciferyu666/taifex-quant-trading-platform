@@ -1858,6 +1858,87 @@ Paper audit integrity evidence viewer scope:
 - No broker SDK is called.
 - Live trading remains disabled by default.
 
+## Hosted Paper Readiness Panel Verification
+
+Verification time:
+
+```text
+2026-05-01 14:24:38 CST (+0800)
+```
+
+Commit:
+
+```text
+e327a1f Add hosted paper readiness panel
+```
+
+GitHub Actions:
+
+```text
+Workflow: Release Readiness
+Run ID: 25204508687
+Status: passed
+```
+
+Vercel deployment:
+
+```text
+Deployment URL: https://taifex-quant-trading-platform-frontend-lcjaizc0z.vercel.app
+Deployment ID: dpl_4VsYDMBaeDYbPULu4FYUeL3hU6dA
+Production alias: https://taifex-quant-trading-platform-front.vercel.app
+Status: Ready
+```
+
+Validation commands:
+
+```bash
+make frontend-i18n-check
+cd frontend && npm run typecheck
+cd frontend && npm run build
+cd backend && .venv/bin/python -m pytest tests/test_hosted_paper_readiness_routes.py
+make hosted-paper-api-readiness-check
+make check
+make frontend-production-smoke-check
+```
+
+Observed result:
+
+```text
+All listed checks passed. Release Readiness CI passed on run 25204508687.
+Production smoke gate confirmed deployment id
+dpl_4VsYDMBaeDYbPULu4FYUeL3hU6dA and required safety copy on English and
+Traditional Chinese pages.
+```
+
+Hosted Paper Readiness Panel scope:
+
+- Added `frontend/app/components/HostedPaperReadinessPanel.tsx`.
+- Web Command Center Release tab now displays
+  `GET /api/hosted-paper/readiness`.
+- The panel shows hosted backend status, hosted datastore status, customer
+  login status, RBAC/ABAC status, paper workflow online status, and local demo
+  mode primary status.
+- The panel shows safety defaults:
+  `TRADING_MODE=paper`, `ENABLE_LIVE_TRADING=false`, and
+  `BROKER_PROVIDER=paper`.
+- The panel shows safety flags:
+  `paper_only=true`, `live_trading_enabled=false`,
+  `broker_api_called=false`, `order_created=false`,
+  `database_written=false`, `external_db_written=false`,
+  `broker_credentials_collected=false`, and
+  `production_trading_ready=false`.
+- The panel clearly states that hosted paper backend/API mode is not enabled.
+- The panel states that actual paper records still require local backend +
+  local SQLite, while Production Vercel remains read-only for UI, fallback
+  samples, and explicit local JSON evidence.
+- The panel is read-only. It does not authenticate users, write databases,
+  create hosted records, create approval requests, submit paper workflows, call
+  Risk Engine mutation paths, call OMS mutation paths, call Broker Gateway, call
+  broker SDKs, collect credentials, expose live controls, or imply that hosted
+  paper mode is enabled.
+- No broker SDK is called.
+- Live trading remains disabled by default.
+
 ## Marketing Website Reachability
 
 Command:
