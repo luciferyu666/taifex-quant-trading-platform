@@ -112,6 +112,7 @@ The current implemented endpoints are:
 
 ```text
 GET /api/hosted-paper/readiness
+GET /api/hosted-paper/identity-readiness
 GET /api/hosted-paper/session
 GET /api/hosted-paper/tenants/current
 ```
@@ -129,6 +130,12 @@ GET /api/hosted-paper/tenants/current
 It does not authenticate users, write records, create orders, call Risk Engine,
 call OMS, call Broker Gateway, call broker SDKs, collect credentials, or enable
 live trading.
+
+`GET /api/hosted-paper/identity-readiness` returns read-only metadata showing
+that real reviewer login, customer accounts, formal RBAC/ABAC enforcement, and
+tenant isolation are not enabled. It is a schema-only readiness contract; it
+does not issue sessions, create tenants, write hosted records, collect
+credentials, call brokers, create orders, or enable live trading.
 
 `GET /api/hosted-paper/session` and
 `GET /api/hosted-paper/tenants/current` return mock read-only contract metadata

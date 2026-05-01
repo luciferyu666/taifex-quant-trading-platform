@@ -3,6 +3,10 @@ from typing import Annotated
 from fastapi import APIRouter, Depends
 
 from app.core.config import Settings, get_settings
+from app.domain.hosted_paper_identity import (
+    HostedPaperIdentityReadinessResponse,
+    get_hosted_paper_identity_readiness,
+)
 from app.domain.hosted_paper_readiness import (
     HostedPaperReadinessResponse,
     get_hosted_paper_readiness,
@@ -30,3 +34,13 @@ def hosted_paper_mock_session(settings: SettingsDep) -> HostedPaperMockSessionRe
 @router.get("/tenants/current", response_model=HostedPaperTenantContext)
 def hosted_paper_current_tenant(settings: SettingsDep) -> HostedPaperTenantContext:
     return get_hosted_paper_mock_session(settings).tenant
+
+
+@router.get(
+    "/identity-readiness",
+    response_model=HostedPaperIdentityReadinessResponse,
+)
+def hosted_paper_identity_readiness(
+    settings: SettingsDep,
+) -> HostedPaperIdentityReadinessResponse:
+    return get_hosted_paper_identity_readiness(settings)

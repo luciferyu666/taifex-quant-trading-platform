@@ -13,13 +13,16 @@ The current implemented hosted paper endpoints are:
 
 ```text
 GET /api/hosted-paper/readiness
+GET /api/hosted-paper/identity-readiness
 GET /api/hosted-paper/session
 GET /api/hosted-paper/tenants/current
 ```
 
 These endpoints are read-only. The readiness endpoint reports that hosted paper
-mode is not enabled. The session and tenant endpoints return mock contract
-metadata only; they do not authenticate users or create hosted sessions.
+mode is not enabled. The identity readiness endpoint reports that real reviewer
+login, customer accounts, formal RBAC/ABAC, and tenant isolation are schema-only
+and not enabled. The session and tenant endpoints return mock contract metadata
+only; they do not authenticate users or create hosted sessions.
 
 ## Current Posture
 
@@ -149,15 +152,23 @@ hosted authorization system yet.
 The current mock contract endpoints are:
 
 ```text
+GET /api/hosted-paper/identity-readiness
 GET /api/hosted-paper/session
 GET /api/hosted-paper/tenants/current
 ```
+
+`GET /api/hosted-paper/identity-readiness` returns read-only readiness metadata
+for future reviewer login, customer accounts, RBAC/ABAC, and tenant isolation.
+It does not create reviewer login, customer accounts, session cookies, tenant
+records, RBAC enforcement, ABAC enforcement, hosted datastore writes, broker
+calls, orders, credential collection, or live trading.
 
 They return schema samples for future session, tenant, roles, and permissions.
 They do not issue session cookies, write hosted datastore records, create paper
 workflow records, collect credentials, call brokers, or enable live trading.
 
 See [hosted-paper-mock-session-contract.md](hosted-paper-mock-session-contract.md).
+See [hosted-paper-identity-rbac-tenant-readiness.md](hosted-paper-identity-rbac-tenant-readiness.md).
 The Web Command Center may display this mock metadata as a read-only panel only.
 That UI must not create login buttons, hosted sessions, credential forms,
 database writes, broker calls, or paper workflow mutations.

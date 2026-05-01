@@ -202,6 +202,7 @@ The current backend also exposes a read-only readiness response:
 
 ```text
 GET /api/hosted-paper/readiness
+GET /api/hosted-paper/identity-readiness
 GET /api/hosted-paper/session
 GET /api/hosted-paper/tenants/current
 ```
@@ -210,5 +211,8 @@ The readiness endpoint reports that hosted paper backend/API mode is not enabled
 yet and that actual paper workflow records still require local backend + local
 SQLite demo mode. The session and tenant endpoints are read-only mock contract
 samples; they do not create hosted sessions or write hosted records.
+The identity readiness endpoint is also read-only; it states that real reviewer
+login, customer accounts, RBAC/ABAC enforcement, and tenant isolation are not
+enabled yet.
 
 Live trading remains disabled by default.

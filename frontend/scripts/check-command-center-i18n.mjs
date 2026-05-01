@@ -9,6 +9,8 @@ const files = {
   commandTabs: "frontend/app/components/CommandCenterTabs.tsx",
   deploymentDataBoundary: "frontend/app/components/DeploymentDataBoundaryPanel.tsx",
   hostedPaperReadiness: "frontend/app/components/HostedPaperReadinessPanel.tsx",
+  hostedPaperIdentityReadiness:
+    "frontend/app/components/HostedPaperIdentityReadinessPanel.tsx",
   hostedPaperSession: "frontend/app/components/HostedPaperMockSessionPanel.tsx",
   hostedPaperTenantEvidence:
     "frontend/app/components/HostedPaperTenantBoundaryEvidencePanel.tsx",
@@ -271,6 +273,31 @@ requireNotContains("Hosted paper readiness panel does not call paper approval mu
 requireNotContains("Hosted paper readiness panel does not collect API keys", sourceByFile.hostedPaperReadiness.toLowerCase(), "api_key");
 requireNotContains("Hosted paper readiness panel does not collect account IDs", sourceByFile.hostedPaperReadiness.toLowerCase(), "account_id");
 requireNotContains("Hosted paper readiness panel does not collect certificates", sourceByFile.hostedPaperReadiness.toLowerCase(), "certificate");
+requireContains("English hosted paper identity readiness copy exists", sourceByFile.i18n, "Identity, RBAC, and tenant readiness");
+requireContains("Traditional Chinese hosted paper identity readiness copy exists", sourceByFile.i18n, "Identity、RBAC 與 tenant readiness");
+requireContains("Hosted paper identity readiness component is implemented", sourceByFile.hostedPaperIdentityReadiness, "HostedPaperIdentityReadinessPanel");
+requireContains("Hosted paper identity readiness endpoint is fetched on page", sourceByFile.page, "/api/hosted-paper/identity-readiness");
+requireContains("Hosted paper identity readiness panel is mounted on page", sourceByFile.page, "HostedPaperIdentityReadinessPanel");
+requireContains("Hosted paper identity readiness panel shows reviewer login status", sourceByFile.hostedPaperIdentityReadiness, "reviewer_login_enabled");
+requireContains("Hosted paper identity readiness panel shows customer account status", sourceByFile.hostedPaperIdentityReadiness, "customer_accounts_enabled");
+requireContains("Hosted paper identity readiness panel shows auth provider status", sourceByFile.hostedPaperIdentityReadiness, "authentication_provider");
+requireContains("Hosted paper identity readiness panel shows session cookie status", sourceByFile.hostedPaperIdentityReadiness, "session_cookie_issued");
+requireContains("Hosted paper identity readiness panel shows RBAC status", sourceByFile.hostedPaperIdentityReadiness, "rbac_enabled");
+requireContains("Hosted paper identity readiness panel shows ABAC status", sourceByFile.hostedPaperIdentityReadiness, "abac_enabled");
+requireContains("Hosted paper identity readiness panel shows mutation permission status", sourceByFile.hostedPaperIdentityReadiness, "mutation_permissions_granted");
+requireContains("Hosted paper identity readiness panel shows tenant isolation requirement", sourceByFile.hostedPaperIdentityReadiness, "tenant_isolation_required");
+requireContains("Hosted paper identity readiness panel shows tenant isolation enforcement", sourceByFile.hostedPaperIdentityReadiness, "tenant_isolation_enforced");
+requireContains("Hosted paper identity readiness panel shows Production Vercel SQLite boundary", sourceByFile.hostedPaperIdentityReadiness, "local_sqlite_access_from_production_vercel");
+requireContains("Hosted paper identity readiness panel shows safety defaults", sourceByFile.hostedPaperIdentityReadiness, "TRADING_MODE");
+requireContains("Hosted paper identity readiness panel shows live disabled flag", sourceByFile.hostedPaperIdentityReadiness, "ENABLE_LIVE_TRADING");
+requireContains("Hosted paper identity readiness panel shows paper broker provider", sourceByFile.hostedPaperIdentityReadiness, "BROKER_PROVIDER");
+requireContains("Hosted paper identity readiness panel shows production readiness flag", sourceByFile.hostedPaperIdentityReadiness, "production_trading_ready");
+requireNotContains("Hosted paper identity readiness panel does not fetch directly", sourceByFile.hostedPaperIdentityReadiness, "fetch(");
+requireNotContains("Hosted paper identity readiness panel does not call workflow record", sourceByFile.hostedPaperIdentityReadiness, "/api/paper-execution/workflow/record");
+requireNotContains("Hosted paper identity readiness panel does not call paper approval mutations", sourceByFile.hostedPaperIdentityReadiness, "/api/paper-execution/approvals/requests");
+requireNotContains("Hosted paper identity readiness panel does not collect API keys", sourceByFile.hostedPaperIdentityReadiness.toLowerCase(), "api_key");
+requireNotContains("Hosted paper identity readiness panel does not collect account IDs", sourceByFile.hostedPaperIdentityReadiness.toLowerCase(), "account_id");
+requireNotContains("Hosted paper identity readiness panel does not collect certificates", sourceByFile.hostedPaperIdentityReadiness.toLowerCase(), "certificate");
 requireContains("English hosted paper session copy exists", sourceByFile.i18n, "Mock session and tenant contract");
 requireContains("Traditional Chinese hosted paper session copy exists", sourceByFile.i18n, "Mock session 與 tenant contract");
 requireContains("Hosted paper mock session component is implemented", sourceByFile.hostedPaperSession, "HostedPaperMockSessionPanel");

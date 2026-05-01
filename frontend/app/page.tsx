@@ -15,6 +15,10 @@ import {
   type HostedPaperReadiness,
 } from "./components/HostedPaperReadinessPanel";
 import {
+  HostedPaperIdentityReadinessPanel,
+  type HostedPaperIdentityReadiness,
+} from "./components/HostedPaperIdentityReadinessPanel";
+import {
   HostedPaperMockSessionPanel,
   type HostedPaperMockSession,
   type HostedPaperTenantContext,
@@ -479,6 +483,113 @@ const fallbackHostedPaperTenant: HostedPaperTenantContext = {
   broker_provider: "paper",
 };
 
+const fallbackHostedPaperIdentityReadiness: HostedPaperIdentityReadiness = {
+  service: "hosted-paper-identity-rbac-tenant-readiness",
+  readiness_state: "schema_only_not_enabled",
+  summary:
+    "Hosted paper identity, reviewer login, customer accounts, formal RBAC/ABAC, and tenant isolation are schema-only readiness metadata. They are not enabled and do not create hosted sessions or tenant records.",
+  identity: {
+    reviewer_login_enabled: false,
+    customer_accounts_enabled: false,
+    authentication_provider: "none",
+    session_issuance_enabled: false,
+    session_cookie_issued: false,
+    mfa_enabled: false,
+  },
+  access_control: {
+    rbac_enabled: false,
+    abac_enabled: false,
+    roles_defined: [
+      "viewer",
+      "research_reviewer",
+      "risk_reviewer",
+      "paper_operator",
+      "tenant_admin",
+    ],
+    permissions_defined: [
+      "read_hosted_readiness",
+      "read_mock_session",
+      "read_current_tenant",
+      "read_tenant_paper_records",
+      "create_paper_approval_request",
+      "record_paper_reviewer_decision",
+      "submit_approved_paper_workflow",
+      "enable_live_trading",
+      "upload_broker_credentials",
+    ],
+    mutation_permissions_granted: false,
+    live_permissions_granted: false,
+    dual_review_required_for_future: true,
+  },
+  tenant_isolation: {
+    tenant_isolation_required: true,
+    tenant_isolation_enforced: false,
+    hosted_tenant_datastore_enabled: false,
+    hosted_tenant_records_enabled: false,
+    tenant_created: false,
+    local_sqlite_access_from_production_vercel: false,
+  },
+  safety_defaults: {
+    trading_mode: "paper",
+    enable_live_trading: false,
+    broker_provider: "paper",
+  },
+  safety_flags: {
+    paper_only: true,
+    read_only: true,
+    live_trading_enabled: false,
+    broker_provider: "paper",
+    broker_api_called: false,
+    order_created: false,
+    credentials_collected: false,
+    broker_credentials_collected: false,
+    hosted_auth_provider_enabled: false,
+    reviewer_login_created: false,
+    customer_account_created: false,
+    session_cookie_issued: false,
+    hosted_datastore_written: false,
+    external_db_written: false,
+    rbac_abac_enforced: false,
+    tenant_isolation_enforced: false,
+    production_trading_ready: false,
+  },
+  current_customer_path: [
+    "Use Production Vercel for read-only UI, fallback samples, and local JSON evidence viewers.",
+    "Use local backend + local SQLite for actual paper approval, OMS, and audit records.",
+    "Use exported evidence files for reviewer/customer handoff until hosted identity exists.",
+  ],
+  blocked_until_identity_layer: [
+    "Real reviewer login.",
+    "Customer account onboarding.",
+    "Tenant-scoped hosted paper workspace.",
+    "Hosted approval queue mutations.",
+    "Hosted paper workflow submission.",
+    "Hosted tenant paper record queries backed by a managed datastore.",
+  ],
+  future_requirements: [
+    "Choose and review a hosted authentication provider.",
+    "Define session issuance, expiry, rotation, and logout behavior.",
+    "Implement tenant-scoped account and membership records.",
+    "Enforce RBAC for reviewer and paper operator actions.",
+    "Enforce ABAC for paper-only mode, tenant scope, environment, and approval state.",
+    "Add dual-review rules before any hosted paper workflow submission.",
+    "Add audit trail for identity, authorization, and tenant-boundary decisions.",
+    "Complete security and operations review before customer pilot.",
+  ],
+  docs: {
+    hosted_paper_auth_boundary: "docs/hosted-paper-auth-boundary-spec.md",
+    hosted_paper_mock_session: "docs/hosted-paper-mock-session-contract.md",
+    hosted_paper_readiness: "docs/hosted-paper-backend-api-readiness.md",
+    paper_shadow_live_boundary: "docs/paper-shadow-live-boundary.md",
+  },
+  warnings: [
+    "This endpoint is read-only identity readiness metadata only.",
+    "It does not create reviewer login, customer accounts, sessions, tenant records, or RBAC/ABAC enforcement.",
+    "It does not enable live trading, write databases, collect credentials, call brokers, or create orders.",
+    "Production Trading Platform remains NOT READY.",
+  ],
+};
+
 const fallbackHostedPaperMockSession: HostedPaperMockSession = {
   service: "hosted-paper-mock-session-contract",
   contract_state: "mock_read_only",
@@ -735,6 +846,7 @@ export default async function Home({ searchParams }: HomeProps) {
     paperApprovalHistory,
     releaseBaseline,
     hostedPaperReadiness,
+    hostedPaperIdentityReadiness,
     hostedPaperMockSession,
     hostedPaperTenant,
     reviewPacket,
@@ -793,6 +905,10 @@ export default async function Home({ searchParams }: HomeProps) {
       fetchJson<HostedPaperReadiness>(
         "/api/hosted-paper/readiness",
         fallbackHostedPaperReadiness,
+      ),
+      fetchJson<HostedPaperIdentityReadiness>(
+        "/api/hosted-paper/identity-readiness",
+        fallbackHostedPaperIdentityReadiness,
       ),
       fetchJson<HostedPaperMockSession>(
         "/api/hosted-paper/session",
@@ -977,6 +1093,16 @@ export default async function Home({ searchParams }: HomeProps) {
               copy={copy.hostedPaperReadiness}
               error={hostedPaperReadiness.available ? undefined : hostedPaperReadiness.error}
               readiness={hostedPaperReadiness.data}
+            />
+            <HostedPaperIdentityReadinessPanel
+              available={hostedPaperIdentityReadiness.available}
+              copy={copy.hostedPaperIdentityReadiness}
+              error={
+                hostedPaperIdentityReadiness.available
+                  ? undefined
+                  : hostedPaperIdentityReadiness.error
+              }
+              readiness={hostedPaperIdentityReadiness.data}
             />
             <HostedPaperMockSessionPanel
               available={hostedPaperMockSession.available && hostedPaperTenant.available}

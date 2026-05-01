@@ -101,6 +101,7 @@ for required_file in \
   docs/customer-self-service-local-demo-launcher.md \
   docs/hosted-paper-backend-api-readiness.md \
   docs/hosted-paper-auth-boundary-spec.md \
+  docs/hosted-paper-identity-rbac-tenant-readiness.md \
   docs/hosted-paper-mock-session-contract.md \
   docs/hosted-paper-tenant-boundary-evidence-export.md \
   docs/paper-simulation-submit-verification.md \
@@ -111,6 +112,7 @@ for required_file in \
   scripts/launch-self-service-paper-demo.sh \
   scripts/hosted-paper-api-readiness-check.sh \
   scripts/hosted-paper-auth-boundary-check.sh \
+  scripts/hosted-paper-identity-readiness-check.sh \
   scripts/hosted-paper-mock-session-check.sh \
   scripts/export-hosted-paper-tenant-boundary-evidence.py \
   frontend/scripts/check-paper-approval-ui-flow.mjs; do
@@ -145,6 +147,11 @@ if [[ ! -x scripts/hosted-paper-auth-boundary-check.sh ]]; then
   missing_customer_eval_file=1
 fi
 
+if [[ ! -x scripts/hosted-paper-identity-readiness-check.sh ]]; then
+  printf 'scripts/hosted-paper-identity-readiness-check.sh must be executable.\n' >&2
+  missing_customer_eval_file=1
+fi
+
 if [[ ! -x scripts/hosted-paper-mock-session-check.sh ]]; then
   printf 'scripts/hosted-paper-mock-session-check.sh must be executable.\n' >&2
   missing_customer_eval_file=1
@@ -159,6 +166,7 @@ bash scripts/self-service-paper-demo-check.sh
 bash scripts/launch-self-service-paper-demo.sh --check-only
 bash scripts/hosted-paper-api-readiness-check.sh
 bash scripts/hosted-paper-auth-boundary-check.sh
+bash scripts/hosted-paper-identity-readiness-check.sh
 bash scripts/hosted-paper-mock-session-check.sh
 
 printf 'Checking Facebook community launch content...\n'
@@ -206,6 +214,7 @@ for required_file in \
   backend/app/domain/audit_integrity.py \
   backend/app/domain/paper_oms_reliability.py \
   backend/app/domain/paper_risk_state.py \
+  backend/app/domain/hosted_paper_identity.py \
   backend/app/domain/hosted_paper_session.py \
   backend/app/domain/exposure.py \
   backend/app/services/risk_engine.py \

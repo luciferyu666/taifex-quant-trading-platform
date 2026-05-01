@@ -351,6 +351,17 @@ This boundary must not be bypassed by attempting to expose local SQLite directly
 from production Vercel. Future hosted API work requires separate architecture,
 identity, RBAC/ABAC, audit, data governance, and operational review.
 
+The current hosted paper identity readiness endpoint is read-only only:
+
+```text
+GET /api/hosted-paper/identity-readiness
+```
+
+It exists to show that real reviewer login, customer accounts, formal RBAC/ABAC
+enforcement, and tenant isolation are not enabled yet. It must not be treated as
+production identity, customer onboarding, hosted tenancy, or authorization
+enforcement.
+
 ## Shadow
 
 Shadow trading is a future validation stage. It may observe live-like data and theoretical orders, but it must not submit broker-bound orders.

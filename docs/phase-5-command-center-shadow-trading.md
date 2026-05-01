@@ -64,6 +64,10 @@ Expose roadmap phase status, contracts, safety mode, risk status, and paper-only
   `GET /api/hosted-paper/readiness` and displays hosted backend status,
   hosted datastore status, customer login status, local demo primary status,
   paper-only safety defaults, and future hosted requirements.
+- Hosted Paper Identity / RBAC / Tenant Readiness panel that reads
+  `GET /api/hosted-paper/identity-readiness` and displays that real reviewer
+  login, customer accounts, formal RBAC/ABAC enforcement, and tenant isolation
+  are schema-only and not enabled.
 - Hosted Paper Mock Session panel that reads `GET /api/hosted-paper/session`
   and `GET /api/hosted-paper/tenants/current`, then displays mock session,
   tenant context, future RBAC roles, permission schema, denied mutation
@@ -132,6 +136,12 @@ Expose roadmap phase status, contracts, safety mode, risk status, and paper-only
 - Hosted Paper API Readiness panel must show that hosted paper backend/API mode
   is not enabled, customer login is not enabled, hosted datastore is not enabled,
   and local backend + local SQLite remain the path for actual paper records.
+- Hosted Paper Identity / RBAC / Tenant Readiness panel must show
+  `reviewer_login_enabled=false`, `customer_accounts_enabled=false`,
+  `authentication_provider=none`, `session_cookie_issued=false`,
+  `rbac_enabled=false`, `abac_enabled=false`,
+  `tenant_isolation_required=true`, `tenant_isolation_enforced=false`, and
+  `local_sqlite_access_from_production_vercel=false`.
 - Hosted Paper API Readiness panel must keep `TRADING_MODE=paper`,
   `ENABLE_LIVE_TRADING=false`, `BROKER_PROVIDER=paper`,
   `broker_api_called=false`, `order_created=false`, and
@@ -208,6 +218,11 @@ Expose roadmap phase status, contracts, safety mode, risk status, and paper-only
   write databases, create paper records, submit approval requests, submit paper
   workflows, call brokers, collect credentials, expose live controls, or imply
   that hosted paper mode is enabled.
+- The Hosted Paper Identity / RBAC / Tenant Readiness panel is a read-only
+  status surface. It may display `GET /api/hosted-paper/identity-readiness`, but
+  it must not create login flows, customer accounts, session cookies, tenant
+  records, RBAC/ABAC enforcement, hosted datastore writes, broker calls,
+  credential collection, paper workflow mutations, or live controls.
 - The Hosted Paper Mock Session panel is a read-only contract surface. It may
   display `GET /api/hosted-paper/session` and
   `GET /api/hosted-paper/tenants/current`, but it must not create login flows,

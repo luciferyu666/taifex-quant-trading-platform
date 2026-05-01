@@ -316,6 +316,112 @@ export const dashboardCopy = {
           "Production Trading Platform remains NOT READY.",
       },
     },
+    hostedPaperIdentityReadiness: {
+      eyebrow: "Hosted Paper Identity",
+      title: "Identity, RBAC, and tenant readiness",
+      description:
+        "Read-only status for future reviewer login, customer accounts, RBAC/ABAC, and tenant isolation. These controls are schema-only and are not enabled.",
+      fallbackPrefix:
+        "Hosted paper identity readiness unavailable. Rendering safe fallback:",
+      endpointLabel: "Read-only endpoint",
+      stateLabel: "Readiness state",
+      identityLabel: "Identity status",
+      accessControlLabel: "Access control status",
+      tenantIsolationLabel: "Tenant isolation status",
+      rolesLabel: "Future roles",
+      blockedLabel: "Blocked until identity exists",
+      futureRequirementsLabel: "Future requirements",
+      safetyDefaultsLabel: "Safety defaults",
+      safetyFlagsLabel: "Safety flags",
+      warningLabel: "Boundary warnings",
+      identityLabels: {
+        reviewer_login_enabled: "Reviewer login enabled",
+        customer_accounts_enabled: "Customer accounts enabled",
+        authentication_provider: "Authentication provider",
+        session_issuance_enabled: "Session issuance enabled",
+        session_cookie_issued: "Session cookie issued",
+        mfa_enabled: "MFA enabled",
+      },
+      accessControlLabels: {
+        rbac_enabled: "RBAC enabled",
+        abac_enabled: "ABAC enabled",
+        mutation_permissions_granted: "Mutation permissions granted",
+        live_permissions_granted: "Live permissions granted",
+      },
+      tenantLabels: {
+        tenant_isolation_required: "Tenant isolation required",
+        tenant_isolation_enforced: "Tenant isolation enforced",
+        hosted_tenant_datastore_enabled: "Hosted tenant datastore enabled",
+        hosted_tenant_records_enabled: "Hosted tenant records enabled",
+        tenant_created: "Tenant created",
+        local_sqlite_access_from_production_vercel:
+          "Local SQLite access from Production Vercel",
+      },
+      roleLabels: {
+        viewer: "Viewer",
+        research_reviewer: "Research reviewer",
+        risk_reviewer: "Risk reviewer",
+        paper_operator: "Paper operator",
+        tenant_admin: "Tenant admin",
+      },
+      blockedLabels: {
+        "Real reviewer login.": "Real reviewer login.",
+        "Customer account onboarding.": "Customer account onboarding.",
+        "Tenant-scoped hosted paper workspace.":
+          "Tenant-scoped hosted paper workspace.",
+        "Hosted approval queue mutations.": "Hosted approval queue mutations.",
+        "Hosted paper workflow submission.": "Hosted paper workflow submission.",
+        "Hosted tenant paper record queries backed by a managed datastore.":
+          "Hosted tenant paper record queries backed by a managed datastore.",
+      },
+      futureRequirementLabels: {
+        "Choose and review a hosted authentication provider.":
+          "Choose and review a hosted authentication provider.",
+        "Define session issuance, expiry, rotation, and logout behavior.":
+          "Define session issuance, expiry, rotation, and logout behavior.",
+        "Implement tenant-scoped account and membership records.":
+          "Implement tenant-scoped account and membership records.",
+        "Enforce RBAC for reviewer and paper operator actions.":
+          "Enforce RBAC for reviewer and paper operator actions.",
+        "Enforce ABAC for paper-only mode, tenant scope, environment, and approval state.":
+          "Enforce ABAC for paper-only mode, tenant scope, environment, and approval state.",
+        "Add dual-review rules before any hosted paper workflow submission.":
+          "Add dual-review rules before any hosted paper workflow submission.",
+        "Add audit trail for identity, authorization, and tenant-boundary decisions.":
+          "Add audit trail for identity, authorization, and tenant-boundary decisions.",
+        "Complete security and operations review before customer pilot.":
+          "Complete security and operations review before customer pilot.",
+      },
+      safetyFlagLabels: {
+        paper_only: "paper_only",
+        read_only: "read_only",
+        live_trading_enabled: "live_trading_enabled",
+        broker_provider: "broker_provider",
+        broker_api_called: "broker_api_called",
+        order_created: "order_created",
+        credentials_collected: "credentials_collected",
+        broker_credentials_collected: "broker_credentials_collected",
+        hosted_auth_provider_enabled: "hosted_auth_provider_enabled",
+        reviewer_login_created: "reviewer_login_created",
+        customer_account_created: "customer_account_created",
+        session_cookie_issued: "session_cookie_issued",
+        hosted_datastore_written: "hosted_datastore_written",
+        external_db_written: "external_db_written",
+        rbac_abac_enforced: "rbac_abac_enforced",
+        tenant_isolation_enforced: "tenant_isolation_enforced",
+        production_trading_ready: "production_trading_ready",
+      },
+      warningLabels: {
+        "This endpoint is read-only identity readiness metadata only.":
+          "This endpoint is read-only identity readiness metadata only.",
+        "It does not create reviewer login, customer accounts, sessions, tenant records, or RBAC/ABAC enforcement.":
+          "It does not create reviewer login, customer accounts, sessions, tenant records, or RBAC/ABAC enforcement.",
+        "It does not enable live trading, write databases, collect credentials, call brokers, or create orders.":
+          "It does not enable live trading, write databases, collect credentials, call brokers, or create orders.",
+        "Production Trading Platform remains NOT READY.":
+          "Production Trading Platform remains NOT READY.",
+      },
+    },
     hostedPaperSession: {
       eyebrow: "Hosted Paper Session",
       title: "Mock session and tenant contract",
@@ -1715,6 +1821,112 @@ export const dashboardCopy = {
           "此 endpoint 只是只讀 readiness metadata，不是 hosted paper backend。",
         "It does not authenticate users, write records, call brokers, create orders, or turn live trading on.":
           "它不驗證使用者、不寫入 records、不呼叫券商、不建立訂單，也不啟用實盤交易。",
+        "Production Trading Platform remains NOT READY.":
+          "Production Trading Platform 仍為 NOT READY。",
+      },
+    },
+    hostedPaperIdentityReadiness: {
+      eyebrow: "Hosted Paper Identity",
+      title: "Identity、RBAC 與 tenant readiness",
+      description:
+        "只讀檢視未來 reviewer login、customer accounts、RBAC/ABAC 與 tenant isolation 狀態。這些控制目前只是 schema-only，尚未啟用。",
+      fallbackPrefix:
+        "Hosted paper identity readiness 無法取得，正在顯示安全備援資料：",
+      endpointLabel: "只讀 endpoint",
+      stateLabel: "就緒狀態",
+      identityLabel: "Identity 狀態",
+      accessControlLabel: "Access control 狀態",
+      tenantIsolationLabel: "Tenant isolation 狀態",
+      rolesLabel: "未來 roles",
+      blockedLabel: "Identity layer 建立前不可用",
+      futureRequirementsLabel: "未來必要條件",
+      safetyDefaultsLabel: "安全預設",
+      safetyFlagsLabel: "安全旗標",
+      warningLabel: "邊界警示",
+      identityLabels: {
+        reviewer_login_enabled: "Reviewer login 已啟用",
+        customer_accounts_enabled: "Customer accounts 已啟用",
+        authentication_provider: "Authentication provider",
+        session_issuance_enabled: "Session issuance 已啟用",
+        session_cookie_issued: "Session cookie 已發出",
+        mfa_enabled: "MFA 已啟用",
+      },
+      accessControlLabels: {
+        rbac_enabled: "RBAC 已啟用",
+        abac_enabled: "ABAC 已啟用",
+        mutation_permissions_granted: "Mutation permissions 已授予",
+        live_permissions_granted: "實盤權限已授予",
+      },
+      tenantLabels: {
+        tenant_isolation_required: "需要 tenant isolation",
+        tenant_isolation_enforced: "Tenant isolation 已強制執行",
+        hosted_tenant_datastore_enabled: "Hosted tenant datastore 已啟用",
+        hosted_tenant_records_enabled: "Hosted tenant records 已啟用",
+        tenant_created: "Tenant 已建立",
+        local_sqlite_access_from_production_vercel:
+          "Production Vercel 讀取 local SQLite",
+      },
+      roleLabels: {
+        viewer: "Viewer",
+        research_reviewer: "Research reviewer",
+        risk_reviewer: "Risk reviewer",
+        paper_operator: "Paper operator",
+        tenant_admin: "Tenant admin",
+      },
+      blockedLabels: {
+        "Real reviewer login.": "真實 reviewer login。",
+        "Customer account onboarding.": "Customer account onboarding。",
+        "Tenant-scoped hosted paper workspace.":
+          "Tenant-scoped hosted paper workspace。",
+        "Hosted approval queue mutations.": "Hosted approval queue mutations。",
+        "Hosted paper workflow submission.": "Hosted paper workflow submission。",
+        "Hosted tenant paper record queries backed by a managed datastore.":
+          "由 managed datastore 支撐的 hosted tenant paper record queries。",
+      },
+      futureRequirementLabels: {
+        "Choose and review a hosted authentication provider.":
+          "選擇並審查 hosted authentication provider。",
+        "Define session issuance, expiry, rotation, and logout behavior.":
+          "定義 session issuance、expiry、rotation 與 logout 行為。",
+        "Implement tenant-scoped account and membership records.":
+          "實作 tenant-scoped account 與 membership records。",
+        "Enforce RBAC for reviewer and paper operator actions.":
+          "針對 reviewer 與 paper operator actions 強制 RBAC。",
+        "Enforce ABAC for paper-only mode, tenant scope, environment, and approval state.":
+          "針對 paper-only mode、tenant scope、environment 與 approval state 強制 ABAC。",
+        "Add dual-review rules before any hosted paper workflow submission.":
+          "任何 hosted paper workflow submission 前加入 dual-review rules。",
+        "Add audit trail for identity, authorization, and tenant-boundary decisions.":
+          "為 identity、authorization 與 tenant-boundary decisions 加入 audit trail。",
+        "Complete security and operations review before customer pilot.":
+          "Customer pilot 前完成 security 與 operations review。",
+      },
+      safetyFlagLabels: {
+        paper_only: "paper_only",
+        read_only: "read_only",
+        live_trading_enabled: "live_trading_enabled",
+        broker_provider: "broker_provider",
+        broker_api_called: "broker_api_called",
+        order_created: "order_created",
+        credentials_collected: "credentials_collected",
+        broker_credentials_collected: "broker_credentials_collected",
+        hosted_auth_provider_enabled: "hosted_auth_provider_enabled",
+        reviewer_login_created: "reviewer_login_created",
+        customer_account_created: "customer_account_created",
+        session_cookie_issued: "session_cookie_issued",
+        hosted_datastore_written: "hosted_datastore_written",
+        external_db_written: "external_db_written",
+        rbac_abac_enforced: "rbac_abac_enforced",
+        tenant_isolation_enforced: "tenant_isolation_enforced",
+        production_trading_ready: "production_trading_ready",
+      },
+      warningLabels: {
+        "This endpoint is read-only identity readiness metadata only.":
+          "此 endpoint 只是只讀 identity readiness metadata。",
+        "It does not create reviewer login, customer accounts, sessions, tenant records, or RBAC/ABAC enforcement.":
+          "它不建立 reviewer login、customer accounts、sessions、tenant records，也不強制 RBAC/ABAC。",
+        "It does not enable live trading, write databases, collect credentials, call brokers, or create orders.":
+          "它不啟用實盤交易、不寫資料庫、不收 credentials、不呼叫券商，也不建立訂單。",
         "Production Trading Platform remains NOT READY.":
           "Production Trading Platform 仍為 NOT READY。",
       },

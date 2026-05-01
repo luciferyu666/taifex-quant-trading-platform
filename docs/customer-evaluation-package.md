@@ -193,6 +193,8 @@ A successful customer evaluation should produce:
   `docs/hosted-paper-tenant-boundary-evidence-export.md`
 - Hosted paper tenant boundary evidence viewer:
   Web Command Center read-only local JSON loader
+- Hosted paper identity / RBAC / tenant readiness:
+  `docs/hosted-paper-identity-rbac-tenant-readiness.md`
 - Paper execution demo seed: `scripts/seed-paper-execution-demo.py`
 - Paper demo evidence exporter: `scripts/export-paper-demo-evidence.py`
 - Hosted paper tenant boundary evidence exporter:
