@@ -89,6 +89,8 @@ safe path is to productize one of these modes:
 See [customer-self-service-paper-demo-roadmap.md](customer-self-service-paper-demo-roadmap.md).
 For the implemented one-command local launcher, see
 [customer-self-service-local-demo-launcher.md](customer-self-service-local-demo-launcher.md).
+For future hosted paper backend/API readiness, see
+[hosted-paper-backend-api-readiness.md](hosted-paper-backend-api-readiness.md).
 
 ## Safety Rules
 

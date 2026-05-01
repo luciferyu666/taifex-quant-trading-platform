@@ -61,6 +61,8 @@ Customers may evaluate:
     [customer-self-service-paper-demo-roadmap.md](customer-self-service-paper-demo-roadmap.md).
   - The one-command local launcher is documented in
     [customer-self-service-local-demo-launcher.md](customer-self-service-local-demo-launcher.md).
+  - Hosted paper backend/API readiness is documented in
+    [hosted-paper-backend-api-readiness.md](hosted-paper-backend-api-readiness.md).
 - Paper OMS reliability metadata review:
   - local idempotency key count
   - completed local outbox metadata

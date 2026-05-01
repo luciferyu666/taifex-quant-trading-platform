@@ -101,6 +101,9 @@ Required design gates before implementation:
 - explicit paper/live separation
 - production incident and rollback plan
 
+See [hosted-paper-backend-api-readiness.md](hosted-paper-backend-api-readiness.md)
+for the hosted paper backend/API readiness specification.
+
 Hosted paper backend/API non-goals:
 
 - live broker connectivity
@@ -176,5 +179,11 @@ make self-service-paper-demo-launcher-check
 ```
 
 See [customer-self-service-local-demo-launcher.md](customer-self-service-local-demo-launcher.md).
+
+The future hosted paper API readiness gate is:
+
+```bash
+make hosted-paper-api-readiness-check
+```
 
 Live trading remains disabled by default.

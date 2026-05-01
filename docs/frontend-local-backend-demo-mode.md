@@ -96,5 +96,7 @@ Until that work is complete, local SQLite remains a local demo store only.
 
 For the one-command local launcher, see
 [customer-self-service-local-demo-launcher.md](customer-self-service-local-demo-launcher.md).
+For the hosted paper backend/API readiness boundary, see
+[hosted-paper-backend-api-readiness.md](hosted-paper-backend-api-readiness.md).
 
 Live trading remains disabled by default.
