@@ -2367,6 +2367,98 @@ Refresh scope:
 - Production Trading Platform remains NOT READY.
 - Live trading remains disabled by default.
 
+## Hosted Paper Identity Readiness Record Refresh 3
+
+Verification timestamp:
+
+```text
+2026-05-02 06:45:55 CST (+0800)
+```
+
+Refresh commit:
+
+```text
+e37ec3f Update release verification for hosted paper identity alias refresh
+```
+
+GitHub Actions:
+
+```text
+Workflow: Release Readiness
+Run ID: 25235081161
+Status: passed
+```
+
+Vercel deployment refresh:
+
+```text
+Deployment URL: https://taifex-quant-trading-platform-frontend-di3yg7gx3.vercel.app
+Deployment ID: dpl_BY3FRPcgUU4GxgQCrG19MAzYwWQH
+Production alias: https://taifex-quant-trading-platform-front.vercel.app
+Status: Ready
+```
+
+Validation commands:
+
+```bash
+gh run watch 25235081161 --exit-status
+cd frontend && vercel inspect https://taifex-quant-trading-platform-front.vercel.app
+make frontend-production-smoke-check
+git status --short --branch
+```
+
+Observed result:
+
+```text
+Release Readiness CI passed on run 25235081161.
+Production alias resolved to deployment dpl_BY3FRPcgUU4GxgQCrG19MAzYwWQH.
+Production smoke gate passed and confirmed required safety copy on English and
+Traditional Chinese pages.
+Local git state was clean: ## main...origin/main.
+```
+
+Refresh scope:
+
+- Documentation-only release verification refresh.
+- No application behavior was changed by the refresh commit.
+- The Hosted Paper Identity Readiness panel and API remain read-only metadata
+  surfaces.
+- Real reviewer login, formal RBAC/ABAC enforcement, customer accounts, hosted
+  tenant datastore writes, credential collection, broker API calls, order
+  creation, and live trading remain unavailable.
+- Production Trading Platform remains NOT READY.
+- Live trading remains disabled by default.
+
+## Deployment Refresh Recording Policy
+
+Record-only documentation commits can trigger a new Vercel production
+deployment through GitHub auto-deploy. Chasing each new deployment ID in this
+file creates an infinite loop: update record, push docs, deploy again, update
+record again.
+
+Policy:
+
+- Do not automatically append a new release verification record solely because
+  a documentation-only release record commit produced another deployment.
+- Record new deployment IDs when application behavior changes, when a release
+  candidate is cut, when customer-facing UI or API behavior changes, or when a
+  human reviewer explicitly requests a new verification entry.
+- For routine confirmation after docs-only commits, use:
+
+```bash
+cd frontend && vercel inspect https://taifex-quant-trading-platform-front.vercel.app
+make frontend-production-smoke-check
+git status --short --branch
+```
+
+Current policy baseline:
+
+```text
+Last recursively recorded docs-only deployment: dpl_BY3FRPcgUU4GxgQCrG19MAzYwWQH
+Production Trading Platform: NOT READY
+Live trading: disabled by default
+```
+
 ## Marketing Website Reachability
 
 Command:
