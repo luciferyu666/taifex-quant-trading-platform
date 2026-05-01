@@ -105,7 +105,9 @@ frontend-i18n-check:
 
 frontend-local-backend-demo-check:
 	test -f docs/frontend-local-backend-demo-mode.md
+	test -f docs/production-local-data-boundary.md
 	test -f frontend/app/components/LocalBackendDemoModePanel.tsx
+	test -f frontend/app/components/DeploymentDataBoundaryPanel.tsx
 	node frontend/scripts/check-command-center-i18n.mjs
 	@echo "Frontend local backend demo boundary OK"
 

@@ -196,6 +196,52 @@ export const dashboardCopy = {
       copyFailed: "Copy failed. Copy the commands manually.",
       safetyLabel: "Local backend demo safety flags",
     },
+    deploymentDataBoundary: {
+      eyebrow: "Data Access Boundary",
+      title: "Where actual paper records can be read",
+      description:
+        "Production Vercel, local backend demo mode, and a future hosted API have different data access boundaries. This panel keeps the reviewer path explicit before they inspect OMS or audit records.",
+      canShowLabel: "Can show",
+      requiresLabel: "Requires",
+      cannotDoLabel: "Cannot do",
+      modes: [
+        {
+          kicker: "Production Vercel",
+          title: "Read-only UI and fallback",
+          canShow:
+            "Release status, safety defaults, checked fallback data, and explicit local JSON evidence selected in the browser.",
+          requires:
+            "No backend is required for fallback UI. Local evidence viewing requires the user to choose a local JSON file.",
+          cannotDo:
+            "Cannot directly read local SQLite, call local FastAPI, write databases, create orders, collect credentials, or call brokers.",
+        },
+        {
+          kicker: "Local Backend",
+          title: "Actual local paper records",
+          canShow:
+            "Paper approval requests, paper workflow runs, OMS timelines, audit timelines, risk state, and audit integrity records stored in local SQLite.",
+          requires:
+            "Run FastAPI and Next.js locally with the same PAPER_EXECUTION_AUDIT_DB_PATH, then seed or create Paper Only records.",
+          cannotDo:
+            "Cannot be treated as production OMS, production audit, real broker connectivity, or live readiness.",
+        },
+        {
+          kicker: "Future Hosted API",
+          title: "Governed cloud data path",
+          canShow:
+            "Potential future paper records through an authenticated backend/API and controlled data layer after architecture review.",
+          requires:
+            "Separate work for authentication, RBAC/ABAC, retention, audit integrity, monitoring, and data governance.",
+          cannotDo:
+            "Cannot bypass paper/live separation, cannot expose broker credentials to strategies, and cannot claim production trading readiness.",
+        },
+      ],
+      operatorKicker: "Reviewer rule",
+      operatorTitle: "Use local backend for actual SQLite records",
+      operatorText:
+        "If a customer must see real seeded paper OMS or audit records, use local backend demo mode. Production Vercel should be treated as a read-only presentation surface unless a future controlled backend/API is deployed.",
+      safetyLabel: "Deployment data boundary safety flags",
+    },
     paperExecution: {
       eyebrow: "Paper Execution",
       title: "Paper simulation approval workflow",
@@ -1282,6 +1328,52 @@ export const dashboardCopy = {
       copied: "已複製本地 demo 指令。",
       copyFailed: "複製失敗，請手動複製指令。",
       safetyLabel: "本地後端 demo 安全旗標",
+    },
+    deploymentDataBoundary: {
+      eyebrow: "資料存取邊界",
+      title: "實際 paper records 可讀取的位置",
+      description:
+        "Production Vercel、本地後端 demo 模式與未來 hosted API 具有不同資料存取邊界。此區塊讓 reviewer 在檢視 OMS 或 audit records 前，先確認正確操作路徑。",
+      canShowLabel: "可顯示",
+      requiresLabel: "需要",
+      cannotDoLabel: "不可執行",
+      modes: [
+        {
+          kicker: "Production Vercel",
+          title: "只讀 UI 與 fallback",
+          canShow:
+            "版本狀態、安全預設、已檢查的 fallback 資料，以及使用者在瀏覽器明確選取的本地 JSON evidence。",
+          requires:
+            "Fallback UI 不需要 backend；檢視本地 evidence 時，需要使用者自行選擇本地 JSON 檔。",
+          cannotDo:
+            "不可直接讀取本機 SQLite、不可呼叫本地 FastAPI、不可寫資料庫、不可建立訂單、不可收集憑證，也不可呼叫券商。",
+        },
+        {
+          kicker: "本地 Backend",
+          title: "實際本地 paper records",
+          canShow:
+            "儲存在本地 SQLite 的 paper approval requests、paper workflow runs、OMS timelines、audit timelines、risk state 與 audit integrity records。",
+          requires:
+            "使用同一個 PAPER_EXECUTION_AUDIT_DB_PATH 在本機啟動 FastAPI 與 Next.js，然後 seed 或建立 Paper Only records。",
+          cannotDo:
+            "不可視為 production OMS、production audit、真實券商連線或 live readiness。",
+        },
+        {
+          kicker: "未來 Hosted API",
+          title: "受治理的雲端資料路徑",
+          canShow:
+            "未來可在架構審查後，透過具身份驗證的 backend/API 與受控資料層顯示 paper records。",
+          requires:
+            "需要另行實作 authentication、RBAC/ABAC、retention、audit integrity、monitoring 與 data governance。",
+          cannotDo:
+            "不可繞過 paper/live 分離、不可讓策略接觸券商憑證，也不可宣稱已達正式交易上線標準。",
+        },
+      ],
+      operatorKicker: "Reviewer 規則",
+      operatorTitle: "實際 SQLite records 必須使用本地 backend",
+      operatorText:
+        "若客戶需要看到已 seed 的真實 paper OMS 或 audit records，請使用本地後端 demo 模式。除非未來部署受控 backend/API，Production Vercel 應視為只讀展示介面。",
+      safetyLabel: "部署資料邊界安全旗標",
     },
     paperExecution: {
       eyebrow: "紙上執行",

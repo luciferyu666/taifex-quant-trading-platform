@@ -9,6 +9,7 @@ import {
 } from "./components/PaperApprovalQueuePanel";
 import { CommandCenterTabs } from "./components/CommandCenterTabs";
 import { DemoGuidePanel } from "./components/DemoGuidePanel";
+import { DeploymentDataBoundaryPanel } from "./components/DeploymentDataBoundaryPanel";
 import { LocalBackendDemoModePanel } from "./components/LocalBackendDemoModePanel";
 import type { PaperAuditEventRecord } from "./components/PaperAuditTimelinePanel";
 import { PaperApprovalDecisionPanel } from "./components/PaperApprovalDecisionPanel";
@@ -700,6 +701,7 @@ export default async function Home({ searchParams }: HomeProps) {
               copy={copy.release}
               error={releaseBaseline.available ? undefined : releaseBaseline.error}
             />
+            <DeploymentDataBoundaryPanel copy={copy.deploymentDataBoundary} />
             <LocalBackendDemoModePanel copy={copy.localBackendMode} />
           </>
         }

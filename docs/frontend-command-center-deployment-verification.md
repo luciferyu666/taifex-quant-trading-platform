@@ -179,6 +179,8 @@ Expected production behavior:
 
 - release status, safety defaults, fallback content, and local JSON evidence
   viewers render correctly
+- the Release tab shows the Data Access Boundary matrix for Production Vercel,
+  Local Backend, and Future Hosted API modes
 - paper records from local SQLite may be empty or unavailable
 - actual paper OMS / audit records are displayed only when running local backend
   + local SQLite, or through a future controlled hosted API/data layer

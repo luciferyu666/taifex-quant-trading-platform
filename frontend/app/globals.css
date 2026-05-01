@@ -448,9 +448,90 @@ h3 {
   margin-top: 18px;
 }
 
+.deployment-boundary-panel {
+  display: grid;
+  gap: 16px;
+  margin-top: 18px;
+}
+
 .local-backend-panel .section-heading p:not(.eyebrow) {
   max-width: 920px;
   margin: 10px 0 0;
+  color: var(--muted);
+  line-height: 1.55;
+}
+
+.deployment-boundary-panel .section-heading p:not(.eyebrow) {
+  max-width: 920px;
+  margin: 10px 0 0;
+  color: var(--muted);
+  line-height: 1.55;
+}
+
+.deployment-boundary-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.deployment-boundary-card {
+  min-width: 0;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 18px;
+  background: var(--panel);
+  box-shadow: var(--shadow);
+}
+
+.deployment-boundary-card h3 {
+  margin-bottom: 14px;
+}
+
+.boundary-facts {
+  display: grid;
+  gap: 10px;
+  margin: 0;
+}
+
+.boundary-facts div {
+  display: grid;
+  gap: 4px;
+  border: 1px solid rgba(15, 23, 42, 0.1);
+  border-radius: 8px;
+  padding: 10px;
+  background: rgba(15, 23, 42, 0.03);
+}
+
+.boundary-facts dt {
+  color: var(--blue);
+  font-size: 0.76rem;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.boundary-facts dd {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.88rem;
+  line-height: 1.45;
+}
+
+.boundary-callout {
+  display: grid;
+  gap: 12px;
+  border: 1px solid rgba(180, 83, 9, 0.22);
+  border-radius: 8px;
+  padding: 18px;
+  background: rgba(180, 83, 9, 0.05);
+}
+
+.boundary-callout h3,
+.boundary-callout p {
+  margin: 0;
+}
+
+.boundary-callout p:not(.card-kicker) {
+  margin-top: 8px;
   color: var(--muted);
   line-height: 1.55;
 }
@@ -1602,6 +1683,7 @@ dd {
   .dashboard-grid,
   .release-hero,
   .release-grid,
+  .deployment-boundary-grid,
   .paper-workflow-grid,
   .persistence-strip,
   .paper-submit-grid,

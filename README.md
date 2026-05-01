@@ -29,6 +29,7 @@ Evaluation artifacts:
 - `docs/customer-demo-script.md`
 - `docs/customer-evaluation-checklist.md`
 - `docs/customer-feedback-form.md`
+- `docs/production-local-data-boundary.md`
 
 Pre-demo check:
 
@@ -140,7 +141,8 @@ The frontend is intended to become a command center for health, portfolio state,
 Production Vercel is a read-only presentation and evaluation surface. It cannot
 directly read a user's local SQLite paper records; actual paper OMS / audit
 records require local backend demo mode or a future controlled hosted API/data
-layer. See `docs/frontend-local-backend-demo-mode.md`.
+layer. See `docs/frontend-local-backend-demo-mode.md` and
+`docs/production-local-data-boundary.md`.
 
 ### Audit and Observability
 

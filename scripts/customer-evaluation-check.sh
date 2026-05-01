@@ -15,6 +15,7 @@ for required_file in \
   docs/customer-feedback-form.md \
   docs/paper-approval-ui-flow-smoke-drill.md \
   docs/local-backend-demo-browser-drill.md \
+  docs/production-local-data-boundary.md \
   docs/release-baseline-v0.1.0.md \
   docs/release-verification-record-2026-04-28.md \
   docs/frontend-command-center-deployment-verification.md \

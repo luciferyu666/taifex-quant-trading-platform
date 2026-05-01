@@ -636,10 +636,37 @@ async function runLocalBackendDemoBrowserDrill({
 
   await waitForChrome(cdpHost, cdpPort);
   const client = await createPage(cdpHost, cdpPort, frontendUrl);
+  await verifyDeploymentDataBoundaryPanel(client);
   await verifyLocalBackendDemoPanel(client);
   await openPaperTab(client);
   const { workflowRunId, orderId } = await verifySeededPaperRecords(client);
   printLocalBackendDemoChecks(workflowRunId, orderId);
+}
+
+async function verifyDeploymentDataBoundaryPanel(client) {
+  await client.evaluate(`${browserHelpers}
+    (async () => {
+      await waitFor(
+        () => {
+          const text = document.body?.textContent || "";
+          return (
+            text.includes("Where actual paper records can be read") &&
+            text.includes("Production Vercel") &&
+            text.includes("Read-only UI and fallback") &&
+            text.includes("Local Backend") &&
+            text.includes("Actual local paper records") &&
+            text.includes("Future Hosted API") &&
+            text.includes("PRODUCTION_SQLITE_ACCESS=false") &&
+            text.includes("LOCAL_BACKEND_REQUIRED_FOR_RECORDS=true")
+          );
+        },
+        "deployment data boundary panel",
+        30000,
+      );
+      return document.body.textContent;
+    })()
+  `);
+  addCheck("Verified Deployment Data Boundary panel");
 }
 
 async function verifyLocalBackendDemoPanel(client) {

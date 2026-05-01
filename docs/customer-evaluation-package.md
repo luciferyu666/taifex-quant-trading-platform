@@ -54,6 +54,9 @@ Customers may evaluate:
   - Actual persisted paper OMS / audit records require local backend + local SQLite.
   - Future hosted record display requires a controlled backend/API and governed
     data layer.
+  - The Release tab includes a Data Access Boundary matrix. Review
+    [production-local-data-boundary.md](production-local-data-boundary.md) before
+    asking customers to inspect actual paper records.
 - Paper OMS reliability metadata review:
   - local idempotency key count
   - completed local outbox metadata

@@ -23,24 +23,26 @@ The browser drill verifies:
 
 1. The Release tab shows `Local Backend Demo Mode`.
 2. The UI states that production Vercel cannot directly read local SQLite.
-3. The UI exposes the local commands:
+3. The Release tab shows the `Data Access Boundary` matrix for production Vercel, local backend, and future hosted API modes.
+4. The UI exposes the local commands:
    - `make backend`
    - `make frontend`
    - `make seed-paper-execution-demo`
    - `make paper-execution-persistence-check`
-4. The Paper OMS tab can display the seeded local paper workflow run.
-5. The selected workflow shows:
+5. The Paper OMS tab can display the seeded local paper workflow run.
+6. The selected workflow shows:
    - `workflow_run_id`
    - `order_id`
    - `demo-paper-strategy`
    - final OMS status `PARTIALLY_FILLED`
-6. The OMS timeline includes `PARTIAL_FILL`.
-7. The audit timeline includes `paper_execution.paper_broker_simulated`.
-8. The UI keeps safety flags visible:
+7. The OMS timeline includes `PARTIAL_FILL`.
+8. The audit timeline includes `paper_execution.paper_broker_simulated`.
+9. The UI keeps safety flags visible:
    - `TRADING_MODE=paper`
    - `ENABLE_LIVE_TRADING=false`
    - `BROKER_PROVIDER=paper`
    - `PRODUCTION_SQLITE_ACCESS=false`
+   - `LOCAL_BACKEND_REQUIRED_FOR_RECORDS=true`
 
 ## Command
 

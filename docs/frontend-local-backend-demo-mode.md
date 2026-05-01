@@ -68,6 +68,8 @@ Expected behavior:
 - Paper records from local SQLite are not expected to appear on production Vercel.
 - If actual paper records must be shown, use local backend demo mode or future hosted backend/API mode.
 
+The Web Command Center now includes a `Data Access Boundary` panel in the Release tab. It distinguishes production Vercel fallback UI, local backend + SQLite records, and the future hosted API direction. See [production-local-data-boundary.md](production-local-data-boundary.md) for the reviewer-facing matrix and verification commands.
+
 ## Safety Rules
 
 - `TRADING_MODE=paper`

@@ -139,6 +139,9 @@ Set expectation before showing paper records:
   records.
 - Production Vercel is suitable for read-only UI, release status, safety copy,
   fallback content, and explicit local JSON evidence viewers.
+- In the Release tab, review the Data Access Boundary matrix before opening
+  Paper OMS records. It should state that actual paper records require local
+  backend + local SQLite unless a future controlled hosted API is deployed.
 - To show actual persisted paper OMS / audit records, run local backend + local
   frontend against the same local SQLite store:
 

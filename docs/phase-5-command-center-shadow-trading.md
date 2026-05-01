@@ -57,6 +57,9 @@ Expose roadmap phase status, contracts, safety mode, risk status, and paper-only
 - Local Backend Demo Mode panel explaining that the production Vercel frontend
   cannot directly read local SQLite paper records, and that actual paper records
   require local backend + local SQLite or a future controlled hosted backend/API.
+- Deployment Data Boundary panel that shows a reviewer-facing matrix for
+  Production Vercel fallback UI, Local Backend + SQLite records, and the future
+  hosted API/data-layer direction.
 - Local Backend Demo Browser Drill that starts local backend/frontend, seeds a
   temporary local SQLite paper workflow record, and verifies the browser can see
   actual OMS / audit timelines.
@@ -107,6 +110,8 @@ Expose roadmap phase status, contracts, safety mode, risk status, and paper-only
   a local backend.
 - Local Backend Demo Mode must show the local commands needed to run backend,
   frontend, demo seed, and persistence verification without enabling live trading.
+- Deployment Data Boundary must show `PRODUCTION_SQLITE_ACCESS=false` and
+  `LOCAL_BACKEND_REQUIRED_FOR_RECORDS=true`.
 - `make local-backend-demo-browser-drill` must verify the complete seeded local
   demo read path without creating real orders, calling brokers, or using
   production Vercel direct SQLite access.

@@ -7,6 +7,7 @@ const files = {
   page: "frontend/app/page.tsx",
   demoGuide: "frontend/app/components/DemoGuidePanel.tsx",
   commandTabs: "frontend/app/components/CommandCenterTabs.tsx",
+  deploymentDataBoundary: "frontend/app/components/DeploymentDataBoundaryPanel.tsx",
   localBackendMode: "frontend/app/components/LocalBackendDemoModePanel.tsx",
   paperApprovals: "frontend/app/components/PaperApprovalQueuePanel.tsx",
   paperApprovalRequest: "frontend/app/components/PaperApprovalRequestPanel.tsx",
@@ -232,6 +233,20 @@ requireContains("Command Center refresh action exists", sourceByFile.i18n, "Refr
 requireContains("Command Center backend troubleshooting exists", sourceByFile.commandTabs, "troubleshooting-panel");
 requireContains("English local backend demo copy exists", sourceByFile.i18n, "Local Backend Demo Mode");
 requireContains("Traditional Chinese local backend demo copy exists", sourceByFile.i18n, "本地後端 Demo 模式");
+requireContains("English deployment data boundary copy exists", sourceByFile.i18n, "Where actual paper records can be read");
+requireContains("Traditional Chinese deployment data boundary copy exists", sourceByFile.i18n, "實際 paper records 可讀取的位置");
+requireContains("Deployment data boundary component is implemented", sourceByFile.deploymentDataBoundary, "DeploymentDataBoundaryPanel");
+requireContains("Deployment data boundary distinguishes production Vercel", sourceByFile.i18n, "Production Vercel");
+requireContains("Deployment data boundary distinguishes local backend", sourceByFile.i18n, "Local Backend");
+requireContains("Deployment data boundary distinguishes future hosted API", sourceByFile.i18n, "Future Hosted API");
+requireContains("Deployment data boundary states production SQLite access false", sourceByFile.deploymentDataBoundary, "PRODUCTION_SQLITE_ACCESS=false");
+requireContains("Deployment data boundary states local backend required", sourceByFile.deploymentDataBoundary, "LOCAL_BACKEND_REQUIRED_FOR_RECORDS=true");
+requireContains("Deployment data boundary is mounted on page", sourceByFile.page, "DeploymentDataBoundaryPanel");
+requireNotContains("Deployment data boundary panel does not fetch backend", sourceByFile.deploymentDataBoundary, "fetch(");
+requireNotContains("Deployment data boundary panel does not call workflow record", sourceByFile.deploymentDataBoundary, "/api/paper-execution/workflow/record");
+requireNotContains("Deployment data boundary panel does not collect API keys", sourceByFile.deploymentDataBoundary.toLowerCase(), "api_key");
+requireNotContains("Deployment data boundary panel does not collect account IDs", sourceByFile.deploymentDataBoundary.toLowerCase(), "account_id");
+requireNotContains("Deployment data boundary panel does not collect certificates", sourceByFile.deploymentDataBoundary.toLowerCase(), "certificate");
 requireContains("Local backend demo component is implemented", sourceByFile.localBackendMode, "LocalBackendDemoModePanel");
 requireContains("Local backend demo panel states Vercel SQLite boundary", sourceByFile.i18n, "cannot directly read your local SQLite");
 requireContains("Local backend demo panel states Chinese Vercel SQLite boundary", sourceByFile.i18n, "無法直接讀取你的本機 SQLite");
