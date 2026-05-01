@@ -156,8 +156,9 @@ The Web Command Center displays the mock session and tenant context as read-only
 contract metadata. Reviewers can export the same mock session and tenant
 boundary as local JSON evidence with
 `docs/hosted-paper-tenant-boundary-evidence-export.md` and
-`scripts/export-hosted-paper-tenant-boundary-evidence.py`. No hosted customer
-login is enabled yet.
+`scripts/export-hosted-paper-tenant-boundary-evidence.py`; the Web Command
+Center can load that evidence read-only from an explicitly selected local JSON
+file. No hosted customer login is enabled yet.
 
 ### Audit and Observability
 

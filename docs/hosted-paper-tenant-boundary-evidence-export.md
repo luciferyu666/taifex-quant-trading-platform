@@ -49,6 +49,26 @@ The evidence includes:
 - boundary assertions
 - warnings
 
+## Web Command Center Viewer
+
+The Web Command Center includes a read-only Hosted Paper Tenant Boundary
+Evidence viewer.
+
+The viewer:
+
+- requires the user to explicitly select a local `.json` file
+- parses the evidence client-side only
+- validates the evidence type and required safety flags
+- displays mock session, tenant, permission, denied mutation, boundary
+  assertion, and warning details
+- rejects evidence if it indicates authentication, session issuance, hosted
+  datastore writes, local SQLite access, credential collection, broker calls,
+  live trading, production readiness, or mutation permission grants
+
+The viewer does not upload files, fetch backend APIs, write databases, call
+brokers, collect credentials, create orders, approve paper execution, or approve
+live trading.
+
 ## Required Boundary Assertions
 
 The evidence must show:
@@ -108,6 +128,9 @@ trading.
 ```bash
 make hosted-paper-tenant-boundary-evidence-export
 make hosted-paper-mock-session-check
+make frontend-i18n-check
+cd frontend && npm run typecheck
+cd frontend && npm run build
 cd backend && .venv/bin/python -m pytest tests/test_hosted_paper_tenant_boundary_evidence_export_script.py
 make check
 ```

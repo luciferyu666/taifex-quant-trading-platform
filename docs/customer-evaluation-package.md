@@ -191,6 +191,8 @@ A successful customer evaluation should produce:
 - Paper demo evidence export: `docs/paper-demo-evidence-export.md`
 - Hosted paper tenant boundary evidence export:
   `docs/hosted-paper-tenant-boundary-evidence-export.md`
+- Hosted paper tenant boundary evidence viewer:
+  Web Command Center read-only local JSON loader
 - Paper execution demo seed: `scripts/seed-paper-execution-demo.py`
 - Paper demo evidence exporter: `scripts/export-paper-demo-evidence.py`
 - Hosted paper tenant boundary evidence exporter:

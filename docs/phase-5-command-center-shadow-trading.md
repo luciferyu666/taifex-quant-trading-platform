@@ -72,6 +72,10 @@ Expose roadmap phase status, contracts, safety mode, risk status, and paper-only
   tenant context, role schema, permission schema, and denied mutation permissions
   into a local reviewer JSON artifact without authentication, DB writes, broker
   calls, credentials, or live trading.
+- Hosted Paper Tenant Boundary Evidence viewer that loads an explicitly selected
+  local JSON artifact client-side and displays mock session, tenant, permission,
+  denied mutation, boundary assertion, warning, and safety flag details without
+  upload or backend mutation.
 - Local Backend Demo Browser Drill that starts local backend/frontend, seeds a
   temporary local SQLite paper workflow record, and verifies the browser can see
   actual OMS / audit timelines.
@@ -215,6 +219,11 @@ Expose roadmap phase status, contracts, safety mode, risk status, and paper-only
   local SQLite, collect credentials, call brokers, create orders, grant mutation
   permissions, approve paper execution, approve live trading, or imply that
   hosted paper mode is enabled.
+- The Hosted Paper Tenant Boundary Evidence viewer is read-only and local JSON
+  only. It must not upload files, fetch hosted APIs, authenticate users, issue
+  sessions, write databases, read or write local SQLite, collect credentials,
+  call brokers, create orders, grant mutation permissions, approve paper
+  execution, approve live trading, or imply that hosted paper mode is enabled.
 - The Paper Execution Approval Workflow panel is a display surface only. It must not
   create paper simulations, create order intents, call Risk Engine, call OMS, call
   Broker Gateway, write databases, connect brokers, or expose live controls.

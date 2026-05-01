@@ -10,6 +10,8 @@ const files = {
   deploymentDataBoundary: "frontend/app/components/DeploymentDataBoundaryPanel.tsx",
   hostedPaperReadiness: "frontend/app/components/HostedPaperReadinessPanel.tsx",
   hostedPaperSession: "frontend/app/components/HostedPaperMockSessionPanel.tsx",
+  hostedPaperTenantEvidence:
+    "frontend/app/components/HostedPaperTenantBoundaryEvidencePanel.tsx",
   localBackendMode: "frontend/app/components/LocalBackendDemoModePanel.tsx",
   paperApprovals: "frontend/app/components/PaperApprovalQueuePanel.tsx",
   paperApprovalRequest: "frontend/app/components/PaperApprovalRequestPanel.tsx",
@@ -294,6 +296,34 @@ requireNotContains("Hosted paper mock session panel does not call paper approval
 requireNotContains("Hosted paper mock session panel does not collect API keys", sourceByFile.hostedPaperSession.toLowerCase(), "api_key");
 requireNotContains("Hosted paper mock session panel does not collect account IDs", sourceByFile.hostedPaperSession.toLowerCase(), "account_id");
 requireNotContains("Hosted paper mock session panel does not collect certificates", sourceByFile.hostedPaperSession.toLowerCase(), "certificate");
+requireContains("English hosted paper tenant evidence copy exists", sourceByFile.i18n, "Tenant boundary evidence viewer");
+requireContains("Traditional Chinese hosted paper tenant evidence copy exists", sourceByFile.i18n, "Tenant boundary evidence viewer");
+requireContains("Hosted paper tenant evidence panel is implemented", sourceByFile.hostedPaperTenantEvidence, "HostedPaperTenantBoundaryEvidencePanel");
+requireContains("Hosted paper tenant evidence panel validates local JSON", sourceByFile.hostedPaperTenantEvidence, "validateHostedPaperTenantBoundaryEvidence");
+requireContains("Hosted paper tenant evidence panel accepts explicit JSON only", sourceByFile.hostedPaperTenantEvidence, 'accept=".json,application/json"');
+requireContains("Hosted paper tenant evidence panel checks evidence type", sourceByFile.hostedPaperTenantEvidence, "hosted_paper_tenant_boundary_evidence");
+requireContains("Hosted paper tenant evidence panel checks mock_read_only", sourceByFile.hostedPaperTenantEvidence, "mock_read_only");
+requireContains("Hosted paper tenant evidence panel checks authenticated=false", sourceByFile.hostedPaperTenantEvidence, "authenticated: false");
+requireContains("Hosted paper tenant evidence panel checks auth provider none", sourceByFile.hostedPaperTenantEvidence, "authentication_provider");
+requireContains("Hosted paper tenant evidence panel checks session cookie false", sourceByFile.hostedPaperTenantEvidence, "session_cookie_issued: false");
+requireContains("Hosted paper tenant evidence panel checks hosted paper disabled", sourceByFile.hostedPaperTenantEvidence, "hosted_paper_enabled: false");
+requireContains("Hosted paper tenant evidence panel checks hosted datastore false", sourceByFile.hostedPaperTenantEvidence, "hosted_datastore_enabled: false");
+requireContains("Hosted paper tenant evidence panel checks hosted datastore writes false", sourceByFile.hostedPaperTenantEvidence, "hosted_datastore_written: false");
+requireContains("Hosted paper tenant evidence panel checks local SQLite false", sourceByFile.hostedPaperTenantEvidence, "local_sqlite_access: false");
+requireContains("Hosted paper tenant evidence panel checks credential flags", sourceByFile.hostedPaperTenantEvidence, "credentials_collected: false");
+requireContains("Hosted paper tenant evidence panel checks broker credential flags", sourceByFile.hostedPaperTenantEvidence, "broker_credentials_collected: false");
+requireContains("Hosted paper tenant evidence panel checks broker calls false", sourceByFile.hostedPaperTenantEvidence, "broker_api_called: false");
+requireContains("Hosted paper tenant evidence panel checks live disabled", sourceByFile.hostedPaperTenantEvidence, "live_trading_enabled: false");
+requireContains("Hosted paper tenant evidence panel checks production readiness false", sourceByFile.hostedPaperTenantEvidence, "production_trading_ready: false");
+requireContains("Hosted paper tenant evidence panel checks denied mutations", sourceByFile.hostedPaperTenantEvidence, "denied_mutation_permissions");
+requireContains("Hosted paper tenant evidence panel checks mutation permissions not granted", sourceByFile.hostedPaperTenantEvidence, "mutation_permissions_granted");
+requireContains("Hosted paper tenant evidence panel is mounted on page", sourceByFile.page, "HostedPaperTenantBoundaryEvidencePanel");
+requireNotContains("Hosted paper tenant evidence panel does not fetch backend", sourceByFile.hostedPaperTenantEvidence, "fetch(");
+requireNotContains("Hosted paper tenant evidence panel does not call workflow record", sourceByFile.hostedPaperTenantEvidence, "/api/paper-execution/workflow/record");
+requireNotContains("Hosted paper tenant evidence panel does not call hosted paper API", sourceByFile.hostedPaperTenantEvidence, "/api/hosted-paper/");
+requireNotContains("Hosted paper tenant evidence panel does not collect API keys", sourceByFile.hostedPaperTenantEvidence.toLowerCase(), "api_key");
+requireNotContains("Hosted paper tenant evidence panel does not collect account IDs", sourceByFile.hostedPaperTenantEvidence.toLowerCase(), "account_id");
+requireNotContains("Hosted paper tenant evidence panel does not collect certificates", sourceByFile.hostedPaperTenantEvidence.toLowerCase(), "certificate");
 requireContains("Local backend demo component is implemented", sourceByFile.localBackendMode, "LocalBackendDemoModePanel");
 requireContains("Local backend demo panel states Vercel SQLite boundary", sourceByFile.i18n, "cannot directly read your local SQLite");
 requireContains("Local backend demo panel states Chinese Vercel SQLite boundary", sourceByFile.i18n, "無法直接讀取你的本機 SQLite");

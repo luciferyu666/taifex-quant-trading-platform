@@ -17,6 +17,7 @@ required_files=(
   "backend/tests/test_hosted_paper_tenant_boundary_evidence_export_script.py"
   "scripts/export-hosted-paper-tenant-boundary-evidence.py"
   "frontend/app/components/HostedPaperMockSessionPanel.tsx"
+  "frontend/app/components/HostedPaperTenantBoundaryEvidencePanel.tsx"
 )
 
 for required_file in "${required_files[@]}"; do
@@ -106,12 +107,13 @@ required_code_text=(
   "@router.get(\"/session\""
   "@router.get(\"/tenants/current\""
   "HostedPaperMockSessionPanel"
+  "HostedPaperTenantBoundaryEvidencePanel"
   "hosted_paper_tenant_boundary_evidence"
   "export-hosted-paper-tenant-boundary-evidence"
 )
 
 for text in "${required_code_text[@]}"; do
-  if ! grep -R -Fq "${text}" backend/app/domain/hosted_paper_session.py backend/app/api/hosted_paper_routes.py backend/tests/test_hosted_paper_mock_session_routes.py backend/tests/test_hosted_paper_tenant_boundary_evidence_export_script.py scripts/export-hosted-paper-tenant-boundary-evidence.py frontend/app/components/HostedPaperMockSessionPanel.tsx; then
+  if ! grep -R -Fq "${text}" backend/app/domain/hosted_paper_session.py backend/app/api/hosted_paper_routes.py backend/tests/test_hosted_paper_mock_session_routes.py backend/tests/test_hosted_paper_tenant_boundary_evidence_export_script.py scripts/export-hosted-paper-tenant-boundary-evidence.py frontend/app/components/HostedPaperMockSessionPanel.tsx frontend/app/components/HostedPaperTenantBoundaryEvidencePanel.tsx; then
     printf 'Hosted paper mock session implementation must contain: %s\n' "${text}" >&2
     exit 1
   fi
@@ -143,7 +145,7 @@ for forbidden_text in \
   'real broker login enabled' \
   'guaranteed profit' \
   'risk-free'; do
-  if grep -R -Fiq "${forbidden_text}" docs/hosted-paper-mock-session-contract.md backend/app/domain/hosted_paper_session.py backend/app/api/hosted_paper_routes.py frontend/app/components/HostedPaperMockSessionPanel.tsx; then
+  if grep -R -Fiq "${forbidden_text}" docs/hosted-paper-mock-session-contract.md backend/app/domain/hosted_paper_session.py backend/app/api/hosted_paper_routes.py frontend/app/components/HostedPaperMockSessionPanel.tsx frontend/app/components/HostedPaperTenantBoundaryEvidencePanel.tsx; then
     printf 'Hosted paper mock session contains forbidden text: %s\n' "${forbidden_text}" >&2
     exit 1
   fi

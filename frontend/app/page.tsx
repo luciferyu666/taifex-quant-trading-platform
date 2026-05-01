@@ -19,6 +19,7 @@ import {
   type HostedPaperMockSession,
   type HostedPaperTenantContext,
 } from "./components/HostedPaperMockSessionPanel";
+import { HostedPaperTenantBoundaryEvidencePanel } from "./components/HostedPaperTenantBoundaryEvidencePanel";
 import { LocalBackendDemoModePanel } from "./components/LocalBackendDemoModePanel";
 import type { PaperAuditEventRecord } from "./components/PaperAuditTimelinePanel";
 import { PaperApprovalDecisionPanel } from "./components/PaperApprovalDecisionPanel";
@@ -993,6 +994,7 @@ export default async function Home({ searchParams }: HomeProps) {
               session={hostedPaperMockSession.data}
               tenant={hostedPaperTenant.data}
             />
+            <HostedPaperTenantBoundaryEvidencePanel copy={copy} />
             <LocalBackendDemoModePanel copy={copy.localBackendMode} />
           </>
         }
