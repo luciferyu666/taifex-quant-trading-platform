@@ -354,6 +354,132 @@ export const dashboardCopy = {
           "Production Trading Platform remains NOT READY.",
       },
     },
+    hostedPaperEnvironment: {
+      eyebrow: "SaaS Foundation",
+      title: "Hosted Paper API Environment Contract",
+      description:
+        "Read-only deployment boundary for the future SaaS paper product. It separates Local Demo Mode, Hosted Paper Mode, and Production Trading Platform readiness without enabling hosted accounts or execution.",
+      fallbackPrefix: "Hosted paper environment unavailable. Rendering safe fallback:",
+      endpointLabel: "Read-only endpoint",
+      currentModeLabel: "Current customer mode",
+      deploymentModelLabel: "Deployment model",
+      productionStateLabel: "Production trading platform",
+      modeLabel: "Mode",
+      stateLabel: "State",
+      canReadLabel: "Can read actual paper records",
+      canWriteLabel: "Can write paper records",
+      authRequiredLabel: "Auth required",
+      tenantRequiredLabel: "Tenant isolation required",
+      managedDatastoreLabel: "Managed datastore required",
+      localSqliteLabel: "Local SQLite allowed",
+      limitationsLabel: "Limitations",
+      roadmapLabel: "SaaS foundation path",
+      statusLabel: "Status",
+      safetyDefaultsLabel: "Safety defaults",
+      safetyFlagsLabel: "Safety flags",
+      warningLabel: "Boundary warnings",
+      currentModeLabels: {
+        local_demo_mode: "Local Demo Mode",
+      },
+      modeLabels: {
+        local_demo: "Local Demo Mode",
+        hosted_paper: "Hosted Paper Mode",
+        production_trading_platform: "Production Trading Platform",
+      },
+      modeTitleLabels: {
+        "Local Demo Mode": "Local Demo Mode",
+        "Hosted Paper Mode": "Hosted Paper Mode",
+        "Production Trading Platform": "Production Trading Platform",
+      },
+      stateLabels: {
+        primary_local_demo: "PRIMARY LOCAL DEMO",
+        not_enabled: "NOT ENABLED",
+        staging_only_future: "STAGING ONLY FUTURE",
+        ready_future: "READY FUTURE",
+        not_ready: "NOT READY",
+      },
+      descriptionLabels: {
+        "Primary customer evaluation path for actual paper workflow records. Runs on the reviewer's machine with local backend and local SQLite.":
+          "Primary customer evaluation path for actual paper workflow records. Runs on the reviewer's machine with local backend and local SQLite.",
+        "Future SaaS paper workflow path with authenticated sessions, tenant-scoped records, RBAC/ABAC, and managed datastore.":
+          "Future SaaS paper workflow path with authenticated sessions, tenant-scoped records, RBAC/ABAC, and managed datastore.",
+        "Production trading platform remains NOT READY. This contract does not enable live trading, broker connectivity, or real order routing.":
+          "Production trading platform remains NOT READY. This contract does not enable live trading, broker connectivity, or real order routing.",
+      },
+      limitationLabels: {
+        "Engineering-style local setup is still required.":
+          "Engineering-style local setup is still required.",
+        "Records are not available from Production Vercel.":
+          "Records are not available from Production Vercel.",
+        "Local SQLite is not a hosted tenant datastore.":
+          "Local SQLite is not a hosted tenant datastore.",
+        "No hosted customer account or reviewer login is available.":
+          "No hosted customer account or reviewer login is available.",
+        "Hosted backend/API is not deployed as a customer paper workspace.":
+          "Hosted backend/API is not deployed as a customer paper workspace.",
+        "Managed paper datastore is not connected.":
+          "Managed paper datastore is not connected.",
+        "Customer login, reviewer identity, and tenant isolation are not enabled.":
+          "Customer login, reviewer identity, and tenant isolation are not enabled.",
+        "Hosted paper workflow persistence is not enabled.":
+          "Hosted paper workflow persistence is not enabled.",
+        "No live trading approval exists.": "No live trading approval exists.",
+        "No broker SDK path is enabled.": "No broker SDK path is enabled.",
+        "No broker credentials are collected.":
+          "No broker credentials are collected.",
+        "No production OMS, WORM audit ledger, or cross-account risk system exists.":
+          "No production OMS, WORM audit ledger, or cross-account risk system exists.",
+      },
+      capabilityLabels: {
+        "Hosted backend": "Hosted backend",
+        "Managed database": "Managed database",
+        "Auth/session": "Auth/session",
+        "Tenant isolation": "Tenant isolation",
+        "Paper workflow persistence": "Paper workflow persistence",
+        "Hosted customer demo tenant": "Hosted customer demo tenant",
+      },
+      statusLabels: {
+        not_enabled: "not_enabled",
+        schema_only: "schema_only",
+        local_only: "local_only",
+      },
+      notesLabels: {
+        "Deploy controlled backend/API for paper-only hosted workspace.":
+          "Deploy controlled backend/API for paper-only hosted workspace.",
+        "Replace local SQLite with tenant-scoped managed datastore.":
+          "Replace local SQLite with tenant-scoped managed datastore.",
+        "Introduce real customer login and reviewer identity.":
+          "Introduce real customer login and reviewer identity.",
+        "Require tenant id on every hosted paper record and API read/write.":
+          "Require tenant id on every hosted paper record and API read/write.",
+        "Move approval, paper OMS, risk, broker simulation, and audit records into hosted datastore.":
+          "Move approval, paper OMS, risk, broker simulation, and audit records into hosted datastore.",
+        "Provision a paper-only tenant with sample records after auth, data, audit, and security gates pass.":
+          "Provision a paper-only tenant with sample records after auth, data, audit, and security gates pass.",
+      },
+      safetyFlagLabels: {
+        paper_only: "paper_only",
+        live_trading_enabled: "live_trading_enabled",
+        broker_api_called: "broker_api_called",
+        order_created: "order_created",
+        database_written: "database_written",
+        external_db_written: "external_db_written",
+        broker_credentials_collected: "broker_credentials_collected",
+        production_trading_ready: "production_trading_ready",
+      },
+      warningLabels: {
+        "This endpoint is read-only environment contract metadata only.":
+          "This endpoint is read-only environment contract metadata only.",
+        "Hosted Paper Mode is not enabled for customer SaaS operation.":
+          "Hosted Paper Mode is not enabled for customer SaaS operation.",
+        "Production Vercel cannot read local SQLite paper records.":
+          "Production Vercel cannot read local SQLite paper records.",
+        "Production Trading Platform remains NOT READY.":
+          "Production Trading Platform remains NOT READY.",
+        "Live trading remains disabled by default.":
+          "Live trading remains disabled by default.",
+      },
+    },
     hostedPaperIdentityReadiness: {
       eyebrow: "Hosted Paper Identity",
       title: "Identity, RBAC, and tenant readiness",
@@ -2244,6 +2370,131 @@ export const dashboardCopy = {
           "它不驗證使用者、不寫入 records、不呼叫券商、不建立訂單，也不啟用實盤交易。",
         "Production Trading Platform remains NOT READY.":
           "Production Trading Platform 仍為 NOT READY。",
+      },
+    },
+    hostedPaperEnvironment: {
+      eyebrow: "SaaS Foundation",
+      title: "Hosted Paper API 環境契約",
+      description:
+        "針對未來 SaaS paper product 的只讀部署邊界。它區分 Local Demo Mode、Hosted Paper Mode 與 Production Trading Platform readiness，但不啟用 hosted accounts 或交易執行。",
+      fallbackPrefix: "Hosted paper environment 無法取得，正在顯示安全備援資料：",
+      endpointLabel: "只讀 endpoint",
+      currentModeLabel: "目前客戶模式",
+      deploymentModelLabel: "部署模型",
+      productionStateLabel: "Production Trading Platform",
+      modeLabel: "模式",
+      stateLabel: "狀態",
+      canReadLabel: "可讀取實際 paper records",
+      canWriteLabel: "可寫入 paper records",
+      authRequiredLabel: "需要身份驗證",
+      tenantRequiredLabel: "需要 tenant isolation",
+      managedDatastoreLabel: "需要 managed datastore",
+      localSqliteLabel: "允許 local SQLite",
+      limitationsLabel: "限制",
+      roadmapLabel: "SaaS foundation path",
+      statusLabel: "狀態",
+      safetyDefaultsLabel: "安全預設",
+      safetyFlagsLabel: "安全旗標",
+      warningLabel: "邊界警示",
+      currentModeLabels: {
+        local_demo_mode: "Local Demo Mode",
+      },
+      modeLabels: {
+        local_demo: "Local Demo Mode",
+        hosted_paper: "Hosted Paper Mode",
+        production_trading_platform: "Production Trading Platform",
+      },
+      modeTitleLabels: {
+        "Local Demo Mode": "Local Demo Mode",
+        "Hosted Paper Mode": "Hosted Paper Mode",
+        "Production Trading Platform": "Production Trading Platform",
+      },
+      stateLabels: {
+        primary_local_demo: "PRIMARY LOCAL DEMO",
+        not_enabled: "NOT ENABLED",
+        staging_only_future: "STAGING ONLY FUTURE",
+        ready_future: "READY FUTURE",
+        not_ready: "NOT READY",
+      },
+      descriptionLabels: {
+        "Primary customer evaluation path for actual paper workflow records. Runs on the reviewer's machine with local backend and local SQLite.":
+          "目前客戶檢視實際 paper workflow records 的主要路徑。它在 reviewer 的本機執行 local backend 與 local SQLite。",
+        "Future SaaS paper workflow path with authenticated sessions, tenant-scoped records, RBAC/ABAC, and managed datastore.":
+          "未來 SaaS paper workflow 路徑，需要 authenticated sessions、tenant-scoped records、RBAC/ABAC 與 managed datastore。",
+        "Production trading platform remains NOT READY. This contract does not enable live trading, broker connectivity, or real order routing.":
+          "Production trading platform 仍為 NOT READY。此 contract 不啟用實盤交易、券商連線或真實委託路由。",
+      },
+      limitationLabels: {
+        "Engineering-style local setup is still required.":
+          "仍需要偏工程導向的本地啟動流程。",
+        "Records are not available from Production Vercel.":
+          "Production Vercel 無法讀取這些 records。",
+        "Local SQLite is not a hosted tenant datastore.":
+          "Local SQLite 不是 hosted tenant datastore。",
+        "No hosted customer account or reviewer login is available.":
+          "尚未提供 hosted customer account 或 reviewer login。",
+        "Hosted backend/API is not deployed as a customer paper workspace.":
+          "Hosted backend/API 尚未部署成客戶 paper workspace。",
+        "Managed paper datastore is not connected.":
+          "Managed paper datastore 尚未連接。",
+        "Customer login, reviewer identity, and tenant isolation are not enabled.":
+          "Customer login、reviewer identity 與 tenant isolation 尚未啟用。",
+        "Hosted paper workflow persistence is not enabled.":
+          "Hosted paper workflow persistence 尚未啟用。",
+        "No live trading approval exists.": "不存在 live trading approval。",
+        "No broker SDK path is enabled.": "未啟用任何 broker SDK path。",
+        "No broker credentials are collected.": "不收集 broker credentials。",
+        "No production OMS, WORM audit ledger, or cross-account risk system exists.":
+          "尚未具備 production OMS、WORM audit ledger 或 cross-account risk system。",
+      },
+      capabilityLabels: {
+        "Hosted backend": "Hosted backend",
+        "Managed database": "Managed database",
+        "Auth/session": "Auth/session",
+        "Tenant isolation": "Tenant isolation",
+        "Paper workflow persistence": "Paper workflow persistence",
+        "Hosted customer demo tenant": "Hosted customer demo tenant",
+      },
+      statusLabels: {
+        not_enabled: "not_enabled",
+        schema_only: "schema_only",
+        local_only: "local_only",
+      },
+      notesLabels: {
+        "Deploy controlled backend/API for paper-only hosted workspace.":
+          "部署受控 backend/API，作為 paper-only hosted workspace。",
+        "Replace local SQLite with tenant-scoped managed datastore.":
+          "以 tenant-scoped managed datastore 取代 local SQLite。",
+        "Introduce real customer login and reviewer identity.":
+          "導入真實 customer login 與 reviewer identity。",
+        "Require tenant id on every hosted paper record and API read/write.":
+          "每筆 hosted paper record 與 API read/write 都必須帶 tenant id。",
+        "Move approval, paper OMS, risk, broker simulation, and audit records into hosted datastore.":
+          "將 approval、paper OMS、risk、broker simulation 與 audit records 移入 hosted datastore。",
+        "Provision a paper-only tenant with sample records after auth, data, audit, and security gates pass.":
+          "在 auth、data、audit 與 security gates 通過後，建立 paper-only sample tenant。",
+      },
+      safetyFlagLabels: {
+        paper_only: "paper_only",
+        live_trading_enabled: "live_trading_enabled",
+        broker_api_called: "broker_api_called",
+        order_created: "order_created",
+        database_written: "database_written",
+        external_db_written: "external_db_written",
+        broker_credentials_collected: "broker_credentials_collected",
+        production_trading_ready: "production_trading_ready",
+      },
+      warningLabels: {
+        "This endpoint is read-only environment contract metadata only.":
+          "此 endpoint 只是只讀 environment contract metadata。",
+        "Hosted Paper Mode is not enabled for customer SaaS operation.":
+          "Hosted Paper Mode 尚未啟用為 customer SaaS operation。",
+        "Production Vercel cannot read local SQLite paper records.":
+          "Production Vercel 無法讀取 local SQLite paper records。",
+        "Production Trading Platform remains NOT READY.":
+          "Production Trading Platform 仍為 NOT READY。",
+        "Live trading remains disabled by default.":
+          "Live trading remains disabled by default.",
       },
     },
     hostedPaperIdentityReadiness: {

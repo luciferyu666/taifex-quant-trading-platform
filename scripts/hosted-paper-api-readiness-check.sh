@@ -8,13 +8,17 @@ cd "${REPO_ROOT}"
 printf 'Checking hosted paper backend/API readiness documentation...\n'
 
 required_files=(
+  "docs/hosted-paper-saas-foundation-roadmap.md"
   "docs/hosted-paper-backend-api-readiness.md"
   "docs/customer-self-service-paper-demo-roadmap.md"
   "docs/production-local-data-boundary.md"
   "docs/frontend-local-backend-demo-mode.md"
+  "backend/app/domain/hosted_paper_environment.py"
   "backend/app/domain/hosted_paper_readiness.py"
   "backend/app/api/hosted_paper_routes.py"
+  "backend/tests/test_hosted_paper_environment_routes.py"
   "backend/tests/test_hosted_paper_readiness_routes.py"
+  "frontend/app/components/HostedPaperEnvironmentPanel.tsx"
 )
 
 for required_file in "${required_files[@]}"; do
@@ -28,6 +32,7 @@ required_text=(
   "hosted paper backend/API"
   "managed hosted datastore"
   "remains for local demo mode only"
+  "GET /api/hosted-paper/environment"
   "authentication"
   "RBAC"
   "tenant"
@@ -46,12 +51,55 @@ for text in "${required_text[@]}"; do
   fi
 done
 
+for text in \
+  "Hosted Paper SaaS Foundation Roadmap" \
+  "Local Demo Mode" \
+  "Hosted Paper Mode" \
+  "Production Trading Platform" \
+  "Hosted Paper Mode | NOT ENABLED" \
+  "Production Trading Platform | NOT READY" \
+  "hosted backend" \
+  "Managed database" \
+  "Auth/session" \
+  "Tenant isolation" \
+  "Hosted customer demo tenant"; do
+  if ! grep -R -Fq "${text}" docs/hosted-paper-saas-foundation-roadmap.md; then
+    printf 'Hosted paper SaaS roadmap doc must contain: %s\n' "${text}" >&2
+    exit 1
+  fi
+done
+
 for route_text in \
   'prefix="/api/hosted-paper"' \
+  '@router.get("/environment"' \
   '@router.get("/readiness"' \
+  'get_hosted_paper_environment' \
   'get_hosted_paper_readiness'; do
-  if ! grep -R -Fq "${route_text}" backend/app/domain/hosted_paper_readiness.py backend/app/api/hosted_paper_routes.py backend/tests/test_hosted_paper_readiness_routes.py; then
+  if ! grep -R -Fq "${route_text}" \
+    backend/app/domain/hosted_paper_environment.py \
+    backend/app/domain/hosted_paper_readiness.py \
+    backend/app/api/hosted_paper_routes.py \
+    backend/tests/test_hosted_paper_environment_routes.py \
+    backend/tests/test_hosted_paper_readiness_routes.py; then
     printf 'Hosted paper readiness endpoint must contain: %s\n' "${route_text}" >&2
+    exit 1
+  fi
+done
+
+for frontend_text in \
+  "HostedPaperEnvironmentPanel" \
+  "/api/hosted-paper/environment" \
+  "Local Demo Mode" \
+  "Hosted Paper Mode" \
+  "Production Trading Platform" \
+  "current_customer_mode" \
+  "not_enabled" \
+  "not_ready"; do
+  if ! grep -R -Fq "${frontend_text}" \
+    frontend/app/page.tsx \
+    frontend/app/i18n.ts \
+    frontend/app/components/HostedPaperEnvironmentPanel.tsx; then
+    printf 'Hosted paper environment UI must contain: %s\n' "${frontend_text}" >&2
     exit 1
   fi
 done
@@ -76,7 +124,9 @@ for forbidden_text in \
   'BROKER_PROVIDER=shioaji' \
   'BROKER_PROVIDER=fubon' \
   'production trading ready'; do
-  if grep -R -Fiq "${forbidden_text}" docs/hosted-paper-backend-api-readiness.md; then
+  if grep -R -Fiq "${forbidden_text}" \
+    docs/hosted-paper-backend-api-readiness.md \
+    docs/hosted-paper-saas-foundation-roadmap.md; then
     printf 'Hosted paper readiness doc contains forbidden text: %s\n' "${forbidden_text}" >&2
     exit 1
   fi

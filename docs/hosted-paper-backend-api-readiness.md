@@ -111,11 +111,27 @@ hosted authentication provider is implemented today.
 The current implemented endpoints are:
 
 ```text
+GET /api/hosted-paper/environment
 GET /api/hosted-paper/readiness
 GET /api/hosted-paper/identity-readiness
 GET /api/hosted-paper/session
 GET /api/hosted-paper/tenants/current
 ```
+
+`GET /api/hosted-paper/environment` returns a read-only environment contract
+for the hosted paper SaaS foundation. It explicitly separates:
+
+- Local Demo Mode: the current primary customer path for actual paper records,
+  using local backend + local SQLite.
+- Hosted Paper Mode: `not_enabled`, pending hosted backend, managed database,
+  auth/session, tenant isolation, hosted paper workflow persistence, and hosted
+  customer demo tenant.
+- Production Trading Platform: `not_ready`, with live trading, broker
+  connectivity, real order routing, production OMS, and production audit ledger
+  unavailable.
+
+The first slice is documented in
+[hosted-paper-saas-foundation-roadmap.md](hosted-paper-saas-foundation-roadmap.md).
 
 `GET /api/hosted-paper/readiness` returns a read-only readiness response showing:
 
@@ -150,10 +166,10 @@ evidence with
 [hosted-paper-tenant-boundary-evidence-export.md](hosted-paper-tenant-boundary-evidence-export.md).
 The evidence proves the hosted paper path is still read-only and not enabled.
 
-The Web Command Center displays this endpoint in a read-only Hosted Paper API
-Readiness panel. The panel is a status view only; it does not create hosted
-sessions, approval requests, paper workflow records, database writes, credential
-flows, or broker calls.
+The Web Command Center displays the environment contract and readiness endpoint
+in read-only Hosted Paper panels. These panels are status views only; they do
+not create hosted sessions, approval requests, paper workflow records, database
+writes, credential flows, or broker calls.
 
 ## Data Layer Requirements
 

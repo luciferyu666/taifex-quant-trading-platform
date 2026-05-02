@@ -150,11 +150,14 @@ customer-facing quick-start flow is documented in
 `make customer-demo-env-check` followed by `make start-customer-demo`. Future
 hosted paper API readiness is tracked in
 `docs/hosted-paper-backend-api-readiness.md`; the current backend exposes
-`GET /api/hosted-paper/readiness`,
+`GET /api/hosted-paper/environment`, `GET /api/hosted-paper/readiness`,
 `GET /api/hosted-paper/identity-readiness`,
 `GET /api/hosted-paper/session`, and `GET /api/hosted-paper/tenants/current` as
-read-only readiness/mock contract responses only. Future hosted login, session,
-RBAC, ABAC, and tenant boundaries are specified in
+read-only environment, readiness, and mock contract responses only. The hosted
+paper SaaS foundation path is documented in
+`docs/hosted-paper-saas-foundation-roadmap.md`; Hosted Paper Mode is not enabled,
+and Local Demo Mode remains the primary customer path for actual paper records.
+Future hosted login, session, RBAC, ABAC, and tenant boundaries are specified in
 `docs/hosted-paper-auth-boundary-spec.md`; the identity/RBAC/tenant readiness
 contract is documented in
 `docs/hosted-paper-identity-rbac-tenant-readiness.md`; the read-only mock

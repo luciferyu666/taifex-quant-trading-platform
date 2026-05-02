@@ -64,6 +64,11 @@ Expose roadmap phase status, contracts, safety mode, risk status, and paper-only
   `GET /api/hosted-paper/readiness` and displays hosted backend status,
   hosted datastore status, customer login status, local demo primary status,
   paper-only safety defaults, and future hosted requirements.
+- Hosted Paper API Environment Contract panel that reads
+  `GET /api/hosted-paper/environment` and displays Local Demo Mode, Hosted
+  Paper Mode, and Production Trading Platform boundaries. It must show Local
+  Demo Mode as the current path, Hosted Paper Mode as not enabled, and
+  Production Trading Platform as NOT READY.
 - Hosted Paper Identity / RBAC / Tenant Readiness panel that reads
   `GET /api/hosted-paper/identity-readiness` and displays that real reviewer
   login, customer accounts, formal RBAC/ABAC enforcement, and tenant isolation
@@ -146,6 +151,11 @@ Expose roadmap phase status, contracts, safety mode, risk status, and paper-only
 - Hosted Paper API Readiness panel must show that hosted paper backend/API mode
   is not enabled, customer login is not enabled, hosted datastore is not enabled,
   and local backend + local SQLite remain the path for actual paper records.
+- Hosted Paper API Environment Contract panel must show:
+  `current_customer_mode=local_demo_mode`, Hosted Paper Mode `not_enabled`,
+  Production Trading Platform `not_ready`, managed datastore required for SaaS,
+  tenant isolation required for SaaS, and local SQLite allowed only for Local
+  Demo Mode.
 - Hosted Paper Identity / RBAC / Tenant Readiness panel must show
   `reviewer_login_enabled=false`, `customer_accounts_enabled=false`,
   `authentication_provider=none`, `session_cookie_issued=false`,
@@ -235,6 +245,12 @@ Expose roadmap phase status, contracts, safety mode, risk status, and paper-only
   write databases, create paper records, submit approval requests, submit paper
   workflows, call brokers, collect credentials, expose live controls, or imply
   that hosted paper mode is enabled.
+- The Hosted Paper API Environment Contract panel is a read-only status
+  surface. It may display `GET /api/hosted-paper/environment`, but it must not
+  create hosted sessions, hosted tenants, hosted paper records, approval
+  requests, paper workflow submissions, database writes, broker calls,
+  credential collection, live controls, or imply that hosted paper mode is
+  enabled.
 - The Hosted Paper Identity / RBAC / Tenant Readiness panel is a read-only
   status surface. It may display `GET /api/hosted-paper/identity-readiness`, but
   it must not create login flows, customer accounts, session cookies, tenant

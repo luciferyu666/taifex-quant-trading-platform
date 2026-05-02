@@ -8,6 +8,7 @@ const files = {
   demoGuide: "frontend/app/components/DemoGuidePanel.tsx",
   commandTabs: "frontend/app/components/CommandCenterTabs.tsx",
   deploymentDataBoundary: "frontend/app/components/DeploymentDataBoundaryPanel.tsx",
+  hostedPaperEnvironment: "frontend/app/components/HostedPaperEnvironmentPanel.tsx",
   hostedPaperReadiness: "frontend/app/components/HostedPaperReadinessPanel.tsx",
   hostedPaperIdentityReadiness:
     "frontend/app/components/HostedPaperIdentityReadinessPanel.tsx",
@@ -263,6 +264,24 @@ requireNotContains("Deployment data boundary panel does not call workflow record
 requireNotContains("Deployment data boundary panel does not collect API keys", sourceByFile.deploymentDataBoundary.toLowerCase(), "api_key");
 requireNotContains("Deployment data boundary panel does not collect account IDs", sourceByFile.deploymentDataBoundary.toLowerCase(), "account_id");
 requireNotContains("Deployment data boundary panel does not collect certificates", sourceByFile.deploymentDataBoundary.toLowerCase(), "certificate");
+requireContains("English hosted paper environment copy exists", sourceByFile.i18n, "Hosted Paper API Environment Contract");
+requireContains("Traditional Chinese hosted paper environment copy exists", sourceByFile.i18n, "Hosted Paper API 環境契約");
+requireContains("Hosted paper environment component is implemented", sourceByFile.hostedPaperEnvironment, "HostedPaperEnvironmentPanel");
+requireContains("Hosted paper environment endpoint is fetched", sourceByFile.page, "/api/hosted-paper/environment");
+requireContains("Hosted paper environment panel is mounted on page", sourceByFile.page, "HostedPaperEnvironmentPanel");
+requireContains("Hosted paper environment shows Local Demo Mode", combinedSource, "Local Demo Mode");
+requireContains("Hosted paper environment shows Hosted Paper Mode", combinedSource, "Hosted Paper Mode");
+requireContains("Hosted paper environment shows Production Trading Platform", combinedSource, "Production Trading Platform");
+requireContains("Hosted paper environment shows current customer mode", combinedSource, "current_customer_mode");
+requireContains("Hosted paper environment keeps hosted mode not enabled", combinedSource, "not_enabled");
+requireContains("Hosted paper environment keeps production not ready", combinedSource, "not_ready");
+requireContains("Hosted paper environment shows managed datastore boundary", combinedSource, "Managed datastore");
+requireContains("Hosted paper environment shows tenant isolation boundary", combinedSource, "Tenant isolation");
+requireNotContains("Hosted paper environment does not fetch directly", sourceByFile.hostedPaperEnvironment, "fetch(");
+requireNotContains("Hosted paper environment does not call workflow record", sourceByFile.hostedPaperEnvironment, "/api/paper-execution/workflow/record");
+requireNotContains("Hosted paper environment does not collect API keys", sourceByFile.hostedPaperEnvironment.toLowerCase(), "api_key");
+requireNotContains("Hosted paper environment does not collect account IDs", sourceByFile.hostedPaperEnvironment.toLowerCase(), "account_id");
+requireNotContains("Hosted paper environment does not collect certificates", sourceByFile.hostedPaperEnvironment.toLowerCase(), "certificate");
 requireContains("English hosted paper readiness copy exists", sourceByFile.i18n, "Hosted Paper API Readiness");
 requireContains("Traditional Chinese hosted paper readiness copy exists", sourceByFile.i18n, "Hosted Paper API 就緒狀態");
 requireContains("Hosted paper readiness component is implemented", sourceByFile.hostedPaperReadiness, "HostedPaperReadinessPanel");

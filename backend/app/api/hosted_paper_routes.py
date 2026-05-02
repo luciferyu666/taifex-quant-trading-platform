@@ -3,6 +3,10 @@ from typing import Annotated
 from fastapi import APIRouter, Depends
 
 from app.core.config import Settings, get_settings
+from app.domain.hosted_paper_environment import (
+    HostedPaperEnvironmentResponse,
+    get_hosted_paper_environment,
+)
 from app.domain.hosted_paper_identity import (
     HostedPaperIdentityReadinessResponse,
     get_hosted_paper_identity_readiness,
@@ -24,6 +28,11 @@ SettingsDep = Annotated[Settings, Depends(get_settings)]
 @router.get("/readiness", response_model=HostedPaperReadinessResponse)
 def hosted_paper_readiness(settings: SettingsDep) -> HostedPaperReadinessResponse:
     return get_hosted_paper_readiness(settings)
+
+
+@router.get("/environment", response_model=HostedPaperEnvironmentResponse)
+def hosted_paper_environment(settings: SettingsDep) -> HostedPaperEnvironmentResponse:
+    return get_hosted_paper_environment(settings)
 
 
 @router.get("/session", response_model=HostedPaperMockSessionResponse)

@@ -736,8 +736,57 @@ th {
   padding: 18px;
 }
 
+.release-card.mode-primary {
+  border-color: rgba(4, 120, 87, 0.34);
+  background: linear-gradient(180deg, rgba(4, 120, 87, 0.08), var(--panel));
+}
+
+.release-card.mode-muted {
+  border-color: rgba(148, 163, 184, 0.26);
+}
+
+.release-card.mode-danger {
+  border-color: rgba(185, 28, 28, 0.28);
+  background: linear-gradient(180deg, rgba(185, 28, 28, 0.07), var(--panel));
+}
+
 .release-gaps {
   margin-top: 16px;
+}
+
+.roadmap-mini-list {
+  display: grid;
+  gap: 12px;
+  margin-top: 18px;
+}
+
+.roadmap-mini-item {
+  display: grid;
+  grid-template-columns: 34px minmax(0, 1fr);
+  gap: 12px;
+  align-items: start;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 12px;
+  background: rgba(15, 23, 42, 0.03);
+}
+
+.step-index {
+  display: grid;
+  width: 34px;
+  height: 34px;
+  place-items: center;
+  border-radius: 999px;
+  background: #0f172a;
+  color: #dbeafe;
+  font-size: 0.82rem;
+  font-weight: 800;
+}
+
+.roadmap-mini-item p {
+  margin: 5px 0 0;
+  color: var(--muted);
+  line-height: 1.5;
 }
 
 .validation-list {

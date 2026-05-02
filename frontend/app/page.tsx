@@ -11,6 +11,10 @@ import { CommandCenterTabs } from "./components/CommandCenterTabs";
 import { DemoGuidePanel } from "./components/DemoGuidePanel";
 import { DeploymentDataBoundaryPanel } from "./components/DeploymentDataBoundaryPanel";
 import {
+  HostedPaperEnvironmentPanel,
+  type HostedPaperEnvironment,
+} from "./components/HostedPaperEnvironmentPanel";
+import {
   HostedPaperReadinessPanel,
   type HostedPaperReadiness,
 } from "./components/HostedPaperReadinessPanel";
@@ -798,6 +802,146 @@ const fallbackReleaseBaseline: ReleaseBaseline = {
   },
 };
 
+const fallbackHostedPaperEnvironment: HostedPaperEnvironment = {
+  service: "hosted-paper-environment-contract",
+  contract_version: "2026-05-02",
+  deployment_model: "local_demo_primary_hosted_paper_not_enabled_production_trading_not_ready",
+  current_customer_mode: "local_demo_mode",
+  local_demo_mode: {
+    mode: "local_demo",
+    label: "Local Demo Mode",
+    state: "primary_local_demo",
+    can_read_actual_paper_records: true,
+    can_write_paper_records: true,
+    auth_required: false,
+    tenant_isolation_required: false,
+    managed_datastore_required: false,
+    local_sqlite_allowed: true,
+    description:
+      "Primary customer evaluation path for actual paper workflow records. Runs on the reviewer's machine with local backend and local SQLite.",
+    limitations: [
+      "Engineering-style local setup is still required.",
+      "Records are not available from Production Vercel.",
+      "Local SQLite is not a hosted tenant datastore.",
+      "No hosted customer account or reviewer login is available.",
+    ],
+  },
+  hosted_paper_mode: {
+    mode: "hosted_paper",
+    label: "Hosted Paper Mode",
+    state: "not_enabled",
+    can_read_actual_paper_records: false,
+    can_write_paper_records: false,
+    auth_required: true,
+    tenant_isolation_required: true,
+    managed_datastore_required: true,
+    local_sqlite_allowed: false,
+    description:
+      "Future SaaS paper workflow path with authenticated sessions, tenant-scoped records, RBAC/ABAC, and managed datastore.",
+    limitations: [
+      "Hosted backend/API is not deployed as a customer paper workspace.",
+      "Managed paper datastore is not connected.",
+      "Customer login, reviewer identity, and tenant isolation are not enabled.",
+      "Hosted paper workflow persistence is not enabled.",
+    ],
+  },
+  production_trading_platform: {
+    mode: "production_trading_platform",
+    label: "Production Trading Platform",
+    state: "not_ready",
+    can_read_actual_paper_records: false,
+    can_write_paper_records: false,
+    auth_required: true,
+    tenant_isolation_required: true,
+    managed_datastore_required: true,
+    local_sqlite_allowed: false,
+    description:
+      "Production trading platform remains NOT READY. This contract does not enable live trading, broker connectivity, or real order routing.",
+    limitations: [
+      "No live trading approval exists.",
+      "No broker SDK path is enabled.",
+      "No broker credentials are collected.",
+      "No production OMS, WORM audit ledger, or cross-account risk system exists.",
+    ],
+  },
+  saas_foundation_path: [
+    {
+      sequence: 1,
+      capability: "Hosted backend",
+      current_status: "not_enabled",
+      required_before_customer_saas: true,
+      notes: "Deploy controlled backend/API for paper-only hosted workspace.",
+    },
+    {
+      sequence: 2,
+      capability: "Managed database",
+      current_status: "not_enabled",
+      required_before_customer_saas: true,
+      notes: "Replace local SQLite with tenant-scoped managed datastore.",
+    },
+    {
+      sequence: 3,
+      capability: "Auth/session",
+      current_status: "schema_only",
+      required_before_customer_saas: true,
+      notes: "Introduce real customer login and reviewer identity.",
+    },
+    {
+      sequence: 4,
+      capability: "Tenant isolation",
+      current_status: "schema_only",
+      required_before_customer_saas: true,
+      notes: "Require tenant id on every hosted paper record and API read/write.",
+    },
+    {
+      sequence: 5,
+      capability: "Paper workflow persistence",
+      current_status: "local_only",
+      required_before_customer_saas: true,
+      notes:
+        "Move approval, paper OMS, risk, broker simulation, and audit records into hosted datastore.",
+    },
+    {
+      sequence: 6,
+      capability: "Hosted customer demo tenant",
+      current_status: "not_enabled",
+      required_before_customer_saas: true,
+      notes:
+        "Provision a paper-only tenant with sample records after auth, data, audit, and security gates pass.",
+    },
+  ],
+  safety_defaults: {
+    trading_mode: "paper",
+    enable_live_trading: false,
+    broker_provider: "paper",
+  },
+  safety_flags: {
+    paper_only: true,
+    live_trading_enabled: false,
+    broker_api_called: false,
+    order_created: false,
+    database_written: false,
+    external_db_written: false,
+    broker_credentials_collected: false,
+    production_trading_ready: false,
+  },
+  docs: {
+    hosted_paper_saas_foundation: "docs/hosted-paper-saas-foundation-roadmap.md",
+    hosted_paper_readiness: "docs/hosted-paper-backend-api-readiness.md",
+    auth_boundary: "docs/hosted-paper-auth-boundary-spec.md",
+    identity_readiness: "docs/hosted-paper-identity-rbac-tenant-readiness.md",
+    local_demo: "docs/customer-self-service-demo.md",
+    production_local_data_boundary: "docs/production-local-data-boundary.md",
+  },
+  warnings: [
+    "This endpoint is read-only environment contract metadata only.",
+    "Hosted Paper Mode is not enabled for customer SaaS operation.",
+    "Production Vercel cannot read local SQLite paper records.",
+    "Production Trading Platform remains NOT READY.",
+    "Live trading remains disabled by default.",
+  ],
+};
+
 const fallbackHostedPaperReadiness: HostedPaperReadiness = {
   service: "hosted-paper-api-readiness",
   readiness_state: "not_enabled",
@@ -1237,6 +1381,7 @@ export default async function Home({ searchParams }: HomeProps) {
     paperApprovalQueue,
     paperApprovalHistory,
     releaseBaseline,
+    hostedPaperEnvironment,
     hostedPaperReadiness,
     hostedPaperIdentityReadiness,
     hostedPaperMockSession,
@@ -1314,6 +1459,10 @@ export default async function Home({ searchParams }: HomeProps) {
         fallbackPaperApprovalHistory,
       ),
       fetchJson<ReleaseBaseline>("/api/release/baseline", fallbackReleaseBaseline),
+      fetchJson<HostedPaperEnvironment>(
+        "/api/hosted-paper/environment",
+        fallbackHostedPaperEnvironment,
+      ),
       fetchJson<HostedPaperReadiness>(
         "/api/hosted-paper/readiness",
         fallbackHostedPaperReadiness,
@@ -1423,6 +1572,9 @@ export default async function Home({ searchParams }: HomeProps) {
       ? undefined
       : `paper approval history: ${paperApprovalHistory.error}`,
     releaseBaseline.available ? undefined : `release baseline: ${releaseBaseline.error}`,
+    hostedPaperEnvironment.available
+      ? undefined
+      : `hosted paper environment: ${hostedPaperEnvironment.error}`,
     hostedPaperReadiness.available
       ? undefined
       : `hosted paper readiness: ${hostedPaperReadiness.error}`,
@@ -1515,6 +1667,16 @@ export default async function Home({ searchParams }: HomeProps) {
               error={releaseBaseline.available ? undefined : releaseBaseline.error}
             />
             <DeploymentDataBoundaryPanel copy={copy.deploymentDataBoundary} />
+            <HostedPaperEnvironmentPanel
+              available={hostedPaperEnvironment.available}
+              copy={copy.hostedPaperEnvironment}
+              environment={hostedPaperEnvironment.data}
+              error={
+                hostedPaperEnvironment.available
+                  ? undefined
+                  : hostedPaperEnvironment.error
+              }
+            />
             <HostedPaperReadinessPanel
               available={hostedPaperReadiness.available}
               copy={copy.hostedPaperReadiness}

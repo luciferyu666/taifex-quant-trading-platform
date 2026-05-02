@@ -102,6 +102,7 @@ for required_file in \
   docs/customer-self-service-demo.md \
   docs/customer-self-service-paper-demo-roadmap.md \
   docs/customer-self-service-local-demo-launcher.md \
+  docs/hosted-paper-saas-foundation-roadmap.md \
   docs/hosted-paper-backend-api-readiness.md \
   docs/hosted-paper-auth-boundary-spec.md \
   docs/hosted-paper-identity-rbac-tenant-readiness.md \
@@ -128,6 +129,9 @@ for required_file in \
   scripts/paper-broker-simulation-readiness-check.sh \
   scripts/paper-risk-cross-account-readiness-check.sh \
   scripts/export-hosted-paper-tenant-boundary-evidence.py \
+  backend/app/domain/hosted_paper_environment.py \
+  backend/tests/test_hosted_paper_environment_routes.py \
+  frontend/app/components/HostedPaperEnvironmentPanel.tsx \
   frontend/scripts/check-paper-approval-ui-flow.mjs; do
   if [[ ! -f "${required_file}" ]]; then
     printf 'Missing required customer evaluation file: %s\n' "${required_file}" >&2
@@ -273,6 +277,7 @@ for required_file in \
   backend/app/domain/paper_oms_reliability.py \
   backend/app/domain/paper_oms_production_readiness.py \
   backend/app/domain/paper_risk_state.py \
+  backend/app/domain/hosted_paper_environment.py \
   backend/app/domain/hosted_paper_identity.py \
   backend/app/domain/hosted_paper_session.py \
   backend/app/domain/exposure.py \
