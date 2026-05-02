@@ -14,6 +14,16 @@ production audit service, not broker connectivity, and not live trading.
 
 ```bash
 cd "/mnt/f/From C download/taifex-quant-trading-platform"
+make customer-demo-env-check
+make start-customer-demo
+```
+
+`make start-customer-demo` is the customer-facing wrapper. It runs the
+environment check first, then delegates to the underlying launcher.
+
+The lower-level command remains available for operators who need custom flags:
+
+```bash
 make launch-self-service-paper-demo
 ```
 
@@ -33,6 +43,7 @@ The launcher:
 For CI or pre-demo verification:
 
 ```bash
+make customer-demo-env-check
 make self-service-paper-demo-launcher-check
 ```
 

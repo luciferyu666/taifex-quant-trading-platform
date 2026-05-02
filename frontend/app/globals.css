@@ -442,7 +442,8 @@ h3 {
   font-weight: 800;
 }
 
-.local-backend-panel {
+.local-backend-panel,
+.local-demo-setup-panel {
   display: grid;
   gap: 16px;
   margin-top: 18px;
@@ -454,7 +455,8 @@ h3 {
   margin-top: 18px;
 }
 
-.local-backend-panel .section-heading p:not(.eyebrow) {
+.local-backend-panel .section-heading p:not(.eyebrow),
+.local-demo-setup-panel .section-heading p:not(.eyebrow) {
   max-width: 920px;
   margin: 10px 0 0;
   color: var(--muted);

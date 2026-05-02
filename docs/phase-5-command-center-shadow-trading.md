@@ -136,6 +136,11 @@ Expose roadmap phase status, contracts, safety mode, risk status, and paper-only
 - Local Backend Demo Mode must show `make launch-self-service-paper-demo` plus
   the manual fallback commands needed to run backend, frontend, demo seed, and
   persistence verification without enabling live trading.
+- Local Demo Setup panel must show the lower-friction customer path:
+  `make customer-demo-env-check` then `make start-customer-demo`.
+- Local Demo Setup panel must state local-machine only, local SQLite only, no
+  hosted customer accounts, no broker credential collection, and no production
+  trading readiness.
 - Deployment Data Boundary must show `PRODUCTION_SQLITE_ACCESS=false` and
   `LOCAL_BACKEND_REQUIRED_FOR_RECORDS=true`.
 - Hosted Paper API Readiness panel must show that hosted paper backend/API mode

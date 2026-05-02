@@ -15,6 +15,7 @@ const files = {
   hostedPaperTenantEvidence:
     "frontend/app/components/HostedPaperTenantBoundaryEvidencePanel.tsx",
   localBackendMode: "frontend/app/components/LocalBackendDemoModePanel.tsx",
+  localDemoSetup: "frontend/app/components/LocalDemoSetupPanel.tsx",
   paperComplianceApproval:
     "frontend/app/components/PaperComplianceApprovalReadinessPanel.tsx",
   paperApprovals: "frontend/app/components/PaperApprovalQueuePanel.tsx",
@@ -397,6 +398,21 @@ requireNotContains("Local backend demo panel does not call workflow record", sou
 requireNotContains("Local backend demo panel does not collect API keys", sourceByFile.localBackendMode.toLowerCase(), "api_key");
 requireNotContains("Local backend demo panel does not collect account IDs", sourceByFile.localBackendMode.toLowerCase(), "account_id");
 requireNotContains("Local backend demo panel does not collect certificates", sourceByFile.localBackendMode.toLowerCase(), "certificate");
+requireContains("Local demo setup English copy exists", sourceByFile.i18n, "Start a local Paper Only demo");
+requireContains("Local demo setup Chinese copy exists", sourceByFile.i18n, "啟動本地 Paper Only Demo");
+requireContains("Local demo setup component is implemented", sourceByFile.localDemoSetup, "LocalDemoSetupPanel");
+requireContains("Local demo setup exposes env check command", sourceByFile.localDemoSetup, "make customer-demo-env-check");
+requireContains("Local demo setup exposes start command", sourceByFile.localDemoSetup, "make start-customer-demo");
+requireContains("Local demo setup exposes Windows wrapper", sourceByFile.localDemoSetup, "scripts/start-customer-demo.ps1");
+requireContains("Local demo setup shows local-only flag", sourceByFile.localDemoSetup, "LOCAL_MACHINE_ONLY=true");
+requireContains("Local demo setup shows no hosted accounts", sourceByFile.localDemoSetup, "HOSTED_CUSTOMER_ACCOUNTS=false");
+requireContains("Local demo setup shows no broker credentials", sourceByFile.localDemoSetup, "BROKER_CREDENTIALS_COLLECTED=false");
+requireContains("Local demo setup is mounted on page", sourceByFile.page, "LocalDemoSetupPanel");
+requireNotContains("Local demo setup does not fetch backend", sourceByFile.localDemoSetup, "fetch(");
+requireNotContains("Local demo setup does not call workflow record", sourceByFile.localDemoSetup, "/api/paper-execution/workflow/record");
+requireNotContains("Local demo setup does not collect API keys", sourceByFile.localDemoSetup.toLowerCase(), "api_key");
+requireNotContains("Local demo setup does not collect account IDs", sourceByFile.localDemoSetup.toLowerCase(), "account_id");
+requireNotContains("Local demo setup does not collect certificates", sourceByFile.localDemoSetup.toLowerCase(), "certificate");
 requireContains("English paper records copy exists", sourceByFile.i18n, "Persisted paper workflow records");
 requireContains("Traditional Chinese paper records copy exists", sourceByFile.i18n, "已持久化紙上流程紀錄");
 requireContains("English paper evidence copy exists", sourceByFile.i18n, "Paper demo evidence viewer");

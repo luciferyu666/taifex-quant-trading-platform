@@ -74,6 +74,8 @@ Existing commands that support this track:
 
 ```bash
 make launch-self-service-paper-demo
+make customer-demo-env-check
+make start-customer-demo
 make self-service-paper-demo-launcher-check
 make frontend-local-backend-demo-check
 make local-backend-demo-browser-drill
@@ -176,6 +178,13 @@ hosted backend, expose local SQLite to Production Vercel, connect brokers, or
 enable live trading.
 
 Implemented launcher:
+
+```bash
+make customer-demo-env-check
+make start-customer-demo
+```
+
+Operator-level launcher:
 
 ```bash
 make launch-self-service-paper-demo

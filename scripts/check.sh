@@ -99,6 +99,7 @@ for required_file in \
   docs/frontend-local-backend-demo-mode.md \
   docs/local-backend-demo-browser-drill.md \
   docs/production-local-data-boundary.md \
+  docs/customer-self-service-demo.md \
   docs/customer-self-service-paper-demo-roadmap.md \
   docs/customer-self-service-local-demo-launcher.md \
   docs/hosted-paper-backend-api-readiness.md \
@@ -115,6 +116,9 @@ for required_file in \
   scripts/customer-evaluation-check.sh \
   scripts/self-service-paper-demo-check.sh \
   scripts/launch-self-service-paper-demo.sh \
+  scripts/check-customer-demo-env.sh \
+  scripts/start-customer-demo.sh \
+  scripts/start-customer-demo.ps1 \
   scripts/hosted-paper-api-readiness-check.sh \
   scripts/hosted-paper-auth-boundary-check.sh \
   scripts/hosted-paper-identity-readiness-check.sh \
@@ -143,6 +147,16 @@ fi
 
 if [[ ! -x scripts/launch-self-service-paper-demo.sh ]]; then
   printf 'scripts/launch-self-service-paper-demo.sh must be executable.\n' >&2
+  missing_customer_eval_file=1
+fi
+
+if [[ ! -x scripts/check-customer-demo-env.sh ]]; then
+  printf 'scripts/check-customer-demo-env.sh must be executable.\n' >&2
+  missing_customer_eval_file=1
+fi
+
+if [[ ! -x scripts/start-customer-demo.sh ]]; then
+  printf 'scripts/start-customer-demo.sh must be executable.\n' >&2
   missing_customer_eval_file=1
 fi
 
@@ -196,6 +210,7 @@ if [[ "${missing_customer_eval_file}" -ne 0 ]]; then
 fi
 
 bash scripts/customer-evaluation-check.sh
+bash scripts/check-customer-demo-env.sh
 bash scripts/self-service-paper-demo-check.sh
 bash scripts/launch-self-service-paper-demo.sh --check-only
 bash scripts/hosted-paper-api-readiness-check.sh

@@ -196,6 +196,44 @@ export const dashboardCopy = {
       copyFailed: "Copy failed. Copy the commands manually.",
       safetyLabel: "Local backend demo safety flags",
     },
+    localDemoSetup: {
+      eyebrow: "Self-Service Demo",
+      title: "Start a local Paper Only demo",
+      description:
+        "A lower-friction local launcher for customer evaluation. It validates safety defaults, uses local SQLite, can seed a paper workflow record, and starts local backend/frontend services without hosted accounts or broker connectivity.",
+      steps: [
+        {
+          kicker: "Step 1",
+          title: "Check prerequisites",
+          text:
+            "Run the environment check first. It verifies backend Python, frontend dependencies, local ports, and paper-only defaults before any service starts.",
+        },
+        {
+          kicker: "Step 2",
+          title: "Start the local demo",
+          text:
+            "Start FastAPI and Next.js locally with one command. The launcher prints the Web Command Center URL, backend health URL, SQLite path, and log files.",
+        },
+        {
+          kicker: "Step 3",
+          title: "Review paper records",
+          text:
+            "Use the local Web Command Center to inspect seeded paper approval, OMS, audit, risk, and evidence surfaces. Production Vercel remains a read-only presentation surface.",
+        },
+      ],
+      commandKicker: "Recommended commands",
+      commandTitle: "Customer-ready local demo path",
+      commandText:
+        "Use these commands when a reviewer needs actual local paper records without reading the full engineering runbook.",
+      copyCommands: "Copy customer demo commands",
+      copied: "Customer demo commands copied.",
+      copyFailed: "Copy failed. Copy the commands manually.",
+      windowsKicker: "Windows helper",
+      windowsTitle: "PowerShell wrapper",
+      windowsText:
+        "Windows reviewers can use the PowerShell wrapper from the repo root. It delegates to the same paper-only Bash launcher and does not collect credentials.",
+      safetyLabel: "Customer self-service demo safety flags",
+    },
     deploymentDataBoundary: {
       eyebrow: "Data Access Boundary",
       title: "Where actual paper records can be read",
@@ -2050,6 +2088,44 @@ export const dashboardCopy = {
       copied: "已複製本地 demo 指令。",
       copyFailed: "複製失敗，請手動複製指令。",
       safetyLabel: "本地後端 demo 安全旗標",
+    },
+    localDemoSetup: {
+      eyebrow: "自助 Demo",
+      title: "啟動本地 Paper Only Demo",
+      description:
+        "降低客戶測試門檻的本地 launcher。它會檢查安全預設、使用本地 SQLite、可 seed 一筆紙上流程紀錄，並啟動本地 backend/frontend；不建立 hosted account，也不連接券商。",
+      steps: [
+        {
+          kicker: "步驟 1",
+          title: "檢查前置條件",
+          text:
+            "先執行環境檢查。它會確認 backend Python、frontend dependencies、本地 port 與 paper-only defaults，然後才允許啟動服務。",
+        },
+        {
+          kicker: "步驟 2",
+          title: "啟動本地 Demo",
+          text:
+            "用一個指令在本機啟動 FastAPI 與 Next.js。launcher 會列出 Web Command Center URL、backend health URL、SQLite 路徑與 log 檔。",
+        },
+        {
+          kicker: "步驟 3",
+          title: "檢視 paper records",
+          text:
+            "使用本地 Web Command Center 檢視已 seed 的紙上審批、OMS、audit、risk 與 evidence 介面。Production Vercel 仍只是只讀展示介面。",
+        },
+      ],
+      commandKicker: "建議指令",
+      commandTitle: "客戶可跟著執行的本地 demo 路徑",
+      commandText:
+        "Reviewer 需要檢視實際本地 paper records，但不想先閱讀完整工程 runbook 時，請使用這組指令。",
+      copyCommands: "複製客戶 demo 指令",
+      copied: "已複製客戶 demo 指令。",
+      copyFailed: "複製失敗，請手動複製指令。",
+      windowsKicker: "Windows helper",
+      windowsTitle: "PowerShell wrapper",
+      windowsText:
+        "Windows reviewer 可在 repo root 使用 PowerShell wrapper。它會委派到同一個 paper-only Bash launcher，且不收集憑證。",
+      safetyLabel: "客戶自助 demo 安全旗標",
     },
     deploymentDataBoundary: {
       eyebrow: "資料存取邊界",

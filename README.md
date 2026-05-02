@@ -144,7 +144,10 @@ records require local backend demo mode or a future controlled hosted API/data
 layer. See `docs/frontend-local-backend-demo-mode.md` and
 `docs/production-local-data-boundary.md`. The customer self-service path is
 tracked in `docs/customer-self-service-paper-demo-roadmap.md`; the local launcher
-is documented in `docs/customer-self-service-local-demo-launcher.md`. Future
+is documented in `docs/customer-self-service-local-demo-launcher.md`, and the
+customer-facing quick-start flow is documented in
+`docs/customer-self-service-demo.md`. Preferred local demo commands are
+`make customer-demo-env-check` followed by `make start-customer-demo`. Future
 hosted paper API readiness is tracked in
 `docs/hosted-paper-backend-api-readiness.md`; the current backend exposes
 `GET /api/hosted-paper/readiness`,

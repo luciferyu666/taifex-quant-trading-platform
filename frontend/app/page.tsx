@@ -25,6 +25,7 @@ import {
 } from "./components/HostedPaperMockSessionPanel";
 import { HostedPaperTenantBoundaryEvidencePanel } from "./components/HostedPaperTenantBoundaryEvidencePanel";
 import { LocalBackendDemoModePanel } from "./components/LocalBackendDemoModePanel";
+import { LocalDemoSetupPanel } from "./components/LocalDemoSetupPanel";
 import {
   PaperComplianceApprovalReadinessPanel,
   type PaperComplianceApprovalReadiness,
@@ -1548,6 +1549,7 @@ export default async function Home({ searchParams }: HomeProps) {
             />
             <HostedPaperTenantBoundaryEvidencePanel copy={copy} />
             <LocalBackendDemoModePanel copy={copy.localBackendMode} />
+            <LocalDemoSetupPanel copy={copy.localDemoSetup} />
           </>
         }
         paper={

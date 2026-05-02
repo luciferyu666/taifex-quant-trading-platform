@@ -61,6 +61,15 @@ Customers may evaluate:
     [customer-self-service-paper-demo-roadmap.md](customer-self-service-paper-demo-roadmap.md).
   - The one-command local launcher is documented in
     [customer-self-service-local-demo-launcher.md](customer-self-service-local-demo-launcher.md).
+  - The customer-facing self-service flow is documented in
+    [customer-self-service-demo.md](customer-self-service-demo.md).
+  - Preferred customer commands:
+
+    ```bash
+    make customer-demo-env-check
+    make start-customer-demo
+    ```
+
   - Hosted paper backend/API readiness is documented in
     [hosted-paper-backend-api-readiness.md](hosted-paper-backend-api-readiness.md).
 - Paper OMS reliability metadata review:
