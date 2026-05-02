@@ -20,6 +20,7 @@ GET /api/hosted-backend/readiness
 GET /api/hosted-paper/environment
 GET /api/hosted-paper/readiness
 GET /api/hosted-paper/datastore-readiness
+GET /api/hosted-paper/production-datastore/readiness
 GET /api/hosted-paper/identity-access-contract
 GET /api/hosted-paper/auth-provider-selection
 ```
@@ -62,6 +63,15 @@ and `database_url_read=false`. It does not read `DATABASE_URL`, connect to a
 database, create hosted records, create customer accounts, create tenants,
 create reviewer login, call brokers, or create orders.
 
+`GET /api/hosted-paper/production-datastore/readiness` defines the production
+datastore boundary for the future hosted paper SaaS product. It is a read-only,
+contract-only response that lists required production record groups for paper
+approval, paper order, OMS events, and audit events. It marks local SQLite as
+demo/development only, requires a future managed Postgres-style datastore
+review, and keeps migration apply, database connection, hosted writes, backup
+configuration, retention enforcement, and restore drill verification disabled
+until a formal datastore implementation slice is approved.
+
 `GET /api/hosted-paper/identity-access-contract` defines the future hosted
 paper identity, session, tenant, RBAC, and ABAC boundary. It separates
 `customer`, `reviewer`, `operator`, and `admin` responsibilities, but remains a
@@ -80,13 +90,14 @@ hosted records, call brokers, or create orders.
 
 1. Hosted backend/API deployment foundation
 2. Managed datastore migration plan review
-3. Managed database with tenant-scoped hosted paper records
-4. Auth provider selection and security review
-5. Auth/session identity access contract
-6. Tenant isolation enforcement
-7. RBAC/ABAC enforcement
-8. Paper workflow persistence
-9. Hosted customer demo tenant
+3. Production datastore readiness contract and provider security review
+4. Managed database with tenant-scoped hosted paper records
+5. Auth provider selection and security review
+6. Auth/session identity access contract
+7. Tenant isolation enforcement
+8. RBAC/ABAC enforcement
+9. Paper workflow persistence
+10. Hosted customer demo tenant
 
 ## Environment Boundary
 
@@ -138,6 +149,11 @@ local machine only, and does not create hosted customer accounts.
   `schema_only_no_hosted_datastore`.
 - `make hosted-paper-datastore-migration-plan` emits the dry-run datastore
   migration plan without reading `DATABASE_URL` or connecting to a database.
+- `GET /api/hosted-paper/production-datastore/readiness` returns
+  `contract_only_no_production_datastore`, lists paper approval, paper order,
+  OMS event, and audit event production record groups, and keeps
+  `database_url_read=false`, `connection_attempted=false`, `apply_enabled=false`,
+  and `local_sqlite_allowed_for_production=false`.
 - `GET /api/hosted-paper/identity-access-contract` returns
   `contract_only_not_implemented` and separates customer, reviewer, operator,
   and admin boundaries.
@@ -161,5 +177,8 @@ BROKER_PROVIDER=paper
   and frontend panel.
 - `make hosted-backend-readiness-check` validates the hosted backend foundation
   docs, placeholder infra, API routes, and tests.
+- `make hosted-paper-production-datastore-readiness-check` validates the
+  production datastore readiness API, Web Command Center panel, docs, and safety
+  boundaries without reading `DATABASE_URL`.
 
 Live trading remains disabled by default.

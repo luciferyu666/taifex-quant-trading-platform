@@ -15,6 +15,10 @@ import {
   type HostedPaperDatastoreReadiness,
 } from "./components/HostedPaperDatastoreReadinessPanel";
 import {
+  HostedPaperProductionDatastoreReadinessPanel,
+  type HostedPaperProductionDatastoreReadiness,
+} from "./components/HostedPaperProductionDatastoreReadinessPanel";
+import {
   HostedPaperEnvironmentPanel,
   type HostedPaperEnvironment,
 } from "./components/HostedPaperEnvironmentPanel";
@@ -1106,6 +1110,217 @@ const fallbackHostedPaperDatastoreReadiness: HostedPaperDatastoreReadiness = {
   ],
 };
 
+const fallbackHostedPaperProductionDatastoreReadiness: HostedPaperProductionDatastoreReadiness = {
+  service: "hosted-paper-production-datastore-readiness",
+  readiness_state: "contract_only_no_production_datastore",
+  summary:
+    "Production datastore is not enabled. This contract defines the future managed database, migration, backup, retention, restore, and tenant boundary required before hosted paper records can move beyond local SQLite demo mode.",
+  recommended_datastore_pattern: "managed_postgres_via_marketplace_candidate",
+  tenant_key: "tenant_id",
+  capabilities: {
+    production_datastore_enabled: false,
+    managed_postgres_selected: false,
+    marketplace_provisioning_enabled: false,
+    hosted_records_writable: false,
+    hosted_records_readable: false,
+    migrations_apply_enabled: false,
+    backup_policy_configured: false,
+    point_in_time_recovery_required: true,
+    restore_drill_verified: false,
+    retention_policy_enforced: false,
+    local_sqlite_allowed_for_production: false,
+  },
+  record_groups: [
+    {
+      record_group: "paper_approval",
+      table_names: [
+        "hosted_paper_approval_requests",
+        "hosted_paper_approval_decisions",
+      ],
+      tenant_key: "tenant_id",
+      required_identifiers: [
+        "tenant_id",
+        "approval_request_id",
+        "approval_decision_id",
+        "reviewer_user_id",
+      ],
+      required_controls: [
+        "authenticated reviewer identity",
+        "tenant-scoped RBAC and ABAC",
+        "append-only decision audit trail",
+      ],
+      backup_required: true,
+      retention_required: true,
+      restore_required: true,
+      local_sqlite_allowed: false,
+    },
+    {
+      record_group: "paper_order",
+      table_names: [
+        "hosted_paper_workflow_runs",
+        "hosted_paper_orders",
+        "hosted_paper_risk_evaluations",
+      ],
+      tenant_key: "tenant_id",
+      required_identifiers: [
+        "tenant_id",
+        "workflow_run_id",
+        "order_id",
+        "idempotency_key",
+      ],
+      required_controls: [
+        "completed approval_request_id",
+        "risk evaluation reference",
+        "duplicate order prevention across sessions",
+      ],
+      backup_required: true,
+      retention_required: true,
+      restore_required: true,
+      local_sqlite_allowed: false,
+    },
+    {
+      record_group: "oms_event",
+      table_names: [
+        "hosted_paper_oms_events",
+        "hosted_paper_execution_reports",
+        "hosted_paper_outbox_events",
+      ],
+      tenant_key: "tenant_id",
+      required_identifiers: [
+        "tenant_id",
+        "workflow_run_id",
+        "order_id",
+        "event_id",
+        "sequence",
+      ],
+      required_controls: [
+        "durable queue/outbox design",
+        "deterministic event ordering",
+        "timeout and retry metadata",
+      ],
+      backup_required: true,
+      retention_required: true,
+      restore_required: true,
+      local_sqlite_allowed: false,
+    },
+    {
+      record_group: "audit_event",
+      table_names: [
+        "hosted_paper_audit_events",
+        "hosted_paper_audit_integrity_snapshots",
+        "hosted_paper_evidence_exports",
+      ],
+      tenant_key: "tenant_id",
+      required_identifiers: [
+        "tenant_id",
+        "audit_event_id",
+        "actor_user_id",
+        "previous_hash",
+        "event_hash",
+      ],
+      required_controls: [
+        "append-only audit write path",
+        "hash-chain verification",
+        "retention and legal hold metadata",
+      ],
+      backup_required: true,
+      retention_required: true,
+      restore_required: true,
+      local_sqlite_allowed: false,
+    },
+  ],
+  migration_boundary: {
+    migration_mode: "contract_only_no_database_connection",
+    dry_run_only: true,
+    database_url_read: false,
+    connection_attempted: false,
+    apply_enabled: false,
+    automatic_apply_enabled: false,
+    backup_before_apply_required: true,
+    restore_drill_before_customer_pilot_required: true,
+    required_controls_before_apply: [
+      "managed Postgres provider selected and security-reviewed",
+      "dev/staging/production database separation documented",
+      "tenant_id required on every hosted paper table",
+      "migration dry-run reviewed",
+      "backup policy documented",
+      "restore drill documented",
+      "retention policy approved",
+      "audit integrity requirements reviewed",
+    ],
+  },
+  retention_boundaries: [
+    {
+      record_group: "paper_approval",
+      minimum_requirement:
+        "retain through customer evaluation, dispute review, and audit hold",
+      delete_behavior: "soft delete request metadata only after retention review",
+      export_required: true,
+      audit_required: true,
+      legal_hold_required_before_delete: true,
+    },
+    {
+      record_group: "paper_order",
+      minimum_requirement:
+        "retain through paper workflow review and customer evidence export",
+      delete_behavior: "archive before deletion; no direct user hard delete",
+      export_required: true,
+      audit_required: true,
+      legal_hold_required_before_delete: true,
+    },
+    {
+      record_group: "oms_event",
+      minimum_requirement:
+        "retain full event timeline through workflow lifecycle and audit review",
+      delete_behavior: "append corrective events instead of mutating history",
+      export_required: true,
+      audit_required: true,
+      legal_hold_required_before_delete: true,
+    },
+    {
+      record_group: "audit_event",
+      minimum_requirement: "append-only retention with integrity verification",
+      delete_behavior: "no user deletion path before legal and compliance review",
+      export_required: true,
+      audit_required: true,
+      legal_hold_required_before_delete: true,
+    },
+  ],
+  local_sqlite_boundary:
+    "Local SQLite remains allowed only for demo and developer workflows. It is not allowed as the production hosted paper datastore.",
+  safety_defaults: {
+    trading_mode: "paper",
+    enable_live_trading: false,
+    broker_provider: "paper",
+  },
+  safety_flags: {
+    paper_only: true,
+    live_trading_enabled: false,
+    broker_api_called: false,
+    order_created: false,
+    database_written: false,
+    external_db_written: false,
+    broker_credentials_collected: false,
+    production_trading_ready: false,
+  },
+  docs: {
+    production_datastore: "docs/hosted-paper-production-datastore-readiness.md",
+    managed_datastore: "docs/hosted-paper-managed-datastore-readiness.md",
+    migration_plan: "docs/hosted-paper-managed-datastore-migration-plan.md",
+    saas_roadmap: "docs/hosted-paper-saas-foundation-roadmap.md",
+    local_data_boundary: "docs/production-local-data-boundary.md",
+  },
+  warnings: [
+    "This endpoint is read-only production datastore readiness metadata.",
+    "No production database is selected, provisioned, connected, or written.",
+    "No DATABASE_URL is read by this contract.",
+    "Local SQLite remains for demo and development only.",
+    "Backup, retention, and restore controls are required before hosted use.",
+    "Production Trading Platform remains NOT READY.",
+    "Live trading remains disabled by default.",
+  ],
+};
+
 const fallbackHostedPaperReadiness: HostedPaperReadiness = {
   service: "hosted-paper-api-readiness",
   readiness_state: "not_enabled",
@@ -1919,6 +2134,7 @@ export default async function Home({ searchParams }: HomeProps) {
     releaseBaseline,
     hostedPaperEnvironment,
     hostedPaperDatastoreReadiness,
+    hostedPaperProductionDatastoreReadiness,
     hostedPaperReadiness,
     hostedPaperIdentityReadiness,
     hostedPaperIdentityAccessContract,
@@ -2005,6 +2221,10 @@ export default async function Home({ searchParams }: HomeProps) {
       fetchJson<HostedPaperDatastoreReadiness>(
         "/api/hosted-paper/datastore-readiness",
         fallbackHostedPaperDatastoreReadiness,
+      ),
+      fetchJson<HostedPaperProductionDatastoreReadiness>(
+        "/api/hosted-paper/production-datastore/readiness",
+        fallbackHostedPaperProductionDatastoreReadiness,
       ),
       fetchJson<HostedPaperReadiness>(
         "/api/hosted-paper/readiness",
@@ -2240,6 +2460,16 @@ export default async function Home({ searchParams }: HomeProps) {
                   : hostedPaperDatastoreReadiness.error
               }
               readiness={hostedPaperDatastoreReadiness.data}
+            />
+            <HostedPaperProductionDatastoreReadinessPanel
+              available={hostedPaperProductionDatastoreReadiness.available}
+              copy={copy.hostedPaperProductionDatastore}
+              error={
+                hostedPaperProductionDatastoreReadiness.available
+                  ? undefined
+                  : hostedPaperProductionDatastoreReadiness.error
+              }
+              readiness={hostedPaperProductionDatastoreReadiness.data}
             />
             <HostedPaperReadinessPanel
               available={hostedPaperReadiness.available}

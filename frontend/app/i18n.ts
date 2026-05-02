@@ -610,6 +610,137 @@ export const dashboardCopy = {
           "Live trading remains disabled by default.",
       },
     },
+    hostedPaperProductionDatastore: {
+      eyebrow: "Production Datastore",
+      title: "Hosted Paper Production Datastore Readiness",
+      description:
+        "Read-only boundary for the future production datastore. It defines paper approval, paper order, OMS event, audit event, migration, backup, retention, and restore requirements without connecting to a database.",
+      fallbackPrefix:
+        "Hosted paper production datastore readiness unavailable. Rendering safe fallback:",
+      endpointLabel: "Read-only endpoint",
+      tenantKeyLabel: "Tenant key",
+      recommendedPatternLabel: "Recommended datastore pattern",
+      stateLabel: "Readiness state",
+      capabilitiesLabel: "Capability flags",
+      migrationLabel: "Migration boundary",
+      migrationModeLabel: "Migration mode",
+      databaseUrlReadLabel: "DATABASE_URL read",
+      connectionAttemptedLabel: "Connection attempted",
+      applyEnabledLabel: "Apply enabled",
+      requiredControlsLabel: "Required controls",
+      recordGroupsLabel: "Production record groups",
+      tablesLabel: "Tables",
+      localSqliteAllowedLabel: "Local SQLite allowed",
+      backupRequiredLabel: "Backup required",
+      retentionRequiredLabel: "Retention required",
+      restoreRequiredLabel: "Restore required",
+      retentionLabel: "Retention and deletion boundaries",
+      localSqliteBoundaryLabel: "Local SQLite boundary",
+      safetyDefaultsLabel: "Safety defaults",
+      safetyFlagsLabel: "Safety flags",
+      warningLabel: "Boundary warnings",
+      statusLabels: {
+        contract_only_no_production_datastore:
+          "CONTRACT ONLY - NO PRODUCTION DATASTORE",
+      },
+      capabilityLabels: {
+        production_datastore_enabled: "Production datastore enabled",
+        managed_postgres_selected: "Managed Postgres selected",
+        marketplace_provisioning_enabled: "Marketplace provisioning enabled",
+        hosted_records_writable: "Hosted records writable",
+        hosted_records_readable: "Hosted records readable",
+        migrations_apply_enabled: "Migration apply enabled",
+        backup_policy_configured: "Backup policy configured",
+        point_in_time_recovery_required: "Point-in-time recovery required",
+        restore_drill_verified: "Restore drill verified",
+        retention_policy_enforced: "Retention policy enforced",
+        local_sqlite_allowed_for_production:
+          "Local SQLite allowed for production",
+      },
+      recordGroupLabels: {
+        paper_approval: "Paper approval",
+        paper_order: "Paper order",
+        oms_event: "OMS event",
+        audit_event: "Audit event",
+      },
+      controlLabels: {
+        "authenticated reviewer identity": "Authenticated reviewer identity",
+        "tenant-scoped RBAC and ABAC": "Tenant-scoped RBAC and ABAC",
+        "dual-review sequence where required": "Dual-review sequence where required",
+        "append-only decision audit trail": "Append-only decision audit trail",
+        "completed approval_request_id": "Completed approval_request_id",
+        "risk evaluation reference": "Risk evaluation reference",
+        "duplicate order prevention across sessions":
+          "Duplicate order prevention across sessions",
+        "paper-only execution eligibility": "Paper-only execution eligibility",
+        "durable queue/outbox design": "Durable queue/outbox design",
+        "deterministic event ordering": "Deterministic event ordering",
+        "timeout and retry metadata": "Timeout and retry metadata",
+        "reconciliation reference": "Reconciliation reference",
+        "append-only audit write path": "Append-only audit write path",
+        "hash-chain verification": "Hash-chain verification",
+        "retention and legal hold metadata": "Retention and legal hold metadata",
+        "exportable evidence references": "Exportable evidence references",
+        "managed Postgres provider selected and security-reviewed":
+          "Managed Postgres provider selected and security-reviewed",
+        "dev/staging/production database separation documented":
+          "dev/staging/production database separation documented",
+        "tenant_id required on every hosted paper table":
+          "tenant_id required on every hosted paper table",
+        "migration dry-run reviewed": "Migration dry-run reviewed",
+        "backup policy documented": "Backup policy documented",
+        "restore drill documented": "Restore drill documented",
+        "retention policy approved": "Retention policy approved",
+        "audit integrity requirements reviewed":
+          "Audit integrity requirements reviewed",
+      },
+      retentionRequirementLabels: {
+        "retain through customer evaluation, dispute review, and audit hold":
+          "Retain through customer evaluation, dispute review, and audit hold",
+        "retain through paper workflow review and customer evidence export":
+          "Retain through paper workflow review and customer evidence export",
+        "retain full event timeline through workflow lifecycle and audit review":
+          "Retain full event timeline through workflow lifecycle and audit review",
+        "append-only retention with integrity verification":
+          "Append-only retention with integrity verification",
+      },
+      deleteBehaviorLabels: {
+        "soft delete request metadata only after retention review":
+          "Soft delete request metadata only after retention review",
+        "archive before deletion; no direct user hard delete":
+          "Archive before deletion; no direct user hard delete",
+        "append corrective events instead of mutating history":
+          "Append corrective events instead of mutating history",
+        "no user deletion path before legal and compliance review":
+          "No user deletion path before legal and compliance review",
+      },
+      safetyFlagLabels: {
+        paper_only: "paper_only",
+        live_trading_enabled: "live_trading_enabled",
+        broker_api_called: "broker_api_called",
+        order_created: "order_created",
+        database_written: "database_written",
+        external_db_written: "external_db_written",
+        broker_credentials_collected: "broker_credentials_collected",
+        production_trading_ready: "production_trading_ready",
+      },
+      warningLabels: {
+        "This endpoint is read-only production datastore readiness metadata.":
+          "This endpoint is read-only production datastore readiness metadata.",
+        "No production database is selected, provisioned, connected, or written.":
+          "No production database is selected, provisioned, connected, or written.",
+        "No DATABASE_URL is read by this contract.":
+          "No DATABASE_URL is read by this contract.",
+        "Local SQLite remains for demo and development only.":
+          "Local SQLite remains for demo and development only.",
+        "Backup, retention, and restore controls are required before hosted use.":
+          "Backup, retention, and restore controls are required before hosted use.",
+        "Production Trading Platform remains NOT READY.":
+          "Production Trading Platform remains NOT READY.",
+        "Live trading remains disabled by default.":
+          "Live trading remains disabled by default.",
+      },
+    },
     hostedPaperIdentityReadiness: {
       eyebrow: "Hosted Paper Identity",
       title: "Identity, RBAC, and tenant readiness",
@@ -3063,6 +3194,137 @@ export const dashboardCopy = {
           "不讀取也不寫入 hosted records。",
         "Local SQLite remains for local demo mode only.":
           "Local SQLite 仍只用於 local demo mode。",
+        "Production Trading Platform remains NOT READY.":
+          "Production Trading Platform 仍為 NOT READY。",
+        "Live trading remains disabled by default.":
+          "Live trading remains disabled by default.",
+      },
+    },
+    hostedPaperProductionDatastore: {
+      eyebrow: "Production Datastore",
+      title: "Hosted Paper Production Datastore 就緒狀態",
+      description:
+        "未來 production datastore 的只讀邊界。它定義 paper approval、paper order、OMS event、audit event、migration、backup、retention 與 restore requirements，但不連接資料庫。",
+      fallbackPrefix:
+        "Hosted paper production datastore readiness 無法取得，正在顯示安全備援資料：",
+      endpointLabel: "只讀 endpoint",
+      tenantKeyLabel: "Tenant key",
+      recommendedPatternLabel: "建議 datastore pattern",
+      stateLabel: "就緒狀態",
+      capabilitiesLabel: "能力旗標",
+      migrationLabel: "Migration boundary",
+      migrationModeLabel: "Migration mode",
+      databaseUrlReadLabel: "DATABASE_URL 已讀取",
+      connectionAttemptedLabel: "Connection attempted",
+      applyEnabledLabel: "Apply enabled",
+      requiredControlsLabel: "必要控制",
+      recordGroupsLabel: "Production record groups",
+      tablesLabel: "資料表",
+      localSqliteAllowedLabel: "允許 Local SQLite",
+      backupRequiredLabel: "需要 backup",
+      retentionRequiredLabel: "需要 retention",
+      restoreRequiredLabel: "需要 restore",
+      retentionLabel: "Retention 與 deletion boundaries",
+      localSqliteBoundaryLabel: "Local SQLite 邊界",
+      safetyDefaultsLabel: "安全預設",
+      safetyFlagsLabel: "安全旗標",
+      warningLabel: "邊界警示",
+      statusLabels: {
+        contract_only_no_production_datastore:
+          "CONTRACT ONLY - NO PRODUCTION DATASTORE",
+      },
+      capabilityLabels: {
+        production_datastore_enabled: "Production datastore 已啟用",
+        managed_postgres_selected: "Managed Postgres 已選定",
+        marketplace_provisioning_enabled: "Marketplace provisioning 已啟用",
+        hosted_records_writable: "Hosted records 可寫入",
+        hosted_records_readable: "Hosted records 可讀取",
+        migrations_apply_enabled: "Migration apply 已啟用",
+        backup_policy_configured: "Backup policy 已設定",
+        point_in_time_recovery_required: "需要 point-in-time recovery",
+        restore_drill_verified: "Restore drill 已驗證",
+        retention_policy_enforced: "Retention policy 已強制",
+        local_sqlite_allowed_for_production:
+          "Production 可使用 Local SQLite",
+      },
+      recordGroupLabels: {
+        paper_approval: "Paper approval",
+        paper_order: "Paper order",
+        oms_event: "OMS event",
+        audit_event: "Audit event",
+      },
+      controlLabels: {
+        "authenticated reviewer identity": "Authenticated reviewer identity",
+        "tenant-scoped RBAC and ABAC": "Tenant-scoped RBAC and ABAC",
+        "dual-review sequence where required": "必要時雙人覆核 sequence",
+        "append-only decision audit trail": "Append-only decision audit trail",
+        "completed approval_request_id": "Completed approval_request_id",
+        "risk evaluation reference": "Risk evaluation reference",
+        "duplicate order prevention across sessions":
+          "跨 session duplicate order prevention",
+        "paper-only execution eligibility": "Paper-only execution eligibility",
+        "durable queue/outbox design": "Durable queue/outbox design",
+        "deterministic event ordering": "Deterministic event ordering",
+        "timeout and retry metadata": "Timeout and retry metadata",
+        "reconciliation reference": "Reconciliation reference",
+        "append-only audit write path": "Append-only audit write path",
+        "hash-chain verification": "Hash-chain verification",
+        "retention and legal hold metadata": "Retention 與 legal hold metadata",
+        "exportable evidence references": "Exportable evidence references",
+        "managed Postgres provider selected and security-reviewed":
+          "Managed Postgres provider 已選定並完成 security review",
+        "dev/staging/production database separation documented":
+          "dev/staging/production database separation 已文件化",
+        "tenant_id required on every hosted paper table":
+          "每個 hosted paper table 都必須有 tenant_id",
+        "migration dry-run reviewed": "Migration dry-run 已審查",
+        "backup policy documented": "Backup policy 已文件化",
+        "restore drill documented": "Restore drill 已文件化",
+        "retention policy approved": "Retention policy 已核准",
+        "audit integrity requirements reviewed":
+          "Audit integrity requirements 已審查",
+      },
+      retentionRequirementLabels: {
+        "retain through customer evaluation, dispute review, and audit hold":
+          "保留至 customer evaluation、dispute review 與 audit hold 結束",
+        "retain through paper workflow review and customer evidence export":
+          "保留至 paper workflow review 與 customer evidence export 結束",
+        "retain full event timeline through workflow lifecycle and audit review":
+          "保留完整 event timeline 至 workflow lifecycle 與 audit review 結束",
+        "append-only retention with integrity verification":
+          "具 integrity verification 的 append-only retention",
+      },
+      deleteBehaviorLabels: {
+        "soft delete request metadata only after retention review":
+          "Retention review 後才 soft delete request metadata",
+        "archive before deletion; no direct user hard delete":
+          "刪除前先 archive；不提供 user direct hard delete",
+        "append corrective events instead of mutating history":
+          "用 corrective events 追加修正，不改寫 history",
+        "no user deletion path before legal and compliance review":
+          "Legal 與 compliance review 前不提供 user deletion path",
+      },
+      safetyFlagLabels: {
+        paper_only: "paper_only",
+        live_trading_enabled: "live_trading_enabled",
+        broker_api_called: "broker_api_called",
+        order_created: "order_created",
+        database_written: "database_written",
+        external_db_written: "external_db_written",
+        broker_credentials_collected: "broker_credentials_collected",
+        production_trading_ready: "production_trading_ready",
+      },
+      warningLabels: {
+        "This endpoint is read-only production datastore readiness metadata.":
+          "此 endpoint 只是只讀 production datastore readiness metadata。",
+        "No production database is selected, provisioned, connected, or written.":
+          "未選定、provision、連接或寫入 production database。",
+        "No DATABASE_URL is read by this contract.":
+          "此 contract 不讀取 DATABASE_URL。",
+        "Local SQLite remains for demo and development only.":
+          "Local SQLite 仍只用於 demo 與 development。",
+        "Backup, retention, and restore controls are required before hosted use.":
+          "Hosted use 前必須完成 backup、retention 與 restore controls。",
         "Production Trading Platform remains NOT READY.":
           "Production Trading Platform 仍為 NOT READY。",
         "Live trading remains disabled by default.":

@@ -1,0 +1,180 @@
+# Hosted Paper Production Datastore Readiness
+
+## Purpose
+
+This document defines the production datastore boundary for a future hosted
+paper-only SaaS product.
+
+The current platform does not have a production hosted datastore. Local SQLite
+remains allowed only for demo and developer workflows. It is not the production
+hosted paper datastore.
+
+This slice is read-only and contract-only. It does not select, provision,
+connect to, migrate, back up, restore, read, or write any production database.
+It does not read `DATABASE_URL`.
+
+Live trading remains disabled by default.
+
+## API
+
+```text
+GET /api/hosted-paper/production-datastore/readiness
+```
+
+Current response state:
+
+```text
+service=hosted-paper-production-datastore-readiness
+readiness_state=contract_only_no_production_datastore
+recommended_datastore_pattern=managed_postgres_via_marketplace_candidate
+production_datastore_enabled=false
+managed_postgres_selected=false
+marketplace_provisioning_enabled=false
+hosted_records_writable=false
+hosted_records_readable=false
+migrations_apply_enabled=false
+backup_policy_configured=false
+restore_drill_verified=false
+retention_policy_enforced=false
+local_sqlite_allowed_for_production=false
+database_url_read=false
+connection_attempted=false
+apply_enabled=false
+database_written=false
+external_db_written=false
+broker_api_called=false
+order_created=false
+production_trading_ready=false
+```
+
+Safety defaults:
+
+```text
+TRADING_MODE=paper
+ENABLE_LIVE_TRADING=false
+BROKER_PROVIDER=paper
+```
+
+## Future Datastore Pattern
+
+The first production datastore candidate should be a managed Postgres service
+provisioned through a reviewed hosted-platform marketplace path where possible.
+For a Vercel deployment, that means a Marketplace-managed Postgres provider
+such as Neon is a candidate for future review.
+
+This document does not approve any provider. Provider selection still requires:
+
+- security review
+- data residency review
+- backup and restore review
+- tenant isolation review
+- operational ownership review
+- cost and scaling review
+
+## Required Record Groups
+
+| Record Group | Future Tables | Production Requirement |
+| --- | --- | --- |
+| `paper_approval` | `hosted_paper_approval_requests`, `hosted_paper_approval_decisions` | Authenticated reviewer identity, tenant-scoped RBAC/ABAC, audit trail. |
+| `paper_order` | `hosted_paper_workflow_runs`, `hosted_paper_orders`, `hosted_paper_risk_evaluations` | Completed `approval_request_id`, risk reference, idempotency, duplicate prevention. |
+| `oms_event` | `hosted_paper_oms_events`, `hosted_paper_execution_reports`, `hosted_paper_outbox_events` | Durable queue/outbox direction, deterministic event ordering, timeout/retry metadata. |
+| `audit_event` | `hosted_paper_audit_events`, `hosted_paper_audit_integrity_snapshots`, `hosted_paper_evidence_exports` | Append-only write path, hash-chain verification, legal hold and retention metadata. |
+
+Every table must include `tenant_id`.
+
+## Migration Boundary
+
+Production migration apply remains disabled.
+
+Before apply can be considered, the following controls must be complete:
+
+- managed Postgres provider selected and security-reviewed
+- dev/staging/production database separation documented
+- `tenant_id` required on every hosted paper table
+- migration dry-run reviewed
+- backup policy documented
+- restore drill documented
+- retention policy approved
+- audit integrity requirements reviewed
+
+Current migration flags:
+
+```text
+dry_run_only=true
+database_url_read=false
+connection_attempted=false
+apply_enabled=false
+automatic_apply_enabled=false
+```
+
+## Backup And Restore Requirements
+
+Production paper records require a documented backup and restore plan before
+customer-hosted use:
+
+- scheduled backup policy
+- point-in-time recovery requirement
+- restore drill before customer pilot
+- restore drill evidence
+- tenant-scoped recovery procedure
+- rollback procedure for failed migrations
+
+This slice does not configure backup or restore.
+
+## Retention Requirements
+
+Retention is required for:
+
+- paper approval records
+- paper order and workflow records
+- OMS event timelines
+- audit events and evidence exports
+
+Deletion behavior must avoid direct user hard-delete of paper workflow history.
+Where corrections are required, the preferred model is append corrective events
+instead of mutating history.
+
+## Local SQLite Boundary
+
+Local SQLite remains for:
+
+- local developer testing
+- customer self-service local demo mode
+- local evidence export demo workflows
+
+Local SQLite is not:
+
+- a hosted paper production datastore
+- a production OMS ledger
+- a production WORM audit ledger
+- a tenant-isolated hosted data layer
+
+## Non-Goals
+
+- Do not provision a production database.
+- Do not read `DATABASE_URL`.
+- Do not connect to a database.
+- Do not apply migrations.
+- Do not write hosted paper records.
+- Do not create customer accounts.
+- Do not collect credentials.
+- Do not call brokers.
+- Do not create orders.
+- Do not enable live trading.
+- Do not claim production trading readiness.
+
+## Acceptance Criteria
+
+- `GET /api/hosted-paper/production-datastore/readiness` returns
+  `contract_only_no_production_datastore`.
+- Response includes paper approval, paper order, OMS event, and audit event
+  record groups.
+- Response marks `database_url_read=false`.
+- Response marks `connection_attempted=false`.
+- Response marks `apply_enabled=false`.
+- Response marks `local_sqlite_allowed_for_production=false`.
+- Web Command Center displays the production datastore boundary as read-only.
+- `make hosted-paper-production-datastore-readiness-check` passes.
+- `make check` passes.
+
+Production Trading Platform remains NOT READY.

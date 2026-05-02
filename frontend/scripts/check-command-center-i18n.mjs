@@ -11,6 +11,8 @@ const files = {
   hostedPaperEnvironment: "frontend/app/components/HostedPaperEnvironmentPanel.tsx",
   hostedPaperDatastore:
     "frontend/app/components/HostedPaperDatastoreReadinessPanel.tsx",
+  hostedPaperProductionDatastore:
+    "frontend/app/components/HostedPaperProductionDatastoreReadinessPanel.tsx",
   hostedPaperReadiness: "frontend/app/components/HostedPaperReadinessPanel.tsx",
   hostedPaperIdentityReadiness:
     "frontend/app/components/HostedPaperIdentityReadinessPanel.tsx",
@@ -338,6 +340,24 @@ requireNotContains("Hosted paper datastore panel does not call workflow record",
 requireNotContains("Hosted paper datastore panel does not collect API keys", sourceByFile.hostedPaperDatastore.toLowerCase(), "api_key");
 requireNotContains("Hosted paper datastore panel does not collect account IDs", sourceByFile.hostedPaperDatastore.toLowerCase(), "account_id");
 requireNotContains("Hosted paper datastore panel does not collect certificates", sourceByFile.hostedPaperDatastore.toLowerCase(), "certificate");
+requireContains("English hosted paper production datastore copy exists", sourceByFile.i18n, "Hosted Paper Production Datastore Readiness");
+requireContains("Traditional Chinese hosted paper production datastore copy exists", sourceByFile.i18n, "Hosted Paper Production Datastore 就緒狀態");
+requireContains("Hosted paper production datastore component is implemented", sourceByFile.hostedPaperProductionDatastore, "HostedPaperProductionDatastoreReadinessPanel");
+requireContains("Hosted paper production datastore endpoint is fetched on page", sourceByFile.page, "/api/hosted-paper/production-datastore/readiness");
+requireContains("Hosted paper production datastore panel is mounted on page", sourceByFile.page, "HostedPaperProductionDatastoreReadinessPanel");
+requireContains("Hosted paper production datastore shows contract-only state", combinedSource, "contract_only_no_production_datastore");
+requireContains("Hosted paper production datastore shows managed Postgres pattern", combinedSource, "managed_postgres_via_marketplace_candidate");
+requireContains("Hosted paper production datastore shows approval table", combinedSource, "hosted_paper_approval_requests");
+requireContains("Hosted paper production datastore shows order table", combinedSource, "hosted_paper_orders");
+requireContains("Hosted paper production datastore shows OMS event table", combinedSource, "hosted_paper_oms_events");
+requireContains("Hosted paper production datastore shows audit event table", combinedSource, "hosted_paper_audit_events");
+requireContains("Hosted paper production datastore shows DATABASE_URL boundary", sourceByFile.hostedPaperProductionDatastore, "database_url_read");
+requireContains("Hosted paper production datastore shows local SQLite production false", combinedSource, "local_sqlite_allowed_for_production");
+requireNotContains("Hosted paper production datastore panel does not fetch directly", sourceByFile.hostedPaperProductionDatastore, "fetch(");
+requireNotContains("Hosted paper production datastore panel does not call workflow record", sourceByFile.hostedPaperProductionDatastore, "/api/paper-execution/workflow/record");
+requireNotContains("Hosted paper production datastore panel does not collect API keys", sourceByFile.hostedPaperProductionDatastore.toLowerCase(), "api_key");
+requireNotContains("Hosted paper production datastore panel does not collect account IDs", sourceByFile.hostedPaperProductionDatastore.toLowerCase(), "account_id");
+requireNotContains("Hosted paper production datastore panel does not collect certificates", sourceByFile.hostedPaperProductionDatastore.toLowerCase(), "certificate");
 requireContains("English hosted paper readiness copy exists", sourceByFile.i18n, "Hosted Paper API Readiness");
 requireContains("Traditional Chinese hosted paper readiness copy exists", sourceByFile.i18n, "Hosted Paper API 就緒狀態");
 requireContains("Hosted paper readiness component is implemented", sourceByFile.hostedPaperReadiness, "HostedPaperReadinessPanel");

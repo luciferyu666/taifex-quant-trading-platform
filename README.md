@@ -152,6 +152,7 @@ hosted paper API readiness is tracked in
 `docs/hosted-paper-backend-api-readiness.md`; the current backend exposes
 `GET /api/hosted-paper/environment`, `GET /api/hosted-paper/readiness`,
 `GET /api/hosted-paper/datastore-readiness`,
+`GET /api/hosted-paper/production-datastore/readiness`,
 `GET /api/hosted-paper/identity-readiness`,
 `GET /api/hosted-paper/identity-access-contract`,
 `GET /api/hosted-paper/auth-provider-selection`,
@@ -164,6 +165,13 @@ The future managed datastore contract is documented in
 `docs/hosted-paper-managed-datastore-readiness.md`; it defines tenant-scoped
 record models, migration boundaries, retention requirements, and audit
 requirements without connecting to a hosted database or writing hosted records.
+The future production datastore boundary for paper approvals, paper orders, OMS
+events, and audit events is documented in
+`docs/hosted-paper-production-datastore-readiness.md` and exposed as read-only
+metadata at `GET /api/hosted-paper/production-datastore/readiness`. It keeps
+production datastore selection, marketplace provisioning, migration apply,
+hosted writes, backup configuration, restore drill verification, and retention
+enforcement disabled; local SQLite remains demo/development only.
 Future hosted login, session, RBAC, ABAC, and tenant boundaries are specified in
 `docs/hosted-paper-auth-boundary-spec.md`; the identity/RBAC/tenant readiness
 contract is documented in

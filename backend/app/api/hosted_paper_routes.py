@@ -23,6 +23,10 @@ from app.domain.hosted_paper_identity_access import (
     HostedPaperIdentityAccessContractResponse,
     get_hosted_paper_identity_access_contract,
 )
+from app.domain.hosted_paper_production_datastore import (
+    HostedPaperProductionDatastoreReadinessResponse,
+    get_hosted_paper_production_datastore_readiness,
+)
 from app.domain.hosted_paper_readiness import (
     HostedPaperReadinessResponse,
     get_hosted_paper_readiness,
@@ -55,6 +59,16 @@ def hosted_paper_datastore_readiness(
     settings: SettingsDep,
 ) -> HostedPaperDatastoreReadinessResponse:
     return get_hosted_paper_datastore_readiness(settings)
+
+
+@router.get(
+    "/production-datastore/readiness",
+    response_model=HostedPaperProductionDatastoreReadinessResponse,
+)
+def hosted_paper_production_datastore_readiness(
+    settings: SettingsDep,
+) -> HostedPaperProductionDatastoreReadinessResponse:
+    return get_hosted_paper_production_datastore_readiness(settings)
 
 
 @router.get("/session", response_model=HostedPaperMockSessionResponse)

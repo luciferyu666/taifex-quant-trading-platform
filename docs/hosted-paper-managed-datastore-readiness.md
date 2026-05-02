@@ -23,6 +23,18 @@ The current platform remains a local demo and paper research preview. Production
 
 The endpoint returns read-only metadata only. It does not connect to a database, does not read hosted records, does not write hosted records, does not create customer accounts, and does not create orders.
 
+The production datastore boundary is tracked separately at:
+
+```text
+GET /api/hosted-paper/production-datastore/readiness
+```
+
+That contract lists the future production record groups for paper approvals,
+paper orders, OMS events, and audit events, and keeps the response state at
+`contract_only_no_production_datastore`. It does not read `DATABASE_URL`, does
+not connect to a database, does not apply migrations, and does not write hosted
+records. See `docs/hosted-paper-production-datastore-readiness.md`.
+
 ## Tenant Key
 
 All future hosted paper tables must include:
@@ -44,6 +56,8 @@ The `tenant_id` must be present on every future hosted paper record and every ho
 | `hosted_paper_audit_events` | Paper audit trail | `tenant_id`, `audit_event_id` |
 
 These are future hosted models only. They do not replace the current local SQLite demo store in this slice.
+Local SQLite remains demo/development only and is not allowed as the production
+hosted paper datastore.
 
 ## Migration Boundary
 
