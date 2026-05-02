@@ -160,6 +160,10 @@ The current Paper Approval workflow is local scaffolding, not a formal
 compliance approval system; the readiness boundary is documented in
 `docs/paper-compliance-approval-readiness.md` and exposed as read-only metadata
 at `GET /api/paper-execution/approvals/compliance-readiness`.
+SQLite audit persistence is also local paper scaffolding, not production WORM
+storage or an immutable audit ledger. The WORM readiness boundary is documented
+in `docs/paper-audit-worm-readiness.md` and exposed as read-only metadata at
+`GET /api/paper-execution/audit-integrity/worm-readiness`.
 The Web Command Center displays the mock session and tenant context as read-only
 contract metadata. Reviewers can export the same mock session and tenant
 boundary as local JSON evidence with

@@ -108,6 +108,7 @@ for required_file in \
   docs/paper-approval-ui-flow-smoke-drill.md \
   docs/paper-approval-workflow.md \
   docs/paper-compliance-approval-readiness.md \
+  docs/paper-audit-worm-readiness.md \
   scripts/customer-evaluation-check.sh \
   scripts/self-service-paper-demo-check.sh \
   scripts/launch-self-service-paper-demo.sh \
@@ -164,6 +165,11 @@ if [[ ! -x scripts/paper-compliance-approval-readiness-check.sh ]]; then
   missing_customer_eval_file=1
 fi
 
+if [[ ! -x scripts/paper-audit-worm-readiness-check.sh ]]; then
+  printf 'scripts/paper-audit-worm-readiness-check.sh must be executable.\n' >&2
+  missing_customer_eval_file=1
+fi
+
 if [[ "${missing_customer_eval_file}" -ne 0 ]]; then
   exit 1
 fi
@@ -176,6 +182,7 @@ bash scripts/hosted-paper-auth-boundary-check.sh
 bash scripts/hosted-paper-identity-readiness-check.sh
 bash scripts/hosted-paper-mock-session-check.sh
 bash scripts/paper-compliance-approval-readiness-check.sh
+bash scripts/paper-audit-worm-readiness-check.sh
 
 printf 'Checking Facebook community launch content...\n'
 if [[ -x scripts/social-content-check.sh ]]; then
@@ -217,6 +224,7 @@ for required_file in \
   backend/app/domain/research_review_packet.py \
   backend/app/domain/paper_approval.py \
   backend/app/domain/paper_compliance_approval.py \
+  backend/app/domain/paper_audit_worm_readiness.py \
   backend/app/domain/paper_broker_simulation.py \
   backend/app/domain/paper_execution.py \
   backend/app/domain/paper_execution_records.py \
@@ -239,6 +247,7 @@ for required_file in \
   scripts/export-paper-risk-evidence.py \
   scripts/export-hosted-paper-tenant-boundary-evidence.py \
   scripts/verify-paper-audit-integrity.py \
+  scripts/paper-audit-worm-readiness-check.sh \
   scripts/paper-simulation-submit-check.py \
   backend/app/api/data_routes.py \
   backend/app/api/continuous_futures_routes.py \

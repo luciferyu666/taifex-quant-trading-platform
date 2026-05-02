@@ -485,3 +485,22 @@ Future live work requires:
 - No research review decision index path may be used as a paper execution approval,
   live readiness, advisory workflow, strategy ranking, broker execution instruction,
   or performance certification.
+
+## SQLite Audit vs Production WORM Boundary
+
+Local SQLite paper audit records are not production WORM storage and must not be
+presented as an immutable audit ledger. The current system may show hash-chain
+verification and WORM readiness metadata for Paper Only review, but the following
+remain false:
+
+- `worm_storage_enabled=false`
+- `immutable_ledger_enabled=false`
+- `centralized_audit_service_enabled=false`
+- `external_timestamping_enabled=false`
+- `cryptographic_signing_enabled=false`
+- `retention_policy_enforced=false`
+- `production_audit_compliance=false`
+
+Any future WORM or immutable audit claim requires separate architecture,
+security, legal, compliance, and operational review. Live trading remains
+disabled by default.

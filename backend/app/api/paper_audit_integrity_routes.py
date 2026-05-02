@@ -9,6 +9,10 @@ from app.domain.audit_integrity import (
     PaperAuditIntegrityStatus,
     PaperAuditIntegrityVerification,
 )
+from app.domain.paper_audit_worm_readiness import (
+    PaperAuditWormReadinessResponse,
+    get_paper_audit_worm_readiness,
+)
 from app.services.audit_integrity_service import PaperAuditIntegrityService
 
 router = APIRouter(prefix="/api/paper-execution", tags=["paper-audit-integrity"])
@@ -24,6 +28,16 @@ def paper_audit_integrity_status(
     settings: SettingsDep,
 ) -> PaperAuditIntegrityStatus:
     return _audit_integrity_service(settings).status()
+
+
+@router.get(
+    "/audit-integrity/worm-readiness",
+    response_model=PaperAuditWormReadinessResponse,
+)
+def paper_audit_worm_readiness(
+    settings: SettingsDep,
+) -> PaperAuditWormReadinessResponse:
+    return get_paper_audit_worm_readiness(settings)
 
 
 @router.get("/audit-integrity/verify", response_model=PaperAuditIntegrityVerification)

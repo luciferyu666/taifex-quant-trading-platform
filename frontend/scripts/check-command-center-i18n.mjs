@@ -26,6 +26,7 @@ const files = {
   paperRisk: "frontend/app/components/PaperRiskGuardrailsPanel.tsx",
   paperOmsReliability: "frontend/app/components/PaperOmsReliabilityPanel.tsx",
   paperAuditIntegrity: "frontend/app/components/PaperAuditIntegrityPanel.tsx",
+  paperAuditWormReadiness: "frontend/app/components/PaperAuditWormReadinessPanel.tsx",
   paperAuditIntegrityEvidence: "frontend/app/components/PaperAuditIntegrityEvidencePanel.tsx",
   paperRecords: "frontend/app/components/PaperExecutionRecordsPanel.tsx",
   paperSubmit: "frontend/app/components/PaperSimulationSubmitPanel.tsx",
@@ -564,6 +565,29 @@ requireNotContains("Paper audit integrity panel does not call workflow record", 
 requireNotContains("Paper audit integrity panel does not collect API keys", sourceByFile.paperAuditIntegrity.toLowerCase(), "api_key");
 requireNotContains("Paper audit integrity panel does not collect account IDs", sourceByFile.paperAuditIntegrity.toLowerCase(), "account_id");
 requireNotContains("Paper audit integrity panel does not collect certificates", sourceByFile.paperAuditIntegrity.toLowerCase(), "certificate");
+requireContains("English paper audit WORM readiness copy exists", sourceByFile.i18n, "SQLite audit is not a production WORM ledger");
+requireContains("Traditional Chinese paper audit WORM readiness copy exists", sourceByFile.i18n, "SQLite audit 不是 production WORM ledger");
+requireContains("Paper audit WORM readiness panel is implemented", sourceByFile.paperAuditWormReadiness, "PaperAuditWormReadinessPanel");
+requireContains("Paper audit WORM readiness endpoint is read on page", sourceByFile.page, "/api/paper-execution/audit-integrity/worm-readiness");
+requireContains("Paper audit WORM readiness panel is mounted on page", sourceByFile.page, "PaperAuditWormReadinessPanel");
+requireContains("Paper audit WORM readiness panel shows local SQLite status", sourceByFile.paperAuditWormReadiness, "local_sqlite_audit_enabled");
+requireContains("Paper audit WORM readiness panel shows local hash chain status", sourceByFile.paperAuditWormReadiness, "local_hash_chain_enabled");
+requireContains("Paper audit WORM readiness panel shows WORM storage flag", sourceByFile.paperAuditWormReadiness, "worm_storage_enabled");
+requireContains("Paper audit WORM readiness panel shows immutable ledger flag", sourceByFile.paperAuditWormReadiness, "immutable_ledger_enabled");
+requireContains("Paper audit WORM readiness panel shows append-only storage flag", sourceByFile.paperAuditWormReadiness, "append_only_enforced_by_storage");
+requireContains("Paper audit WORM readiness panel shows centralized audit flag", sourceByFile.paperAuditWormReadiness, "centralized_audit_service_enabled");
+requireContains("Paper audit WORM readiness panel shows object lock flag", sourceByFile.paperAuditWormReadiness, "object_lock_enabled");
+requireContains("Paper audit WORM readiness panel shows external timestamping flag", sourceByFile.paperAuditWormReadiness, "external_timestamping_enabled");
+requireContains("Paper audit WORM readiness panel shows cryptographic signing flag", sourceByFile.paperAuditWormReadiness, "cryptographic_signing_enabled");
+requireContains("Paper audit WORM readiness panel shows retention policy flag", sourceByFile.paperAuditWormReadiness, "retention_policy_enforced");
+requireContains("Paper audit WORM readiness panel shows no compliance claim", sourceByFile.paperAuditWormReadiness, "worm_compliance_claim");
+requireContains("Paper audit WORM readiness panel shows production audit compliance false", sourceByFile.paperAuditWormReadiness, "production_audit_compliance");
+requireNotContains("Paper audit WORM readiness panel does not fetch backend", sourceByFile.paperAuditWormReadiness, "fetch(");
+requireNotContains("Paper audit WORM readiness panel does not call workflow record", sourceByFile.paperAuditWormReadiness, "/api/paper-execution/workflow/record");
+requireNotContains("Paper audit WORM readiness panel does not call audit verify mutation", sourceByFile.paperAuditWormReadiness, "/api/paper-execution/audit-integrity/verify");
+requireNotContains("Paper audit WORM readiness panel does not collect API keys", sourceByFile.paperAuditWormReadiness.toLowerCase(), "api_key");
+requireNotContains("Paper audit WORM readiness panel does not collect account IDs", sourceByFile.paperAuditWormReadiness.toLowerCase(), "account_id");
+requireNotContains("Paper audit WORM readiness panel does not collect certificates", sourceByFile.paperAuditWormReadiness.toLowerCase(), "certificate");
 requireContains("English paper audit evidence copy exists", sourceByFile.i18n, "Paper audit integrity evidence viewer");
 requireContains("Traditional Chinese paper audit evidence copy exists", sourceByFile.i18n, "紙上稽核完整性 evidence viewer");
 requireContains("Paper audit evidence panel is implemented", sourceByFile.paperAuditIntegrityEvidence, "PaperAuditIntegrityEvidencePanel");

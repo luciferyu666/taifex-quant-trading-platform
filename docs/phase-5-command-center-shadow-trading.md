@@ -414,3 +414,15 @@ event checks, and warnings client-side only. It must not upload evidence, call
 backend APIs, write databases, repair hash chains, call brokers, collect
 credentials, create orders, grant live approval, or claim WORM / immutable audit
 compliance.
+
+## Paper Audit WORM Readiness Panel
+
+The Web Command Center includes a read-only Paper Audit WORM Readiness panel. It
+shows that local SQLite audit persistence and hash-chain metadata are useful for
+paper demos, but are not a production WORM or immutable audit ledger.
+
+The panel displays disabled WORM controls such as object lock, centralized audit
+service, external timestamping, cryptographic signing, retention enforcement,
+and production audit compliance. It must not upload records, repair chains,
+collect credentials, create orders, approve live trading, or claim production
+WORM compliance.

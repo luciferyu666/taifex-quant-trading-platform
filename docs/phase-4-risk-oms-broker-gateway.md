@@ -192,3 +192,19 @@ audit events and can detect missing hash metadata, broken chains, duplicate
 `audit_id` values, and workflow continuity issues. It is still local paper
 metadata only. It is not WORM storage, not an immutable audit log, not a
 centralized audit service, and not production compliance certification.
+
+## Paper Audit WORM Readiness Boundary
+
+Paper audit persistence remains local SQLite plus paper-only hash-chain metadata.
+A read-only readiness endpoint now documents the gap to production WORM storage:
+
+```text
+GET /api/paper-execution/audit-integrity/worm-readiness
+make paper-audit-worm-readiness-check
+```
+
+This is not WORM storage, not an immutable audit ledger, not centralized audit,
+not external signing, and not production audit compliance. Future WORM work must
+include reviewed storage architecture, immutable schemas, retention/legal-hold
+rules, append-only ingestion, signing/timestamping, RBAC/ABAC, tenant isolation,
+and legal/security/compliance review.

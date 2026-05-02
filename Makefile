@@ -1,6 +1,6 @@
 SHELL := /usr/bin/env bash
 
-.PHONY: help init infra dev backend frontend frontend-i18n-check frontend-local-backend-demo-check frontend-production-smoke-check customer-demo-ui-smoke-check local-backend-demo-browser-drill paper-approval-ui-flow-smoke-check website website-build website-preview website-check website-content-check website-deploy roadmap-status release-readiness-check customer-evaluation-check self-service-paper-demo-check self-service-paper-demo-launcher-check hosted-paper-api-readiness-check hosted-paper-auth-boundary-check hosted-paper-identity-readiness-check hosted-paper-mock-session-check hosted-paper-tenant-boundary-evidence-export launch-self-service-paper-demo social-content-check facebook-launch-check seed-paper-execution-demo paper-demo-evidence-export paper-broker-simulation-evidence-export paper-risk-evidence-export paper-audit-integrity-check paper-simulation-submit-check paper-approval-workflow-check paper-compliance-approval-readiness-check paper-execution-workflow-check paper-execution-persistence-check paper-risk-guardrails-check paper-broker-simulation-model-check paper-broker-simulation-ui-check paper-oms-reliability-check paper-oms-timeout-check data-fixtures-check rollover-fixtures-check continuous-futures-preview feature-manifest-preview strategy-research-preview backtest-preview backtest-result-preview toy-backtest backtest-artifact-preview backtest-artifact-index-preview backtest-artifact-comparison-preview backtest-research-bundle-preview backtest-research-bundle-index-preview research-review-queue-preview research-review-decision-preview research-review-decision-index-preview research-review-packet-preview sample-research-review-packet research-review-packet-fixtures-check data-quality-reports-dry-run data-version-register-dry-run data-migrations-dry-run data-platform-verify architecture-status architecture-docs-check architecture-safety-check business-docs-check business-compliance-check business-status check test codex-prompt clean
+.PHONY: help init infra dev backend frontend frontend-i18n-check frontend-local-backend-demo-check frontend-production-smoke-check customer-demo-ui-smoke-check local-backend-demo-browser-drill paper-approval-ui-flow-smoke-check website website-build website-preview website-check website-content-check website-deploy roadmap-status release-readiness-check customer-evaluation-check self-service-paper-demo-check self-service-paper-demo-launcher-check hosted-paper-api-readiness-check hosted-paper-auth-boundary-check hosted-paper-identity-readiness-check hosted-paper-mock-session-check hosted-paper-tenant-boundary-evidence-export launch-self-service-paper-demo social-content-check facebook-launch-check seed-paper-execution-demo paper-demo-evidence-export paper-broker-simulation-evidence-export paper-risk-evidence-export paper-audit-integrity-check paper-audit-worm-readiness-check paper-simulation-submit-check paper-approval-workflow-check paper-compliance-approval-readiness-check paper-execution-workflow-check paper-execution-persistence-check paper-risk-guardrails-check paper-broker-simulation-model-check paper-broker-simulation-ui-check paper-oms-reliability-check paper-oms-timeout-check data-fixtures-check rollover-fixtures-check continuous-futures-preview feature-manifest-preview strategy-research-preview backtest-preview backtest-result-preview toy-backtest backtest-artifact-preview backtest-artifact-index-preview backtest-artifact-comparison-preview backtest-research-bundle-preview backtest-research-bundle-index-preview research-review-queue-preview research-review-decision-preview research-review-decision-index-preview research-review-packet-preview sample-research-review-packet research-review-packet-fixtures-check data-quality-reports-dry-run data-version-register-dry-run data-migrations-dry-run data-platform-verify architecture-status architecture-docs-check architecture-safety-check business-docs-check business-compliance-check business-status check test codex-prompt clean
 
 help:
 	@printf 'Taifex Quant Trading Platform commands\n'
@@ -40,6 +40,7 @@ help:
 	@printf '  make paper-broker-simulation-evidence-export Export Paper Only broker simulation preview evidence\n'
 	@printf '  make paper-risk-evidence-export Export Paper Only risk evaluation evidence\n'
 	@printf '  make paper-audit-integrity-check Verify Paper Only local audit hash-chain metadata\n'
+	@printf '  make paper-audit-worm-readiness-check Verify Paper Only WORM readiness boundary\n'
 	@printf '  make paper-simulation-submit-check Verify Paper Only submit trace through API, OMS, and audit queries\n'
 	@printf '  make paper-approval-workflow-check Validate paper-only approval queue and history\n'
 	@printf '  make paper-compliance-approval-readiness-check Validate paper compliance approval readiness boundary\n'
@@ -212,6 +213,10 @@ paper-audit-integrity-check:
 		backend/.venv/bin/python scripts/verify-paper-audit-integrity.py >/dev/null; \
 	rm -rf "$$tmp_dir"
 	cd backend && . .venv/bin/activate && pytest tests/test_audit_integrity.py
+
+paper-audit-worm-readiness-check:
+	bash scripts/paper-audit-worm-readiness-check.sh
+	cd backend && . .venv/bin/activate && pytest tests/test_paper_audit_worm_readiness_routes.py
 
 paper-simulation-submit-check:
 	backend/.venv/bin/python scripts/paper-simulation-submit-check.py

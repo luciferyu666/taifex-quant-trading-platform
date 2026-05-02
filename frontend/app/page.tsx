@@ -38,6 +38,10 @@ import {
   type PaperAuditIntegrityVerification,
 } from "./components/PaperAuditIntegrityPanel";
 import { PaperAuditIntegrityEvidencePanel } from "./components/PaperAuditIntegrityEvidencePanel";
+import {
+  PaperAuditWormReadinessPanel,
+  type PaperAuditWormReadiness,
+} from "./components/PaperAuditWormReadinessPanel";
 import { PaperBrokerSimulationEvidencePanel } from "./components/PaperBrokerSimulationEvidencePanel";
 import { PaperBrokerSimulationModelPanel } from "./components/PaperBrokerSimulationModelPanel";
 import { PaperDemoEvidencePanel } from "./components/PaperDemoEvidencePanel";
@@ -301,6 +305,72 @@ const fallbackPaperAuditIntegrityStatus: PaperAuditIntegrityStatus = {
     "No retention policy enforcement is enabled.",
   ],
   message: "Fallback paper audit integrity status. Backend is unavailable.",
+};
+const fallbackPaperAuditWormReadiness: PaperAuditWormReadiness = {
+  service: "paper-audit-worm-readiness",
+  readiness_state: "local_sqlite_not_production_worm_ledger",
+  summary:
+    "Fallback WORM readiness metadata. Local SQLite audit records are not a production WORM or immutable audit ledger.",
+  storage: {
+    local_sqlite_audit_enabled: true,
+    local_hash_chain_enabled: true,
+    worm_storage_enabled: false,
+    immutable_ledger_enabled: false,
+    append_only_enforced_by_storage: false,
+    centralized_audit_service_enabled: false,
+    object_lock_enabled: false,
+    external_timestamping_enabled: false,
+    cryptographic_signing_enabled: false,
+    retention_policy_enforced: false,
+    legal_hold_enabled: false,
+    audit_export_reviewed: false,
+    production_audit_compliance: false,
+  },
+  safety_defaults: {
+    trading_mode: "paper",
+    enable_live_trading: false,
+    broker_provider: "paper",
+  },
+  safety_flags: {
+    paper_only: true,
+    read_only: true,
+    live_trading_enabled: false,
+    broker_provider: "paper",
+    broker_api_called: false,
+    order_created: false,
+    credentials_collected: false,
+    database_written: false,
+    external_db_written: false,
+    worm_compliance_claim: false,
+    production_audit_compliance: false,
+    production_trading_ready: false,
+  },
+  current_scope: [
+    "Local SQLite paper audit records for demos and engineering review.",
+    "Local hash-chain metadata for paper audit integrity preview.",
+    "Read-only UI display of the current non-production audit posture.",
+  ],
+  missing_for_production_worm: [
+    "Storage-level WORM controls.",
+    "Centralized audit service.",
+    "Cryptographic signing and external timestamping.",
+    "Retention policy and legal hold enforcement.",
+  ],
+  required_before_worm_claim: [
+    "Select a reviewed WORM-capable storage architecture.",
+    "Implement immutable audit schemas and retention policies.",
+    "Complete security, legal, compliance, and DR review.",
+  ],
+  docs: {
+    paper_audit_integrity_preview: "docs/paper-audit-integrity-preview.md",
+    paper_audit_worm_readiness: "docs/paper-audit-worm-readiness.md",
+    paper_shadow_live_boundary: "docs/paper-shadow-live-boundary.md",
+  },
+  warnings: [
+    "Fallback WORM readiness metadata. Backend is unavailable.",
+    "Local SQLite audit persistence is not production WORM storage.",
+    "Production Trading Platform remains NOT READY.",
+  ],
 };
 const fallbackPaperRiskStatus: PaperRiskStatus = {
   trading_mode: "paper",
@@ -939,6 +1009,7 @@ export default async function Home({ searchParams }: HomeProps) {
     paperTimeoutCandidates,
     paperAuditIntegrityStatus,
     paperAuditIntegrityVerification,
+    paperAuditWormReadiness,
     paperRiskStatus,
     paperExecutionRuns,
     paperApprovalStatus,
@@ -984,6 +1055,10 @@ export default async function Home({ searchParams }: HomeProps) {
       fetchJson<PaperAuditIntegrityVerification>(
         "/api/paper-execution/audit-integrity/verify",
         fallbackPaperAuditIntegrityVerification,
+      ),
+      fetchJson<PaperAuditWormReadiness>(
+        "/api/paper-execution/audit-integrity/worm-readiness",
+        fallbackPaperAuditWormReadiness,
       ),
       fetchJson<PaperRiskStatus>("/api/paper-risk/status", fallbackPaperRiskStatus),
       fetchJson<PaperExecutionRunRecord[]>(
@@ -1086,6 +1161,9 @@ export default async function Home({ searchParams }: HomeProps) {
     paperAuditIntegrityVerification.available
       ? undefined
       : `paper audit integrity verification: ${paperAuditIntegrityVerification.error}`,
+    paperAuditWormReadiness.available
+      ? undefined
+      : `paper audit WORM readiness: ${paperAuditWormReadiness.error}`,
     paperRiskStatus.available ? undefined : `paper risk: ${paperRiskStatus.error}`,
     paperExecutionReports.available
       ? undefined
@@ -1453,6 +1531,17 @@ export default async function Home({ searchParams }: HomeProps) {
               }
               status={paperAuditIntegrityStatus.data}
               verification={paperAuditIntegrityVerification.data}
+            />
+
+            <PaperAuditWormReadinessPanel
+              available={paperAuditWormReadiness.available}
+              copy={copy.paperAuditWormReadiness}
+              error={
+                paperAuditWormReadiness.available
+                  ? undefined
+                  : paperAuditWormReadiness.error
+              }
+              readiness={paperAuditWormReadiness.data}
             />
 
             <PaperAuditIntegrityEvidencePanel copy={copy} />

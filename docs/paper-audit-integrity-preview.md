@@ -131,3 +131,18 @@ make check
 ```
 
 Live trading remains disabled by default.
+
+## WORM Readiness Boundary
+
+The audit integrity preview now has a separate WORM readiness boundary:
+
+```text
+GET /api/paper-execution/audit-integrity/worm-readiness
+make paper-audit-worm-readiness-check
+```
+
+This boundary explicitly states that local SQLite audit persistence is not a
+production WORM or immutable audit ledger. The endpoint and Web Command Center
+panel are read-only metadata surfaces. They do not write databases, repair audit
+chains, upload records, call brokers, collect credentials, create orders, grant
+live approval, or claim production audit compliance.

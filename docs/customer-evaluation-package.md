@@ -211,3 +211,13 @@ A successful customer evaluation should produce:
 This project is for research, engineering development, controlled demonstrations, and paper-first workflow evaluation. It is not investment advice, does not guarantee profit, and is not ready for production trading.
 
 Live trading remains disabled by default.
+
+## Paper Audit WORM Readiness Boundary
+
+Customer evaluation may inspect the Paper Audit WORM Readiness panel to confirm
+that local SQLite paper audit records are not a production WORM or immutable
+audit ledger. This is a safety boundary, not a production compliance claim.
+
+Customers must not treat the local SQLite audit database, hash-chain preview, or
+local JSON evidence as regulated audit certification, live-readiness approval,
+or proof of production trading readiness.
