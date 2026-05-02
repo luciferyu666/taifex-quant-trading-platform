@@ -3063,6 +3063,72 @@ Safety boundary:
 - Production Trading Platform remains NOT READY.
 - Live trading remains disabled by default.
 
+## Hosted Paper Auth Provider Selection Matrix Verification
+
+Feature commit:
+
+```text
+002d0f2 Add hosted paper auth provider selection matrix
+```
+
+Verification results:
+
+- GitHub Actions Release Readiness: passed.
+- GitHub Actions Run ID: `25263906069`.
+- Vercel production deployment: `dpl_G3uktLgxi3eB8adDb1t6npx3GSn7`.
+- Production alias:
+  `https://taifex-quant-trading-platform-front.vercel.app`.
+- Production smoke gate: passed.
+- Local validation completed before commit:
+  - `make hosted-paper-auth-provider-selection-check`
+  - `make frontend-i18n-check`
+  - `cd frontend && npm run typecheck`
+  - `cd frontend && npm run build`
+  - `make check`
+
+Scope verified:
+
+- Added read-only endpoint:
+  `GET /api/hosted-paper/auth-provider-selection`.
+- Added read-only Web Command Center panel for hosted paper auth provider
+  selection.
+- Compared Clerk, Auth0, Descope, and Vercel OIDC / Sign in with Vercel against
+  future hosted paper SaaS identity requirements.
+- Documented the provider selection matrix in
+  `docs/hosted-paper-auth-provider-selection-matrix.md`.
+- Added `make hosted-paper-auth-provider-selection-check`.
+
+Safety boundary:
+
+- This is a read-only provider selection matrix, not an authentication
+  integration.
+- No provider was selected, installed, configured, or enabled.
+- No login or signup page was created.
+- No customer account, reviewer login, session cookie, or tenant account was
+  created.
+- No secrets or provider environment variables were added.
+- No hosted datastore records were written.
+- No credentials or broker credentials are collected.
+- No broker API is called.
+- No order is created.
+- `provider_selected=false`.
+- `integration_enabled=false`.
+- `auth_provider_enabled=false`.
+- `customer_account_created=false`.
+- `reviewer_login_created=false`.
+- `session_cookie_issued=false`.
+- `credentials_collected=false`.
+- `secrets_added=false`.
+- `hosted_datastore_written=false`.
+- `broker_api_called=false`.
+- `order_created=false`.
+- `production_trading_ready=false`.
+- `TRADING_MODE=paper`.
+- `ENABLE_LIVE_TRADING=false`.
+- `BROKER_PROVIDER=paper`.
+- Production Trading Platform remains NOT READY.
+- Live trading remains disabled by default.
+
 ## Deployment Refresh Recording Policy
 
 Record-only documentation commits can trigger a new Vercel production
