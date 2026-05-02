@@ -2689,6 +2689,74 @@ Verified scope:
 - Production Trading Platform remains NOT READY.
 - Live trading remains disabled by default.
 
+## Paper Risk Cross-Account Readiness Boundary Verification
+
+Verification date: 2026-05-02
+
+Commit:
+
+```text
+7d6dfa2 Add paper risk cross-account readiness boundary
+```
+
+Commands:
+
+```bash
+make paper-risk-cross-account-readiness-check
+backend/.venv/bin/python -m ruff check backend/app/domain/paper_risk_cross_account_readiness.py backend/app/api/paper_risk_routes.py backend/tests/test_paper_risk_cross_account_readiness_routes.py
+make frontend-i18n-check
+cd frontend && npm run typecheck
+cd frontend && npm run build
+make check
+gh run watch 25245999611 --exit-status
+cd frontend && vercel inspect https://taifex-quant-trading-platform-front.vercel.app
+make frontend-production-smoke-check
+git status --short --branch
+```
+
+Observed result:
+
+```text
+Local repository checks passed.
+Release Readiness CI passed on workflow_dispatch run 25245999611.
+The original push-triggered run 25245813594 was cancelled after the GitHub
+runner stalled in Install system utilities; the rerun passed on the same main
+commit.
+Production alias resolved to deployment dpl_6sjfr68FA1PiypX7HSYsaT4UDEsN.
+Production smoke gate passed and confirmed required safety copy on English and
+Traditional Chinese pages.
+Local git state was clean before this record update: ## main...origin/main.
+```
+
+Verified scope:
+
+- Added a read-only Paper Risk Cross-Account Readiness boundary.
+- Exposed `GET /api/paper-risk/cross-account-readiness`.
+- Added a Web Command Center panel that states the current Paper Risk Engine
+  uses local paper state and is not a formal cross-account risk system.
+- Documented current paper-only scope:
+  - paper-only risk policy defaults
+  - local paper guardrail checks
+  - local duplicate idempotency checks
+  - read-only risk readiness presentation
+- Documented missing production cross-account risk controls:
+  - tenant and account hierarchy
+  - cross-account exposure aggregation
+  - per-account and group-level limits
+  - real margin, equity, PnL, order, fill, and position feeds
+  - centralized durable risk state store
+  - distributed kill switch
+  - broker-side reconciliation
+  - RBAC / ABAC enforcement for risk operations
+- Added `make paper-risk-cross-account-readiness-check` and included the
+  boundary in `make check`.
+- No order creation, Risk Engine mutation, OMS call, Broker Gateway execution
+  path, external account data load, real account data load, broker SDK call,
+  credential collection, hosted datastore write, or production risk approval
+  claim was added.
+- Production Trading Platform remains NOT READY.
+- Live trading remains disabled by default.
+
 ## Deployment Refresh Recording Policy
 
 Record-only documentation commits can trigger a new Vercel production
