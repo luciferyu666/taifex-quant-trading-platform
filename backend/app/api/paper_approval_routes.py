@@ -11,6 +11,10 @@ from app.domain.paper_approval import (
     PaperApprovalRequestCreate,
     PaperApprovalStatusResponse,
 )
+from app.domain.paper_compliance_approval import (
+    PaperComplianceApprovalReadinessResponse,
+    get_paper_compliance_approval_readiness,
+)
 from app.services.paper_approval_store import PaperApprovalStore
 
 router = APIRouter(
@@ -52,6 +56,16 @@ def paper_approval_status(settings: SettingsDep) -> PaperApprovalStatusResponse:
             "governance only. Live approval is not supported."
         ),
     )
+
+
+@router.get(
+    "/compliance-readiness",
+    response_model=PaperComplianceApprovalReadinessResponse,
+)
+def paper_compliance_approval_readiness(
+    settings: SettingsDep,
+) -> PaperComplianceApprovalReadinessResponse:
+    return get_paper_compliance_approval_readiness(settings)
 
 
 @router.post("/requests", response_model=PaperApprovalHistory)

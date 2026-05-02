@@ -13,6 +13,21 @@ UI or workflow depends on approval state.
 This is still **not** production authentication, production RBAC, production WORM
 storage, broker integration, or live-trading approval.
 
+It is also **not** a formal compliance approval system. The current workflow is
+local paper scaffolding for demos and technical validation. The explicit
+readiness boundary is available at:
+
+```text
+GET /api/paper-execution/approvals/compliance-readiness
+```
+
+and documented in
+[paper-compliance-approval-readiness.md](paper-compliance-approval-readiness.md).
+That readiness response keeps formal compliance approval, production approval
+authority, verified reviewer identity, RBAC/ABAC enforcement, WORM ledger,
+centralized audit service, signed approval records, paper execution approval,
+and live approval unavailable.
+
 ## Current Scope
 
 Implemented backend foundation:

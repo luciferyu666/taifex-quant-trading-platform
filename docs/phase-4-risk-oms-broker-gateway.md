@@ -40,6 +40,13 @@ Create a paper-only execution core where order intents are evaluated by Risk Eng
   - Approval history is queryable and hash-chained for local tamper-evidence.
   - This is not production login, production RBAC, production WORM storage, or live
     approval.
+- Paper compliance approval readiness:
+  - `GET /api/paper-execution/approvals/compliance-readiness` exposes read-only
+    metadata that the local approval workflow is paper scaffolding only.
+  - Formal compliance approval, production approval authority, verified reviewer
+    identity, RBAC/ABAC enforcement, WORM ledger, centralized audit service,
+    paper execution approval, and live approval remain unavailable through this
+    readiness endpoint.
 - Local paper OMS/audit persistence:
   - `POST /api/paper-execution/workflow/record` records a paper workflow run to
     local SQLite only.
@@ -110,6 +117,8 @@ Create a paper-only execution core where order intents are evaluated by Risk Eng
   reviewed persistence design.
 - Do not treat local approval queue records as production identity, final compliance
   approval, or live readiness.
+- Do not describe the local paper approval workflow as a formal compliance
+  approval system.
 - Do not let a client-supplied `approval_decision` become the source of authority
   for paper simulation. Controlled Paper Submit must use persisted approval history.
 - Do not treat the local outbox metadata as asynchronous production processing.

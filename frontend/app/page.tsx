@@ -25,6 +25,10 @@ import {
 } from "./components/HostedPaperMockSessionPanel";
 import { HostedPaperTenantBoundaryEvidencePanel } from "./components/HostedPaperTenantBoundaryEvidencePanel";
 import { LocalBackendDemoModePanel } from "./components/LocalBackendDemoModePanel";
+import {
+  PaperComplianceApprovalReadinessPanel,
+  type PaperComplianceApprovalReadiness,
+} from "./components/PaperComplianceApprovalReadinessPanel";
 import type { PaperAuditEventRecord } from "./components/PaperAuditTimelinePanel";
 import { PaperApprovalDecisionPanel } from "./components/PaperApprovalDecisionPanel";
 import { PaperApprovalRequestPanel } from "./components/PaperApprovalRequestPanel";
@@ -375,6 +379,102 @@ const fallbackPaperApprovalStatus: PaperApprovalStatus = {
 
 const fallbackPaperApprovalQueue: PaperApprovalHistory[] = [];
 const fallbackPaperApprovalHistory: PaperApprovalHistory[] = [];
+
+const fallbackPaperComplianceApprovalReadiness: PaperComplianceApprovalReadiness = {
+  service: "paper-compliance-approval-readiness",
+  readiness_state: "local_paper_scaffolding_not_formal_compliance_system",
+  summary:
+    "The current approval workflow is local Paper Only scaffolding for technical demos. It is not a formal compliance approval system, does not verify reviewer identity, and does not grant live or production trading approval.",
+  scaffolding: {
+    local_paper_approval_queue_enabled: true,
+    local_sqlite_persistence_enabled: true,
+    paper_only_decisions_supported: [
+      "research_approved",
+      "approved_for_paper_simulation",
+      "rejected",
+      "needs_data_review",
+    ],
+    local_dual_review_rule_enabled: true,
+    formal_compliance_approval_enabled: false,
+    production_approval_authority: false,
+    reviewer_identity_verified: false,
+    rbac_abac_enforced: false,
+    segregation_of_duties_enforced: false,
+    compliance_policy_engine_enabled: false,
+    approval_policy_versioning_enabled: false,
+    tenant_scoped_approval_records_enabled: false,
+    legal_retention_policy_enforced: false,
+  },
+  audit: {
+    local_hash_chain_enabled: true,
+    worm_ledger_enabled: false,
+    immutable_audit_log_enabled: false,
+    centralized_audit_service_enabled: false,
+    signed_approval_records_enabled: false,
+    external_timestamping_enabled: false,
+    retention_policy_enforced: false,
+    production_compliance_archive_enabled: false,
+  },
+  safety_defaults: {
+    trading_mode: "paper",
+    enable_live_trading: false,
+    broker_provider: "paper",
+  },
+  safety_flags: {
+    paper_only: true,
+    read_only: true,
+    live_trading_enabled: false,
+    broker_provider: "paper",
+    broker_api_called: false,
+    order_created: false,
+    credentials_collected: false,
+    broker_credentials_collected: false,
+    database_written: false,
+    external_db_written: false,
+    production_compliance_approval: false,
+    live_approval_granted: false,
+    paper_execution_approval_granted: false,
+    production_trading_ready: false,
+  },
+  current_scope: [
+    "Local Paper Only approval queue and history for demos and technical testing.",
+    "Local SQLite persistence with hash-chain references for paper approval decisions.",
+    "Controlled Paper Submit can reference a persisted approval_request_id.",
+    "Web Command Center can create local paper requests and decisions for paper simulation only.",
+  ],
+  missing_for_formal_compliance: [
+    "Real reviewer login and verified reviewer identity.",
+    "Formal RBAC/ABAC enforcement for approval authority.",
+    "Tenant-scoped customer accounts and hosted approval records.",
+    "Compliance policy engine with versioned approval rules.",
+    "Segregation of duties enforced by identity and authorization controls.",
+    "Immutable WORM ledger or centralized compliance audit service.",
+    "Signed approval records, external timestamping, and retention policy enforcement.",
+    "Legal, regulatory, security, and operations review for customer-facing approval workflows.",
+  ],
+  required_before_formal_approval: [
+    "Select and review an authentication provider.",
+    "Implement reviewer identity, session lifecycle, MFA, and logout behavior.",
+    "Implement tenant-scoped customer accounts and membership records.",
+    "Enforce RBAC/ABAC for reviewer, risk, compliance, and paper operator roles.",
+    "Define and version compliance approval policies.",
+    "Implement WORM or centralized immutable audit storage.",
+    "Implement signed approval records and tamper-evident export.",
+    "Complete legal/regulatory review before presenting any approval as formal compliance approval.",
+  ],
+  docs: {
+    paper_approval_workflow: "docs/paper-approval-workflow.md",
+    hosted_paper_identity: "docs/hosted-paper-identity-rbac-tenant-readiness.md",
+    paper_shadow_live_boundary: "docs/paper-shadow-live-boundary.md",
+    compliance_boundary: "docs/compliance-boundary.md",
+  },
+  warnings: [
+    "This endpoint is read-only compliance approval readiness metadata only.",
+    "The local paper approval workflow is not formal compliance approval, not legal approval, and not live trading approval.",
+    "It does not enable live trading, write databases, collect credentials, call brokers, or create orders.",
+    "Production Trading Platform remains NOT READY.",
+  ],
+};
 
 const fallbackReleaseBaseline: ReleaseBaseline = {
   version: "v0.1.0-paper-research-preview",
@@ -842,6 +942,7 @@ export default async function Home({ searchParams }: HomeProps) {
     paperRiskStatus,
     paperExecutionRuns,
     paperApprovalStatus,
+    paperComplianceApprovalReadiness,
     paperApprovalQueue,
     paperApprovalHistory,
     releaseBaseline,
@@ -892,6 +993,10 @@ export default async function Home({ searchParams }: HomeProps) {
       fetchJson<PaperApprovalStatus>(
         "/api/paper-execution/approvals/status",
         fallbackPaperApprovalStatus,
+      ),
+      fetchJson<PaperComplianceApprovalReadiness>(
+        "/api/paper-execution/approvals/compliance-readiness",
+        fallbackPaperComplianceApprovalReadiness,
       ),
       fetchJson<PaperApprovalHistory[]>(
         "/api/paper-execution/approvals/queue?limit=5",
@@ -989,6 +1094,9 @@ export default async function Home({ searchParams }: HomeProps) {
     paperApprovalStatus.available
       ? undefined
       : `paper approval status: ${paperApprovalStatus.error}`,
+    paperComplianceApprovalReadiness.available
+      ? undefined
+      : `paper compliance approval readiness: ${paperComplianceApprovalReadiness.error}`,
     paperApprovalQueue.available
       ? undefined
       : `paper approval queue: ${paperApprovalQueue.error}`,
@@ -1254,6 +1362,17 @@ export default async function Home({ searchParams }: HomeProps) {
               history={paperApprovalHistory.data}
               queue={paperApprovalQueue.data}
               status={paperApprovalStatus.data}
+            />
+
+            <PaperComplianceApprovalReadinessPanel
+              available={paperComplianceApprovalReadiness.available}
+              copy={copy.paperComplianceApprovalReadiness}
+              error={
+                paperComplianceApprovalReadiness.available
+                  ? undefined
+                  : paperComplianceApprovalReadiness.error
+              }
+              readiness={paperComplianceApprovalReadiness.data}
             />
 
             <PaperApprovalRequestPanel

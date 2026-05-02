@@ -8,6 +8,15 @@ Paper mode is the default and only executable mode in the current roadmap implem
 - `ENABLE_LIVE_TRADING=false`
 - `BROKER_PROVIDER=paper`
 - PaperBrokerGateway returns simulated acknowledgements only.
+- Paper approval workflow is local scaffolding, not formal compliance approval:
+  - `GET /api/paper-execution/approvals/compliance-readiness` returns read-only
+    metadata that keeps formal compliance approval disabled
+  - production approval authority is false
+  - reviewer identity verification is false
+  - RBAC/ABAC enforcement is false
+  - WORM ledger / centralized compliance audit service are false
+  - paper execution approval and live approval are not granted by this readiness
+    endpoint
 - Paper OMS reliability metadata is local-only:
   - idempotency keys are stored in local SQLite for duplicate prevention in local
     paper workflow sessions

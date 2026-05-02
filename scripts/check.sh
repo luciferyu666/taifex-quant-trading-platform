@@ -107,6 +107,7 @@ for required_file in \
   docs/paper-simulation-submit-verification.md \
   docs/paper-approval-ui-flow-smoke-drill.md \
   docs/paper-approval-workflow.md \
+  docs/paper-compliance-approval-readiness.md \
   scripts/customer-evaluation-check.sh \
   scripts/self-service-paper-demo-check.sh \
   scripts/launch-self-service-paper-demo.sh \
@@ -114,6 +115,7 @@ for required_file in \
   scripts/hosted-paper-auth-boundary-check.sh \
   scripts/hosted-paper-identity-readiness-check.sh \
   scripts/hosted-paper-mock-session-check.sh \
+  scripts/paper-compliance-approval-readiness-check.sh \
   scripts/export-hosted-paper-tenant-boundary-evidence.py \
   frontend/scripts/check-paper-approval-ui-flow.mjs; do
   if [[ ! -f "${required_file}" ]]; then
@@ -157,6 +159,11 @@ if [[ ! -x scripts/hosted-paper-mock-session-check.sh ]]; then
   missing_customer_eval_file=1
 fi
 
+if [[ ! -x scripts/paper-compliance-approval-readiness-check.sh ]]; then
+  printf 'scripts/paper-compliance-approval-readiness-check.sh must be executable.\n' >&2
+  missing_customer_eval_file=1
+fi
+
 if [[ "${missing_customer_eval_file}" -ne 0 ]]; then
   exit 1
 fi
@@ -168,6 +175,7 @@ bash scripts/hosted-paper-api-readiness-check.sh
 bash scripts/hosted-paper-auth-boundary-check.sh
 bash scripts/hosted-paper-identity-readiness-check.sh
 bash scripts/hosted-paper-mock-session-check.sh
+bash scripts/paper-compliance-approval-readiness-check.sh
 
 printf 'Checking Facebook community launch content...\n'
 if [[ -x scripts/social-content-check.sh ]]; then
@@ -208,6 +216,7 @@ for required_file in \
   backend/app/domain/research_review_decision_index.py \
   backend/app/domain/research_review_packet.py \
   backend/app/domain/paper_approval.py \
+  backend/app/domain/paper_compliance_approval.py \
   backend/app/domain/paper_broker_simulation.py \
   backend/app/domain/paper_execution.py \
   backend/app/domain/paper_execution_records.py \

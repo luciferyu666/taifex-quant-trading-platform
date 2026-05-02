@@ -68,6 +68,11 @@ Expose roadmap phase status, contracts, safety mode, risk status, and paper-only
   `GET /api/hosted-paper/identity-readiness` and displays that real reviewer
   login, customer accounts, formal RBAC/ABAC enforcement, and tenant isolation
   are schema-only and not enabled.
+- Paper Compliance Approval Readiness panel that reads
+  `GET /api/paper-execution/approvals/compliance-readiness` and displays that
+  the local Paper Approval workflow is scaffolding, not formal compliance
+  approval, not production approval authority, not verified reviewer identity,
+  not WORM ledger, and not live approval.
 - Hosted Paper Mock Session panel that reads `GET /api/hosted-paper/session`
   and `GET /api/hosted-paper/tenants/current`, then displays mock session,
   tenant context, future RBAC roles, permission schema, denied mutation
@@ -142,6 +147,13 @@ Expose roadmap phase status, contracts, safety mode, risk status, and paper-only
   `rbac_enabled=false`, `abac_enabled=false`,
   `tenant_isolation_required=true`, `tenant_isolation_enforced=false`, and
   `local_sqlite_access_from_production_vercel=false`.
+- Paper Compliance Approval Readiness panel must show
+  `formal_compliance_approval_enabled=false`,
+  `production_approval_authority=false`, `reviewer_identity_verified=false`,
+  `rbac_abac_enforced=false`, `worm_ledger_enabled=false`,
+  `centralized_audit_service_enabled=false`,
+  `production_compliance_approval=false`, `live_approval_granted=false`, and
+  `paper_execution_approval_granted=false`.
 - Hosted Paper API Readiness panel must keep `TRADING_MODE=paper`,
   `ENABLE_LIVE_TRADING=false`, `BROKER_PROVIDER=paper`,
   `broker_api_called=false`, `order_created=false`, and

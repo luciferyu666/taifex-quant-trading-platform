@@ -75,6 +75,12 @@ Customers may evaluate:
   - Writes only to local SQLite through `PAPER_EXECUTION_AUDIT_DB_PATH`.
   - Does not collect broker credentials, account IDs, certificates, API keys, or
     customer financial data.
+- Paper Compliance Approval Readiness:
+  - `GET /api/paper-execution/approvals/compliance-readiness` states that the
+    current local approval workflow is paper scaffolding only.
+  - It is not formal compliance approval, not production approval authority, not
+    verified reviewer identity, not WORM ledger, and not live approval.
+  - The Web Command Center displays this as a read-only boundary panel.
 - Local developer setup and dry-run validation commands when the customer is a technical evaluator.
 
 ## What Customers Must Not Test

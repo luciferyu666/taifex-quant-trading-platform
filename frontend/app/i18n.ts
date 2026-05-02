@@ -1229,6 +1229,121 @@ export const dashboardCopy = {
       readOnlyNote:
         "Read-only approval surface. It does not create approval requests, submit reviewer decisions, write databases, call brokers, collect credentials, create orders, or grant live-trading access.",
     },
+    paperComplianceApprovalReadiness: {
+      eyebrow: "Compliance Approval Boundary",
+      title: "Local paper scaffolding, not formal compliance approval",
+      description:
+        "Read-only readiness view showing that the current approval workflow is local Paper Only scaffolding. It is not a formal compliance approval system and does not grant paper execution or live approval by itself.",
+      fallbackPrefix:
+        "Backend paper compliance approval readiness unavailable. Rendering safe fallback:",
+      endpointLabel: "Read-only endpoint",
+      stateLabel: "Readiness state",
+      scaffoldingLabel: "Approval scaffolding",
+      auditLabel: "Audit posture",
+      safetyDefaultsLabel: "Safety defaults",
+      currentScopeLabel: "Current local paper scope",
+      missingLabel: "Missing for formal compliance",
+      requiredLabel: "Required before formal approval",
+      safetyFlagsLabel: "Safety flags",
+      decisionsLabel: "Paper-only decisions",
+      warningLabel: "Boundary warnings",
+      scaffoldingLabels: {
+        local_paper_approval_queue_enabled: "Local paper approval queue enabled",
+        local_sqlite_persistence_enabled: "Local SQLite persistence enabled",
+        local_dual_review_rule_enabled: "Local dual-review rule enabled",
+        formal_compliance_approval_enabled: "Formal compliance approval enabled",
+        production_approval_authority: "Production approval authority",
+        reviewer_identity_verified: "Reviewer identity verified",
+        rbac_abac_enforced: "RBAC/ABAC enforced",
+        segregation_of_duties_enforced: "Segregation of duties enforced",
+        compliance_policy_engine_enabled: "Compliance policy engine enabled",
+        approval_policy_versioning_enabled: "Approval policy versioning enabled",
+        tenant_scoped_approval_records_enabled: "Tenant-scoped approval records enabled",
+        legal_retention_policy_enforced: "Legal retention policy enforced",
+      },
+      auditLabels: {
+        local_hash_chain_enabled: "Local hash-chain enabled",
+        worm_ledger_enabled: "WORM ledger enabled",
+        immutable_audit_log_enabled: "Immutable audit log enabled",
+        centralized_audit_service_enabled: "Centralized audit service enabled",
+        signed_approval_records_enabled: "Signed approval records enabled",
+        external_timestamping_enabled: "External timestamping enabled",
+        retention_policy_enforced: "Retention policy enforced",
+        production_compliance_archive_enabled: "Production compliance archive enabled",
+      },
+      currentScopeLabels: {
+        "Local Paper Only approval queue and history for demos and technical testing.":
+          "Local Paper Only approval queue and history for demos and technical testing.",
+        "Local SQLite persistence with hash-chain references for paper approval decisions.":
+          "Local SQLite persistence with hash-chain references for paper approval decisions.",
+        "Controlled Paper Submit can reference a persisted approval_request_id.":
+          "Controlled Paper Submit can reference a persisted approval_request_id.",
+        "Web Command Center can create local paper requests and decisions for paper simulation only.":
+          "Web Command Center can create local paper requests and decisions for paper simulation only.",
+      },
+      missingLabels: {
+        "Real reviewer login and verified reviewer identity.":
+          "Real reviewer login and verified reviewer identity.",
+        "Formal RBAC/ABAC enforcement for approval authority.":
+          "Formal RBAC/ABAC enforcement for approval authority.",
+        "Tenant-scoped customer accounts and hosted approval records.":
+          "Tenant-scoped customer accounts and hosted approval records.",
+        "Compliance policy engine with versioned approval rules.":
+          "Compliance policy engine with versioned approval rules.",
+        "Segregation of duties enforced by identity and authorization controls.":
+          "Segregation of duties enforced by identity and authorization controls.",
+        "Immutable WORM ledger or centralized compliance audit service.":
+          "Immutable WORM ledger or centralized compliance audit service.",
+        "Signed approval records, external timestamping, and retention policy enforcement.":
+          "Signed approval records, external timestamping, and retention policy enforcement.",
+        "Legal, regulatory, security, and operations review for customer-facing approval workflows.":
+          "Legal, regulatory, security, and operations review for customer-facing approval workflows.",
+      },
+      requiredLabels: {
+        "Select and review an authentication provider.":
+          "Select and review an authentication provider.",
+        "Implement reviewer identity, session lifecycle, MFA, and logout behavior.":
+          "Implement reviewer identity, session lifecycle, MFA, and logout behavior.",
+        "Implement tenant-scoped customer accounts and membership records.":
+          "Implement tenant-scoped customer accounts and membership records.",
+        "Enforce RBAC/ABAC for reviewer, risk, compliance, and paper operator roles.":
+          "Enforce RBAC/ABAC for reviewer, risk, compliance, and paper operator roles.",
+        "Define and version compliance approval policies.":
+          "Define and version compliance approval policies.",
+        "Implement WORM or centralized immutable audit storage.":
+          "Implement WORM or centralized immutable audit storage.",
+        "Implement signed approval records and tamper-evident export.":
+          "Implement signed approval records and tamper-evident export.",
+        "Complete legal/regulatory review before presenting any approval as formal compliance approval.":
+          "Complete legal/regulatory review before presenting any approval as formal compliance approval.",
+      },
+      safetyFlagLabels: {
+        paper_only: "paper_only",
+        read_only: "read_only",
+        live_trading_enabled: "live_trading_enabled",
+        broker_provider: "broker_provider",
+        broker_api_called: "broker_api_called",
+        order_created: "order_created",
+        credentials_collected: "credentials_collected",
+        broker_credentials_collected: "broker_credentials_collected",
+        database_written: "database_written",
+        external_db_written: "external_db_written",
+        production_compliance_approval: "production_compliance_approval",
+        live_approval_granted: "live_approval_granted",
+        paper_execution_approval_granted: "paper_execution_approval_granted",
+        production_trading_ready: "production_trading_ready",
+      },
+      warningLabels: {
+        "This endpoint is read-only compliance approval readiness metadata only.":
+          "This endpoint is read-only compliance approval readiness metadata only.",
+        "The local paper approval workflow is not formal compliance approval, not legal approval, and not live trading approval.":
+          "The local paper approval workflow is not formal compliance approval, not legal approval, and not live trading approval.",
+        "It does not enable live trading, write databases, collect credentials, call brokers, or create orders.":
+          "It does not enable live trading, write databases, collect credentials, call brokers, or create orders.",
+        "Production Trading Platform remains NOT READY.":
+          "Production Trading Platform remains NOT READY.",
+      },
+    },
     paperRecords: {
       eyebrow: "Paper OMS / Audit",
       title: "Persisted paper workflow records",
@@ -2731,6 +2846,120 @@ export const dashboardCopy = {
       executionEligible: "LIVE_EXECUTION_ELIGIBLE",
       readOnlyNote:
         "只讀審批介面。它不建立 approval request、不送出覆核決策、不寫資料庫、不呼叫券商、不收集憑證、不建立訂單，也不授予實盤交易權限。",
+    },
+    paperComplianceApprovalReadiness: {
+      eyebrow: "合規審批邊界",
+      title: "本地紙上骨架，不是正式合規審批",
+      description:
+        "只讀檢視目前 approval workflow 仍是本地 Paper Only scaffolding。它不是正式合規審批系統，本身不授予紙上執行或實盤核准。",
+      fallbackPrefix: "後端紙上合規審批 readiness 無法取得，正在顯示安全備援資料：",
+      endpointLabel: "只讀 endpoint",
+      stateLabel: "就緒狀態",
+      scaffoldingLabel: "審批骨架",
+      auditLabel: "稽核姿態",
+      safetyDefaultsLabel: "安全預設",
+      currentScopeLabel: "目前本地紙上範圍",
+      missingLabel: "正式合規審批缺口",
+      requiredLabel: "正式審批前必要條件",
+      safetyFlagsLabel: "安全旗標",
+      decisionsLabel: "紙上決策",
+      warningLabel: "邊界警示",
+      scaffoldingLabels: {
+        local_paper_approval_queue_enabled: "本地紙上審批佇列已啟用",
+        local_sqlite_persistence_enabled: "本地 SQLite 持久化已啟用",
+        local_dual_review_rule_enabled: "本地雙人覆核規則已啟用",
+        formal_compliance_approval_enabled: "正式合規審批已啟用",
+        production_approval_authority: "Production approval authority",
+        reviewer_identity_verified: "Reviewer identity 已驗證",
+        rbac_abac_enforced: "RBAC/ABAC 已強制執行",
+        segregation_of_duties_enforced: "職責分離已強制執行",
+        compliance_policy_engine_enabled: "Compliance policy engine 已啟用",
+        approval_policy_versioning_enabled: "Approval policy versioning 已啟用",
+        tenant_scoped_approval_records_enabled: "Tenant-scoped approval records 已啟用",
+        legal_retention_policy_enforced: "Legal retention policy 已強制執行",
+      },
+      auditLabels: {
+        local_hash_chain_enabled: "本地 hash-chain 已啟用",
+        worm_ledger_enabled: "WORM ledger 已啟用",
+        immutable_audit_log_enabled: "Immutable audit log 已啟用",
+        centralized_audit_service_enabled: "Centralized audit service 已啟用",
+        signed_approval_records_enabled: "Signed approval records 已啟用",
+        external_timestamping_enabled: "External timestamping 已啟用",
+        retention_policy_enforced: "Retention policy 已強制執行",
+        production_compliance_archive_enabled: "Production compliance archive 已啟用",
+      },
+      currentScopeLabels: {
+        "Local Paper Only approval queue and history for demos and technical testing.":
+          "用於 demo 與技術測試的本地 Paper Only approval queue 與 history。",
+        "Local SQLite persistence with hash-chain references for paper approval decisions.":
+          "針對紙上 approval decisions 的本地 SQLite persistence 與 hash-chain references。",
+        "Controlled Paper Submit can reference a persisted approval_request_id.":
+          "Controlled Paper Submit 可引用已持久化的 approval_request_id。",
+        "Web Command Center can create local paper requests and decisions for paper simulation only.":
+          "Web Command Center 僅可為紙上模擬建立本地 paper requests 與 decisions。",
+      },
+      missingLabels: {
+        "Real reviewer login and verified reviewer identity.":
+          "真實 reviewer login 與已驗證 reviewer identity。",
+        "Formal RBAC/ABAC enforcement for approval authority.":
+          "針對 approval authority 的正式 RBAC/ABAC enforcement。",
+        "Tenant-scoped customer accounts and hosted approval records.":
+          "Tenant-scoped customer accounts 與 hosted approval records。",
+        "Compliance policy engine with versioned approval rules.":
+          "具備 versioned approval rules 的 compliance policy engine。",
+        "Segregation of duties enforced by identity and authorization controls.":
+          "由 identity 與 authorization controls 強制執行的職責分離。",
+        "Immutable WORM ledger or centralized compliance audit service.":
+          "Immutable WORM ledger 或 centralized compliance audit service。",
+        "Signed approval records, external timestamping, and retention policy enforcement.":
+          "Signed approval records、external timestamping 與 retention policy enforcement。",
+        "Legal, regulatory, security, and operations review for customer-facing approval workflows.":
+          "針對 customer-facing approval workflows 的 legal、regulatory、security 與 operations review。",
+      },
+      requiredLabels: {
+        "Select and review an authentication provider.":
+          "選擇並審查 authentication provider。",
+        "Implement reviewer identity, session lifecycle, MFA, and logout behavior.":
+          "實作 reviewer identity、session lifecycle、MFA 與 logout behavior。",
+        "Implement tenant-scoped customer accounts and membership records.":
+          "實作 tenant-scoped customer accounts 與 membership records。",
+        "Enforce RBAC/ABAC for reviewer, risk, compliance, and paper operator roles.":
+          "針對 reviewer、risk、compliance 與 paper operator roles 強制 RBAC/ABAC。",
+        "Define and version compliance approval policies.":
+          "定義並版本化 compliance approval policies。",
+        "Implement WORM or centralized immutable audit storage.":
+          "實作 WORM 或 centralized immutable audit storage。",
+        "Implement signed approval records and tamper-evident export.":
+          "實作 signed approval records 與 tamper-evident export。",
+        "Complete legal/regulatory review before presenting any approval as formal compliance approval.":
+          "任何 approval 被呈現為正式合規審批前，必須完成 legal/regulatory review。",
+      },
+      safetyFlagLabels: {
+        paper_only: "paper_only",
+        read_only: "read_only",
+        live_trading_enabled: "live_trading_enabled",
+        broker_provider: "broker_provider",
+        broker_api_called: "broker_api_called",
+        order_created: "order_created",
+        credentials_collected: "credentials_collected",
+        broker_credentials_collected: "broker_credentials_collected",
+        database_written: "database_written",
+        external_db_written: "external_db_written",
+        production_compliance_approval: "production_compliance_approval",
+        live_approval_granted: "live_approval_granted",
+        paper_execution_approval_granted: "paper_execution_approval_granted",
+        production_trading_ready: "production_trading_ready",
+      },
+      warningLabels: {
+        "This endpoint is read-only compliance approval readiness metadata only.":
+          "此 endpoint 僅為只讀 compliance approval readiness metadata。",
+        "The local paper approval workflow is not formal compliance approval, not legal approval, and not live trading approval.":
+          "本地 paper approval workflow 不是正式合規審批、不是法律核准，也不是實盤核准。",
+        "It does not enable live trading, write databases, collect credentials, call brokers, or create orders.":
+          "它不啟用實盤、不寫資料庫、不收集憑證、不呼叫券商，也不建立訂單。",
+        "Production Trading Platform remains NOT READY.":
+          "Production Trading Platform 仍為 NOT READY。",
+      },
     },
     paperRecords: {
       eyebrow: "紙上 OMS / 稽核",

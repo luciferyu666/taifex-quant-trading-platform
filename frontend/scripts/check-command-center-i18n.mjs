@@ -15,6 +15,8 @@ const files = {
   hostedPaperTenantEvidence:
     "frontend/app/components/HostedPaperTenantBoundaryEvidencePanel.tsx",
   localBackendMode: "frontend/app/components/LocalBackendDemoModePanel.tsx",
+  paperComplianceApproval:
+    "frontend/app/components/PaperComplianceApprovalReadinessPanel.tsx",
   paperApprovals: "frontend/app/components/PaperApprovalQueuePanel.tsx",
   paperApprovalRequest: "frontend/app/components/PaperApprovalRequestPanel.tsx",
   paperApprovalDecision: "frontend/app/components/PaperApprovalDecisionPanel.tsx",
@@ -298,6 +300,29 @@ requireNotContains("Hosted paper identity readiness panel does not call paper ap
 requireNotContains("Hosted paper identity readiness panel does not collect API keys", sourceByFile.hostedPaperIdentityReadiness.toLowerCase(), "api_key");
 requireNotContains("Hosted paper identity readiness panel does not collect account IDs", sourceByFile.hostedPaperIdentityReadiness.toLowerCase(), "account_id");
 requireNotContains("Hosted paper identity readiness panel does not collect certificates", sourceByFile.hostedPaperIdentityReadiness.toLowerCase(), "certificate");
+requireContains("English paper compliance approval readiness copy exists", sourceByFile.i18n, "Local paper scaffolding, not formal compliance approval");
+requireContains("Traditional Chinese paper compliance approval readiness copy exists", sourceByFile.i18n, "本地紙上骨架，不是正式合規審批");
+requireContains("Paper compliance approval readiness component is implemented", sourceByFile.paperComplianceApproval, "PaperComplianceApprovalReadinessPanel");
+requireContains("Paper compliance approval readiness endpoint is fetched on page", sourceByFile.page, "/api/paper-execution/approvals/compliance-readiness");
+requireContains("Paper compliance approval readiness panel is mounted on page", sourceByFile.page, "PaperComplianceApprovalReadinessPanel");
+requireContains("Paper compliance approval readiness panel shows formal compliance status", sourceByFile.paperComplianceApproval, "formal_compliance_approval_enabled");
+requireContains("Paper compliance approval readiness panel shows production approval authority", sourceByFile.paperComplianceApproval, "production_approval_authority");
+requireContains("Paper compliance approval readiness panel shows reviewer identity status", sourceByFile.paperComplianceApproval, "reviewer_identity_verified");
+requireContains("Paper compliance approval readiness panel shows RBAC/ABAC status", sourceByFile.paperComplianceApproval, "rbac_abac_enforced");
+requireContains("Paper compliance approval readiness panel shows WORM status", sourceByFile.paperComplianceApproval, "worm_ledger_enabled");
+requireContains("Paper compliance approval readiness panel shows centralized audit status", sourceByFile.paperComplianceApproval, "centralized_audit_service_enabled");
+requireContains("Paper compliance approval readiness panel shows production compliance flag", sourceByFile.paperComplianceApproval, "production_compliance_approval");
+requireContains("Paper compliance approval readiness panel shows live approval flag", sourceByFile.paperComplianceApproval, "live_approval_granted");
+requireContains("Paper compliance approval readiness panel shows paper execution approval flag", sourceByFile.paperComplianceApproval, "paper_execution_approval_granted");
+requireContains("Paper compliance approval readiness panel shows safety defaults", sourceByFile.paperComplianceApproval, "TRADING_MODE");
+requireContains("Paper compliance approval readiness panel shows live disabled default", sourceByFile.paperComplianceApproval, "ENABLE_LIVE_TRADING");
+requireContains("Paper compliance approval readiness panel shows paper broker default", sourceByFile.paperComplianceApproval, "BROKER_PROVIDER");
+requireNotContains("Paper compliance approval readiness panel does not fetch directly", sourceByFile.paperComplianceApproval, "fetch(");
+requireNotContains("Paper compliance approval readiness panel does not call workflow record", sourceByFile.paperComplianceApproval, "/api/paper-execution/workflow/record");
+requireNotContains("Paper compliance approval readiness panel does not call approval mutations", sourceByFile.paperComplianceApproval, "/api/paper-execution/approvals/requests");
+requireNotContains("Paper compliance approval readiness panel does not collect API keys", sourceByFile.paperComplianceApproval.toLowerCase(), "api_key");
+requireNotContains("Paper compliance approval readiness panel does not collect account IDs", sourceByFile.paperComplianceApproval.toLowerCase(), "account_id");
+requireNotContains("Paper compliance approval readiness panel does not collect certificates", sourceByFile.paperComplianceApproval.toLowerCase(), "certificate");
 requireContains("English hosted paper session copy exists", sourceByFile.i18n, "Mock session and tenant contract");
 requireContains("Traditional Chinese hosted paper session copy exists", sourceByFile.i18n, "Mock session 與 tenant contract");
 requireContains("Hosted paper mock session component is implemented", sourceByFile.hostedPaperSession, "HostedPaperMockSessionPanel");
