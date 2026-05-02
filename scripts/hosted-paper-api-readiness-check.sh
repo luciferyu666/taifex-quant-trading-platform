@@ -11,6 +11,7 @@ required_files=(
   "docs/hosted-paper-saas-foundation-roadmap.md"
   "docs/hosted-paper-backend-api-readiness.md"
   "docs/hosted-paper-managed-datastore-readiness.md"
+  "docs/hosted-paper-managed-datastore-migration-plan.md"
   "docs/customer-self-service-paper-demo-roadmap.md"
   "docs/production-local-data-boundary.md"
   "docs/frontend-local-backend-demo-mode.md"
@@ -21,6 +22,8 @@ required_files=(
   "backend/tests/test_hosted_paper_environment_routes.py"
   "backend/tests/test_hosted_paper_readiness_routes.py"
   "backend/tests/test_hosted_paper_datastore_readiness_routes.py"
+  "backend/tests/test_hosted_paper_datastore_migration_plan_script.py"
+  "scripts/hosted-paper-datastore-migration-plan.py"
   "frontend/app/components/HostedPaperEnvironmentPanel.tsx"
   "frontend/app/components/HostedPaperDatastoreReadinessPanel.tsx"
 )
@@ -69,6 +72,37 @@ for text in \
   "No database connection is configured or attempted"; do
   if ! grep -R -Fq "${text}" docs/hosted-paper-managed-datastore-readiness.md; then
     printf 'Hosted paper datastore readiness doc must contain: %s\n' "${text}" >&2
+    exit 1
+  fi
+done
+
+for text in \
+  "Hosted Paper Managed Datastore Migration Plan" \
+  "scripts/hosted-paper-datastore-migration-plan.py" \
+  "DATABASE_URL is not read" \
+  "migration_apply_enabled=false" \
+  "connection_attempted=false" \
+  "hosted_paper_approval_requests" \
+  "hosted_paper_approval_decisions" \
+  "hosted_paper_workflow_runs" \
+  "hosted_paper_oms_events" \
+  "hosted_paper_audit_events" \
+  "Live trading remains disabled by default"; do
+  if ! grep -R -Fq "${text}" docs/hosted-paper-managed-datastore-migration-plan.md; then
+    printf 'Hosted paper datastore migration plan doc must contain: %s\n' "${text}" >&2
+    exit 1
+  fi
+done
+
+for text in \
+  "database_url_read" \
+  "connection_attempted" \
+  "migration_apply_enabled" \
+  "hosted_records_written" \
+  "hosted_paper_approval_requests" \
+  "tenant_id"; do
+  if ! grep -R -Fq "${text}" scripts/hosted-paper-datastore-migration-plan.py; then
+    printf 'Hosted paper datastore migration plan script must contain: %s\n' "${text}" >&2
     exit 1
   fi
 done
@@ -172,6 +206,7 @@ for forbidden_text in \
   if grep -R -Fiq "${forbidden_text}" \
     docs/hosted-paper-backend-api-readiness.md \
     docs/hosted-paper-managed-datastore-readiness.md \
+    docs/hosted-paper-managed-datastore-migration-plan.md \
     docs/hosted-paper-saas-foundation-roadmap.md; then
     printf 'Hosted paper readiness doc contains forbidden text: %s\n' "${forbidden_text}" >&2
     exit 1

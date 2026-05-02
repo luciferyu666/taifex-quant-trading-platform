@@ -105,6 +105,7 @@ for required_file in \
   docs/hosted-paper-saas-foundation-roadmap.md \
   docs/hosted-paper-backend-api-readiness.md \
   docs/hosted-paper-managed-datastore-readiness.md \
+  docs/hosted-paper-managed-datastore-migration-plan.md \
   docs/hosted-paper-auth-boundary-spec.md \
   docs/hosted-paper-identity-rbac-tenant-readiness.md \
   docs/hosted-paper-mock-session-contract.md \
@@ -125,6 +126,7 @@ for required_file in \
   scripts/hosted-paper-auth-boundary-check.sh \
   scripts/hosted-paper-identity-readiness-check.sh \
   scripts/hosted-paper-mock-session-check.sh \
+  scripts/hosted-paper-datastore-migration-plan.py \
   scripts/paper-compliance-approval-readiness-check.sh \
   scripts/paper-oms-production-readiness-check.sh \
   scripts/paper-broker-simulation-readiness-check.sh \
@@ -134,6 +136,7 @@ for required_file in \
   backend/app/domain/hosted_paper_datastore.py \
   backend/tests/test_hosted_paper_environment_routes.py \
   backend/tests/test_hosted_paper_datastore_readiness_routes.py \
+  backend/tests/test_hosted_paper_datastore_migration_plan_script.py \
   frontend/app/components/HostedPaperEnvironmentPanel.tsx \
   frontend/app/components/HostedPaperDatastoreReadinessPanel.tsx \
   frontend/scripts/check-paper-approval-ui-flow.mjs; do
@@ -185,6 +188,11 @@ fi
 
 if [[ ! -x scripts/hosted-paper-mock-session-check.sh ]]; then
   printf 'scripts/hosted-paper-mock-session-check.sh must be executable.\n' >&2
+  missing_customer_eval_file=1
+fi
+
+if [[ ! -x scripts/hosted-paper-datastore-migration-plan.py ]]; then
+  printf 'scripts/hosted-paper-datastore-migration-plan.py must be executable.\n' >&2
   missing_customer_eval_file=1
 fi
 
@@ -580,6 +588,9 @@ if [[ -x "${BACKEND_PYTHON}" ]]; then
 
   printf 'Running Hosted Paper tenant boundary evidence export dry-run...\n'
   "${BACKEND_PYTHON}" scripts/export-hosted-paper-tenant-boundary-evidence.py >/dev/null
+
+  printf 'Running Hosted Paper datastore migration plan dry-run...\n'
+  "${BACKEND_PYTHON}" scripts/hosted-paper-datastore-migration-plan.py >/dev/null
 else
   printf 'backend/.venv/bin/python is missing; skipping backend runtime checks. Run bash scripts/bootstrap.sh.\n' >&2
 fi

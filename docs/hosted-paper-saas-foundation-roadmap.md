@@ -38,14 +38,28 @@ models, the required `tenant_id` key, dry-run migration boundaries,
 retention requirements, and audit requirements. It is schema-only and does not
 connect to a hosted database, read hosted records, or write hosted records.
 
+The datastore contract can be rendered as a dry-run migration plan:
+
+```bash
+make hosted-paper-datastore-migration-plan
+```
+
+The planner outputs a reviewable JSON artifact with future table names,
+`tenant_id` requirements, primary key drafts, index drafts, retention/audit
+requirements, `migration_apply_enabled=false`, `connection_attempted=false`,
+and `database_url_read=false`. It does not read `DATABASE_URL`, connect to a
+database, create hosted records, create customer accounts, create tenants,
+create reviewer login, call brokers, or create orders.
+
 ## Required SaaS Foundation Path
 
 1. Hosted backend
-2. Managed database with tenant-scoped hosted paper records
-3. Auth/session
-4. Tenant isolation
-5. Paper workflow persistence
-6. Hosted customer demo tenant
+2. Managed datastore migration plan review
+3. Managed database with tenant-scoped hosted paper records
+4. Auth/session
+5. Tenant isolation
+6. Paper workflow persistence
+7. Hosted customer demo tenant
 
 ## Environment Boundary
 
@@ -89,6 +103,8 @@ local machine only, and does not create hosted customer accounts.
 - Production Trading Platform returns `not_ready`.
 - `GET /api/hosted-paper/datastore-readiness` returns
   `schema_only_no_hosted_datastore`.
+- `make hosted-paper-datastore-migration-plan` emits the dry-run datastore
+  migration plan without reading `DATABASE_URL` or connecting to a database.
 - Future hosted paper record models require `tenant_id`.
 - Migration apply remains disabled and no hosted database connection is
   attempted.

@@ -67,6 +67,30 @@ Rules:
   - retention policy approved
   - security review completed
 
+## Migration Plan Dry-Run
+
+The schema-only contract can be converted into a reviewable migration plan artifact:
+
+```bash
+make hosted-paper-datastore-migration-plan
+```
+
+Underlying script:
+
+```bash
+scripts/hosted-paper-datastore-migration-plan.py
+```
+
+The planner emits JSON to stdout by default. It does not read `DATABASE_URL`, does not connect to a hosted database, does not create tenants, does not create customer accounts, does not create reviewer login, does not write hosted records, does not call brokers, and does not create orders.
+
+The plan must keep:
+
+```text
+migration_apply_enabled=false
+connection_attempted=false
+database_url_read=false
+```
+
 ## Retention And Audit Requirements
 
 Future hosted paper records require explicit retention and audit rules before hosted customer use:
@@ -100,6 +124,7 @@ This contract does not:
 - The response lists the future hosted paper record models.
 - The response marks hosted reads/writes as disabled.
 - The response marks migration apply as disabled and connection attempted as false.
+- `make hosted-paper-datastore-migration-plan` emits a dry-run plan listing table names, `tenant_id`, primary key drafts, index drafts, retention requirements, and audit requirements without connecting to a database.
 - Web Command Center displays the contract as read-only metadata.
 - Safety defaults remain `TRADING_MODE=paper`, `ENABLE_LIVE_TRADING=false`, and `BROKER_PROVIDER=paper`.
 
