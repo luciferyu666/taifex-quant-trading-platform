@@ -2575,6 +2575,56 @@ Verified scope:
 - Production Trading Platform remains NOT READY.
 - Live trading remains disabled by default.
 
+## Paper OMS Production Readiness Boundary Verification
+
+Verification date: 2026-05-02
+
+Commands:
+
+```bash
+make paper-oms-production-readiness-check
+make frontend-i18n-check
+cd frontend && npm run typecheck
+cd frontend && npm run build
+make check
+gh run watch 25241799842 --exit-status
+cd frontend && vercel inspect https://taifex-quant-trading-platform-front.vercel.app
+make frontend-production-smoke-check
+git status --short --branch
+```
+
+Observed result:
+
+```text
+Local repository checks passed.
+Release Readiness CI passed on run 25241799842.
+Production alias resolved to deployment dpl_29kHtAFxSieydCGNxnK7VbeBR1ht.
+Production smoke gate passed and confirmed required safety copy on English and
+Traditional Chinese pages.
+Local git state was clean before this record update: ## main...origin/main.
+```
+
+Verified scope:
+
+- Added a read-only Paper OMS Production Readiness boundary.
+- Exposed `GET /api/paper-execution/reliability/production-readiness`.
+- Added a Web Command Center panel that states the current Paper OMS is local
+  paper scaffolding, not a production OMS.
+- Documented disabled production OMS controls:
+  - asynchronous order processing
+  - distributed durable queue / production outbox worker
+  - full automated timeout worker
+  - amend / replace lifecycle
+  - broker execution report ingestion
+  - formal reconciliation loop
+  - production OMS readiness
+- Added `make paper-oms-production-readiness-check` and included the boundary in
+  `make check`.
+- No order submission, queue processing, OMS mutation, broker call, credential
+  collection, live approval, or production OMS readiness claim was added.
+- Production Trading Platform remains NOT READY.
+- Live trading remains disabled by default.
+
 ## Deployment Refresh Recording Policy
 
 Record-only documentation commits can trigger a new Vercel production
