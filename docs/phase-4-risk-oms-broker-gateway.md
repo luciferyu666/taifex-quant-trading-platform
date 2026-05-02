@@ -28,6 +28,17 @@ Create a paper-only execution core where order intents are evaluated by Risk Eng
     directly supplied deterministic `broker_simulation`.
   - This is still paper-only, local, and not a production matching engine or live
     liquidity model.
+- Paper Broker simulation readiness boundary:
+  - `GET /api/paper-execution/broker-simulation/readiness` reports that the
+    current simulation is deterministic/local quote-based paper scaffolding, not
+    real market matching or a broker execution report model.
+  - It keeps real market matching, exchange order book replay, broker execution
+    report modeling, latency/queue position modeling, slippage/liquidity
+    calibration, real account reconciliation, and production execution modeling
+    disabled.
+  - The endpoint is read-only and does not create orders, call Risk Engine, call
+    OMS, call Broker Gateway execution paths, write databases, download market
+    data, call brokers, collect credentials, or claim real fill accuracy.
 - Audit events are emitted for approval, intent creation, risk evaluation,
   broker simulation, and OMS lifecycle recording.
 - Paper approval workflow foundation:
@@ -135,6 +146,8 @@ Create a paper-only execution core where order intents are evaluated by Risk Eng
 - Do not treat explicit paper timeout mark as production timeout processing.
 - Do not treat the Paper OMS production readiness panel as production OMS
   enablement. It is a read-only gap statement.
+- Do not treat deterministic or local quote-based Paper Broker simulation as real
+  market matching, broker execution reports, or production execution modeling.
 - Do not implement amend/replace or reconciliation loops without a separate paper-only
   design and tests.
 - Do not treat the local quote-based paper broker simulation model as production
@@ -146,6 +159,7 @@ Create a paper-only execution core where order intents are evaluated by Risk Eng
 ```bash
 make paper-risk-guardrails-check
 make paper-broker-simulation-model-check
+make paper-broker-simulation-readiness-check
 make paper-approval-workflow-check
 make paper-execution-workflow-check
 make paper-execution-persistence-check

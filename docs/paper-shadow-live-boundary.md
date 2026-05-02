@@ -190,6 +190,16 @@ Phase 4 paper execution approval workflow is the first controlled paper simulati
   safety flags and must not upload files, write databases, call backend mutation
   APIs, call brokers, create orders, call Risk Engine, call OMS, call Broker
   Gateway execution paths, collect credentials, or grant live approval.
+- Paper Broker simulation readiness metadata is read-only:
+  - `GET /api/paper-execution/broker-simulation/readiness` states the current
+    simulation is deterministic/local quote-based paper scaffolding, not real
+    market matching or broker execution report modeling
+  - real market matching, exchange order book replay, broker execution report
+    modeling, latency/queue position modeling, slippage/liquidity calibration,
+    real account reconciliation, and production execution modeling remain disabled
+  - it must not create orders, call Risk Engine, call OMS, call Broker Gateway
+    execution paths, write databases, download market data, call brokers, collect
+    credentials, approve live trading, or claim real fill accuracy
 - Audit events are emitted for approval, intent creation, risk evaluation, paper
   broker simulation, and OMS lifecycle recording.
 - `/api/paper-execution/workflow/record` can persist a completed paper workflow run to

@@ -23,6 +23,8 @@ const files = {
   paperDemoEvidence: "frontend/app/components/PaperDemoEvidencePanel.tsx",
   paperBrokerEvidence: "frontend/app/components/PaperBrokerSimulationEvidencePanel.tsx",
   paperBrokerSimulation: "frontend/app/components/PaperBrokerSimulationModelPanel.tsx",
+  paperBrokerSimulationReadiness:
+    "frontend/app/components/PaperBrokerSimulationReadinessPanel.tsx",
   paperRisk: "frontend/app/components/PaperRiskGuardrailsPanel.tsx",
   paperOmsReliability: "frontend/app/components/PaperOmsReliabilityPanel.tsx",
   paperOmsProductionReadiness:
@@ -460,6 +462,30 @@ requireNotContains("Paper broker simulation does not call approval decisions", s
 requireNotContains("Paper broker simulation does not collect API keys", sourceByFile.paperBrokerSimulation.toLowerCase(), "api_key");
 requireNotContains("Paper broker simulation does not collect account IDs", sourceByFile.paperBrokerSimulation.toLowerCase(), "account_id");
 requireNotContains("Paper broker simulation does not collect certificates", sourceByFile.paperBrokerSimulation.toLowerCase(), "certificate");
+requireContains("English paper broker simulation readiness copy exists", sourceByFile.i18n, "Paper broker simulation is not market matching");
+requireContains("Traditional Chinese paper broker simulation readiness copy exists", sourceByFile.i18n, "紙上券商模擬不是真實市場撮合");
+requireContains("Paper broker simulation readiness panel is implemented", sourceByFile.paperBrokerSimulationReadiness, "PaperBrokerSimulationReadinessPanel");
+requireContains("Paper broker simulation readiness endpoint is read on page", sourceByFile.page, "/api/paper-execution/broker-simulation/readiness");
+requireContains("Paper broker simulation readiness panel is mounted on page", sourceByFile.page, "PaperBrokerSimulationReadinessPanel");
+requireContains("Paper broker simulation readiness panel shows deterministic simulation", sourceByFile.paperBrokerSimulationReadiness, "deterministic_broker_simulation_enabled");
+requireContains("Paper broker simulation readiness panel shows local quote preview", sourceByFile.paperBrokerSimulationReadiness, "local_quote_snapshot_preview_enabled");
+requireContains("Paper broker simulation readiness panel shows paper outcomes", sourceByFile.paperBrokerSimulationReadiness, "paper_ack_reject_partial_fill_fill_cancel_enabled");
+requireContains("Paper broker simulation readiness panel shows caller-provided quote only", sourceByFile.paperBrokerSimulationReadiness, "caller_provided_quote_only");
+requireContains("Paper broker simulation readiness panel shows real matching false", sourceByFile.paperBrokerSimulationReadiness, "real_market_matching_engine_enabled");
+requireContains("Paper broker simulation readiness panel shows order book replay false", sourceByFile.paperBrokerSimulationReadiness, "exchange_order_book_replay_enabled");
+requireContains("Paper broker simulation readiness panel shows broker execution report model false", sourceByFile.paperBrokerSimulationReadiness, "broker_execution_report_model_enabled");
+requireContains("Paper broker simulation readiness panel shows latency queue model false", sourceByFile.paperBrokerSimulationReadiness, "latency_queue_position_model_enabled");
+requireContains("Paper broker simulation readiness panel shows slippage liquidity calibration false", sourceByFile.paperBrokerSimulationReadiness, "slippage_liquidity_calibration_enabled");
+requireContains("Paper broker simulation readiness panel shows reconciliation false", sourceByFile.paperBrokerSimulationReadiness, "real_account_reconciliation_enabled");
+requireContains("Paper broker simulation readiness panel shows production execution model false", sourceByFile.paperBrokerSimulationReadiness, "production_execution_model");
+requireContains("Paper broker simulation readiness panel shows external data safety flag", sourceByFile.paperBrokerSimulationReadiness, "external_market_data_downloaded");
+requireContains("Paper broker simulation readiness panel shows real order flag", sourceByFile.paperBrokerSimulationReadiness, "real_order_created");
+requireNotContains("Paper broker simulation readiness panel does not fetch backend", sourceByFile.paperBrokerSimulationReadiness, "fetch(");
+requireNotContains("Paper broker simulation readiness panel does not call workflow record", sourceByFile.paperBrokerSimulationReadiness, "/api/paper-execution/workflow/record");
+requireNotContains("Paper broker simulation readiness panel does not call broker simulation preview", sourceByFile.paperBrokerSimulationReadiness, "/api/paper-execution/broker-simulation/preview");
+requireNotContains("Paper broker simulation readiness panel does not collect API keys", sourceByFile.paperBrokerSimulationReadiness.toLowerCase(), "api_key");
+requireNotContains("Paper broker simulation readiness panel does not collect account IDs", sourceByFile.paperBrokerSimulationReadiness.toLowerCase(), "account_id");
+requireNotContains("Paper broker simulation readiness panel does not collect certificates", sourceByFile.paperBrokerSimulationReadiness.toLowerCase(), "certificate");
 requireContains("English paper broker evidence copy exists", sourceByFile.i18n, "Paper broker simulation evidence viewer");
 requireContains("Traditional Chinese paper broker evidence copy exists", sourceByFile.i18n, "紙上券商模擬 evidence viewer");
 requireContains("Paper broker evidence panel is implemented", sourceByFile.paperBrokerEvidence, "PaperBrokerSimulationEvidencePanel");

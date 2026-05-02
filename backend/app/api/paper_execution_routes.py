@@ -11,6 +11,10 @@ from app.domain.paper_broker_simulation import (
     PaperBrokerSimulationPreviewRequest,
     simulate_paper_broker_outcome,
 )
+from app.domain.paper_broker_simulation_readiness import (
+    PaperBrokerSimulationReadinessResponse,
+    get_paper_broker_simulation_readiness,
+)
 from app.domain.paper_execution import (
     PaperExecutionWorkflowRequest,
     PaperExecutionWorkflowResponse,
@@ -112,6 +116,16 @@ def paper_broker_simulation_preview(
         return simulate_paper_broker_outcome(request.intent, request.simulation)
     except ValueError as exc:
         raise HTTPException(status_code=400, detail=str(exc)) from exc
+
+
+@router.get(
+    "/broker-simulation/readiness",
+    response_model=PaperBrokerSimulationReadinessResponse,
+)
+def paper_broker_simulation_readiness(
+    settings: SettingsDep,
+) -> PaperBrokerSimulationReadinessResponse:
+    return get_paper_broker_simulation_readiness(settings)
 
 
 @router.post("/workflow/preview", response_model=PaperExecutionWorkflowResponse)

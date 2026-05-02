@@ -92,6 +92,7 @@ for required_file in \
   docs/customer-feedback-form.md \
   docs/paper-demo-evidence-export.md \
   docs/paper-broker-simulation-evidence-export.md \
+  docs/paper-broker-simulation-readiness.md \
   docs/paper-risk-evidence-export.md \
   docs/paper-audit-integrity-preview.md \
   docs/frontend-local-backend-demo-mode.md \
@@ -119,6 +120,7 @@ for required_file in \
   scripts/hosted-paper-mock-session-check.sh \
   scripts/paper-compliance-approval-readiness-check.sh \
   scripts/paper-oms-production-readiness-check.sh \
+  scripts/paper-broker-simulation-readiness-check.sh \
   scripts/export-hosted-paper-tenant-boundary-evidence.py \
   frontend/scripts/check-paper-approval-ui-flow.mjs; do
   if [[ ! -f "${required_file}" ]]; then
@@ -177,6 +179,11 @@ if [[ ! -x scripts/paper-oms-production-readiness-check.sh ]]; then
   missing_customer_eval_file=1
 fi
 
+if [[ ! -x scripts/paper-broker-simulation-readiness-check.sh ]]; then
+  printf 'scripts/paper-broker-simulation-readiness-check.sh must be executable.\n' >&2
+  missing_customer_eval_file=1
+fi
+
 if [[ "${missing_customer_eval_file}" -ne 0 ]]; then
   exit 1
 fi
@@ -191,6 +198,7 @@ bash scripts/hosted-paper-mock-session-check.sh
 bash scripts/paper-compliance-approval-readiness-check.sh
 bash scripts/paper-audit-worm-readiness-check.sh
 bash scripts/paper-oms-production-readiness-check.sh
+bash scripts/paper-broker-simulation-readiness-check.sh
 
 printf 'Checking Facebook community launch content...\n'
 if [[ -x scripts/social-content-check.sh ]]; then
@@ -234,6 +242,7 @@ for required_file in \
   backend/app/domain/paper_compliance_approval.py \
   backend/app/domain/paper_audit_worm_readiness.py \
   backend/app/domain/paper_broker_simulation.py \
+  backend/app/domain/paper_broker_simulation_readiness.py \
   backend/app/domain/paper_execution.py \
   backend/app/domain/paper_execution_records.py \
   backend/app/domain/audit_integrity.py \
@@ -306,6 +315,7 @@ for required_file in \
   frontend/app/components/HostedPaperTenantBoundaryEvidencePanel.tsx \
   frontend/app/components/LocalBackendDemoModePanel.tsx \
   frontend/app/components/PaperExecutionRecordsPanel.tsx \
+  frontend/app/components/PaperBrokerSimulationReadinessPanel.tsx \
   frontend/app/components/PaperOmsReliabilityPanel.tsx \
   frontend/app/components/PaperOmsProductionReadinessPanel.tsx \
   frontend/app/components/PaperSimulationSubmitPanel.tsx \

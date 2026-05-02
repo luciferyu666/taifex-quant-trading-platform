@@ -44,6 +44,10 @@ import {
 } from "./components/PaperAuditWormReadinessPanel";
 import { PaperBrokerSimulationEvidencePanel } from "./components/PaperBrokerSimulationEvidencePanel";
 import { PaperBrokerSimulationModelPanel } from "./components/PaperBrokerSimulationModelPanel";
+import {
+  PaperBrokerSimulationReadinessPanel,
+  type PaperBrokerSimulationReadiness,
+} from "./components/PaperBrokerSimulationReadinessPanel";
 import { PaperDemoEvidencePanel } from "./components/PaperDemoEvidencePanel";
 import {
   PaperOmsReliabilityPanel,
@@ -325,6 +329,72 @@ const fallbackPaperOmsProductionReadiness: PaperOmsProductionReadiness = {
   },
   warnings: [
     "Fallback production OMS readiness metadata. Backend is unavailable.",
+    "Production Trading Platform remains NOT READY.",
+  ],
+};
+const fallbackPaperBrokerSimulationReadiness: PaperBrokerSimulationReadiness = {
+  service: "paper-broker-simulation-readiness",
+  readiness_state: "local_paper_simulation_not_market_matching_or_broker_execution",
+  summary:
+    "Fallback Paper Broker simulation readiness metadata. Local paper fills are not real market fills or broker execution reports.",
+  capabilities: {
+    deterministic_broker_simulation_enabled: true,
+    local_quote_snapshot_preview_enabled: true,
+    paper_ack_reject_partial_fill_fill_cancel_enabled: true,
+    caller_provided_quote_only: true,
+    real_market_matching_engine_enabled: false,
+    exchange_order_book_replay_enabled: false,
+    broker_execution_report_model_enabled: false,
+    latency_queue_position_model_enabled: false,
+    slippage_liquidity_calibration_enabled: false,
+    real_account_reconciliation_enabled: false,
+    production_execution_model: false,
+  },
+  safety_defaults: {
+    trading_mode: "paper",
+    enable_live_trading: false,
+    broker_provider: "paper",
+  },
+  safety_flags: {
+    paper_only: true,
+    read_only: true,
+    live_trading_enabled: false,
+    broker_provider: "paper",
+    broker_api_called: false,
+    external_market_data_downloaded: false,
+    real_order_created: false,
+    order_created: false,
+    credentials_collected: false,
+    database_written: false,
+    external_db_written: false,
+    production_execution_model: false,
+    production_trading_ready: false,
+  },
+  current_scope: [
+    "Deterministic broker_simulation outcomes for paper workflow tests.",
+    "Caller-provided local quote snapshot preview.",
+    "Paper-only simulated ack/reject/partial_fill/fill/cancel outcomes.",
+  ],
+  missing_for_production_execution_model: [
+    "Real market matching engine.",
+    "Exchange order book replay.",
+    "Broker execution report ingestion and normalization.",
+    "Latency and queue position model.",
+    "Real account, order, fill, and position reconciliation.",
+  ],
+  required_before_production_execution_model: [
+    "Define broker execution report schema behind broker-gateway.",
+    "Define market data and order book replay sources with data licensing review.",
+    "Design latency, queue position, slippage, and liquidity model assumptions.",
+  ],
+  docs: {
+    broker_gateway_adapter_pattern: "docs/broker-gateway-adapter-pattern.md",
+    phase_4_risk_oms_broker_gateway: "docs/phase-4-risk-oms-broker-gateway.md",
+    paper_shadow_live_boundary: "docs/paper-shadow-live-boundary.md",
+  },
+  warnings: [
+    "Fallback broker simulation readiness metadata. Backend is unavailable.",
+    "Paper fills are simulated metadata, not real market fills.",
     "Production Trading Platform remains NOT READY.",
   ],
 };
@@ -1076,6 +1146,7 @@ export default async function Home({ searchParams }: HomeProps) {
     paperStatus,
     paperExecutionStatus,
     paperExecutionPersistence,
+    paperBrokerSimulationReadiness,
     paperOmsReliability,
     paperOmsProductionReadiness,
     paperOmsOutbox,
@@ -1108,6 +1179,10 @@ export default async function Home({ searchParams }: HomeProps) {
       fetchJson<PaperExecutionPersistenceStatus>(
         "/api/paper-execution/persistence/status",
         fallbackPaperExecutionPersistenceStatus,
+      ),
+      fetchJson<PaperBrokerSimulationReadiness>(
+        "/api/paper-execution/broker-simulation/readiness",
+        fallbackPaperBrokerSimulationReadiness,
       ),
       fetchJson<PaperOmsReliabilityStatus>(
         "/api/paper-execution/reliability/status",
@@ -1225,6 +1300,9 @@ export default async function Home({ searchParams }: HomeProps) {
     paperExecutionPersistence.available
       ? undefined
       : `paper persistence: ${paperExecutionPersistence.error}`,
+    paperBrokerSimulationReadiness.available
+      ? undefined
+      : `paper broker simulation readiness: ${paperBrokerSimulationReadiness.error}`,
     paperOmsReliability.available
       ? undefined
       : `paper reliability: ${paperOmsReliability.error}`,
@@ -1554,6 +1632,17 @@ export default async function Home({ searchParams }: HomeProps) {
             />
 
             <PaperBrokerSimulationModelPanel copy={copy} />
+
+            <PaperBrokerSimulationReadinessPanel
+              available={paperBrokerSimulationReadiness.available}
+              copy={copy.paperBrokerSimulationReadiness}
+              error={
+                paperBrokerSimulationReadiness.available
+                  ? undefined
+                  : paperBrokerSimulationReadiness.error
+              }
+              readiness={paperBrokerSimulationReadiness.data}
+            />
 
             <PaperBrokerSimulationEvidencePanel copy={copy} />
 

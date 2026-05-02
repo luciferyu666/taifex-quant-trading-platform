@@ -409,6 +409,15 @@ broker outcome. Future UI work may connect this preview to controlled paper subm
 payloads only after a separate approval and audit review; it must not download
 external market data, call brokers, bypass Risk Engine/OMS, or imply production
 execution modeling.
+The Paper Broker Simulation Readiness panel now states the same boundary in a
+read-only customer/reviewer surface. It calls
+`GET /api/paper-execution/broker-simulation/readiness` and displays that real
+market matching, exchange order book replay, broker execution report modeling,
+latency/queue position modeling, slippage/liquidity calibration, real account
+reconciliation, and production execution modeling are not enabled. The panel must
+not create orders, call Risk Engine, call OMS, call Broker Gateway execution
+paths, write databases, download market data, call brokers, collect credentials,
+or claim real fill accuracy.
 The Paper Audit Integrity panel now shows local SQLite audit hash-chain verification
 status, latest event-level checks, known gaps, and warnings. It is read-only and
 does not repair audit chains, write databases, upload records, call brokers,
