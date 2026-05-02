@@ -93,6 +93,26 @@ These records support customer demos and reviewer audits. They do not provide
 asynchronous order processing, production durable queues, amend/replace,
 real broker execution reports, or reconciliation loops.
 
+## Production OMS Readiness Boundary
+
+The current Paper OMS remains local paper scaffolding, not a production OMS.
+`GET /api/paper-execution/reliability/production-readiness` exposes this as
+read-only metadata for the Web Command Center and reviewer checks.
+
+The readiness response must keep these capabilities disabled until separate
+paper-only designs, tests, and reviews are completed:
+
+- asynchronous order processing worker
+- distributed durable queue or production outbox worker
+- full automated timeout scheduler
+- amend and replace lifecycle
+- broker execution report ingestion
+- formal reconciliation loop
+- production OMS readiness
+
+This boundary does not submit orders, mutate OMS state, call brokers, collect
+credentials, approve live trading, or claim production trading readiness.
+
 ## Acceptance Criteria
 
 - Invalid transitions raise an error.
@@ -114,4 +134,5 @@ cd backend && pytest tests/test_order_state_machine.py
 make paper-execution-workflow-check
 make paper-execution-persistence-check
 make paper-oms-reliability-check
+make paper-oms-production-readiness-check
 ```

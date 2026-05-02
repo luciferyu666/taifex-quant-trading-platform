@@ -164,6 +164,13 @@ SQLite audit persistence is also local paper scaffolding, not production WORM
 storage or an immutable audit ledger. The WORM readiness boundary is documented
 in `docs/paper-audit-worm-readiness.md` and exposed as read-only metadata at
 `GET /api/paper-execution/audit-integrity/worm-readiness`.
+Paper OMS is also local paper scaffolding, not a production OMS. The production
+readiness boundary is documented in `docs/paper-oms-production-readiness.md` and
+exposed as read-only metadata at
+`GET /api/paper-execution/reliability/production-readiness`. Durable
+queue/outbox workers, asynchronous order processing, full timeout handling,
+amend/replace, broker execution report ingestion, and formal reconciliation
+remain unavailable.
 The Web Command Center displays the mock session and tenant context as read-only
 contract metadata. Reviewers can export the same mock session and tenant
 boundary as local JSON evidence with

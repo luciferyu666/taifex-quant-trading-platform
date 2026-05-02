@@ -147,6 +147,12 @@ production requirements include asynchronous workers, a distributed durable queu
 amend/replace, real execution report ingestion, broker reconciliation loops,
 operator recovery workflows, and WORM-grade audit storage.
 
+`GET /api/paper-execution/reliability/production-readiness` and the Web Command
+Center Paper OMS Production Readiness panel make this boundary explicit. They
+must keep `production_oms_ready=false` and must not submit orders, mutate OMS
+state, call brokers, collect credentials, write databases, approve live trading,
+or imply production trading readiness.
+
 ## Secrets Policy
 
 - Do not commit `.env`.

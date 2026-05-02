@@ -25,6 +25,8 @@ const files = {
   paperBrokerSimulation: "frontend/app/components/PaperBrokerSimulationModelPanel.tsx",
   paperRisk: "frontend/app/components/PaperRiskGuardrailsPanel.tsx",
   paperOmsReliability: "frontend/app/components/PaperOmsReliabilityPanel.tsx",
+  paperOmsProductionReadiness:
+    "frontend/app/components/PaperOmsProductionReadinessPanel.tsx",
   paperAuditIntegrity: "frontend/app/components/PaperAuditIntegrityPanel.tsx",
   paperAuditWormReadiness: "frontend/app/components/PaperAuditWormReadinessPanel.tsx",
   paperAuditIntegrityEvidence: "frontend/app/components/PaperAuditIntegrityEvidencePanel.tsx",
@@ -548,6 +550,30 @@ requireNotContains("Paper OMS reliability panel does not call approval decisions
 requireNotContains("Paper OMS reliability panel does not collect API keys", sourceByFile.paperOmsReliability.toLowerCase(), "api_key");
 requireNotContains("Paper OMS reliability panel does not collect account IDs", sourceByFile.paperOmsReliability.toLowerCase(), "account_id");
 requireNotContains("Paper OMS reliability panel does not collect certificates", sourceByFile.paperOmsReliability.toLowerCase(), "certificate");
+requireContains("English paper OMS production readiness copy exists", sourceByFile.i18n, "Paper OMS is not a production OMS");
+requireContains("Traditional Chinese paper OMS production readiness copy exists", sourceByFile.i18n, "Paper OMS 不是 production OMS");
+requireContains("Paper OMS production readiness panel is implemented", sourceByFile.paperOmsProductionReadiness, "PaperOmsProductionReadinessPanel");
+requireContains("Paper OMS production readiness endpoint is read on page", sourceByFile.page, "/api/paper-execution/reliability/production-readiness");
+requireContains("Paper OMS production readiness panel is mounted on page", sourceByFile.page, "PaperOmsProductionReadinessPanel");
+requireContains("Paper OMS production readiness panel shows state machine flag", sourceByFile.paperOmsProductionReadiness, "order_state_machine_enabled");
+requireContains("Paper OMS production readiness panel shows local outbox metadata", sourceByFile.paperOmsProductionReadiness, "local_outbox_metadata_enabled");
+requireContains("Paper OMS production readiness panel shows duplicate idempotency metadata", sourceByFile.paperOmsProductionReadiness, "duplicate_idempotency_metadata_enabled");
+requireContains("Paper OMS production readiness panel shows execution report metadata", sourceByFile.paperOmsProductionReadiness, "execution_report_metadata_enabled");
+requireContains("Paper OMS production readiness panel shows timeout candidate scan", sourceByFile.paperOmsProductionReadiness, "timeout_candidate_scan_enabled");
+requireContains("Paper OMS production readiness panel shows async processing flag", sourceByFile.paperOmsProductionReadiness, "asynchronous_order_processing_enabled");
+requireContains("Paper OMS production readiness panel shows durable queue flag", sourceByFile.paperOmsProductionReadiness, "distributed_durable_queue_enabled");
+requireContains("Paper OMS production readiness panel shows outbox worker flag", sourceByFile.paperOmsProductionReadiness, "outbox_worker_enabled");
+requireContains("Paper OMS production readiness panel shows timeout worker flag", sourceByFile.paperOmsProductionReadiness, "full_timeout_worker_enabled");
+requireContains("Paper OMS production readiness panel shows amend replace flag", sourceByFile.paperOmsProductionReadiness, "amend_replace_enabled");
+requireContains("Paper OMS production readiness panel shows broker execution report ingestion flag", sourceByFile.paperOmsProductionReadiness, "broker_execution_report_ingestion_enabled");
+requireContains("Paper OMS production readiness panel shows reconciliation loop flag", sourceByFile.paperOmsProductionReadiness, "formal_reconciliation_loop_enabled");
+requireContains("Paper OMS production readiness panel shows production OMS false", sourceByFile.paperOmsProductionReadiness, "production_oms_ready");
+requireNotContains("Paper OMS production readiness panel does not fetch backend", sourceByFile.paperOmsProductionReadiness, "fetch(");
+requireNotContains("Paper OMS production readiness panel does not call workflow record", sourceByFile.paperOmsProductionReadiness, "/api/paper-execution/workflow/record");
+requireNotContains("Paper OMS production readiness panel does not call timeout mutation", sourceByFile.paperOmsProductionReadiness, "/api/paper-execution/reliability/timeout-mark");
+requireNotContains("Paper OMS production readiness panel does not collect API keys", sourceByFile.paperOmsProductionReadiness.toLowerCase(), "api_key");
+requireNotContains("Paper OMS production readiness panel does not collect account IDs", sourceByFile.paperOmsProductionReadiness.toLowerCase(), "account_id");
+requireNotContains("Paper OMS production readiness panel does not collect certificates", sourceByFile.paperOmsProductionReadiness.toLowerCase(), "certificate");
 requireContains("English paper audit integrity copy exists", sourceByFile.i18n, "Local audit hash-chain verification");
 requireContains("Traditional Chinese paper audit integrity copy exists", sourceByFile.i18n, "本地 audit hash-chain 驗證");
 requireContains("Paper audit integrity panel is implemented", sourceByFile.paperAuditIntegrity, "PaperAuditIntegrityPanel");

@@ -396,6 +396,13 @@ non-production gaps, and explicit paper-only timeout preview/mark actions. Futur
 work should keep this panel bounded to local paper metadata until a separate
 backend slice introduces durable queues, asynchronous processing, amend/replace,
 and reconciliation under explicit paper-only tests.
+The Paper OMS Production Readiness panel now states the same boundary in a
+read-only customer/reviewer surface. It calls
+`GET /api/paper-execution/reliability/production-readiness` and displays that
+asynchronous workers, durable queue/outbox processing, full timeout workers,
+amend/replace, broker execution report ingestion, and formal reconciliation are
+not enabled. The panel must not submit orders, mutate OMS state, grant approval,
+collect credentials, call brokers, or imply production OMS readiness.
 The Paper Broker Simulation Model UI now exposes quote, size, spread, quote-age,
 order-type, limit-price, and liquidity-score inputs for previewing a local paper
 broker outcome. Future UI work may connect this preview to controlled paper submit

@@ -66,6 +66,15 @@ Create a paper-only execution core where order intents are evaluated by Risk Eng
     local SQLite `EXPIRE` OMS event, audit event, and simulated execution report.
     This is not an asynchronous production timeout worker.
   - Reliability status explicitly reports `production_oms_ready=false`.
+- Paper OMS production readiness boundary:
+  - `GET /api/paper-execution/reliability/production-readiness` reports that the
+    current Paper OMS is local scaffolding, not a production OMS.
+  - It keeps asynchronous processing, distributed durable queues, outbox workers,
+    full timeout workers, amend/replace, broker execution report ingestion, and
+    formal reconciliation disabled.
+  - The endpoint is read-only and does not submit orders, mutate OMS state, write
+    databases, call brokers, collect credentials, approve live trading, or claim
+    production readiness.
 - Controlled Paper Simulation UI:
   - The Web Command Center may call only
     `/api/paper-execution/workflow/record`.
@@ -124,6 +133,8 @@ Create a paper-only execution core where order intents are evaluated by Risk Eng
 - Do not treat the local outbox metadata as asynchronous production processing.
 - Do not treat paper execution reports as broker execution reports.
 - Do not treat explicit paper timeout mark as production timeout processing.
+- Do not treat the Paper OMS production readiness panel as production OMS
+  enablement. It is a read-only gap statement.
 - Do not implement amend/replace or reconciliation loops without a separate paper-only
   design and tests.
 - Do not treat the local quote-based paper broker simulation model as production
@@ -140,6 +151,7 @@ make paper-execution-workflow-check
 make paper-execution-persistence-check
 make paper-oms-reliability-check
 make paper-oms-timeout-check
+make paper-oms-production-readiness-check
 cd backend && pytest tests/test_exposure_allocator.py tests/test_risk_engine.py tests/test_roadmap_routes.py
 make check
 ```

@@ -69,6 +69,14 @@ Customers may evaluate:
   - simulated execution report count
   - read-only timeout candidate scan
   - explicit `production_oms_ready=false`
+- Paper OMS production readiness boundary:
+  - `GET /api/paper-execution/reliability/production-readiness` states that the
+    current Paper OMS is local scaffolding, not a production OMS.
+  - The Web Command Center displays the disabled production controls as read-only
+    reviewer context.
+  - Asynchronous order processing, durable queue/outbox workers, full timeout
+    handling, amend/replace, broker execution report ingestion, and formal
+    reconciliation remain unavailable.
 - Paper Simulation Controlled Submit UI when a local backend is running:
   - Creates one bounded Paper Only workflow record through
     `/api/paper-execution/workflow/record`.

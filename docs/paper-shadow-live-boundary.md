@@ -24,6 +24,14 @@ Paper mode is the default and only executable mode in the current roadmap implem
   - execution reports are simulated paper metadata, not broker execution reports
   - timeout candidate scans are read-only and do not mutate OMS state
   - `production_oms_ready=false` remains explicit
+- Paper OMS production readiness metadata is read-only:
+  - `GET /api/paper-execution/reliability/production-readiness` states the
+    current Paper OMS is local scaffolding, not a production OMS
+  - durable queue/outbox workers, asynchronous processing, full timeout workers,
+    amend/replace, broker execution report ingestion, and formal reconciliation
+    remain disabled
+  - it must not create orders, write databases, call brokers, collect
+    credentials, approve live trading, or claim production readiness
 
 Phase 3 strategy research is even narrower than paper execution:
 

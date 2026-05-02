@@ -109,6 +109,7 @@ for required_file in \
   docs/paper-approval-workflow.md \
   docs/paper-compliance-approval-readiness.md \
   docs/paper-audit-worm-readiness.md \
+  docs/paper-oms-production-readiness.md \
   scripts/customer-evaluation-check.sh \
   scripts/self-service-paper-demo-check.sh \
   scripts/launch-self-service-paper-demo.sh \
@@ -117,6 +118,7 @@ for required_file in \
   scripts/hosted-paper-identity-readiness-check.sh \
   scripts/hosted-paper-mock-session-check.sh \
   scripts/paper-compliance-approval-readiness-check.sh \
+  scripts/paper-oms-production-readiness-check.sh \
   scripts/export-hosted-paper-tenant-boundary-evidence.py \
   frontend/scripts/check-paper-approval-ui-flow.mjs; do
   if [[ ! -f "${required_file}" ]]; then
@@ -170,6 +172,11 @@ if [[ ! -x scripts/paper-audit-worm-readiness-check.sh ]]; then
   missing_customer_eval_file=1
 fi
 
+if [[ ! -x scripts/paper-oms-production-readiness-check.sh ]]; then
+  printf 'scripts/paper-oms-production-readiness-check.sh must be executable.\n' >&2
+  missing_customer_eval_file=1
+fi
+
 if [[ "${missing_customer_eval_file}" -ne 0 ]]; then
   exit 1
 fi
@@ -183,6 +190,7 @@ bash scripts/hosted-paper-identity-readiness-check.sh
 bash scripts/hosted-paper-mock-session-check.sh
 bash scripts/paper-compliance-approval-readiness-check.sh
 bash scripts/paper-audit-worm-readiness-check.sh
+bash scripts/paper-oms-production-readiness-check.sh
 
 printf 'Checking Facebook community launch content...\n'
 if [[ -x scripts/social-content-check.sh ]]; then
@@ -230,6 +238,7 @@ for required_file in \
   backend/app/domain/paper_execution_records.py \
   backend/app/domain/audit_integrity.py \
   backend/app/domain/paper_oms_reliability.py \
+  backend/app/domain/paper_oms_production_readiness.py \
   backend/app/domain/paper_risk_state.py \
   backend/app/domain/hosted_paper_identity.py \
   backend/app/domain/hosted_paper_session.py \
@@ -298,6 +307,7 @@ for required_file in \
   frontend/app/components/LocalBackendDemoModePanel.tsx \
   frontend/app/components/PaperExecutionRecordsPanel.tsx \
   frontend/app/components/PaperOmsReliabilityPanel.tsx \
+  frontend/app/components/PaperOmsProductionReadinessPanel.tsx \
   frontend/app/components/PaperSimulationSubmitPanel.tsx \
   frontend/app/components/PaperOmsTimelinePanel.tsx \
   frontend/app/components/PaperAuditTimelinePanel.tsx \

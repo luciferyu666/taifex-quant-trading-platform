@@ -52,6 +52,10 @@ import {
   type PaperOmsReliabilityStatus,
   type PaperOrderTimeoutCandidate,
 } from "./components/PaperOmsReliabilityPanel";
+import {
+  PaperOmsProductionReadinessPanel,
+  type PaperOmsProductionReadiness,
+} from "./components/PaperOmsProductionReadinessPanel";
 import type { PaperOmsEventRecord } from "./components/PaperOmsTimelinePanel";
 import {
   PaperRiskGuardrailsPanel,
@@ -255,6 +259,74 @@ const fallbackPaperOmsReliabilityStatus: PaperOmsReliabilityStatus = {
   ],
   message:
     "Fallback Paper OMS reliability metadata. The production OMS path is not ready and remains paper-only.",
+};
+const fallbackPaperOmsProductionReadiness: PaperOmsProductionReadiness = {
+  service: "paper-oms-production-readiness",
+  readiness_state: "local_paper_oms_scaffolding_not_production_oms",
+  summary:
+    "Fallback Paper OMS production readiness metadata. Local paper OMS scaffolding is not a production OMS.",
+  capabilities: {
+    order_state_machine_enabled: true,
+    local_sqlite_persistence_enabled: true,
+    local_outbox_metadata_enabled: true,
+    duplicate_idempotency_metadata_enabled: true,
+    execution_report_metadata_enabled: true,
+    timeout_candidate_scan_enabled: true,
+    explicit_paper_timeout_mark_enabled: true,
+    asynchronous_order_processing_enabled: false,
+    distributed_durable_queue_enabled: false,
+    outbox_worker_enabled: false,
+    full_timeout_worker_enabled: false,
+    amend_replace_enabled: false,
+    production_partial_fill_accounting_enabled: false,
+    broker_execution_report_ingestion_enabled: false,
+    formal_reconciliation_loop_enabled: false,
+    production_oms_ready: false,
+  },
+  safety_defaults: {
+    trading_mode: "paper",
+    enable_live_trading: false,
+    broker_provider: "paper",
+  },
+  safety_flags: {
+    paper_only: true,
+    read_only: true,
+    live_trading_enabled: false,
+    broker_provider: "paper",
+    broker_api_called: false,
+    order_created: false,
+    credentials_collected: false,
+    database_written: false,
+    external_db_written: false,
+    production_oms_ready: false,
+    live_approval_granted: false,
+    production_trading_ready: false,
+  },
+  current_scope: [
+    "Deterministic paper OMS state machine and lifecycle transitions.",
+    "Local SQLite paper workflow, OMS event, audit event, and execution-report metadata.",
+    "Local outbox metadata for completed paper workflow submissions.",
+  ],
+  missing_for_production_oms: [
+    "Asynchronous order processing worker.",
+    "Distributed durable queue or production outbox worker.",
+    "Amend and replace order lifecycle.",
+    "Formal reconciliation loop against broker/account state.",
+  ],
+  required_before_production_oms: [
+    "Select and review durable queue/outbox architecture.",
+    "Implement idempotent asynchronous OMS worker processing.",
+    "Implement formal reconciliation loop and locked-state handling.",
+  ],
+  docs: {
+    oms_state_machine: "docs/oms-state-machine.md",
+    phase_4_risk_oms_broker_gateway: "docs/phase-4-risk-oms-broker-gateway.md",
+    paper_shadow_live_boundary: "docs/paper-shadow-live-boundary.md",
+  },
+  warnings: [
+    "Fallback production OMS readiness metadata. Backend is unavailable.",
+    "Production Trading Platform remains NOT READY.",
+  ],
 };
 const fallbackPaperOmsOutboxItems: PaperOmsOutboxItem[] = [];
 const fallbackPaperExecutionReports: PaperExecutionReport[] = [];
@@ -1005,6 +1077,7 @@ export default async function Home({ searchParams }: HomeProps) {
     paperExecutionStatus,
     paperExecutionPersistence,
     paperOmsReliability,
+    paperOmsProductionReadiness,
     paperOmsOutbox,
     paperTimeoutCandidates,
     paperAuditIntegrityStatus,
@@ -1039,6 +1112,10 @@ export default async function Home({ searchParams }: HomeProps) {
       fetchJson<PaperOmsReliabilityStatus>(
         "/api/paper-execution/reliability/status",
         fallbackPaperOmsReliabilityStatus,
+      ),
+      fetchJson<PaperOmsProductionReadiness>(
+        "/api/paper-execution/reliability/production-readiness",
+        fallbackPaperOmsProductionReadiness,
       ),
       fetchJson<PaperOmsOutboxItem[]>(
         "/api/paper-execution/outbox?limit=5",
@@ -1151,6 +1228,9 @@ export default async function Home({ searchParams }: HomeProps) {
     paperOmsReliability.available
       ? undefined
       : `paper reliability: ${paperOmsReliability.error}`,
+    paperOmsProductionReadiness.available
+      ? undefined
+      : `paper OMS production readiness: ${paperOmsProductionReadiness.error}`,
     paperOmsOutbox.available ? undefined : `paper outbox: ${paperOmsOutbox.error}`,
     paperTimeoutCandidates.available
       ? undefined
@@ -1509,6 +1589,17 @@ export default async function Home({ searchParams }: HomeProps) {
               outboxItems={paperOmsOutbox.data}
               reliability={paperOmsReliability.data}
               timeoutCandidates={paperTimeoutCandidates.data}
+            />
+
+            <PaperOmsProductionReadinessPanel
+              available={paperOmsProductionReadiness.available}
+              copy={copy.paperOmsProductionReadiness}
+              error={
+                paperOmsProductionReadiness.available
+                  ? undefined
+                  : paperOmsProductionReadiness.error
+              }
+              readiness={paperOmsProductionReadiness.data}
             />
 
             <PaperAuditIntegrityPanel

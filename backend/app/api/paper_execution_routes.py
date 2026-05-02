@@ -21,6 +21,10 @@ from app.domain.paper_execution_records import (
     PaperExecutionRunRecord,
     PaperOmsEventRecord,
 )
+from app.domain.paper_oms_production_readiness import (
+    PaperOmsProductionReadinessResponse,
+    get_paper_oms_production_readiness,
+)
 from app.domain.paper_oms_reliability import (
     PaperExecutionReport,
     PaperOmsOutboxItem,
@@ -161,6 +165,16 @@ def paper_execution_reliability_status(
     settings: SettingsDep,
 ) -> PaperOmsReliabilityStatus:
     return _paper_execution_store(settings).reliability_status()
+
+
+@router.get(
+    "/reliability/production-readiness",
+    response_model=PaperOmsProductionReadinessResponse,
+)
+def paper_execution_production_readiness(
+    settings: SettingsDep,
+) -> PaperOmsProductionReadinessResponse:
+    return get_paper_oms_production_readiness(settings)
 
 
 @router.get("/runs", response_model=list[PaperExecutionRunRecord])
