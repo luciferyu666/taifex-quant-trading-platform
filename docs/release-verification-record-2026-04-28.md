@@ -2962,6 +2962,107 @@ Safety boundary:
 - Production Trading Platform remains NOT READY.
 - Live trading remains disabled by default.
 
+## Hosted Paper Identity Access Contract Verification
+
+Verification date: 2026-05-03
+
+Commit:
+
+```text
+10536de Add hosted paper identity access contract
+```
+
+Commands:
+
+```bash
+make hosted-paper-identity-access-check
+cd backend && .venv/bin/python -m pytest tests/test_hosted_paper_identity_access_contract_routes.py
+make frontend-i18n-check
+cd frontend && npm run typecheck
+cd frontend && npm run build
+make hosted-paper-api-readiness-check
+make check
+gh run watch 25262632788 --exit-status
+cd frontend && vercel inspect https://taifex-quant-trading-platform-front.vercel.app
+make frontend-production-smoke-check
+git status --short --branch
+```
+
+Observed result:
+
+```text
+Hosted paper identity access contract check passed.
+Targeted identity access contract tests passed: 3 passed.
+Frontend i18n safety check passed.
+Frontend typecheck and production build passed.
+Hosted paper API readiness check passed.
+Full repository check passed, including 346 backend tests, frontend typecheck,
+frontend build, website checks, website build, and production smoke gates.
+Release Readiness CI passed on run 25262632788.
+Production Vercel alias points to deployment dpl_5Ar1XgbGJ5ZGFfLd4pB2nZejay4o.
+Production smoke gate passed against deployment dpl_5Ar1XgbGJ5ZGFfLd4pB2nZejay4o.
+Production smoke gate confirmed required English and Traditional Chinese safety
+copy and rejected prohibited profit/risk-free/live-approval wording.
+Local git state was clean after push: ## main...origin/main.
+```
+
+Verified scope:
+
+- Added `GET /api/hosted-paper/identity-access-contract`.
+- Added `backend/app/domain/hosted_paper_identity_access.py`.
+- Added `backend/tests/test_hosted_paper_identity_access_contract_routes.py`.
+- Added `frontend/app/components/HostedPaperIdentityAccessContractPanel.tsx`.
+- Added `docs/hosted-paper-identity-access-contract.md`.
+- Added `scripts/hosted-paper-identity-access-check.sh`.
+- Added `make hosted-paper-identity-access-check`.
+- Added identity access contract coverage to `scripts/check.sh` and frontend
+  i18n safety checks.
+- Updated `README.md`, hosted paper auth boundary, identity readiness, and SaaS
+  foundation roadmap docs.
+- Web Command Center now displays the identity access contract as read-only
+  release metadata.
+
+Identity and tenancy boundary:
+
+- Future identity provider is required but not selected.
+- Real login is not enabled.
+- Customer signup is not enabled.
+- Reviewer login is not enabled.
+- Session issuance is not enabled.
+- Session cookie issuance is not enabled.
+- MFA is marked required for privileged future roles but not enabled.
+- Future session claims require `user_id`, `tenant_id`, `session_id`, `roles`,
+  `permissions`, `paper_only`, and `environment`.
+- Future tenant boundary requires `tenant_id` on every hosted request and every
+  hosted record.
+- Cross-tenant access remains disallowed.
+- Local SQLite is not allowed for hosted tenant records.
+- Future role separation is documented for `customer`, `reviewer`, `operator`,
+  and `admin`.
+- Future RBAC and ABAC requirements are documented, but not enforced by this
+  slice.
+
+Safety boundary:
+
+- This release adds a read-only contract and UI panel only.
+- No authentication provider was added.
+- No login, signup, session cookie, customer account, reviewer account, admin
+  account, or operator account was created.
+- No hosted datastore write was added.
+- No external database write was added.
+- No credentials or broker credentials are collected.
+- No broker API is called.
+- No order is created.
+- RBAC enforcement remains `false`.
+- ABAC enforcement remains `false`.
+- Tenant isolation enforcement remains `false`.
+- `TRADING_MODE=paper`.
+- `ENABLE_LIVE_TRADING=false`.
+- `BROKER_PROVIDER=paper`.
+- `production_trading_ready=false`.
+- Production Trading Platform remains NOT READY.
+- Live trading remains disabled by default.
+
 ## Deployment Refresh Recording Policy
 
 Record-only documentation commits can trigger a new Vercel production
