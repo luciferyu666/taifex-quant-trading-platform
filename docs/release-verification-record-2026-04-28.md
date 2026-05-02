@@ -2891,6 +2891,77 @@ Verified scope:
 - Production Trading Platform remains NOT READY.
 - Live trading remains disabled by default.
 
+## Hosted Backend API Deployment Foundation Verification
+
+Verification date: 2026-05-03
+
+Commit:
+
+```text
+29d5282 Add hosted backend API deployment foundation
+```
+
+Commands:
+
+```bash
+make hosted-backend-readiness-check
+cd backend && .venv/bin/python -m pytest tests/test_hosted_backend_environment_routes.py
+make hosted-paper-api-readiness-check
+make check
+gh run watch 25254798247 --exit-status
+make frontend-production-smoke-check
+git status --short --branch
+```
+
+Observed result:
+
+```text
+Hosted backend/API deployment foundation check passed.
+Targeted hosted backend API tests passed: 5 passed.
+Hosted paper API readiness check passed.
+Full repository check passed, including 343 backend tests, frontend typecheck,
+frontend build, website checks, website build, and production smoke gates.
+Release Readiness CI passed on run 25254798247.
+Production smoke gate passed against deployment dpl_7tQ7xXC1WocebJxeyQiKgY9DPXEU.
+Production smoke gate confirmed required English and Traditional Chinese safety
+copy and rejected prohibited profit/risk-free/live-approval wording.
+Local git state was clean after push: ## main...origin/main.
+```
+
+Verified scope:
+
+- Added `GET /api/hosted-backend/environment`.
+- Added `GET /api/hosted-backend/readiness`.
+- Added `backend/app/domain/hosted_backend_environment.py`.
+- Added `backend/app/api/hosted_backend_routes.py`.
+- Registered hosted backend routes in `backend/app/main.py`.
+- Added `backend/tests/test_hosted_backend_environment_routes.py`.
+- Added `docs/hosted-backend-api-deployment-foundation.md`.
+- Added hosted backend placeholder docs under `infra/hosted-backend/`.
+- Added `make hosted-backend-readiness-check`.
+- Added hosted backend foundation coverage to `scripts/check.sh`.
+- Updated hosted paper SaaS roadmap and managed datastore docs to reference
+  the hosted backend/API deployment boundary.
+
+Safety boundary:
+
+- Hosted backend foundation is read-only deployment metadata only.
+- `hosted_backend_enabled=false` locally.
+- `managed_datastore_enabled=false`.
+- `local_sqlite_allowed_for_hosted=false`.
+- `tenant_isolation_required=true`.
+- Customer accounts are not created.
+- Reviewer login is not created.
+- Hosted records are not readable or writable.
+- Managed datastore connection is not enabled.
+- Broker API remains disabled.
+- Credential collection remains disabled.
+- `live_trading_enabled=false`.
+- `broker_provider=paper`.
+- `production_trading_ready=false`.
+- Production Trading Platform remains NOT READY.
+- Live trading remains disabled by default.
+
 ## Deployment Refresh Recording Policy
 
 Record-only documentation commits can trigger a new Vercel production
