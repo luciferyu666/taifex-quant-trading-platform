@@ -111,6 +111,8 @@ hosted authentication provider is implemented today.
 The current implemented endpoints are:
 
 ```text
+GET /api/hosted-backend/environment
+GET /api/hosted-backend/readiness
 GET /api/hosted-paper/environment
 GET /api/hosted-paper/readiness
 GET /api/hosted-paper/datastore-readiness
@@ -118,6 +120,16 @@ GET /api/hosted-paper/identity-readiness
 GET /api/hosted-paper/session
 GET /api/hosted-paper/tenants/current
 ```
+
+`GET /api/hosted-backend/environment` and
+`GET /api/hosted-backend/readiness` return read-only hosted backend deployment
+foundation metadata. They define dev / staging / production environment
+separation, mark managed datastore disabled, forbid local SQLite as a hosted
+datastore, require tenant isolation, keep broker provider paper, keep live
+trading disabled, and keep Production Trading Platform `not_ready`.
+
+This first hosted backend foundation slice is documented in
+[hosted-backend-api-deployment-foundation.md](hosted-backend-api-deployment-foundation.md).
 
 `GET /api/hosted-paper/environment` returns a read-only environment contract
 for the hosted paper SaaS foundation. It explicitly separates:
@@ -220,14 +232,15 @@ The hosted datastore must not store:
 ## Migration Path
 
 1. Readiness specification and safety gate.
-2. Hosted paper API status endpoint with paper-only static response.
-3. Mock authenticated session contract for local and preview environments.
-4. Tenant-scoped managed datastore adapter in dry-run mode.
-5. Paper approval queue and decision APIs backed by hosted datastore.
-6. Controlled paper submit using persisted hosted `approval_request_id`.
-7. Hosted paper OMS/audit query viewer.
-8. Evidence export for hosted paper records.
-9. Security review before any production customer pilot.
+2. Hosted backend/API deployment foundation with dev / staging / production boundary.
+3. Hosted paper API status endpoint with paper-only static response.
+4. Mock authenticated session contract for local and preview environments.
+5. Tenant-scoped managed datastore adapter in dry-run mode.
+6. Paper approval queue and decision APIs backed by hosted datastore.
+7. Controlled paper submit using persisted hosted `approval_request_id`.
+8. Hosted paper OMS/audit query viewer.
+9. Evidence export for hosted paper records.
+10. Security review before any production customer pilot.
 
 ## Non-Goals
 
@@ -264,9 +277,10 @@ Current readiness gate:
 make hosted-paper-auth-boundary-check
 make hosted-paper-mock-session-check
 make hosted-paper-tenant-boundary-evidence-export
+make hosted-backend-readiness-check
 make frontend-i18n-check
 make hosted-paper-api-readiness-check
-cd backend && .venv/bin/python -m pytest tests/test_hosted_paper_readiness_routes.py
+cd backend && .venv/bin/python -m pytest tests/test_hosted_backend_environment_routes.py tests/test_hosted_paper_readiness_routes.py
 make check
 ```
 

@@ -10,6 +10,7 @@ The current platform remains a local demo and paper research preview. Production
 
 - Hosted paper managed datastore: not enabled.
 - Hosted paper records: not readable and not writable.
+- Hosted backend/API customer workspace: not enabled.
 - Customer account / reviewer login: not enabled.
 - Tenant isolation enforcement: not enabled.
 - Migration apply: disabled.
@@ -60,6 +61,8 @@ Rules:
 - A database URL must be reviewed before any future apply path exists.
 - No database connection is configured or attempted in this slice.
 - Required controls before future apply:
+  - hosted backend/API deployment boundary reviewed
+  - dev / staging / production environment separation reviewed
   - approved managed datastore selection
   - `tenant_id` required on every hosted paper table
   - migration dry-run output reviewed
@@ -106,6 +109,7 @@ Future hosted paper records require explicit retention and audit rules before ho
 This contract does not:
 
 - create a hosted database
+- deploy hosted backend/API customer workspace
 - connect to a hosted database
 - create customer accounts
 - create reviewer login

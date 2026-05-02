@@ -102,6 +102,7 @@ for required_file in \
   docs/customer-self-service-demo.md \
   docs/customer-self-service-paper-demo-roadmap.md \
   docs/customer-self-service-local-demo-launcher.md \
+  docs/hosted-backend-api-deployment-foundation.md \
   docs/hosted-paper-saas-foundation-roadmap.md \
   docs/hosted-paper-backend-api-readiness.md \
   docs/hosted-paper-managed-datastore-readiness.md \
@@ -110,6 +111,8 @@ for required_file in \
   docs/hosted-paper-identity-rbac-tenant-readiness.md \
   docs/hosted-paper-mock-session-contract.md \
   docs/hosted-paper-tenant-boundary-evidence-export.md \
+  infra/hosted-backend/README.md \
+  infra/hosted-backend/env-boundary.placeholder.md \
   docs/paper-simulation-submit-verification.md \
   docs/paper-approval-ui-flow-smoke-drill.md \
   docs/paper-approval-workflow.md \
@@ -123,6 +126,7 @@ for required_file in \
   scripts/start-customer-demo.sh \
   scripts/start-customer-demo.ps1 \
   scripts/hosted-paper-api-readiness-check.sh \
+  scripts/hosted-backend-readiness-check.sh \
   scripts/hosted-paper-auth-boundary-check.sh \
   scripts/hosted-paper-identity-readiness-check.sh \
   scripts/hosted-paper-mock-session-check.sh \
@@ -132,8 +136,11 @@ for required_file in \
   scripts/paper-broker-simulation-readiness-check.sh \
   scripts/paper-risk-cross-account-readiness-check.sh \
   scripts/export-hosted-paper-tenant-boundary-evidence.py \
+  backend/app/domain/hosted_backend_environment.py \
   backend/app/domain/hosted_paper_environment.py \
   backend/app/domain/hosted_paper_datastore.py \
+  backend/app/api/hosted_backend_routes.py \
+  backend/tests/test_hosted_backend_environment_routes.py \
   backend/tests/test_hosted_paper_environment_routes.py \
   backend/tests/test_hosted_paper_datastore_readiness_routes.py \
   backend/tests/test_hosted_paper_datastore_migration_plan_script.py \
@@ -173,6 +180,11 @@ fi
 
 if [[ ! -x scripts/hosted-paper-api-readiness-check.sh ]]; then
   printf 'scripts/hosted-paper-api-readiness-check.sh must be executable.\n' >&2
+  missing_customer_eval_file=1
+fi
+
+if [[ ! -x scripts/hosted-backend-readiness-check.sh ]]; then
+  printf 'scripts/hosted-backend-readiness-check.sh must be executable.\n' >&2
   missing_customer_eval_file=1
 fi
 
@@ -229,6 +241,7 @@ bash scripts/customer-evaluation-check.sh
 bash scripts/check-customer-demo-env.sh
 bash scripts/self-service-paper-demo-check.sh
 bash scripts/launch-self-service-paper-demo.sh --check-only
+bash scripts/hosted-backend-readiness-check.sh
 bash scripts/hosted-paper-api-readiness-check.sh
 bash scripts/hosted-paper-auth-boundary-check.sh
 bash scripts/hosted-paper-identity-readiness-check.sh
@@ -290,6 +303,7 @@ for required_file in \
   backend/app/domain/paper_oms_production_readiness.py \
   backend/app/domain/paper_risk_state.py \
   backend/app/domain/hosted_paper_environment.py \
+  backend/app/domain/hosted_backend_environment.py \
   backend/app/domain/hosted_paper_identity.py \
   backend/app/domain/hosted_paper_session.py \
   backend/app/domain/exposure.py \
@@ -328,6 +342,7 @@ for required_file in \
   backend/app/api/paper_approval_routes.py \
   backend/app/api/paper_execution_routes.py \
   backend/app/api/paper_risk_routes.py \
+  backend/app/api/hosted_backend_routes.py \
   backend/app/api/hosted_paper_routes.py \
   backend/app/api/roadmap_routes.py \
   data-pipeline/migrations/001_phase_2_data_platform.sql \

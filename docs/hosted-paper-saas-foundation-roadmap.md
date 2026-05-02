@@ -15,10 +15,19 @@ paper records.
 The first hosted paper SaaS slice is a read-only environment contract:
 
 ```text
+GET /api/hosted-backend/environment
+GET /api/hosted-backend/readiness
 GET /api/hosted-paper/environment
 GET /api/hosted-paper/readiness
 GET /api/hosted-paper/datastore-readiness
 ```
+
+`GET /api/hosted-backend/environment` and
+`GET /api/hosted-backend/readiness` define the deployable backend/API boundary
+before any hosted customer workspace exists. They expose dev / staging /
+production separation, mark Hosted Paper customer SaaS as not enabled, mark the
+future managed datastore as disabled, forbid local SQLite as a hosted datastore,
+require tenant isolation, and keep live trading disabled.
 
 `GET /api/hosted-paper/environment` defines three explicit modes:
 
@@ -53,7 +62,7 @@ create reviewer login, call brokers, or create orders.
 
 ## Required SaaS Foundation Path
 
-1. Hosted backend
+1. Hosted backend/API deployment foundation
 2. Managed datastore migration plan review
 3. Managed database with tenant-scoped hosted paper records
 4. Auth/session
@@ -99,6 +108,12 @@ local machine only, and does not create hosted customer accounts.
 
 - `GET /api/hosted-paper/environment` returns Local Demo Mode as the current
   customer path.
+- `GET /api/hosted-backend/environment` returns the hosted backend/API
+  deployment boundary with dev / staging / production separation.
+- `GET /api/hosted-backend/readiness` marks managed datastore disabled, local
+  SQLite forbidden for hosted records, tenant isolation required, broker
+  provider paper, live trading disabled, and Production Trading Platform
+  `not_ready`.
 - Hosted Paper Mode returns `not_enabled`.
 - Production Trading Platform returns `not_ready`.
 - `GET /api/hosted-paper/datastore-readiness` returns
@@ -120,5 +135,7 @@ BROKER_PROVIDER=paper
   Production Trading Platform status as read-only metadata.
 - `make hosted-paper-api-readiness-check` validates the endpoint, docs, tests,
   and frontend panel.
+- `make hosted-backend-readiness-check` validates the hosted backend foundation
+  docs, placeholder infra, API routes, and tests.
 
 Live trading remains disabled by default.
