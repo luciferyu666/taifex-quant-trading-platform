@@ -2757,6 +2757,76 @@ Verified scope:
 - Production Trading Platform remains NOT READY.
 - Live trading remains disabled by default.
 
+## Hosted Paper Managed Datastore Readiness Verification
+
+Verification date: 2026-05-02
+
+Commit:
+
+```text
+81de0a8 Add hosted paper datastore readiness contract
+```
+
+Commands:
+
+```bash
+make hosted-paper-api-readiness-check
+make frontend-i18n-check
+cd backend && .venv/bin/python -m ruff check app tests/test_hosted_paper_datastore_readiness_routes.py
+cd backend && .venv/bin/python -m pytest tests/test_hosted_paper_datastore_readiness_routes.py tests/test_hosted_paper_environment_routes.py tests/test_hosted_paper_readiness_routes.py
+cd frontend && npm run typecheck
+cd frontend && npm run build
+make check
+gh run watch 25250373604 --exit-status
+cd frontend && vercel inspect https://taifex-quant-trading-platform-front.vercel.app
+make frontend-production-smoke-check
+git status --short --branch
+```
+
+Observed result:
+
+```text
+Local hosted paper readiness checks passed.
+Backend targeted tests passed: 9 passed.
+Frontend typecheck and production build passed.
+Full repository check passed, including 335 backend tests, frontend build,
+website checks, website build, and production smoke gates.
+Release Readiness CI passed on run 25250373604.
+Production alias resolved to deployment dpl_6ZZKG7PpynZanpDV55JFGheZy4NA.
+Production smoke gate passed and confirmed required safety copy on English and
+Traditional Chinese pages.
+Local git state was clean after push: ## main...origin/main.
+```
+
+Verified scope:
+
+- Added a read-only Hosted Paper Managed Datastore Readiness contract.
+- Exposed `GET /api/hosted-paper/datastore-readiness`.
+- Added a Web Command Center panel that displays the future hosted paper
+  datastore boundary as schema-only metadata.
+- Documented future hosted paper record models:
+  - `hosted_paper_approval_requests`
+  - `hosted_paper_approval_decisions`
+  - `hosted_paper_workflow_runs`
+  - `hosted_paper_oms_events`
+  - `hosted_paper_audit_events`
+- Documented the required future tenant key: `tenant_id`.
+- Documented migration boundary:
+  - schema contract only
+  - dry-run only
+  - apply disabled
+  - no automatic migration apply
+  - no hosted database connection configured or attempted
+- Documented future retention and audit requirements for approval records,
+  paper workflow records, OMS events, and audit events.
+- Added datastore readiness coverage to `make hosted-paper-api-readiness-check`
+  and `make check`.
+- No hosted database connection, hosted record read, hosted record write,
+  customer account creation, reviewer login, broker call, credential collection,
+  order creation, or production trading readiness claim was added.
+- Production Trading Platform remains NOT READY.
+- Live trading remains disabled by default.
+
 ## Deployment Refresh Recording Policy
 
 Record-only documentation commits can trigger a new Vercel production
