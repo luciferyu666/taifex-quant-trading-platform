@@ -154,6 +154,7 @@ hosted paper API readiness is tracked in
 `GET /api/hosted-paper/datastore-readiness`,
 `GET /api/hosted-paper/identity-readiness`,
 `GET /api/hosted-paper/identity-access-contract`,
+`GET /api/hosted-paper/auth-provider-selection`,
 `GET /api/hosted-paper/session`, and `GET /api/hosted-paper/tenants/current` as
 read-only environment, readiness, and mock contract responses only. The hosted
 paper SaaS foundation path is documented in
@@ -169,6 +170,9 @@ contract is documented in
 `docs/hosted-paper-identity-rbac-tenant-readiness.md`; the identity access
 contract separating future customer, reviewer, operator, and admin roles is
 documented in `docs/hosted-paper-identity-access-contract.md`; the read-only
+auth provider selection matrix comparing Clerk, Auth0, Descope, and Vercel OIDC
+/ Sign in with Vercel is documented in
+`docs/hosted-paper-auth-provider-selection-matrix.md`; the read-only
 mock session contract is documented in `docs/hosted-paper-mock-session-contract.md`.
 The current Paper Approval workflow is local scaffolding, not a formal
 compliance approval system; the readiness boundary is documented in

@@ -15,6 +15,7 @@ The current implemented hosted paper endpoints are:
 GET /api/hosted-paper/readiness
 GET /api/hosted-paper/identity-readiness
 GET /api/hosted-paper/identity-access-contract
+GET /api/hosted-paper/auth-provider-selection
 GET /api/hosted-paper/session
 GET /api/hosted-paper/tenants/current
 ```
@@ -25,8 +26,11 @@ login, customer accounts, formal RBAC/ABAC, and tenant isolation are schema-only
 and not enabled. The identity access contract endpoint separates future
 `customer`, `reviewer`, `operator`, and `admin` permissions, session boundary,
 tenant boundary, and ABAC policies without enabling real login or sessions. The
-session and tenant endpoints return mock contract metadata only; they do not
-authenticate users or create hosted sessions.
+auth provider selection endpoint compares Clerk, Auth0, Descope, and Vercel
+OIDC / Sign in with Vercel as a read-only selection matrix only; it does not
+select, install, configure, or enable any provider. The session and tenant
+endpoints return mock contract metadata only; they do not authenticate users or
+create hosted sessions.
 
 ## Current Posture
 
@@ -158,6 +162,7 @@ The current mock contract endpoints are:
 ```text
 GET /api/hosted-paper/identity-readiness
 GET /api/hosted-paper/identity-access-contract
+GET /api/hosted-paper/auth-provider-selection
 GET /api/hosted-paper/session
 GET /api/hosted-paper/tenants/current
 ```
@@ -176,6 +181,16 @@ provider, create accounts, issue sessions, enforce RBAC/ABAC, write hosted
 records, collect credentials, call brokers, create orders, or enable live
 trading.
 
+`GET /api/hosted-paper/auth-provider-selection` returns the read-only provider
+selection matrix for Clerk, Auth0, Descope, and Vercel OIDC / Sign in with
+Vercel. It reports `selection_state=selection_matrix_only`,
+`provider_selected=false`, `integration_enabled=false`,
+`auth_provider_enabled=false`, `customer_account_created=false`,
+`reviewer_login_created=false`, `session_cookie_issued=false`,
+`credentials_collected=false`, `secrets_added=false`,
+`hosted_datastore_written=false`, `broker_api_called=false`,
+`order_created=false`, and `production_trading_ready=false`.
+
 They return schema samples for future session, tenant, roles, and permissions.
 They do not issue session cookies, write hosted datastore records, create paper
 workflow records, collect credentials, call brokers, or enable live trading.
@@ -183,6 +198,7 @@ workflow records, collect credentials, call brokers, or enable live trading.
 See [hosted-paper-mock-session-contract.md](hosted-paper-mock-session-contract.md).
 See [hosted-paper-identity-rbac-tenant-readiness.md](hosted-paper-identity-rbac-tenant-readiness.md).
 See [hosted-paper-identity-access-contract.md](hosted-paper-identity-access-contract.md).
+See [hosted-paper-auth-provider-selection-matrix.md](hosted-paper-auth-provider-selection-matrix.md).
 The Web Command Center may display this mock metadata as a read-only panel only.
 That UI must not create login buttons, hosted sessions, credential forms,
 database writes, broker calls, or paper workflow mutations.

@@ -3,6 +3,10 @@ from typing import Annotated
 from fastapi import APIRouter, Depends
 
 from app.core.config import Settings, get_settings
+from app.domain.hosted_paper_auth_provider_selection import (
+    HostedPaperAuthProviderSelectionResponse,
+    get_hosted_paper_auth_provider_selection,
+)
 from app.domain.hosted_paper_datastore import (
     HostedPaperDatastoreReadinessResponse,
     get_hosted_paper_datastore_readiness,
@@ -81,3 +85,13 @@ def hosted_paper_identity_access_contract(
     settings: SettingsDep,
 ) -> HostedPaperIdentityAccessContractResponse:
     return get_hosted_paper_identity_access_contract(settings)
+
+
+@router.get(
+    "/auth-provider-selection",
+    response_model=HostedPaperAuthProviderSelectionResponse,
+)
+def hosted_paper_auth_provider_selection(
+    settings: SettingsDep,
+) -> HostedPaperAuthProviderSelectionResponse:
+    return get_hosted_paper_auth_provider_selection(settings)

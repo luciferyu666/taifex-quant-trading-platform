@@ -108,6 +108,7 @@ for required_file in \
   docs/hosted-paper-managed-datastore-readiness.md \
   docs/hosted-paper-managed-datastore-migration-plan.md \
   docs/hosted-paper-auth-boundary-spec.md \
+  docs/hosted-paper-auth-provider-selection-matrix.md \
   docs/hosted-paper-identity-rbac-tenant-readiness.md \
   docs/hosted-paper-identity-access-contract.md \
   docs/hosted-paper-mock-session-contract.md \
@@ -129,6 +130,7 @@ for required_file in \
   scripts/hosted-paper-api-readiness-check.sh \
   scripts/hosted-backend-readiness-check.sh \
   scripts/hosted-paper-auth-boundary-check.sh \
+  scripts/hosted-paper-auth-provider-selection-check.sh \
   scripts/hosted-paper-identity-readiness-check.sh \
   scripts/hosted-paper-identity-access-check.sh \
   scripts/hosted-paper-mock-session-check.sh \
@@ -141,15 +143,18 @@ for required_file in \
   backend/app/domain/hosted_backend_environment.py \
   backend/app/domain/hosted_paper_environment.py \
   backend/app/domain/hosted_paper_datastore.py \
+  backend/app/domain/hosted_paper_auth_provider_selection.py \
   backend/app/domain/hosted_paper_identity_access.py \
   backend/app/api/hosted_backend_routes.py \
   backend/tests/test_hosted_backend_environment_routes.py \
   backend/tests/test_hosted_paper_environment_routes.py \
   backend/tests/test_hosted_paper_datastore_readiness_routes.py \
   backend/tests/test_hosted_paper_datastore_migration_plan_script.py \
+  backend/tests/test_hosted_paper_auth_provider_selection_routes.py \
   backend/tests/test_hosted_paper_identity_access_contract_routes.py \
   frontend/app/components/HostedPaperEnvironmentPanel.tsx \
   frontend/app/components/HostedPaperDatastoreReadinessPanel.tsx \
+  frontend/app/components/HostedPaperAuthProviderSelectionPanel.tsx \
   frontend/app/components/HostedPaperIdentityAccessContractPanel.tsx \
   frontend/scripts/check-paper-approval-ui-flow.mjs; do
   if [[ ! -f "${required_file}" ]]; then
@@ -195,6 +200,11 @@ fi
 
 if [[ ! -x scripts/hosted-paper-auth-boundary-check.sh ]]; then
   printf 'scripts/hosted-paper-auth-boundary-check.sh must be executable.\n' >&2
+  missing_customer_eval_file=1
+fi
+
+if [[ ! -x scripts/hosted-paper-auth-provider-selection-check.sh ]]; then
+  printf 'scripts/hosted-paper-auth-provider-selection-check.sh must be executable.\n' >&2
   missing_customer_eval_file=1
 fi
 
@@ -254,6 +264,7 @@ bash scripts/launch-self-service-paper-demo.sh --check-only
 bash scripts/hosted-backend-readiness-check.sh
 bash scripts/hosted-paper-api-readiness-check.sh
 bash scripts/hosted-paper-auth-boundary-check.sh
+bash scripts/hosted-paper-auth-provider-selection-check.sh
 bash scripts/hosted-paper-identity-readiness-check.sh
 bash scripts/hosted-paper-identity-access-check.sh
 bash scripts/hosted-paper-mock-session-check.sh
@@ -316,6 +327,7 @@ for required_file in \
   backend/app/domain/hosted_paper_environment.py \
   backend/app/domain/hosted_backend_environment.py \
   backend/app/domain/hosted_paper_identity.py \
+  backend/app/domain/hosted_paper_auth_provider_selection.py \
   backend/app/domain/hosted_paper_identity_access.py \
   backend/app/domain/hosted_paper_session.py \
   backend/app/domain/exposure.py \

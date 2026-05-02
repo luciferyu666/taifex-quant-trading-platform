@@ -31,6 +31,10 @@ import {
   type HostedPaperIdentityAccessContract,
 } from "./components/HostedPaperIdentityAccessContractPanel";
 import {
+  HostedPaperAuthProviderSelectionPanel,
+  type HostedPaperAuthProviderSelection,
+} from "./components/HostedPaperAuthProviderSelectionPanel";
+import {
   HostedPaperMockSessionPanel,
   type HostedPaperMockSession,
   type HostedPaperTenantContext,
@@ -1519,6 +1523,140 @@ const fallbackHostedPaperIdentityAccessContract: HostedPaperIdentityAccessContra
   ],
 };
 
+const fallbackHostedPaperAuthProviderSelection: HostedPaperAuthProviderSelection = {
+  service: "hosted-paper-auth-provider-selection",
+  selection_state: "selection_matrix_only",
+  summary:
+    "Read-only provider selection matrix for future hosted paper identity. It compares Clerk, Auth0, Descope, and Vercel OIDC / Sign in with Vercel against paper-only SaaS needs without selecting, installing, or enabling any provider.",
+  candidates: [
+    {
+      provider: "Clerk",
+      category: "Vercel Marketplace auth platform",
+      fit_summary:
+        "Strong candidate for a fast hosted paper SaaS pilot on Vercel when prebuilt UI, session management, and lower integration overhead are more important than deep enterprise identity customization.",
+      strengths: [],
+      watch_items: [],
+      paper_saas_fit: "strong_pilot_candidate",
+      recommended_use: "Shortlist for first hosted paper customer pilot evaluation.",
+      integration_enabled: false,
+      credentials_required_now: false,
+      secrets_added: false,
+      customer_accounts_created: false,
+    },
+    {
+      provider: "Auth0",
+      category: "Enterprise identity platform",
+      fit_summary:
+        "Strong candidate when enterprise SSO, mature identity governance, custom claims, and large organization requirements dominate.",
+      strengths: [],
+      watch_items: [],
+      paper_saas_fit: "strong_enterprise_candidate",
+      recommended_use: "Shortlist for enterprise or broker-partner paper SaaS pilots.",
+      integration_enabled: false,
+      credentials_required_now: false,
+      secrets_added: false,
+      customer_accounts_created: false,
+    },
+    {
+      provider: "Descope",
+      category: "Passwordless and workflow-oriented auth platform",
+      fit_summary:
+        "Candidate for passwordless customer onboarding and guided identity flows where visual flow configuration is useful.",
+      strengths: [],
+      watch_items: [],
+      paper_saas_fit: "pilot_candidate",
+      recommended_use: "Evaluate if passwordless onboarding is a product priority.",
+      integration_enabled: false,
+      credentials_required_now: false,
+      secrets_added: false,
+      customer_accounts_created: false,
+    },
+    {
+      provider: "Vercel OIDC / Sign in with Vercel",
+      category: "Developer-facing OAuth/OIDC identity",
+      fit_summary:
+        "Useful for developer/operator tooling where users already have Vercel accounts, but not a default fit for general customer SaaS login.",
+      strengths: [],
+      watch_items: [],
+      paper_saas_fit: "internal_operator_candidate",
+      recommended_use: "Keep as an internal/admin tooling option, not customer default.",
+      integration_enabled: false,
+      credentials_required_now: false,
+      secrets_added: false,
+      customer_accounts_created: false,
+    },
+  ],
+  criteria: [
+    {
+      criterion: "tenant_boundary",
+      why_it_matters: "Every hosted paper record and request must be scoped by tenant_id.",
+      required_before_customer_pilot: true,
+    },
+    {
+      criterion: "role_mapping",
+      why_it_matters: "Customer, reviewer, operator, and admin permissions must remain separate.",
+      required_before_customer_pilot: true,
+    },
+    {
+      criterion: "session_security",
+      why_it_matters: "Sessions need expiry, rotation, revocation, logout, and audit events.",
+      required_before_customer_pilot: true,
+    },
+  ],
+  non_goals: [
+    "Do not install provider SDKs in this slice.",
+    "Do not create login or signup pages.",
+    "Do not create customer accounts.",
+    "Do not issue session cookies.",
+    "Do not add secrets or environment variables.",
+    "Do not write hosted datastore records.",
+    "Do not collect broker credentials.",
+    "Do not call brokers or create orders.",
+    "Do not enable live trading.",
+  ],
+  recommended_next_steps: [
+    "Review product requirements for customer, reviewer, operator, and admin roles.",
+    "Confirm tenant membership and audit requirements before choosing a provider.",
+    "Run a security review of shortlisted provider data handling and session behavior.",
+  ],
+  safety_defaults: {
+    trading_mode: "paper",
+    enable_live_trading: false,
+    broker_provider: "paper",
+  },
+  safety_flags: {
+    paper_only: true,
+    read_only: true,
+    live_trading_enabled: false,
+    broker_provider: "paper",
+    provider_selected: false,
+    integration_enabled: false,
+    auth_provider_enabled: false,
+    customer_account_created: false,
+    reviewer_login_created: false,
+    session_cookie_issued: false,
+    credentials_collected: false,
+    secrets_added: false,
+    hosted_datastore_written: false,
+    broker_api_called: false,
+    order_created: false,
+    production_trading_ready: false,
+  },
+  docs: {
+    auth_provider_selection: "docs/hosted-paper-auth-provider-selection-matrix.md",
+    identity_access_contract: "docs/hosted-paper-identity-access-contract.md",
+    auth_boundary: "docs/hosted-paper-auth-boundary-spec.md",
+    saas_roadmap: "docs/hosted-paper-saas-foundation-roadmap.md",
+  },
+  warnings: [
+    "This is a read-only selection matrix, not an authentication integration.",
+    "No provider is selected or enabled by this slice.",
+    "No credentials, secrets, customer accounts, sessions, hosted records, broker calls, or orders are created.",
+    "Production Trading Platform remains NOT READY.",
+    "Live trading remains disabled by default.",
+  ],
+};
+
 const fallbackHostedPaperMockSession: HostedPaperMockSession = {
   service: "hosted-paper-mock-session-contract",
   contract_state: "mock_read_only",
@@ -1784,6 +1922,7 @@ export default async function Home({ searchParams }: HomeProps) {
     hostedPaperReadiness,
     hostedPaperIdentityReadiness,
     hostedPaperIdentityAccessContract,
+    hostedPaperAuthProviderSelection,
     hostedPaperMockSession,
     hostedPaperTenant,
     reviewPacket,
@@ -1878,6 +2017,10 @@ export default async function Home({ searchParams }: HomeProps) {
       fetchJson<HostedPaperIdentityAccessContract>(
         "/api/hosted-paper/identity-access-contract",
         fallbackHostedPaperIdentityAccessContract,
+      ),
+      fetchJson<HostedPaperAuthProviderSelection>(
+        "/api/hosted-paper/auth-provider-selection",
+        fallbackHostedPaperAuthProviderSelection,
       ),
       fetchJson<HostedPaperMockSession>(
         "/api/hosted-paper/session",
@@ -2123,6 +2266,16 @@ export default async function Home({ searchParams }: HomeProps) {
                   ? undefined
                   : hostedPaperIdentityAccessContract.error
               }
+            />
+            <HostedPaperAuthProviderSelectionPanel
+              available={hostedPaperAuthProviderSelection.available}
+              copy={copy.hostedPaperAuthProviderSelection}
+              error={
+                hostedPaperAuthProviderSelection.available
+                  ? undefined
+                  : hostedPaperAuthProviderSelection.error
+              }
+              selection={hostedPaperAuthProviderSelection.data}
             />
             <HostedPaperMockSessionPanel
               available={hostedPaperMockSession.available && hostedPaperTenant.available}

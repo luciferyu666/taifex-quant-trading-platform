@@ -16,6 +16,8 @@ const files = {
     "frontend/app/components/HostedPaperIdentityReadinessPanel.tsx",
   hostedPaperIdentityAccess:
     "frontend/app/components/HostedPaperIdentityAccessContractPanel.tsx",
+  hostedPaperAuthProviderSelection:
+    "frontend/app/components/HostedPaperAuthProviderSelectionPanel.tsx",
   hostedPaperSession: "frontend/app/components/HostedPaperMockSessionPanel.tsx",
   hostedPaperTenantEvidence:
     "frontend/app/components/HostedPaperTenantBoundaryEvidencePanel.tsx",
@@ -247,6 +249,29 @@ requireContains("Hosted identity access separates customer role", sourceByFile.i
 requireContains("Hosted identity access separates reviewer role", sourceByFile.i18n, "reviewer");
 requireContains("Hosted identity access separates operator role", sourceByFile.i18n, "operator");
 requireContains("Hosted identity access separates admin role", sourceByFile.i18n, "admin");
+requireContains("English hosted paper auth provider selection copy exists", sourceByFile.i18n, "Auth provider selection matrix");
+requireContains("Traditional Chinese hosted paper auth provider selection copy exists", sourceByFile.i18n, "選型狀態");
+requireContains("Hosted paper auth provider selection component is implemented", sourceByFile.hostedPaperAuthProviderSelection, "HostedPaperAuthProviderSelectionPanel");
+requireContains("Hosted paper auth provider selection endpoint is fetched on page", sourceByFile.page, "/api/hosted-paper/auth-provider-selection");
+requireContains("Hosted paper auth provider selection panel is mounted on page", sourceByFile.page, "HostedPaperAuthProviderSelectionPanel");
+requireContains("Hosted paper auth provider selection compares Clerk", sourceByFile.i18n, "Clerk");
+requireContains("Hosted paper auth provider selection compares Auth0", sourceByFile.i18n, "Auth0");
+requireContains("Hosted paper auth provider selection compares Descope", sourceByFile.i18n, "Descope");
+requireContains("Hosted paper auth provider selection compares Vercel OIDC", sourceByFile.i18n, "Vercel OIDC");
+requireContains("Hosted paper auth provider selection shows provider_selected flag", sourceByFile.hostedPaperAuthProviderSelection, "provider_selected");
+requireContains("Hosted paper auth provider selection shows integration_enabled flag", sourceByFile.hostedPaperAuthProviderSelection, "integration_enabled");
+requireContains("Hosted paper auth provider selection shows auth_provider_enabled flag", sourceByFile.hostedPaperAuthProviderSelection, "auth_provider_enabled");
+requireContains("Hosted paper auth provider selection shows credentials_collected flag", sourceByFile.hostedPaperAuthProviderSelection, "credentials_collected");
+requireContains("Hosted paper auth provider selection shows secrets_added flag", sourceByFile.hostedPaperAuthProviderSelection, "secrets_added");
+requireContains("Hosted paper auth provider selection shows hosted datastore write flag", sourceByFile.hostedPaperAuthProviderSelection, "hosted_datastore_written");
+requireContains("Hosted paper auth provider selection shows broker call flag", sourceByFile.hostedPaperAuthProviderSelection, "broker_api_called");
+requireContains("Hosted paper auth provider selection shows order flag", sourceByFile.hostedPaperAuthProviderSelection, "order_created");
+requireContains("Hosted paper auth provider selection shows production readiness flag", sourceByFile.hostedPaperAuthProviderSelection, "production_trading_ready");
+requireNotContains("Hosted paper auth provider selection panel does not fetch directly", sourceByFile.hostedPaperAuthProviderSelection, "fetch(");
+requireNotContains("Hosted paper auth provider selection panel does not call workflow record", sourceByFile.hostedPaperAuthProviderSelection, "/api/paper-execution/workflow/record");
+requireNotContains("Hosted paper auth provider selection panel does not collect API keys", sourceByFile.hostedPaperAuthProviderSelection.toLowerCase(), "api_key");
+requireNotContains("Hosted paper auth provider selection panel does not collect account IDs", sourceByFile.hostedPaperAuthProviderSelection.toLowerCase(), "account_id");
+requireNotContains("Hosted paper auth provider selection panel does not collect certificates", sourceByFile.hostedPaperAuthProviderSelection.toLowerCase(), "certificate");
 requireContains("English demo guide copy exists", sourceByFile.i18n, "Customer Demo Guided Flow");
 requireContains("Traditional Chinese demo guide copy exists", sourceByFile.i18n, "客戶測試導覽流程");
 requireContains("Demo guide component is implemented", sourceByFile.demoGuide, "DemoGuidePanel");

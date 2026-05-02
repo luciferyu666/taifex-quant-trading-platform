@@ -884,6 +884,150 @@ export const dashboardCopy = {
           "Live trading remains disabled by default.",
       },
     },
+    hostedPaperAuthProviderSelection: {
+      eyebrow: "Hosted Paper Auth",
+      title: "Auth provider selection matrix",
+      description:
+        "Read-only comparison of Clerk, Auth0, Descope, and Vercel OIDC / Sign in with Vercel for future hosted paper SaaS identity. No provider is selected, installed, or enabled.",
+      fallbackPrefix:
+        "Hosted paper auth provider selection unavailable. Rendering safe fallback:",
+      endpointLabel: "Read-only endpoint",
+      stateLabel: "Selection state",
+      categoryLabel: "Category",
+      paperSaasFitLabel: "Paper SaaS fit",
+      integrationEnabledLabel: "Integration enabled",
+      secretsAddedLabel: "Secrets added",
+      recommendedUseLabel: "Recommended use",
+      criteriaLabel: "Selection criteria",
+      nonGoalsLabel: "Non-goals",
+      nextStepsLabel: "Recommended next steps",
+      safetyDefaultsLabel: "Safety defaults",
+      safetyFlagsLabel: "Safety flags",
+      warningLabel: "Boundary warnings",
+      providerLabels: {
+        Clerk: "Clerk",
+        Auth0: "Auth0",
+        Descope: "Descope",
+        "Vercel OIDC / Sign in with Vercel": "Vercel OIDC / Sign in with Vercel",
+      },
+      categoryLabels: {
+        "Vercel Marketplace auth platform": "Vercel Marketplace auth platform",
+        "Enterprise identity platform": "Enterprise identity platform",
+        "Passwordless and workflow-oriented auth platform":
+          "Passwordless and workflow-oriented auth platform",
+        "Developer-facing OAuth/OIDC identity":
+          "Developer-facing OAuth/OIDC identity",
+      },
+      fitLabels: {
+        strong_pilot_candidate: "Strong pilot candidate",
+        strong_enterprise_candidate: "Strong enterprise candidate",
+        pilot_candidate: "Pilot candidate",
+        internal_operator_candidate: "Internal/operator candidate",
+      },
+      fitSummaryLabels: {
+        "Strong candidate for a fast hosted paper SaaS pilot on Vercel when prebuilt UI, session management, and lower integration overhead are more important than deep enterprise identity customization.":
+          "Strong candidate for a fast hosted paper SaaS pilot on Vercel when prebuilt UI, session management, and lower integration overhead are more important than deep enterprise identity customization.",
+        "Strong candidate when enterprise SSO, mature identity governance, custom claims, and large organization requirements dominate.":
+          "Strong candidate when enterprise SSO, mature identity governance, custom claims, and large organization requirements dominate.",
+        "Candidate for passwordless customer onboarding and guided identity flows where visual flow configuration is useful.":
+          "Candidate for passwordless customer onboarding and guided identity flows where visual flow configuration is useful.",
+        "Useful for developer/operator tooling where users already have Vercel accounts, but not a default fit for general customer SaaS login.":
+          "Useful for developer/operator tooling where users already have Vercel accounts, but not a default fit for general customer SaaS login.",
+      },
+      recommendedUseLabels: {
+        "Shortlist for first hosted paper customer pilot evaluation.":
+          "Shortlist for first hosted paper customer pilot evaluation.",
+        "Shortlist for enterprise or broker-partner paper SaaS pilots.":
+          "Shortlist for enterprise or broker-partner paper SaaS pilots.",
+        "Evaluate if passwordless onboarding is a product priority.":
+          "Evaluate if passwordless onboarding is a product priority.",
+        "Keep as an internal/admin tooling option, not customer default.":
+          "Keep as an internal/admin tooling option, not customer default.",
+      },
+      criterionLabels: {
+        tenant_boundary: "Tenant boundary",
+        role_mapping: "Role mapping",
+        session_security: "Session security",
+        mfa_for_privileged_roles: "MFA for privileged roles",
+        auditability: "Auditability",
+        paper_only_policy_enforcement: "Paper-only policy enforcement",
+        vercel_deployment_fit: "Vercel deployment fit",
+      },
+      criterionReasonLabels: {
+        "Every hosted paper record and request must be scoped by tenant_id.":
+          "Every hosted paper record and request must be scoped by tenant_id.",
+        "Customer, reviewer, operator, and admin permissions must remain separate.":
+          "Customer, reviewer, operator, and admin permissions must remain separate.",
+        "Sessions need expiry, rotation, revocation, logout, and audit events.":
+          "Sessions need expiry, rotation, revocation, logout, and audit events.",
+        "Reviewer, operator, and admin roles should require stronger assurance.":
+          "Reviewer, operator, and admin roles should require stronger assurance.",
+        "Identity and authorization decisions must be traceable for review.":
+          "Identity and authorization decisions must be traceable for review.",
+        "Auth must carry attributes needed to enforce paper-only mode.":
+          "Auth must carry attributes needed to enforce paper-only mode.",
+        "The provider should fit the planned hosted frontend/backend deployment path.":
+          "The provider should fit the planned hosted frontend/backend deployment path.",
+      },
+      nonGoalLabels: {
+        "Do not install provider SDKs in this slice.":
+          "Do not install provider SDKs in this slice.",
+        "Do not create login or signup pages.":
+          "Do not create login or signup pages.",
+        "Do not create customer accounts.": "Do not create customer accounts.",
+        "Do not issue session cookies.": "Do not issue session cookies.",
+        "Do not add secrets or environment variables.":
+          "Do not add secrets or environment variables.",
+        "Do not write hosted datastore records.":
+          "Do not write hosted datastore records.",
+        "Do not collect broker credentials.": "Do not collect broker credentials.",
+        "Do not call brokers or create orders.":
+          "Do not call brokers or create orders.",
+        "Do not enable live trading.": "Do not enable live trading.",
+      },
+      nextStepLabels: {
+        "Review product requirements for customer, reviewer, operator, and admin roles.":
+          "Review product requirements for customer, reviewer, operator, and admin roles.",
+        "Confirm tenant membership and audit requirements before choosing a provider.":
+          "Confirm tenant membership and audit requirements before choosing a provider.",
+        "Run a security review of shortlisted provider data handling and session behavior.":
+          "Run a security review of shortlisted provider data handling and session behavior.",
+        "Select one provider for a staging-only proof of concept in a future slice.":
+          "Select one provider for a staging-only proof of concept in a future slice.",
+        "Keep production hosted paper customer access disabled until auth, tenant datastore, RBAC, ABAC, and audit controls are implemented.":
+          "Keep production hosted paper customer access disabled until auth, tenant datastore, RBAC, ABAC, and audit controls are implemented.",
+      },
+      safetyFlagLabels: {
+        paper_only: "paper_only",
+        read_only: "read_only",
+        live_trading_enabled: "live_trading_enabled",
+        broker_provider: "broker_provider",
+        provider_selected: "provider_selected",
+        integration_enabled: "integration_enabled",
+        auth_provider_enabled: "auth_provider_enabled",
+        customer_account_created: "customer_account_created",
+        reviewer_login_created: "reviewer_login_created",
+        session_cookie_issued: "session_cookie_issued",
+        credentials_collected: "credentials_collected",
+        secrets_added: "secrets_added",
+        hosted_datastore_written: "hosted_datastore_written",
+        broker_api_called: "broker_api_called",
+        order_created: "order_created",
+        production_trading_ready: "production_trading_ready",
+      },
+      warningLabels: {
+        "This is a read-only selection matrix, not an authentication integration.":
+          "This is a read-only selection matrix, not an authentication integration.",
+        "No provider is selected or enabled by this slice.":
+          "No provider is selected or enabled by this slice.",
+        "No credentials, secrets, customer accounts, sessions, hosted records, broker calls, or orders are created.":
+          "No credentials, secrets, customer accounts, sessions, hosted records, broker calls, or orders are created.",
+        "Production Trading Platform remains NOT READY.":
+          "Production Trading Platform remains NOT READY.",
+        "Live trading remains disabled by default.":
+          "Live trading remains disabled by default.",
+      },
+    },
     hostedPaperSession: {
       eyebrow: "Hosted Paper Session",
       title: "Mock session and tenant contract",
@@ -3193,6 +3337,149 @@ export const dashboardCopy = {
           "Hosted SaaS 需要 RBAC 與 ABAC，但本切片尚未強制執行。",
         "No credentials are collected, no hosted datastore is written, no broker is called, and no order is created.":
           "不收 credentials、不寫 hosted datastore、不呼叫券商，也不建立訂單。",
+        "Production Trading Platform remains NOT READY.":
+          "Production Trading Platform 仍為 NOT READY。",
+        "Live trading remains disabled by default.":
+          "Live trading remains disabled by default.",
+      },
+    },
+    hostedPaperAuthProviderSelection: {
+      eyebrow: "Hosted Paper Auth",
+      title: "Auth provider selection matrix",
+      description:
+        "只讀比較 Clerk、Auth0、Descope、Vercel OIDC / Sign in with Vercel 與未來 hosted paper SaaS identity 需求。本切片不選定、不安裝、也不啟用任何 provider。",
+      fallbackPrefix:
+        "Hosted paper auth provider selection 無法取得，正在顯示安全備援資料：",
+      endpointLabel: "只讀 endpoint",
+      stateLabel: "選型狀態",
+      categoryLabel: "類型",
+      paperSaasFitLabel: "Paper SaaS 適配",
+      integrationEnabledLabel: "Integration 已啟用",
+      secretsAddedLabel: "Secrets 已加入",
+      recommendedUseLabel: "建議用途",
+      criteriaLabel: "選型標準",
+      nonGoalsLabel: "非目標",
+      nextStepsLabel: "建議下一步",
+      safetyDefaultsLabel: "安全預設",
+      safetyFlagsLabel: "安全旗標",
+      warningLabel: "邊界警示",
+      providerLabels: {
+        Clerk: "Clerk",
+        Auth0: "Auth0",
+        Descope: "Descope",
+        "Vercel OIDC / Sign in with Vercel": "Vercel OIDC / Sign in with Vercel",
+      },
+      categoryLabels: {
+        "Vercel Marketplace auth platform": "Vercel Marketplace auth platform",
+        "Enterprise identity platform": "Enterprise identity platform",
+        "Passwordless and workflow-oriented auth platform":
+          "Passwordless and workflow-oriented auth platform",
+        "Developer-facing OAuth/OIDC identity":
+          "Developer-facing OAuth/OIDC identity",
+      },
+      fitLabels: {
+        strong_pilot_candidate: "強 pilot 候選",
+        strong_enterprise_candidate: "強 enterprise 候選",
+        pilot_candidate: "Pilot 候選",
+        internal_operator_candidate: "Internal/operator 候選",
+      },
+      fitSummaryLabels: {
+        "Strong candidate for a fast hosted paper SaaS pilot on Vercel when prebuilt UI, session management, and lower integration overhead are more important than deep enterprise identity customization.":
+          "若早期 hosted paper SaaS pilot 重視 Vercel 上快速導入、預建 UI、session management 與較低整合成本，Clerk 是強候選。",
+        "Strong candidate when enterprise SSO, mature identity governance, custom claims, and large organization requirements dominate.":
+          "若 enterprise SSO、成熟 identity governance、custom claims 與大型組織需求是主軸，Auth0 是強候選。",
+        "Candidate for passwordless customer onboarding and guided identity flows where visual flow configuration is useful.":
+          "若需要 passwordless customer onboarding 與 guided identity flows，Descope 可列入評估。",
+        "Useful for developer/operator tooling where users already have Vercel accounts, but not a default fit for general customer SaaS login.":
+          "適合既有 Vercel 帳號的 developer/operator tooling，但不適合作為一般 customer SaaS login 預設。",
+      },
+      recommendedUseLabels: {
+        "Shortlist for first hosted paper customer pilot evaluation.":
+          "列入第一個 hosted paper customer pilot 的 shortlist。",
+        "Shortlist for enterprise or broker-partner paper SaaS pilots.":
+          "列入 enterprise 或 broker-partner paper SaaS pilot shortlist。",
+        "Evaluate if passwordless onboarding is a product priority.":
+          "若 passwordless onboarding 是產品優先事項，列入評估。",
+        "Keep as an internal/admin tooling option, not customer default.":
+          "保留為 internal/admin tooling 選項，不作為 customer default。",
+      },
+      criterionLabels: {
+        tenant_boundary: "Tenant boundary",
+        role_mapping: "Role mapping",
+        session_security: "Session security",
+        mfa_for_privileged_roles: "Privileged roles MFA",
+        auditability: "Auditability",
+        paper_only_policy_enforcement: "Paper-only policy enforcement",
+        vercel_deployment_fit: "Vercel deployment fit",
+      },
+      criterionReasonLabels: {
+        "Every hosted paper record and request must be scoped by tenant_id.":
+          "每筆 hosted paper record 與 request 都必須由 tenant_id 限定範圍。",
+        "Customer, reviewer, operator, and admin permissions must remain separate.":
+          "Customer、reviewer、operator、admin 權限必須分離。",
+        "Sessions need expiry, rotation, revocation, logout, and audit events.":
+          "Session 需要 expiry、rotation、revocation、logout 與 audit events。",
+        "Reviewer, operator, and admin roles should require stronger assurance.":
+          "Reviewer、operator、admin roles 應有更高 assurance 要求。",
+        "Identity and authorization decisions must be traceable for review.":
+          "Identity 與 authorization decisions 必須可供審查追溯。",
+        "Auth must carry attributes needed to enforce paper-only mode.":
+          "Auth 必須攜帶可強制 paper-only mode 的 attributes。",
+        "The provider should fit the planned hosted frontend/backend deployment path.":
+          "Provider 應符合規劃中的 hosted frontend/backend deployment path。",
+      },
+      nonGoalLabels: {
+        "Do not install provider SDKs in this slice.":
+          "本切片不安裝 provider SDK。",
+        "Do not create login or signup pages.":
+          "不建立 login 或 signup pages。",
+        "Do not create customer accounts.": "不建立 customer accounts。",
+        "Do not issue session cookies.": "不發 session cookies。",
+        "Do not add secrets or environment variables.":
+          "不加入 secrets 或 environment variables。",
+        "Do not write hosted datastore records.":
+          "不寫 hosted datastore records。",
+        "Do not collect broker credentials.": "不收 broker credentials。",
+        "Do not call brokers or create orders.": "不呼叫券商，也不建立訂單。",
+        "Do not enable live trading.": "不啟用實盤交易。",
+      },
+      nextStepLabels: {
+        "Review product requirements for customer, reviewer, operator, and admin roles.":
+          "審查 customer、reviewer、operator、admin roles 的產品需求。",
+        "Confirm tenant membership and audit requirements before choosing a provider.":
+          "選定 provider 前先確認 tenant membership 與 audit requirements。",
+        "Run a security review of shortlisted provider data handling and session behavior.":
+          "針對 shortlist provider 的資料處理與 session behavior 做 security review。",
+        "Select one provider for a staging-only proof of concept in a future slice.":
+          "在未來切片選一個 provider 做 staging-only proof of concept。",
+        "Keep production hosted paper customer access disabled until auth, tenant datastore, RBAC, ABAC, and audit controls are implemented.":
+          "在 auth、tenant datastore、RBAC、ABAC 與 audit controls 完成前，production hosted paper customer access 保持關閉。",
+      },
+      safetyFlagLabels: {
+        paper_only: "paper_only",
+        read_only: "read_only",
+        live_trading_enabled: "live_trading_enabled",
+        broker_provider: "broker_provider",
+        provider_selected: "provider_selected",
+        integration_enabled: "integration_enabled",
+        auth_provider_enabled: "auth_provider_enabled",
+        customer_account_created: "customer_account_created",
+        reviewer_login_created: "reviewer_login_created",
+        session_cookie_issued: "session_cookie_issued",
+        credentials_collected: "credentials_collected",
+        secrets_added: "secrets_added",
+        hosted_datastore_written: "hosted_datastore_written",
+        broker_api_called: "broker_api_called",
+        order_created: "order_created",
+        production_trading_ready: "production_trading_ready",
+      },
+      warningLabels: {
+        "This is a read-only selection matrix, not an authentication integration.":
+          "這是只讀 selection matrix，不是 authentication integration。",
+        "No provider is selected or enabled by this slice.":
+          "本切片不選定也不啟用任何 provider。",
+        "No credentials, secrets, customer accounts, sessions, hosted records, broker calls, or orders are created.":
+          "不建立 credentials、secrets、customer accounts、sessions、hosted records、broker calls 或 orders。",
         "Production Trading Platform remains NOT READY.":
           "Production Trading Platform 仍為 NOT READY。",
         "Live trading remains disabled by default.":
