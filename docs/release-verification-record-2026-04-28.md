@@ -2502,6 +2502,79 @@ Verified scope:
 - Production Trading Platform remains NOT READY.
 - Live trading remains disabled by default.
 
+## Paper Audit WORM Readiness Verification
+
+Verification timestamp:
+
+```text
+2026-05-02 10:03:26 CST (+0800)
+```
+
+Application commit:
+
+```text
+1c64000 Add paper audit WORM readiness boundary
+```
+
+GitHub Actions:
+
+```text
+Workflow: Release Readiness
+Run ID: 25240905825
+Status: passed
+```
+
+Vercel deployment:
+
+```text
+Deployment URL: https://taifex-quant-trading-platform-frontend-ps4iu7bab.vercel.app
+Deployment ID: dpl_r4tQhkXx1g4Ts1iJrFtQkd8fKb21
+Production alias: https://taifex-quant-trading-platform-front.vercel.app
+Status: Ready
+```
+
+Validation commands:
+
+```bash
+make paper-audit-worm-readiness-check
+make frontend-i18n-check
+cd frontend && npm run typecheck
+cd frontend && npm run build
+make check
+gh run watch 25240905825 --exit-status
+cd frontend && vercel inspect https://taifex-quant-trading-platform-front.vercel.app
+make frontend-production-smoke-check
+git status --short --branch
+```
+
+Observed result:
+
+```text
+Local repository checks passed.
+Release Readiness CI passed on run 25240905825.
+Production alias resolved to deployment dpl_r4tQhkXx1g4Ts1iJrFtQkd8fKb21.
+Production smoke gate passed and confirmed required safety copy on English and
+Traditional Chinese pages.
+Local git state was clean: ## main...origin/main.
+```
+
+Verified scope:
+
+- Added a read-only Paper Audit WORM Readiness boundary for local SQLite audit
+  persistence.
+- Exposed `GET /api/paper-execution/audit-integrity/worm-readiness`.
+- Added a Web Command Center panel that states local SQLite audit records and
+  local hash-chain metadata are not production WORM storage or an immutable
+  audit ledger.
+- Documented disabled production controls: WORM storage, immutable ledger,
+  storage-enforced append-only semantics, object lock, centralized audit
+  service, external timestamping, cryptographic signing, retention policy,
+  legal hold, and production audit compliance.
+- No audit upload, chain repair, credential collection, broker call, order
+  creation, live approval, or production WORM compliance claim was added.
+- Production Trading Platform remains NOT READY.
+- Live trading remains disabled by default.
+
 ## Deployment Refresh Recording Policy
 
 Record-only documentation commits can trigger a new Vercel production
