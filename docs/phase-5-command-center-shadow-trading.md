@@ -69,6 +69,12 @@ Expose roadmap phase status, contracts, safety mode, risk status, and paper-only
   Paper Mode, and Production Trading Platform boundaries. It must show Local
   Demo Mode as the current path, Hosted Paper Mode as not enabled, and
   Production Trading Platform as NOT READY.
+- Hosted Paper Managed Datastore Readiness panel that reads
+  `GET /api/hosted-paper/datastore-readiness` and displays the future
+  `tenant_id` key, hosted paper record models, migration boundary, retention
+  requirements, audit requirements, and safety flags. It must show the contract
+  as schema-only with no hosted database connection, no hosted record reads, and
+  no hosted record writes.
 - Hosted Paper Identity / RBAC / Tenant Readiness panel that reads
   `GET /api/hosted-paper/identity-readiness` and displays that real reviewer
   login, customer accounts, formal RBAC/ABAC enforcement, and tenant isolation
@@ -251,6 +257,12 @@ Expose roadmap phase status, contracts, safety mode, risk status, and paper-only
   requests, paper workflow submissions, database writes, broker calls,
   credential collection, live controls, or imply that hosted paper mode is
   enabled.
+- The Hosted Paper Managed Datastore Readiness panel is a read-only contract
+  surface. It may display `GET /api/hosted-paper/datastore-readiness`, but it
+  must not connect to a hosted database, write hosted records, read hosted
+  records, create tenants, create customer accounts, create approval requests,
+  submit paper workflows, call brokers, collect credentials, expose live
+  controls, or imply that hosted paper mode is enabled.
 - The Hosted Paper Identity / RBAC / Tenant Readiness panel is a read-only
   status surface. It may display `GET /api/hosted-paper/identity-readiness`, but
   it must not create login flows, customer accounts, session cookies, tenant

@@ -151,12 +151,17 @@ customer-facing quick-start flow is documented in
 hosted paper API readiness is tracked in
 `docs/hosted-paper-backend-api-readiness.md`; the current backend exposes
 `GET /api/hosted-paper/environment`, `GET /api/hosted-paper/readiness`,
+`GET /api/hosted-paper/datastore-readiness`,
 `GET /api/hosted-paper/identity-readiness`,
 `GET /api/hosted-paper/session`, and `GET /api/hosted-paper/tenants/current` as
 read-only environment, readiness, and mock contract responses only. The hosted
 paper SaaS foundation path is documented in
 `docs/hosted-paper-saas-foundation-roadmap.md`; Hosted Paper Mode is not enabled,
 and Local Demo Mode remains the primary customer path for actual paper records.
+The future managed datastore contract is documented in
+`docs/hosted-paper-managed-datastore-readiness.md`; it defines tenant-scoped
+record models, migration boundaries, retention requirements, and audit
+requirements without connecting to a hosted database or writing hosted records.
 Future hosted login, session, RBAC, ABAC, and tenant boundaries are specified in
 `docs/hosted-paper-auth-boundary-spec.md`; the identity/RBAC/tenant readiness
 contract is documented in

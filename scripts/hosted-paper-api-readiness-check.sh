@@ -10,15 +10,19 @@ printf 'Checking hosted paper backend/API readiness documentation...\n'
 required_files=(
   "docs/hosted-paper-saas-foundation-roadmap.md"
   "docs/hosted-paper-backend-api-readiness.md"
+  "docs/hosted-paper-managed-datastore-readiness.md"
   "docs/customer-self-service-paper-demo-roadmap.md"
   "docs/production-local-data-boundary.md"
   "docs/frontend-local-backend-demo-mode.md"
   "backend/app/domain/hosted_paper_environment.py"
   "backend/app/domain/hosted_paper_readiness.py"
+  "backend/app/domain/hosted_paper_datastore.py"
   "backend/app/api/hosted_paper_routes.py"
   "backend/tests/test_hosted_paper_environment_routes.py"
   "backend/tests/test_hosted_paper_readiness_routes.py"
+  "backend/tests/test_hosted_paper_datastore_readiness_routes.py"
   "frontend/app/components/HostedPaperEnvironmentPanel.tsx"
+  "frontend/app/components/HostedPaperDatastoreReadinessPanel.tsx"
 )
 
 for required_file in "${required_files[@]}"; do
@@ -36,6 +40,7 @@ required_text=(
   "authentication"
   "RBAC"
   "tenant"
+  "GET /api/hosted-paper/datastore-readiness"
   "Broker SDK calls remain forbidden"
   "TRADING_MODE=paper"
   "ENABLE_LIVE_TRADING=false"
@@ -47,6 +52,23 @@ required_text=(
 for text in "${required_text[@]}"; do
   if ! grep -R -Fq "${text}" docs/hosted-paper-backend-api-readiness.md; then
     printf 'Hosted paper readiness doc must contain: %s\n' "${text}" >&2
+    exit 1
+  fi
+done
+
+for text in \
+  "Hosted Paper Managed Datastore Readiness Contract" \
+  "GET /api/hosted-paper/datastore-readiness" \
+  "tenant_id" \
+  "hosted_paper_approval_requests" \
+  "hosted_paper_approval_decisions" \
+  "hosted_paper_workflow_runs" \
+  "hosted_paper_oms_events" \
+  "hosted_paper_audit_events" \
+  "Dry-run only" \
+  "No database connection is configured or attempted"; do
+  if ! grep -R -Fq "${text}" docs/hosted-paper-managed-datastore-readiness.md; then
+    printf 'Hosted paper datastore readiness doc must contain: %s\n' "${text}" >&2
     exit 1
   fi
 done
@@ -73,14 +95,19 @@ for route_text in \
   'prefix="/api/hosted-paper"' \
   '@router.get("/environment"' \
   '@router.get("/readiness"' \
+  '"/datastore-readiness"' \
   'get_hosted_paper_environment' \
-  'get_hosted_paper_readiness'; do
+  'get_hosted_paper_readiness' \
+  'get_hosted_paper_datastore_readiness' \
+  'schema_only_no_hosted_datastore'; do
   if ! grep -R -Fq "${route_text}" \
     backend/app/domain/hosted_paper_environment.py \
     backend/app/domain/hosted_paper_readiness.py \
+    backend/app/domain/hosted_paper_datastore.py \
     backend/app/api/hosted_paper_routes.py \
     backend/tests/test_hosted_paper_environment_routes.py \
-    backend/tests/test_hosted_paper_readiness_routes.py; then
+    backend/tests/test_hosted_paper_readiness_routes.py \
+    backend/tests/test_hosted_paper_datastore_readiness_routes.py; then
     printf 'Hosted paper readiness endpoint must contain: %s\n' "${route_text}" >&2
     exit 1
   fi
@@ -100,6 +127,24 @@ for frontend_text in \
     frontend/app/i18n.ts \
     frontend/app/components/HostedPaperEnvironmentPanel.tsx; then
     printf 'Hosted paper environment UI must contain: %s\n' "${frontend_text}" >&2
+    exit 1
+  fi
+done
+
+for frontend_text in \
+  "HostedPaperDatastoreReadinessPanel" \
+  "/api/hosted-paper/datastore-readiness" \
+  "tenant_id" \
+  "schema_only_no_hosted_datastore" \
+  "managed_datastore_enabled" \
+  "hosted_records_writable" \
+  "migration_boundary" \
+  "retention_requirements"; do
+  if ! grep -R -Fq "${frontend_text}" \
+    frontend/app/page.tsx \
+    frontend/app/i18n.ts \
+    frontend/app/components/HostedPaperDatastoreReadinessPanel.tsx; then
+    printf 'Hosted paper datastore UI must contain: %s\n' "${frontend_text}" >&2
     exit 1
   fi
 done
@@ -126,6 +171,7 @@ for forbidden_text in \
   'production trading ready'; do
   if grep -R -Fiq "${forbidden_text}" \
     docs/hosted-paper-backend-api-readiness.md \
+    docs/hosted-paper-managed-datastore-readiness.md \
     docs/hosted-paper-saas-foundation-roadmap.md; then
     printf 'Hosted paper readiness doc contains forbidden text: %s\n' "${forbidden_text}" >&2
     exit 1

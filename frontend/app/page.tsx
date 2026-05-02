@@ -11,6 +11,10 @@ import { CommandCenterTabs } from "./components/CommandCenterTabs";
 import { DemoGuidePanel } from "./components/DemoGuidePanel";
 import { DeploymentDataBoundaryPanel } from "./components/DeploymentDataBoundaryPanel";
 import {
+  HostedPaperDatastoreReadinessPanel,
+  type HostedPaperDatastoreReadiness,
+} from "./components/HostedPaperDatastoreReadinessPanel";
+import {
   HostedPaperEnvironmentPanel,
   type HostedPaperEnvironment,
 } from "./components/HostedPaperEnvironmentPanel";
@@ -942,6 +946,158 @@ const fallbackHostedPaperEnvironment: HostedPaperEnvironment = {
   ],
 };
 
+const fallbackHostedPaperDatastoreReadiness: HostedPaperDatastoreReadiness = {
+  service: "hosted-paper-managed-datastore-readiness",
+  readiness_state: "schema_only_no_hosted_datastore",
+  summary:
+    "Hosted paper managed datastore is not enabled. This response defines future tenant-scoped paper record models, migration boundary, retention requirements, and audit requirements as read-only metadata.",
+  tenant_key: "tenant_id",
+  capabilities: {
+    managed_datastore_enabled: false,
+    hosted_records_writable: false,
+    hosted_records_readable: false,
+    tenant_key_enforced: false,
+    migrations_apply_enabled: false,
+    retention_policy_enforced: false,
+    audit_append_only_enforced: false,
+    local_sqlite_replacement_required: true,
+  },
+  record_models: [
+    {
+      record_name: "Paper approval request",
+      table_name: "hosted_paper_approval_requests",
+      tenant_key: "tenant_id",
+      tenant_key_required: true,
+      primary_identifiers: ["tenant_id", "approval_request_id"],
+      required_fields: [
+        "tenant_id",
+        "approval_request_id",
+        "signal_id",
+        "strategy_id",
+        "strategy_version",
+        "status",
+      ],
+      audit_requirements: [
+        "append-only request creation event",
+        "hash-chain reference",
+      ],
+      retention_class: "paper_approval_governance",
+      notes: "Future hosted approval requests must be tenant-scoped.",
+    },
+    {
+      record_name: "Paper workflow run",
+      table_name: "hosted_paper_workflow_runs",
+      tenant_key: "tenant_id",
+      tenant_key_required: true,
+      primary_identifiers: ["tenant_id", "workflow_run_id"],
+      required_fields: [
+        "tenant_id",
+        "workflow_run_id",
+        "approval_request_id",
+        "order_id",
+        "idempotency_key",
+        "final_oms_status",
+      ],
+      audit_requirements: [
+        "risk evaluation reference",
+        "OMS event sequence reference",
+      ],
+      retention_class: "paper_execution_workflow",
+      notes: "Future hosted paper workflow runs remain Paper Only.",
+    },
+    {
+      record_name: "Paper audit event",
+      table_name: "hosted_paper_audit_events",
+      tenant_key: "tenant_id",
+      tenant_key_required: true,
+      primary_identifiers: ["tenant_id", "audit_event_id"],
+      required_fields: [
+        "tenant_id",
+        "audit_event_id",
+        "workflow_run_id",
+        "actor_user_id",
+        "previous_hash",
+        "event_hash",
+      ],
+      audit_requirements: [
+        "append-only write path",
+        "hash-chain continuity",
+      ],
+      retention_class: "paper_audit_trail",
+      notes: "Future hosted audit events must support integrity verification.",
+    },
+  ],
+  migration_boundary: {
+    migration_mode: "schema_contract_only",
+    dry_run_only: true,
+    apply_enabled: false,
+    database_url_required_before_apply: true,
+    automatic_migration_apply: false,
+    connection_attempted: false,
+    required_controls_before_apply: [
+      "approved managed datastore selection",
+      "tenant_id required on every hosted paper table",
+      "migration dry-run output reviewed",
+      "backup and restore plan documented",
+      "retention policy approved",
+      "security review completed",
+    ],
+  },
+  retention_requirements: [
+    {
+      record_group: "approval_records",
+      minimum_policy: "retain through customer evaluation window plus review hold",
+      delete_behavior: "soft-delete metadata only until retention review",
+      export_required: true,
+      audit_required: true,
+    },
+    {
+      record_group: "paper_workflow_records",
+      minimum_policy: "retain through paper evaluation and audit review period",
+      delete_behavior: "tenant-scoped archival before deletion",
+      export_required: true,
+      audit_required: true,
+    },
+    {
+      record_group: "audit_events",
+      minimum_policy: "append-only retention policy required before hosted use",
+      delete_behavior: "no direct user deletion path",
+      export_required: true,
+      audit_required: true,
+    },
+  ],
+  safety_defaults: {
+    trading_mode: "paper",
+    enable_live_trading: false,
+    broker_provider: "paper",
+  },
+  safety_flags: {
+    paper_only: true,
+    live_trading_enabled: false,
+    broker_api_called: false,
+    order_created: false,
+    database_written: false,
+    external_db_written: false,
+    broker_credentials_collected: false,
+    production_trading_ready: false,
+  },
+  docs: {
+    hosted_paper_datastore: "docs/hosted-paper-managed-datastore-readiness.md",
+    hosted_paper_saas_foundation: "docs/hosted-paper-saas-foundation-roadmap.md",
+    hosted_paper_environment: "GET /api/hosted-paper/environment",
+    auth_boundary: "docs/hosted-paper-auth-boundary-spec.md",
+    local_demo: "docs/customer-self-service-demo.md",
+  },
+  warnings: [
+    "This endpoint is a schema-only datastore readiness contract.",
+    "No hosted database connection is configured or attempted.",
+    "No hosted records are read or written.",
+    "Local SQLite remains for local demo mode only.",
+    "Production Trading Platform remains NOT READY.",
+    "Live trading remains disabled by default.",
+  ],
+};
+
 const fallbackHostedPaperReadiness: HostedPaperReadiness = {
   service: "hosted-paper-api-readiness",
   readiness_state: "not_enabled",
@@ -1382,6 +1538,7 @@ export default async function Home({ searchParams }: HomeProps) {
     paperApprovalHistory,
     releaseBaseline,
     hostedPaperEnvironment,
+    hostedPaperDatastoreReadiness,
     hostedPaperReadiness,
     hostedPaperIdentityReadiness,
     hostedPaperMockSession,
@@ -1462,6 +1619,10 @@ export default async function Home({ searchParams }: HomeProps) {
       fetchJson<HostedPaperEnvironment>(
         "/api/hosted-paper/environment",
         fallbackHostedPaperEnvironment,
+      ),
+      fetchJson<HostedPaperDatastoreReadiness>(
+        "/api/hosted-paper/datastore-readiness",
+        fallbackHostedPaperDatastoreReadiness,
       ),
       fetchJson<HostedPaperReadiness>(
         "/api/hosted-paper/readiness",
@@ -1575,6 +1736,9 @@ export default async function Home({ searchParams }: HomeProps) {
     hostedPaperEnvironment.available
       ? undefined
       : `hosted paper environment: ${hostedPaperEnvironment.error}`,
+    hostedPaperDatastoreReadiness.available
+      ? undefined
+      : `hosted paper datastore: ${hostedPaperDatastoreReadiness.error}`,
     hostedPaperReadiness.available
       ? undefined
       : `hosted paper readiness: ${hostedPaperReadiness.error}`,
@@ -1676,6 +1840,16 @@ export default async function Home({ searchParams }: HomeProps) {
                   ? undefined
                   : hostedPaperEnvironment.error
               }
+            />
+            <HostedPaperDatastoreReadinessPanel
+              available={hostedPaperDatastoreReadiness.available}
+              copy={copy.hostedPaperDatastore}
+              error={
+                hostedPaperDatastoreReadiness.available
+                  ? undefined
+                  : hostedPaperDatastoreReadiness.error
+              }
+              readiness={hostedPaperDatastoreReadiness.data}
             />
             <HostedPaperReadinessPanel
               available={hostedPaperReadiness.available}

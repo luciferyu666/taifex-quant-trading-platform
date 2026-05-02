@@ -480,6 +480,136 @@ export const dashboardCopy = {
           "Live trading remains disabled by default.",
       },
     },
+    hostedPaperDatastore: {
+      eyebrow: "Managed Datastore",
+      title: "Hosted Paper Managed Datastore Readiness",
+      description:
+        "Read-only schema contract for future tenant-scoped hosted paper records. It defines models, tenant key, migration boundary, retention, and audit requirements without connecting to a database.",
+      fallbackPrefix:
+        "Hosted paper datastore readiness unavailable. Rendering safe fallback:",
+      endpointLabel: "Read-only endpoint",
+      tenantKeyLabel: "Tenant key",
+      stateLabel: "Readiness state",
+      capabilitiesLabel: "Capability flags",
+      migrationLabel: "Migration boundary",
+      migrationModeLabel: "Migration mode",
+      dryRunLabel: "Dry-run only",
+      applyEnabledLabel: "Apply enabled",
+      connectionAttemptedLabel: "Connection attempted",
+      requiredControlsLabel: "Required controls before apply",
+      recordModelsLabel: "Future hosted paper record models",
+      tableLabel: "Table",
+      tenantKeyRequiredLabel: "Tenant key required",
+      retentionClassLabel: "Retention class",
+      primaryIdentifiersLabel: "Primary identifiers",
+      auditRequirementsLabel: "Audit requirements",
+      retentionLabel: "Retention requirements",
+      safetyDefaultsLabel: "Safety defaults",
+      safetyFlagsLabel: "Safety flags",
+      warningLabel: "Boundary warnings",
+      statusLabels: {
+        schema_only_no_hosted_datastore: "SCHEMA ONLY - NO HOSTED DATASTORE",
+      },
+      capabilityLabels: {
+        managed_datastore_enabled: "Managed datastore enabled",
+        hosted_records_writable: "Hosted records writable",
+        hosted_records_readable: "Hosted records readable",
+        tenant_key_enforced: "Tenant key enforced",
+        migrations_apply_enabled: "Migration apply enabled",
+        retention_policy_enforced: "Retention policy enforced",
+        audit_append_only_enforced: "Audit append-only enforced",
+        local_sqlite_replacement_required: "Local SQLite replacement required",
+      },
+      controlLabels: {
+        "approved managed datastore selection": "Approved managed datastore selection",
+        "tenant_id required on every hosted paper table":
+          "tenant_id required on every hosted paper table",
+        "migration dry-run output reviewed": "Migration dry-run output reviewed",
+        "backup and restore plan documented": "Backup and restore plan documented",
+        "retention policy approved": "Retention policy approved",
+        "security review completed": "Security review completed",
+      },
+      recordNameLabels: {
+        "Paper approval request": "Paper approval request",
+        "Paper approval decision": "Paper approval decision",
+        "Paper workflow run": "Paper workflow run",
+        "Paper OMS event": "Paper OMS event",
+        "Paper audit event": "Paper audit event",
+      },
+      retentionClassLabels: {
+        paper_approval_governance: "paper_approval_governance",
+        paper_review_history: "paper_review_history",
+        paper_execution_workflow: "paper_execution_workflow",
+        paper_oms_timeline: "paper_oms_timeline",
+        paper_audit_trail: "paper_audit_trail",
+      },
+      modelNotesLabels: {
+        "Future hosted approval requests must be tenant-scoped.":
+          "Future hosted approval requests must be tenant-scoped.",
+        "Future reviewer decisions require authenticated identity.":
+          "Future reviewer decisions require authenticated identity.",
+        "Future hosted paper workflow runs remain Paper Only.":
+          "Future hosted paper workflow runs remain Paper Only.",
+        "Future hosted OMS events require tenant-scoped ordering.":
+          "Future hosted OMS events require tenant-scoped ordering.",
+        "Future hosted audit events must support integrity verification.":
+          "Future hosted audit events must support integrity verification.",
+      },
+      auditRequirementLabels: {
+        "append-only request creation event": "append-only request creation event",
+        "hash-chain reference": "hash-chain reference",
+        "reviewer-visible payload snapshot": "reviewer-visible payload snapshot",
+        "distinct reviewer identity": "distinct reviewer identity",
+        "immutable decision event": "immutable decision event",
+        "previous decision hash": "previous decision hash",
+        "risk evaluation reference": "risk evaluation reference",
+        "OMS event sequence reference": "OMS event sequence reference",
+        "paper broker simulation reference": "paper broker simulation reference",
+        "deterministic sequence": "deterministic sequence",
+        "idempotency key reference": "idempotency key reference",
+        "event payload hash": "event payload hash",
+        "append-only write path": "append-only write path",
+        "hash-chain continuity": "hash-chain continuity",
+        "retention and export metadata": "retention and export metadata",
+      },
+      recordGroupLabels: {
+        approval_records: "approval_records",
+        paper_workflow_records: "paper_workflow_records",
+        audit_events: "audit_events",
+      },
+      retentionPolicyLabels: {
+        "retain through customer evaluation window plus review hold":
+          "Retain through customer evaluation window plus review hold",
+        "retain through paper evaluation and audit review period":
+          "Retain through paper evaluation and audit review period",
+        "append-only retention policy required before hosted use":
+          "Append-only retention policy required before hosted use",
+      },
+      safetyFlagLabels: {
+        paper_only: "paper_only",
+        live_trading_enabled: "live_trading_enabled",
+        broker_api_called: "broker_api_called",
+        order_created: "order_created",
+        database_written: "database_written",
+        external_db_written: "external_db_written",
+        broker_credentials_collected: "broker_credentials_collected",
+        production_trading_ready: "production_trading_ready",
+      },
+      warningLabels: {
+        "This endpoint is a schema-only datastore readiness contract.":
+          "This endpoint is a schema-only datastore readiness contract.",
+        "No hosted database connection is configured or attempted.":
+          "No hosted database connection is configured or attempted.",
+        "No hosted records are read or written.":
+          "No hosted records are read or written.",
+        "Local SQLite remains for local demo mode only.":
+          "Local SQLite remains for local demo mode only.",
+        "Production Trading Platform remains NOT READY.":
+          "Production Trading Platform remains NOT READY.",
+        "Live trading remains disabled by default.":
+          "Live trading remains disabled by default.",
+      },
+    },
     hostedPaperIdentityReadiness: {
       eyebrow: "Hosted Paper Identity",
       title: "Identity, RBAC, and tenant readiness",
@@ -2491,6 +2621,136 @@ export const dashboardCopy = {
           "Hosted Paper Mode 尚未啟用為 customer SaaS operation。",
         "Production Vercel cannot read local SQLite paper records.":
           "Production Vercel 無法讀取 local SQLite paper records。",
+        "Production Trading Platform remains NOT READY.":
+          "Production Trading Platform 仍為 NOT READY。",
+        "Live trading remains disabled by default.":
+          "Live trading remains disabled by default.",
+      },
+    },
+    hostedPaperDatastore: {
+      eyebrow: "Managed Datastore",
+      title: "Hosted Paper Managed Datastore 就緒狀態",
+      description:
+        "未來 tenant-scoped hosted paper records 的只讀 schema contract。它定義資料模型、tenant key、migration boundary、retention 與 audit requirements，但不連接資料庫。",
+      fallbackPrefix:
+        "Hosted paper datastore readiness 無法取得，正在顯示安全備援資料：",
+      endpointLabel: "只讀 endpoint",
+      tenantKeyLabel: "Tenant key",
+      stateLabel: "就緒狀態",
+      capabilitiesLabel: "能力旗標",
+      migrationLabel: "Migration boundary",
+      migrationModeLabel: "Migration mode",
+      dryRunLabel: "Dry-run only",
+      applyEnabledLabel: "Apply enabled",
+      connectionAttemptedLabel: "Connection attempted",
+      requiredControlsLabel: "Apply 前必要控制",
+      recordModelsLabel: "未來 hosted paper record models",
+      tableLabel: "資料表",
+      tenantKeyRequiredLabel: "Tenant key required",
+      retentionClassLabel: "Retention class",
+      primaryIdentifiersLabel: "Primary identifiers",
+      auditRequirementsLabel: "Audit requirements",
+      retentionLabel: "Retention requirements",
+      safetyDefaultsLabel: "安全預設",
+      safetyFlagsLabel: "安全旗標",
+      warningLabel: "邊界警示",
+      statusLabels: {
+        schema_only_no_hosted_datastore: "SCHEMA ONLY - NO HOSTED DATASTORE",
+      },
+      capabilityLabels: {
+        managed_datastore_enabled: "Managed datastore 已啟用",
+        hosted_records_writable: "Hosted records 可寫入",
+        hosted_records_readable: "Hosted records 可讀取",
+        tenant_key_enforced: "Tenant key 已強制",
+        migrations_apply_enabled: "Migration apply 已啟用",
+        retention_policy_enforced: "Retention policy 已強制",
+        audit_append_only_enforced: "Audit append-only 已強制",
+        local_sqlite_replacement_required: "需要取代 local SQLite",
+      },
+      controlLabels: {
+        "approved managed datastore selection": "已核准 managed datastore selection",
+        "tenant_id required on every hosted paper table":
+          "每個 hosted paper table 都必須有 tenant_id",
+        "migration dry-run output reviewed": "Migration dry-run output 已審查",
+        "backup and restore plan documented": "Backup 與 restore plan 已文件化",
+        "retention policy approved": "Retention policy 已核准",
+        "security review completed": "Security review 已完成",
+      },
+      recordNameLabels: {
+        "Paper approval request": "Paper approval request",
+        "Paper approval decision": "Paper approval decision",
+        "Paper workflow run": "Paper workflow run",
+        "Paper OMS event": "Paper OMS event",
+        "Paper audit event": "Paper audit event",
+      },
+      retentionClassLabels: {
+        paper_approval_governance: "paper_approval_governance",
+        paper_review_history: "paper_review_history",
+        paper_execution_workflow: "paper_execution_workflow",
+        paper_oms_timeline: "paper_oms_timeline",
+        paper_audit_trail: "paper_audit_trail",
+      },
+      modelNotesLabels: {
+        "Future hosted approval requests must be tenant-scoped.":
+          "未來 hosted approval requests 必須 tenant-scoped。",
+        "Future reviewer decisions require authenticated identity.":
+          "未來 reviewer decisions 必須有 authenticated identity。",
+        "Future hosted paper workflow runs remain Paper Only.":
+          "未來 hosted paper workflow runs 仍必須是 Paper Only。",
+        "Future hosted OMS events require tenant-scoped ordering.":
+          "未來 hosted OMS events 必須支援 tenant-scoped ordering。",
+        "Future hosted audit events must support integrity verification.":
+          "未來 hosted audit events 必須支援 integrity verification。",
+      },
+      auditRequirementLabels: {
+        "append-only request creation event": "append-only request creation event",
+        "hash-chain reference": "hash-chain reference",
+        "reviewer-visible payload snapshot": "reviewer-visible payload snapshot",
+        "distinct reviewer identity": "distinct reviewer identity",
+        "immutable decision event": "immutable decision event",
+        "previous decision hash": "previous decision hash",
+        "risk evaluation reference": "risk evaluation reference",
+        "OMS event sequence reference": "OMS event sequence reference",
+        "paper broker simulation reference": "paper broker simulation reference",
+        "deterministic sequence": "deterministic sequence",
+        "idempotency key reference": "idempotency key reference",
+        "event payload hash": "event payload hash",
+        "append-only write path": "append-only write path",
+        "hash-chain continuity": "hash-chain continuity",
+        "retention and export metadata": "retention and export metadata",
+      },
+      recordGroupLabels: {
+        approval_records: "approval_records",
+        paper_workflow_records: "paper_workflow_records",
+        audit_events: "audit_events",
+      },
+      retentionPolicyLabels: {
+        "retain through customer evaluation window plus review hold":
+          "保留至 customer evaluation window 加 review hold 結束",
+        "retain through paper evaluation and audit review period":
+          "保留至 paper evaluation 與 audit review period 結束",
+        "append-only retention policy required before hosted use":
+          "Hosted use 前必須先有 append-only retention policy",
+      },
+      safetyFlagLabels: {
+        paper_only: "paper_only",
+        live_trading_enabled: "live_trading_enabled",
+        broker_api_called: "broker_api_called",
+        order_created: "order_created",
+        database_written: "database_written",
+        external_db_written: "external_db_written",
+        broker_credentials_collected: "broker_credentials_collected",
+        production_trading_ready: "production_trading_ready",
+      },
+      warningLabels: {
+        "This endpoint is a schema-only datastore readiness contract.":
+          "此 endpoint 只是 schema-only datastore readiness contract。",
+        "No hosted database connection is configured or attempted.":
+          "未設定也未嘗試連接 hosted database。",
+        "No hosted records are read or written.":
+          "不讀取也不寫入 hosted records。",
+        "Local SQLite remains for local demo mode only.":
+          "Local SQLite 仍只用於 local demo mode。",
         "Production Trading Platform remains NOT READY.":
           "Production Trading Platform 仍為 NOT READY。",
         "Live trading remains disabled by default.":

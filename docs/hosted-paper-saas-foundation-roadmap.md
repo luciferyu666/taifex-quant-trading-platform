@@ -17,6 +17,7 @@ The first hosted paper SaaS slice is a read-only environment contract:
 ```text
 GET /api/hosted-paper/environment
 GET /api/hosted-paper/readiness
+GET /api/hosted-paper/datastore-readiness
 ```
 
 `GET /api/hosted-paper/environment` defines three explicit modes:
@@ -31,10 +32,16 @@ The endpoint is read-only metadata. It does not authenticate users, create
 sessions, write databases, create orders, call brokers, collect credentials, or
 enable live trading.
 
+`GET /api/hosted-paper/datastore-readiness` defines the future managed
+datastore contract for hosted paper records. It lists tenant-scoped record
+models, the required `tenant_id` key, dry-run migration boundaries,
+retention requirements, and audit requirements. It is schema-only and does not
+connect to a hosted database, read hosted records, or write hosted records.
+
 ## Required SaaS Foundation Path
 
 1. Hosted backend
-2. Managed database
+2. Managed database with tenant-scoped hosted paper records
 3. Auth/session
 4. Tenant isolation
 5. Paper workflow persistence
@@ -70,6 +77,7 @@ local machine only, and does not create hosted customer accounts.
 - Do not collect broker credentials, account IDs, certificates, or API keys.
 - Do not create hosted customer accounts in this slice.
 - Do not write hosted paper records in this slice.
+- Do not connect to a hosted database in this slice.
 - Do not claim production trading readiness.
 - Do not describe paper simulation as real market matching.
 
@@ -79,6 +87,11 @@ local machine only, and does not create hosted customer accounts.
   customer path.
 - Hosted Paper Mode returns `not_enabled`.
 - Production Trading Platform returns `not_ready`.
+- `GET /api/hosted-paper/datastore-readiness` returns
+  `schema_only_no_hosted_datastore`.
+- Future hosted paper record models require `tenant_id`.
+- Migration apply remains disabled and no hosted database connection is
+  attempted.
 - Safety defaults remain:
 
 ```text

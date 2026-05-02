@@ -3,6 +3,10 @@ from typing import Annotated
 from fastapi import APIRouter, Depends
 
 from app.core.config import Settings, get_settings
+from app.domain.hosted_paper_datastore import (
+    HostedPaperDatastoreReadinessResponse,
+    get_hosted_paper_datastore_readiness,
+)
 from app.domain.hosted_paper_environment import (
     HostedPaperEnvironmentResponse,
     get_hosted_paper_environment,
@@ -33,6 +37,16 @@ def hosted_paper_readiness(settings: SettingsDep) -> HostedPaperReadinessRespons
 @router.get("/environment", response_model=HostedPaperEnvironmentResponse)
 def hosted_paper_environment(settings: SettingsDep) -> HostedPaperEnvironmentResponse:
     return get_hosted_paper_environment(settings)
+
+
+@router.get(
+    "/datastore-readiness",
+    response_model=HostedPaperDatastoreReadinessResponse,
+)
+def hosted_paper_datastore_readiness(
+    settings: SettingsDep,
+) -> HostedPaperDatastoreReadinessResponse:
+    return get_hosted_paper_datastore_readiness(settings)
 
 
 @router.get("/session", response_model=HostedPaperMockSessionResponse)

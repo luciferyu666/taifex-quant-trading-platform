@@ -177,7 +177,7 @@ self-service-paper-demo-launcher-check:
 
 hosted-paper-api-readiness-check:
 	bash scripts/hosted-paper-api-readiness-check.sh
-	cd backend && . .venv/bin/activate && pytest tests/test_hosted_paper_environment_routes.py tests/test_hosted_paper_readiness_routes.py
+	cd backend && . .venv/bin/activate && pytest tests/test_hosted_paper_environment_routes.py tests/test_hosted_paper_readiness_routes.py tests/test_hosted_paper_datastore_readiness_routes.py
 
 hosted-paper-auth-boundary-check:
 	bash scripts/hosted-paper-auth-boundary-check.sh

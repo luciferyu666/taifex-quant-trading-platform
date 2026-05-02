@@ -113,6 +113,7 @@ The current implemented endpoints are:
 ```text
 GET /api/hosted-paper/environment
 GET /api/hosted-paper/readiness
+GET /api/hosted-paper/datastore-readiness
 GET /api/hosted-paper/identity-readiness
 GET /api/hosted-paper/session
 GET /api/hosted-paper/tenants/current
@@ -146,6 +147,25 @@ The first slice is documented in
 It does not authenticate users, write records, create orders, call Risk Engine,
 call OMS, call Broker Gateway, call broker SDKs, collect credentials, or enable
 live trading.
+
+`GET /api/hosted-paper/datastore-readiness` returns a read-only managed
+datastore readiness contract showing:
+
+- hosted paper managed datastore is not enabled
+- hosted paper records are not readable or writable
+- future hosted paper tables must include `tenant_id`
+- future models include `hosted_paper_approval_requests`,
+  `hosted_paper_approval_decisions`, `hosted_paper_workflow_runs`,
+  `hosted_paper_oms_events`, and `hosted_paper_audit_events`
+- migration mode is `schema_contract_only`
+- migration apply is disabled
+- no hosted database connection is configured or attempted
+- retention and audit requirements are schema-only requirements
+
+It does not create customer accounts, write hosted records, connect to a hosted
+database, call brokers, collect credentials, create orders, or enable live
+trading. See
+[hosted-paper-managed-datastore-readiness.md](hosted-paper-managed-datastore-readiness.md).
 
 `GET /api/hosted-paper/identity-readiness` returns read-only metadata showing
 that real reviewer login, customer accounts, formal RBAC/ABAC enforcement, and

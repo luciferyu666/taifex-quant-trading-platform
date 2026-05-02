@@ -9,6 +9,8 @@ const files = {
   commandTabs: "frontend/app/components/CommandCenterTabs.tsx",
   deploymentDataBoundary: "frontend/app/components/DeploymentDataBoundaryPanel.tsx",
   hostedPaperEnvironment: "frontend/app/components/HostedPaperEnvironmentPanel.tsx",
+  hostedPaperDatastore:
+    "frontend/app/components/HostedPaperDatastoreReadinessPanel.tsx",
   hostedPaperReadiness: "frontend/app/components/HostedPaperReadinessPanel.tsx",
   hostedPaperIdentityReadiness:
     "frontend/app/components/HostedPaperIdentityReadinessPanel.tsx",
@@ -282,6 +284,25 @@ requireNotContains("Hosted paper environment does not call workflow record", sou
 requireNotContains("Hosted paper environment does not collect API keys", sourceByFile.hostedPaperEnvironment.toLowerCase(), "api_key");
 requireNotContains("Hosted paper environment does not collect account IDs", sourceByFile.hostedPaperEnvironment.toLowerCase(), "account_id");
 requireNotContains("Hosted paper environment does not collect certificates", sourceByFile.hostedPaperEnvironment.toLowerCase(), "certificate");
+requireContains("English hosted paper datastore copy exists", sourceByFile.i18n, "Hosted Paper Managed Datastore Readiness");
+requireContains("Traditional Chinese hosted paper datastore copy exists", sourceByFile.i18n, "Hosted Paper Managed Datastore 就緒狀態");
+requireContains("Hosted paper datastore component is implemented", sourceByFile.hostedPaperDatastore, "HostedPaperDatastoreReadinessPanel");
+requireContains("Hosted paper datastore endpoint is fetched on page", sourceByFile.page, "/api/hosted-paper/datastore-readiness");
+requireContains("Hosted paper datastore panel is mounted on page", sourceByFile.page, "HostedPaperDatastoreReadinessPanel");
+requireContains("Hosted paper datastore shows tenant_id", combinedSource, "tenant_id");
+requireContains("Hosted paper datastore shows schema-only state", combinedSource, "schema_only_no_hosted_datastore");
+requireContains("Hosted paper datastore shows managed datastore flag", combinedSource, "managed_datastore_enabled");
+requireContains("Hosted paper datastore shows hosted write flag", combinedSource, "hosted_records_writable");
+requireContains("Hosted paper datastore shows migration boundary", combinedSource, "migration_boundary");
+requireContains("Hosted paper datastore shows retention requirements", combinedSource, "retention_requirements");
+requireContains("Hosted paper datastore shows approval request table", combinedSource, "hosted_paper_approval_requests");
+requireContains("Hosted paper datastore shows workflow run table", combinedSource, "hosted_paper_workflow_runs");
+requireContains("Hosted paper datastore shows audit event table", combinedSource, "hosted_paper_audit_events");
+requireNotContains("Hosted paper datastore panel does not fetch directly", sourceByFile.hostedPaperDatastore, "fetch(");
+requireNotContains("Hosted paper datastore panel does not call workflow record", sourceByFile.hostedPaperDatastore, "/api/paper-execution/workflow/record");
+requireNotContains("Hosted paper datastore panel does not collect API keys", sourceByFile.hostedPaperDatastore.toLowerCase(), "api_key");
+requireNotContains("Hosted paper datastore panel does not collect account IDs", sourceByFile.hostedPaperDatastore.toLowerCase(), "account_id");
+requireNotContains("Hosted paper datastore panel does not collect certificates", sourceByFile.hostedPaperDatastore.toLowerCase(), "certificate");
 requireContains("English hosted paper readiness copy exists", sourceByFile.i18n, "Hosted Paper API Readiness");
 requireContains("Traditional Chinese hosted paper readiness copy exists", sourceByFile.i18n, "Hosted Paper API 就緒狀態");
 requireContains("Hosted paper readiness component is implemented", sourceByFile.hostedPaperReadiness, "HostedPaperReadinessPanel");
