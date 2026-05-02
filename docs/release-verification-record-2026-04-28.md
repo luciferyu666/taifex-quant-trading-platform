@@ -2827,6 +2827,70 @@ Verified scope:
 - Production Trading Platform remains NOT READY.
 - Live trading remains disabled by default.
 
+## Hosted Paper Datastore Migration Plan Verification
+
+Verification date: 2026-05-02
+
+Commit:
+
+```text
+e5164d2 Add hosted paper datastore migration plan dry-run
+```
+
+Commands:
+
+```bash
+make hosted-paper-datastore-migration-plan
+cd backend && .venv/bin/python -m pytest tests/test_hosted_paper_datastore_migration_plan_script.py
+make hosted-paper-api-readiness-check
+make check
+gh run watch 25253145566 --exit-status
+make frontend-production-smoke-check
+git status --short --branch
+```
+
+Observed result:
+
+```text
+Hosted paper datastore migration plan dry-run emitted valid JSON to stdout.
+Targeted migration plan script tests passed: 3 passed.
+Hosted paper API readiness check passed, including datastore migration plan
+documentation, script, and targeted tests.
+Full repository check passed, including 338 backend tests, frontend typecheck,
+frontend build, website checks, website build, and production smoke gates.
+Release Readiness CI passed on run 25253145566.
+Production smoke gate passed against deployment dpl_DaHSMJ51KjsjKUmAWGq9JzoZWVam.
+Production smoke gate confirmed required English and Traditional Chinese safety
+copy and rejected prohibited profit/risk-free/live-approval wording.
+Local git state was clean after push: ## main...origin/main.
+```
+
+Verified scope:
+
+- Added `scripts/hosted-paper-datastore-migration-plan.py`.
+- Added `docs/hosted-paper-managed-datastore-migration-plan.md`.
+- Added `backend/tests/test_hosted_paper_datastore_migration_plan_script.py`.
+- Added `make hosted-paper-datastore-migration-plan`.
+- Added datastore migration plan coverage to `make hosted-paper-api-readiness-check`
+  and `make check`.
+- The plan lists future hosted paper table names:
+  - `hosted_paper_approval_requests`
+  - `hosted_paper_approval_decisions`
+  - `hosted_paper_workflow_runs`
+  - `hosted_paper_oms_events`
+  - `hosted_paper_audit_events`
+- The plan includes `tenant_id` requirements, primary key drafts, index drafts,
+  retention requirements, audit requirements, warnings, and safety flags.
+- The plan keeps `migration_apply_enabled=false`.
+- The plan keeps `connection_attempted=false`.
+- The plan keeps `database_url_read=false`.
+- No hosted database connection, hosted record write, hosted record read,
+  customer account creation, tenant creation, reviewer login, credential
+  collection, broker call, order creation, or production migration apply path was
+  added.
+- Production Trading Platform remains NOT READY.
+- Live trading remains disabled by default.
+
 ## Deployment Refresh Recording Policy
 
 Record-only documentation commits can trigger a new Vercel production
