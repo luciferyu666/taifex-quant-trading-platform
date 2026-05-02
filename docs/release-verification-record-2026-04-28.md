@@ -2625,6 +2625,70 @@ Verified scope:
 - Production Trading Platform remains NOT READY.
 - Live trading remains disabled by default.
 
+## Paper Broker Simulation Readiness Boundary Verification
+
+Verification date: 2026-05-02
+
+Commit:
+
+```text
+395eb7c Add paper broker simulation readiness boundary
+```
+
+Commands:
+
+```bash
+make paper-broker-simulation-readiness-check
+backend/.venv/bin/python -m ruff check backend/app/domain/paper_broker_simulation_readiness.py backend/app/api/paper_execution_routes.py backend/tests/test_paper_broker_simulation_readiness_routes.py
+make frontend-i18n-check
+cd frontend && npm run typecheck
+cd frontend && npm run build
+make check
+gh run watch 25245095829 --exit-status
+cd frontend && vercel inspect https://taifex-quant-trading-platform-front.vercel.app
+make frontend-production-smoke-check
+git status --short --branch
+```
+
+Observed result:
+
+```text
+Local repository checks passed.
+Release Readiness CI passed on run 25245095829.
+Production alias resolved to deployment dpl_5KPj2pX7FChimxYdmDMiqpmMyihs.
+Production smoke gate passed and confirmed required safety copy on English and
+Traditional Chinese pages.
+Local git state was clean before this record update: ## main...origin/main.
+```
+
+Verified scope:
+
+- Added a read-only Paper Broker Simulation Readiness boundary.
+- Exposed `GET /api/paper-execution/broker-simulation/readiness`.
+- Added a Web Command Center panel that states current Paper Broker simulation
+  is deterministic / local quote-based paper simulation, not real market
+  matching or a broker execution report model.
+- Documented current paper-only scope:
+  - deterministic `broker_simulation` outcomes
+  - caller-provided local quote snapshot preview
+  - simulated paper ack / reject / partial fill / fill / cancel outcomes
+  - local evidence export and viewer support
+- Documented missing production execution-model controls:
+  - real market matching engine
+  - exchange order book replay
+  - broker execution report ingestion
+  - latency and queue position model
+  - slippage and liquidity calibration
+  - real account, order, fill, and position reconciliation
+  - broker-specific amend / replace / reject / cancel semantics
+- Added `make paper-broker-simulation-readiness-check` and included the boundary
+  in `make check`.
+- No order creation, Risk Engine call, OMS call, Broker Gateway execution path,
+  external market data download, broker SDK call, credential collection, or
+  production execution readiness claim was added.
+- Production Trading Platform remains NOT READY.
+- Live trading remains disabled by default.
+
 ## Deployment Refresh Recording Policy
 
 Record-only documentation commits can trigger a new Vercel production
