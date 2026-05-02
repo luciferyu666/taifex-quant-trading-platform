@@ -203,6 +203,26 @@ artifact that captures the input intent, policy, local state, passed checks, fai
 checks, and safety flags. The export does not write databases, create orders, call
 OMS, call Broker Gateway, collect credentials, or call brokers.
 
+## Paper Risk Cross-Account Readiness Boundary
+
+Paper Risk Engine guardrails now include a read-only readiness boundary for the
+gap between local paper state and a future cross-account risk system:
+
+```text
+GET /api/paper-risk/cross-account-readiness
+make paper-risk-cross-account-readiness-check
+```
+
+The current implementation remains local paper state only. It is not a formal
+cross-account risk system and does not provide tenant/account hierarchy,
+cross-account exposure aggregation, real margin/equity/PnL feeds, broker
+position feeds, centralized risk limits, distributed kill switch propagation, or
+durable risk state.
+
+The endpoint and UI panel are metadata only. They must not create orders, call
+brokers, load real account data, write databases, collect credentials, grant
+production risk approval, or imply production trading readiness.
+
 ## Paper Audit Integrity Preview
 
 Paper audit integrity preview adds local SQLite hash-chain metadata to new paper

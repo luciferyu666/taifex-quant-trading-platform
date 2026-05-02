@@ -418,6 +418,15 @@ reconciliation, and production execution modeling are not enabled. The panel mus
 not create orders, call Risk Engine, call OMS, call Broker Gateway execution
 paths, write databases, download market data, call brokers, collect credentials,
 or claim real fill accuracy.
+The Paper Risk Cross-Account Readiness panel states that current paper risk
+guardrails use local paper state only and are not a formal cross-account risk
+system. It calls `GET /api/paper-risk/cross-account-readiness` and displays that
+tenant/account hierarchy, cross-account exposure aggregation, real account
+margin feeds, broker position feeds, centralized risk limits, distributed kill
+switch propagation, durable risk state, and production cross-account risk are
+not enabled. The panel must not create orders, write databases, call Risk Engine
+mutation endpoints, call brokers, collect credentials, load real account data,
+or grant production risk approval.
 The Paper Audit Integrity panel now shows local SQLite audit hash-chain verification
 status, latest event-level checks, known gaps, and warnings. It is read-only and
 does not repair audit chains, write databases, upload records, call brokers,

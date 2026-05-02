@@ -65,6 +65,10 @@ import {
   PaperRiskGuardrailsPanel,
   type PaperRiskStatus,
 } from "./components/PaperRiskGuardrailsPanel";
+import {
+  PaperRiskCrossAccountReadinessPanel,
+  type PaperRiskCrossAccountReadiness,
+} from "./components/PaperRiskCrossAccountReadinessPanel";
 import { PaperSimulationSubmitPanel } from "./components/PaperSimulationSubmitPanel";
 import { ResearchReviewPacketJsonLoader } from "./components/ResearchReviewPacketJsonLoader";
 import type { ResearchReviewPacket } from "./components/ResearchReviewPacketPanel";
@@ -563,6 +567,76 @@ const fallbackPaperRiskStatus: PaperRiskStatus = {
     "BROKER_HEARTBEAT",
   ],
   message: "Fallback paper risk guardrail status. Backend is unavailable.",
+};
+const fallbackPaperRiskCrossAccountReadiness: PaperRiskCrossAccountReadiness = {
+  service: "paper-risk-cross-account-readiness",
+  readiness_state: "local_paper_risk_state_not_cross_account_risk_system",
+  summary:
+    "Fallback cross-account risk readiness metadata. Paper Risk Engine guardrails use local paper state and are not a formal cross-account risk system.",
+  capabilities: {
+    local_paper_guardrails_enabled: true,
+    local_paper_state_enabled: true,
+    single_account_demo_state_enabled: true,
+    risk_evaluation_detail_enabled: true,
+    duplicate_idempotency_local_check_enabled: true,
+    cross_account_aggregation_enabled: false,
+    account_hierarchy_enabled: false,
+    tenant_isolated_risk_state_enabled: false,
+    real_account_margin_feed_enabled: false,
+    broker_position_feed_enabled: false,
+    centralized_risk_limits_enabled: false,
+    distributed_kill_switch_enabled: false,
+    durable_risk_state_store_enabled: false,
+    real_time_equity_pnl_tracking_enabled: false,
+    production_cross_account_risk_system: false,
+  },
+  safety_defaults: {
+    trading_mode: "paper",
+    enable_live_trading: false,
+    broker_provider: "paper",
+  },
+  safety_flags: {
+    paper_only: true,
+    read_only: true,
+    live_trading_enabled: false,
+    broker_provider: "paper",
+    broker_api_called: false,
+    external_account_data_loaded: false,
+    real_account_data_loaded: false,
+    order_created: false,
+    credentials_collected: false,
+    database_written: false,
+    hosted_datastore_written: false,
+    production_risk_approval: false,
+    production_cross_account_risk: false,
+    production_trading_ready: false,
+  },
+  current_scope: [
+    "Paper-only guardrail evaluation for local simulation workflows.",
+    "Local in-memory paper risk state for demo and engineering checks.",
+    "Single-account style paper state snapshot in the current Web Command Center.",
+  ],
+  missing_for_cross_account_risk: [
+    "Cross-account exposure aggregation by customer, strategy, symbol, and contract.",
+    "Real account margin, equity, cash, PnL, order, fill, and position feeds.",
+    "Broker-side position and order reconciliation per account.",
+    "Centralized durable risk state store with replay and recovery.",
+  ],
+  required_before_cross_account_risk: [
+    "Define tenant, account, portfolio, strategy, and reviewer identity model.",
+    "Design account-scoped and group-scoped risk limit schemas.",
+    "Select reviewed durable storage for cross-account risk state.",
+  ],
+  docs: {
+    risk_engine_spec: "docs/risk-engine-spec.md",
+    phase_4_risk_oms_broker_gateway: "docs/phase-4-risk-oms-broker-gateway.md",
+    paper_shadow_live_boundary: "docs/paper-shadow-live-boundary.md",
+  },
+  warnings: [
+    "Fallback cross-account risk readiness metadata. Backend is unavailable.",
+    "Local paper risk state is not a hosted or cross-account risk store.",
+    "Production Trading Platform remains NOT READY.",
+  ],
 };
 
 const fallbackPaperApprovalStatus: PaperApprovalStatus = {
@@ -1155,6 +1229,7 @@ export default async function Home({ searchParams }: HomeProps) {
     paperAuditIntegrityVerification,
     paperAuditWormReadiness,
     paperRiskStatus,
+    paperRiskCrossAccountReadiness,
     paperExecutionRuns,
     paperApprovalStatus,
     paperComplianceApprovalReadiness,
@@ -1213,6 +1288,10 @@ export default async function Home({ searchParams }: HomeProps) {
         fallbackPaperAuditWormReadiness,
       ),
       fetchJson<PaperRiskStatus>("/api/paper-risk/status", fallbackPaperRiskStatus),
+      fetchJson<PaperRiskCrossAccountReadiness>(
+        "/api/paper-risk/cross-account-readiness",
+        fallbackPaperRiskCrossAccountReadiness,
+      ),
       fetchJson<PaperExecutionRunRecord[]>(
         "/api/paper-execution/runs?limit=5",
         fallbackPaperExecutionRuns,
@@ -1323,6 +1402,9 @@ export default async function Home({ searchParams }: HomeProps) {
       ? undefined
       : `paper audit WORM readiness: ${paperAuditWormReadiness.error}`,
     paperRiskStatus.available ? undefined : `paper risk: ${paperRiskStatus.error}`,
+    paperRiskCrossAccountReadiness.available
+      ? undefined
+      : `paper risk cross-account readiness: ${paperRiskCrossAccountReadiness.error}`,
     paperExecutionReports.available
       ? undefined
       : `paper execution reports: ${paperExecutionReports.error}`,
@@ -1577,6 +1659,17 @@ export default async function Home({ searchParams }: HomeProps) {
               copy={copy}
               error={paperRiskStatus.available ? undefined : paperRiskStatus.error}
               status={paperRiskStatus.data}
+            />
+
+            <PaperRiskCrossAccountReadinessPanel
+              available={paperRiskCrossAccountReadiness.available}
+              copy={copy.paperRiskCrossAccountReadiness}
+              error={
+                paperRiskCrossAccountReadiness.available
+                  ? undefined
+                  : paperRiskCrossAccountReadiness.error
+              }
+              readiness={paperRiskCrossAccountReadiness.data}
             />
 
             <PaperApprovalQueuePanel

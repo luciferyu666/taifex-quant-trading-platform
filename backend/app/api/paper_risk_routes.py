@@ -6,6 +6,10 @@ from fastapi import APIRouter, Depends
 from pydantic import BaseModel
 
 from app.core.config import Settings, get_settings
+from app.domain.paper_risk_cross_account_readiness import (
+    PaperRiskCrossAccountReadinessResponse,
+    get_paper_risk_cross_account_readiness,
+)
 from app.domain.paper_risk_state import PaperRiskState, new_paper_risk_state
 from app.domain.risk_rules import (
     PaperOrderIntent,
@@ -73,6 +77,16 @@ def _status_response(settings: Settings, state: PaperRiskState) -> PaperRiskStat
 @router.get("/status", response_model=PaperRiskStatusResponse)
 def paper_risk_status(settings: SettingsDep) -> PaperRiskStatusResponse:
     return _status_response(settings, _LOCAL_PAPER_RISK_STATE)
+
+
+@router.get(
+    "/cross-account-readiness",
+    response_model=PaperRiskCrossAccountReadinessResponse,
+)
+def paper_risk_cross_account_readiness(
+    settings: SettingsDep,
+) -> PaperRiskCrossAccountReadinessResponse:
+    return get_paper_risk_cross_account_readiness(settings)
 
 
 @router.post("/evaluate", response_model=RiskEvaluation)

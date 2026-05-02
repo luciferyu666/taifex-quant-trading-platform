@@ -475,6 +475,12 @@ Future live work requires:
   It is a local JSON evidence artifact for one paper risk evaluation and must not
   write databases, call OMS, call Broker Gateway, call brokers, collect
   credentials, or enable live trading.
+- No Paper Risk Cross-Account Readiness API or UI may be treated as a formal
+  cross-account risk system, tenant/account hierarchy, real account risk feed,
+  margin confirmation, position reconciliation, production risk approval, or
+  live readiness. It is read-only metadata for local paper state boundaries and
+  must not create orders, write databases, call brokers, collect credentials,
+  load real account data, or enable live trading.
 - No Paper Audit Integrity Layer Preview may be treated as WORM storage,
   immutable audit compliance, centralized audit, production signing, or live
   readiness. It verifies local SQLite `previous_hash` / `event_hash` metadata for

@@ -26,6 +26,8 @@ const files = {
   paperBrokerSimulationReadiness:
     "frontend/app/components/PaperBrokerSimulationReadinessPanel.tsx",
   paperRisk: "frontend/app/components/PaperRiskGuardrailsPanel.tsx",
+  paperRiskCrossAccountReadiness:
+    "frontend/app/components/PaperRiskCrossAccountReadinessPanel.tsx",
   paperOmsReliability: "frontend/app/components/PaperOmsReliabilityPanel.tsx",
   paperOmsProductionReadiness:
     "frontend/app/components/PaperOmsProductionReadinessPanel.tsx",
@@ -444,6 +446,35 @@ requireNotContains("Paper risk panel does not call mutation endpoints", sourceBy
 requireNotContains("Paper risk panel does not collect API keys", sourceByFile.paperRisk.toLowerCase(), "api_key");
 requireNotContains("Paper risk panel does not collect account IDs", sourceByFile.paperRisk.toLowerCase(), "account_id");
 requireNotContains("Paper risk panel does not collect certificates", sourceByFile.paperRisk.toLowerCase(), "certificate");
+requireContains("English paper risk cross-account readiness copy exists", sourceByFile.i18n, "Paper risk cross-account readiness");
+requireContains("Traditional Chinese paper risk cross-account readiness copy exists", sourceByFile.i18n, "紙上跨帳戶風控 Readiness");
+requireContains("Paper risk cross-account readiness panel is implemented", sourceByFile.paperRiskCrossAccountReadiness, "PaperRiskCrossAccountReadinessPanel");
+requireContains("Paper risk cross-account readiness endpoint is read on page", sourceByFile.page, "/api/paper-risk/cross-account-readiness");
+requireContains("Paper risk cross-account readiness panel is mounted on page", sourceByFile.page, "PaperRiskCrossAccountReadinessPanel");
+requireContains("Paper risk cross-account readiness panel shows local paper guardrails", sourceByFile.paperRiskCrossAccountReadiness, "local_paper_guardrails_enabled");
+requireContains("Paper risk cross-account readiness panel shows local paper state", sourceByFile.paperRiskCrossAccountReadiness, "local_paper_state_enabled");
+requireContains("Paper risk cross-account readiness panel shows single account demo state", sourceByFile.paperRiskCrossAccountReadiness, "single_account_demo_state_enabled");
+requireContains("Paper risk cross-account readiness panel shows risk evaluation detail", sourceByFile.paperRiskCrossAccountReadiness, "risk_evaluation_detail_enabled");
+requireContains("Paper risk cross-account readiness panel shows local duplicate idempotency", sourceByFile.paperRiskCrossAccountReadiness, "duplicate_idempotency_local_check_enabled");
+requireContains("Paper risk cross-account readiness panel shows cross-account aggregation false", sourceByFile.paperRiskCrossAccountReadiness, "cross_account_aggregation_enabled");
+requireContains("Paper risk cross-account readiness panel shows account hierarchy false", sourceByFile.paperRiskCrossAccountReadiness, "account_hierarchy_enabled");
+requireContains("Paper risk cross-account readiness panel shows tenant-isolated risk state false", sourceByFile.paperRiskCrossAccountReadiness, "tenant_isolated_risk_state_enabled");
+requireContains("Paper risk cross-account readiness panel shows real account margin feed false", sourceByFile.paperRiskCrossAccountReadiness, "real_account_margin_feed_enabled");
+requireContains("Paper risk cross-account readiness panel shows broker position feed false", sourceByFile.paperRiskCrossAccountReadiness, "broker_position_feed_enabled");
+requireContains("Paper risk cross-account readiness panel shows centralized risk limits false", sourceByFile.paperRiskCrossAccountReadiness, "centralized_risk_limits_enabled");
+requireContains("Paper risk cross-account readiness panel shows distributed kill switch false", sourceByFile.paperRiskCrossAccountReadiness, "distributed_kill_switch_enabled");
+requireContains("Paper risk cross-account readiness panel shows durable risk state store false", sourceByFile.paperRiskCrossAccountReadiness, "durable_risk_state_store_enabled");
+requireContains("Paper risk cross-account readiness panel shows equity PnL tracking false", sourceByFile.paperRiskCrossAccountReadiness, "real_time_equity_pnl_tracking_enabled");
+requireContains("Paper risk cross-account readiness panel shows production cross-account risk false", sourceByFile.paperRiskCrossAccountReadiness, "production_cross_account_risk_system");
+requireContains("Paper risk cross-account readiness panel shows external account data safety flag", sourceByFile.paperRiskCrossAccountReadiness, "external_account_data_loaded");
+requireContains("Paper risk cross-account readiness panel shows real account data safety flag", sourceByFile.paperRiskCrossAccountReadiness, "real_account_data_loaded");
+requireContains("Paper risk cross-account readiness panel shows production risk approval false", sourceByFile.paperRiskCrossAccountReadiness, "production_risk_approval");
+requireNotContains("Paper risk cross-account readiness panel does not call workflow record", sourceByFile.paperRiskCrossAccountReadiness, "/api/paper-execution/workflow/record");
+requireNotContains("Paper risk cross-account readiness panel does not call risk evaluate mutation", sourceByFile.paperRiskCrossAccountReadiness, "/api/paper-risk/evaluate");
+requireNotContains("Paper risk cross-account readiness panel does not fetch backend", sourceByFile.paperRiskCrossAccountReadiness, "fetch(");
+requireNotContains("Paper risk cross-account readiness panel does not collect API keys", sourceByFile.paperRiskCrossAccountReadiness.toLowerCase(), "api_key");
+requireNotContains("Paper risk cross-account readiness panel does not collect account IDs", sourceByFile.paperRiskCrossAccountReadiness.toLowerCase(), "account_id");
+requireNotContains("Paper risk cross-account readiness panel does not collect certificates", sourceByFile.paperRiskCrossAccountReadiness.toLowerCase(), "certificate");
 requireContains("English paper broker simulation copy exists", sourceByFile.i18n, "Local quote-based simulation preview");
 requireContains("Traditional Chinese paper broker simulation copy exists", sourceByFile.i18n, "本地 quote-based 模擬預覽");
 requireContains("Paper broker simulation component is implemented", sourceByFile.paperBrokerSimulation, "PaperBrokerSimulationModelPanel");

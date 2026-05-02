@@ -89,6 +89,25 @@ Paper risk evaluation can be exported as local JSON evidence with
 export is stdout-only by default and writes a local `.json` file only when
 `--output` is explicitly supplied.
 
+## Paper Risk Cross-Account Readiness Boundary
+
+Paper Risk Engine guardrails are not a cross-account risk system. The current
+risk state is paper-only and local. It does not aggregate exposure across real
+customers, accounts, strategies, brokers, contracts, margin, equity, PnL, orders,
+or fills.
+
+The read-only endpoint `GET /api/paper-risk/cross-account-readiness` documents
+this boundary for reviewers and the Web Command Center. It returns
+`production_cross_account_risk_system=false`, `broker_api_called=false`,
+`real_account_data_loaded=false`, and `production_risk_approval=false`.
+
+Cross-account risk remains future work and requires tenant/account hierarchy,
+account-scoped and group-scoped risk limits, durable risk state, real
+account/broker feeds, reconciliation, audited limit changes, RBAC/ABAC, and
+security/legal/compliance review. The current endpoint is metadata only; it does
+not write databases, create orders, call brokers, collect credentials, or enable
+live trading.
+
 ## Acceptance Criteria
 
 - Risk Engine rejects when live trading is enabled.
@@ -108,6 +127,7 @@ export is stdout-only by default and writes a local `.json` file only when
 cd backend && pytest tests/test_risk_rules.py tests/test_architecture_routes.py
 make paper-risk-guardrails-check
 make paper-risk-evidence-export
+make paper-risk-cross-account-readiness-check
 cd backend && pytest tests/test_paper_risk_evidence_export_script.py
 make paper-execution-workflow-check
 make paper-execution-persistence-check
