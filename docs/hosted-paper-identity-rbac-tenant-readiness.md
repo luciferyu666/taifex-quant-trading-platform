@@ -70,6 +70,19 @@ customer pilot:
 - add audit trail for identity, authorization, and tenant-boundary decisions
 - complete security and operations review
 
+The more detailed role and access contract is documented in
+[hosted-paper-identity-access-contract.md](hosted-paper-identity-access-contract.md)
+and exposed as:
+
+```text
+GET /api/hosted-paper/identity-access-contract
+```
+
+That contract separates future `customer`, `reviewer`, `operator`, and `admin`
+roles, but it remains read-only and does not create real login, sessions,
+customer accounts, tenant records, RBAC/ABAC enforcement, credential collection,
+broker access, orders, or live trading.
+
 ## Safety Contract
 
 The readiness endpoint must preserve:
@@ -127,6 +140,7 @@ or live trading controls.
 
 ```bash
 make hosted-paper-identity-readiness-check
+make hosted-paper-identity-access-check
 make hosted-paper-mock-session-check
 make frontend-i18n-check
 cd backend && .venv/bin/python -m pytest tests/test_hosted_paper_identity_readiness_routes.py

@@ -15,6 +15,10 @@ from app.domain.hosted_paper_identity import (
     HostedPaperIdentityReadinessResponse,
     get_hosted_paper_identity_readiness,
 )
+from app.domain.hosted_paper_identity_access import (
+    HostedPaperIdentityAccessContractResponse,
+    get_hosted_paper_identity_access_contract,
+)
 from app.domain.hosted_paper_readiness import (
     HostedPaperReadinessResponse,
     get_hosted_paper_readiness,
@@ -67,3 +71,13 @@ def hosted_paper_identity_readiness(
     settings: SettingsDep,
 ) -> HostedPaperIdentityReadinessResponse:
     return get_hosted_paper_identity_readiness(settings)
+
+
+@router.get(
+    "/identity-access-contract",
+    response_model=HostedPaperIdentityAccessContractResponse,
+)
+def hosted_paper_identity_access_contract(
+    settings: SettingsDep,
+) -> HostedPaperIdentityAccessContractResponse:
+    return get_hosted_paper_identity_access_contract(settings)

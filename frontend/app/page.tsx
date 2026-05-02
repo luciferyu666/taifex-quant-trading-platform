@@ -27,6 +27,10 @@ import {
   type HostedPaperIdentityReadiness,
 } from "./components/HostedPaperIdentityReadinessPanel";
 import {
+  HostedPaperIdentityAccessContractPanel,
+  type HostedPaperIdentityAccessContract,
+} from "./components/HostedPaperIdentityAccessContractPanel";
+import {
   HostedPaperMockSessionPanel,
   type HostedPaperMockSession,
   type HostedPaperTenantContext,
@@ -1277,6 +1281,244 @@ const fallbackHostedPaperIdentityReadiness: HostedPaperIdentityReadiness = {
   ],
 };
 
+const fallbackHostedPaperIdentityAccessContract: HostedPaperIdentityAccessContract = {
+  service: "hosted-paper-identity-access-contract",
+  contract_state: "contract_only_not_implemented",
+  summary:
+    "Read-only contract for the future hosted paper identity layer. It separates customer, reviewer, operator, and admin roles, but does not enable real login, sessions, RBAC/ABAC enforcement, tenant writes, credentials, broker access, or live trading.",
+  identity_provider: {
+    provider_required: true,
+    provider_selected: false,
+    provider_name: "none",
+    real_login_enabled: false,
+    customer_signup_enabled: false,
+    reviewer_login_enabled: false,
+    session_issuance_enabled: false,
+    session_cookie_issued: false,
+    mfa_required_for_privileged_roles: true,
+    mfa_enabled: false,
+  },
+  session_boundary: {
+    required_claims: [
+      "user_id",
+      "tenant_id",
+      "session_id",
+      "roles",
+      "permissions",
+      "paper_only",
+      "environment",
+    ],
+    session_lifecycle_required: ["issue", "expire", "rotate", "revoke", "logout"],
+    session_storage: "future_secure_http_only_cookie_or_token",
+    session_validation_enabled: false,
+    session_audit_required: true,
+  },
+  tenant_boundary: {
+    tenant_id_required_on_every_request: true,
+    tenant_id_required_on_every_record: true,
+    membership_required: true,
+    cross_tenant_access_allowed: false,
+    tenant_isolation_enforced: false,
+    tenant_admin_role_required_for_membership_changes: true,
+    local_sqlite_allowed_for_hosted_tenant_records: false,
+  },
+  role_permission_matrix: [
+    {
+      role: "customer",
+      purpose:
+        "Future tenant member who can read the customer's own paper workspace, paper evidence, and demo status.",
+      allowed_read_permissions: [
+        "read_own_tenant_readiness",
+        "read_own_paper_records",
+        "read_own_evidence",
+      ],
+      allowed_future_mutations: [],
+      denied_permissions: [
+        "record_reviewer_decision",
+        "submit_approved_paper_workflow",
+        "manage_tenant_members",
+        "enable_live_trading",
+        "upload_broker_credentials",
+        "create_real_order",
+        "connect_real_broker",
+        "cross_tenant_access",
+      ],
+      requires_mfa: false,
+      requires_dual_review: false,
+      can_enable_live_trading: false,
+      can_upload_broker_credentials: false,
+    },
+    {
+      role: "reviewer",
+      purpose:
+        "Future paper-only reviewer for research and risk decisions inside one tenant boundary.",
+      allowed_read_permissions: [
+        "read_tenant_readiness",
+        "read_tenant_approval_queue",
+        "read_tenant_paper_records",
+        "read_tenant_evidence",
+      ],
+      allowed_future_mutations: [
+        "record_research_review_decision",
+        "record_risk_review_decision",
+      ],
+      denied_permissions: [
+        "submit_approved_paper_workflow",
+        "manage_tenant_members",
+        "enable_live_trading",
+        "upload_broker_credentials",
+        "create_real_order",
+        "connect_real_broker",
+        "cross_tenant_access",
+      ],
+      requires_mfa: true,
+      requires_dual_review: false,
+      can_enable_live_trading: false,
+      can_upload_broker_credentials: false,
+    },
+    {
+      role: "operator",
+      purpose:
+        "Future paper-only operator who can submit a paper workflow only after completed approval sequence.",
+      allowed_read_permissions: [
+        "read_tenant_readiness",
+        "read_completed_approval_requests",
+        "read_tenant_paper_records",
+      ],
+      allowed_future_mutations: ["submit_approved_paper_workflow"],
+      denied_permissions: [
+        "record_reviewer_decision",
+        "manage_tenant_members",
+        "enable_live_trading",
+        "upload_broker_credentials",
+        "create_real_order",
+        "connect_real_broker",
+        "cross_tenant_access",
+      ],
+      requires_mfa: true,
+      requires_dual_review: true,
+      can_enable_live_trading: false,
+      can_upload_broker_credentials: false,
+    },
+    {
+      role: "admin",
+      purpose:
+        "Future tenant administrator for paper-only tenant membership and configuration review.",
+      allowed_read_permissions: [
+        "read_tenant_readiness",
+        "read_tenant_members",
+        "read_tenant_paper_records",
+        "read_tenant_audit_events",
+      ],
+      allowed_future_mutations: ["manage_tenant_members", "rotate_tenant_reviewers"],
+      denied_permissions: [
+        "submit_approved_paper_workflow_without_review",
+        "enable_live_trading",
+        "upload_broker_credentials",
+        "create_real_order",
+        "connect_real_broker",
+        "cross_tenant_access",
+      ],
+      requires_mfa: true,
+      requires_dual_review: false,
+      can_enable_live_trading: false,
+      can_upload_broker_credentials: false,
+    },
+  ],
+  abac_policies: [
+    {
+      policy: "paper_only_mode",
+      required_attributes: ["paper_only=true", "live_trading_enabled=false"],
+      enforcement_target: "all hosted paper requests",
+      enabled: false,
+    },
+    {
+      policy: "tenant_scope",
+      required_attributes: ["tenant_id", "membership_status=active"],
+      enforcement_target: "all tenant record reads and future writes",
+      enabled: false,
+    },
+    {
+      policy: "environment_scope",
+      required_attributes: ["environment in dev|staging", "production_trading_ready=false"],
+      enforcement_target: "hosted paper API routing",
+      enabled: false,
+    },
+    {
+      policy: "approval_state",
+      required_attributes: [
+        "approval_request_id",
+        "required_review_sequence=complete",
+        "approval_for_live=false",
+      ],
+      enforcement_target: "future paper workflow submission",
+      enabled: false,
+    },
+  ],
+  blocked_until_real_identity: [
+    "Hosted customer account login.",
+    "Reviewer login and session issuance.",
+    "Tenant membership management.",
+    "RBAC enforcement for reviewer, admin, customer, and operator roles.",
+    "ABAC enforcement for paper-only mode, tenant scope, environment, and approval state.",
+    "Hosted paper approval mutations.",
+    "Hosted paper workflow submission.",
+    "Hosted tenant paper record queries backed by managed datastore.",
+  ],
+  implementation_sequence: [
+    "Select and security-review an authentication provider.",
+    "Implement tenant and membership datastore models.",
+    "Implement real login, logout, session issue, session rotation, and session expiry.",
+    "Attach tenant_id, roles, permissions, and attributes to every hosted request.",
+    "Enforce RBAC for reviewer, admin, customer, and operator permissions.",
+    "Enforce ABAC for paper-only mode, tenant scope, environment, and approval state.",
+    "Add identity and authorization audit events.",
+    "Run security review before hosted customer pilot.",
+  ],
+  safety_defaults: {
+    trading_mode: "paper",
+    enable_live_trading: false,
+    broker_provider: "paper",
+  },
+  safety_flags: {
+    paper_only: true,
+    read_only: true,
+    live_trading_enabled: false,
+    broker_provider: "paper",
+    auth_provider_enabled: false,
+    real_login_enabled: false,
+    customer_account_created: false,
+    reviewer_login_created: false,
+    admin_login_created: false,
+    operator_login_created: false,
+    session_cookie_issued: false,
+    rbac_enforced: false,
+    abac_enforced: false,
+    tenant_isolation_enforced: false,
+    hosted_datastore_written: false,
+    external_db_written: false,
+    credentials_collected: false,
+    broker_credentials_collected: false,
+    broker_api_called: false,
+    order_created: false,
+    production_trading_ready: false,
+  },
+  docs: {
+    identity_access_contract: "docs/hosted-paper-identity-access-contract.md",
+    auth_boundary: "docs/hosted-paper-auth-boundary-spec.md",
+    identity_readiness: "docs/hosted-paper-identity-rbac-tenant-readiness.md",
+    saas_roadmap: "docs/hosted-paper-saas-foundation-roadmap.md",
+  },
+  warnings: [
+    "This is a read-only identity access contract, not a login system.",
+    "No customer account, reviewer login, admin login, operator login, or session is created.",
+    "RBAC and ABAC are required for hosted SaaS but are not enforced by this slice.",
+    "No credentials are collected, no hosted datastore is written, no broker is called, and no order is created.",
+    "Production Trading Platform remains NOT READY.",
+    "Live trading remains disabled by default.",
+  ],
+};
+
 const fallbackHostedPaperMockSession: HostedPaperMockSession = {
   service: "hosted-paper-mock-session-contract",
   contract_state: "mock_read_only",
@@ -1541,6 +1783,7 @@ export default async function Home({ searchParams }: HomeProps) {
     hostedPaperDatastoreReadiness,
     hostedPaperReadiness,
     hostedPaperIdentityReadiness,
+    hostedPaperIdentityAccessContract,
     hostedPaperMockSession,
     hostedPaperTenant,
     reviewPacket,
@@ -1631,6 +1874,10 @@ export default async function Home({ searchParams }: HomeProps) {
       fetchJson<HostedPaperIdentityReadiness>(
         "/api/hosted-paper/identity-readiness",
         fallbackHostedPaperIdentityReadiness,
+      ),
+      fetchJson<HostedPaperIdentityAccessContract>(
+        "/api/hosted-paper/identity-access-contract",
+        fallbackHostedPaperIdentityAccessContract,
       ),
       fetchJson<HostedPaperMockSession>(
         "/api/hosted-paper/session",
@@ -1866,6 +2113,16 @@ export default async function Home({ searchParams }: HomeProps) {
                   : hostedPaperIdentityReadiness.error
               }
               readiness={hostedPaperIdentityReadiness.data}
+            />
+            <HostedPaperIdentityAccessContractPanel
+              available={hostedPaperIdentityAccessContract.available}
+              contract={hostedPaperIdentityAccessContract.data}
+              copy={copy.hostedPaperIdentityAccessContract}
+              error={
+                hostedPaperIdentityAccessContract.available
+                  ? undefined
+                  : hostedPaperIdentityAccessContract.error
+              }
             />
             <HostedPaperMockSessionPanel
               available={hostedPaperMockSession.available && hostedPaperTenant.available}

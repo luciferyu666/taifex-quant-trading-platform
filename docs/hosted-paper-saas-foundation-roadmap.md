@@ -20,6 +20,7 @@ GET /api/hosted-backend/readiness
 GET /api/hosted-paper/environment
 GET /api/hosted-paper/readiness
 GET /api/hosted-paper/datastore-readiness
+GET /api/hosted-paper/identity-access-contract
 ```
 
 `GET /api/hosted-backend/environment` and
@@ -60,15 +61,23 @@ and `database_url_read=false`. It does not read `DATABASE_URL`, connect to a
 database, create hosted records, create customer accounts, create tenants,
 create reviewer login, call brokers, or create orders.
 
+`GET /api/hosted-paper/identity-access-contract` defines the future hosted
+paper identity, session, tenant, RBAC, and ABAC boundary. It separates
+`customer`, `reviewer`, `operator`, and `admin` responsibilities, but remains a
+read-only contract. It does not select an auth provider, create real login,
+issue sessions, create customer accounts, enforce RBAC/ABAC, write hosted
+records, collect credentials, call brokers, or enable live trading.
+
 ## Required SaaS Foundation Path
 
 1. Hosted backend/API deployment foundation
 2. Managed datastore migration plan review
 3. Managed database with tenant-scoped hosted paper records
-4. Auth/session
-5. Tenant isolation
-6. Paper workflow persistence
-7. Hosted customer demo tenant
+4. Auth/session identity access contract
+5. Tenant isolation enforcement
+6. RBAC/ABAC enforcement
+7. Paper workflow persistence
+8. Hosted customer demo tenant
 
 ## Environment Boundary
 
@@ -120,6 +129,9 @@ local machine only, and does not create hosted customer accounts.
   `schema_only_no_hosted_datastore`.
 - `make hosted-paper-datastore-migration-plan` emits the dry-run datastore
   migration plan without reading `DATABASE_URL` or connecting to a database.
+- `GET /api/hosted-paper/identity-access-contract` returns
+  `contract_only_not_implemented` and separates customer, reviewer, operator,
+  and admin boundaries.
 - Future hosted paper record models require `tenant_id`.
 - Migration apply remains disabled and no hosted database connection is
   attempted.

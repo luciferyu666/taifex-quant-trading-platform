@@ -716,6 +716,174 @@ export const dashboardCopy = {
           "Production Trading Platform remains NOT READY.",
       },
     },
+    hostedPaperIdentityAccessContract: {
+      eyebrow: "Hosted Paper Identity",
+      title: "Identity access contract",
+      description:
+        "Read-only contract for future real login, sessions, customer accounts, tenant boundary, and RBAC/ABAC role separation. This release does not authenticate users or issue sessions.",
+      fallbackPrefix:
+        "Hosted paper identity access contract unavailable. Rendering safe fallback:",
+      endpointLabel: "Read-only endpoint",
+      stateLabel: "Contract state",
+      providerLabel: "Identity provider boundary",
+      sessionBoundaryLabel: "Session boundary",
+      tenantBoundaryLabel: "Tenant boundary",
+      requiredClaimsLabel: "Required future session claims",
+      sessionLifecycleLabel: "Required session lifecycle",
+      sessionValidationLabel: "Session validation enabled",
+      sessionAuditLabel: "Session audit required",
+      roleLabel: "Separated future role",
+      requiresMfaLabel: "Requires MFA",
+      requiresDualReviewLabel: "Requires dual review",
+      livePermissionLabel: "Live permission granted",
+      futureMutationsLabel: "Future paper-only mutations",
+      noneLabel: "None",
+      abacPoliciesLabel: "ABAC policy contracts",
+      enabledLabel: "enabled",
+      blockedLabel: "Blocked until real identity exists",
+      implementationSequenceLabel: "Implementation sequence",
+      safetyDefaultsLabel: "Safety defaults",
+      safetyFlagsLabel: "Safety flags",
+      warningLabel: "Boundary warnings",
+      providerLabels: {
+        provider_required: "Provider required",
+        provider_selected: "Provider selected",
+        provider_name: "Provider name",
+        real_login_enabled: "Real login enabled",
+        customer_signup_enabled: "Customer signup enabled",
+        reviewer_login_enabled: "Reviewer login enabled",
+        session_issuance_enabled: "Session issuance enabled",
+        session_cookie_issued: "Session cookie issued",
+        mfa_required_for_privileged_roles: "MFA required for privileged roles",
+        mfa_enabled: "MFA enabled",
+      },
+      tenantLabels: {
+        tenant_id_required_on_every_request: "tenant_id required on every request",
+        tenant_id_required_on_every_record: "tenant_id required on every record",
+        membership_required: "Tenant membership required",
+        cross_tenant_access_allowed: "Cross-tenant access allowed",
+        tenant_isolation_enforced: "Tenant isolation enforced",
+        tenant_admin_role_required_for_membership_changes:
+          "Tenant admin required for membership changes",
+        local_sqlite_allowed_for_hosted_tenant_records:
+          "Local SQLite allowed for hosted tenant records",
+      },
+      roleLabels: {
+        customer: "Customer",
+        reviewer: "Reviewer",
+        operator: "Operator",
+        admin: "Admin",
+      },
+      rolePurposeLabels: {
+        "Future tenant member who can read the customer's own paper workspace, paper evidence, and demo status.":
+          "Future tenant member who can read the customer's own paper workspace, paper evidence, and demo status.",
+        "Future paper-only reviewer for research and risk decisions inside one tenant boundary.":
+          "Future paper-only reviewer for research and risk decisions inside one tenant boundary.",
+        "Future paper-only operator who can submit a paper workflow only after completed approval sequence.":
+          "Future paper-only operator who can submit a paper workflow only after completed approval sequence.",
+        "Future tenant administrator for paper-only tenant membership and configuration review.":
+          "Future tenant administrator for paper-only tenant membership and configuration review.",
+      },
+      permissionLabels: {
+        read_own_tenant_readiness: "Read own tenant readiness",
+        read_own_paper_records: "Read own paper records",
+        read_own_evidence: "Read own evidence",
+        read_tenant_readiness: "Read tenant readiness",
+        read_tenant_approval_queue: "Read tenant approval queue",
+        read_tenant_paper_records: "Read tenant paper records",
+        read_tenant_evidence: "Read tenant evidence",
+        read_completed_approval_requests: "Read completed approval requests",
+        read_tenant_members: "Read tenant members",
+        read_tenant_audit_events: "Read tenant audit events",
+        record_research_review_decision: "Record research review decision",
+        record_risk_review_decision: "Record risk review decision",
+        submit_approved_paper_workflow: "Submit approved paper workflow",
+        manage_tenant_members: "Manage tenant members",
+        rotate_tenant_reviewers: "Rotate tenant reviewers",
+        None: "None",
+      },
+      abacPolicyLabels: {
+        paper_only_mode: "Paper-only mode",
+        tenant_scope: "Tenant scope",
+        environment_scope: "Environment scope",
+        approval_state: "Approval state",
+      },
+      enforcementTargetLabels: {
+        "all hosted paper requests": "all hosted paper requests",
+        "all tenant record reads and future writes":
+          "all tenant record reads and future writes",
+        "hosted paper API routing": "hosted paper API routing",
+        "future paper workflow submission": "future paper workflow submission",
+      },
+      blockedLabels: {
+        "Hosted customer account login.": "Hosted customer account login.",
+        "Reviewer login and session issuance.": "Reviewer login and session issuance.",
+        "Tenant membership management.": "Tenant membership management.",
+        "RBAC enforcement for reviewer, admin, customer, and operator roles.":
+          "RBAC enforcement for reviewer, admin, customer, and operator roles.",
+        "ABAC enforcement for paper-only mode, tenant scope, environment, and approval state.":
+          "ABAC enforcement for paper-only mode, tenant scope, environment, and approval state.",
+        "Hosted paper approval mutations.": "Hosted paper approval mutations.",
+        "Hosted paper workflow submission.": "Hosted paper workflow submission.",
+        "Hosted tenant paper record queries backed by managed datastore.":
+          "Hosted tenant paper record queries backed by managed datastore.",
+      },
+      implementationLabels: {
+        "Select and security-review an authentication provider.":
+          "Select and security-review an authentication provider.",
+        "Implement tenant and membership datastore models.":
+          "Implement tenant and membership datastore models.",
+        "Implement real login, logout, session issue, session rotation, and session expiry.":
+          "Implement real login, logout, session issue, session rotation, and session expiry.",
+        "Attach tenant_id, roles, permissions, and attributes to every hosted request.":
+          "Attach tenant_id, roles, permissions, and attributes to every hosted request.",
+        "Enforce RBAC for reviewer, admin, customer, and operator permissions.":
+          "Enforce RBAC for reviewer, admin, customer, and operator permissions.",
+        "Enforce ABAC for paper-only mode, tenant scope, environment, and approval state.":
+          "Enforce ABAC for paper-only mode, tenant scope, environment, and approval state.",
+        "Add identity and authorization audit events.":
+          "Add identity and authorization audit events.",
+        "Run security review before hosted customer pilot.":
+          "Run security review before hosted customer pilot.",
+      },
+      safetyFlagLabels: {
+        paper_only: "paper_only",
+        read_only: "read_only",
+        live_trading_enabled: "live_trading_enabled",
+        broker_provider: "broker_provider",
+        auth_provider_enabled: "auth_provider_enabled",
+        real_login_enabled: "real_login_enabled",
+        customer_account_created: "customer_account_created",
+        reviewer_login_created: "reviewer_login_created",
+        admin_login_created: "admin_login_created",
+        operator_login_created: "operator_login_created",
+        session_cookie_issued: "session_cookie_issued",
+        rbac_enforced: "rbac_enforced",
+        abac_enforced: "abac_enforced",
+        tenant_isolation_enforced: "tenant_isolation_enforced",
+        hosted_datastore_written: "hosted_datastore_written",
+        external_db_written: "external_db_written",
+        credentials_collected: "credentials_collected",
+        broker_credentials_collected: "broker_credentials_collected",
+        broker_api_called: "broker_api_called",
+        order_created: "order_created",
+        production_trading_ready: "production_trading_ready",
+      },
+      warningLabels: {
+        "This is a read-only identity access contract, not a login system.":
+          "This is a read-only identity access contract, not a login system.",
+        "No customer account, reviewer login, admin login, operator login, or session is created.":
+          "No customer account, reviewer login, admin login, operator login, or session is created.",
+        "RBAC and ABAC are required for hosted SaaS but are not enforced by this slice.":
+          "RBAC and ABAC are required for hosted SaaS but are not enforced by this slice.",
+        "No credentials are collected, no hosted datastore is written, no broker is called, and no order is created.":
+          "No credentials are collected, no hosted datastore is written, no broker is called, and no order is created.",
+        "Production Trading Platform remains NOT READY.":
+          "Production Trading Platform remains NOT READY.",
+        "Live trading remains disabled by default.":
+          "Live trading remains disabled by default.",
+      },
+    },
     hostedPaperSession: {
       eyebrow: "Hosted Paper Session",
       title: "Mock session and tenant contract",
@@ -2861,6 +3029,174 @@ export const dashboardCopy = {
           "它不啟用實盤交易、不寫資料庫、不收 credentials、不呼叫券商，也不建立訂單。",
         "Production Trading Platform remains NOT READY.":
           "Production Trading Platform 仍為 NOT READY。",
+      },
+    },
+    hostedPaperIdentityAccessContract: {
+      eyebrow: "Hosted Paper Identity",
+      title: "Identity access contract",
+      description:
+        "只讀檢視未來真實 login、session、customer account、tenant boundary 與 RBAC/ABAC role separation 契約。本版本不驗證使用者，也不發 session。",
+      fallbackPrefix:
+        "Hosted paper identity access contract 無法取得，正在顯示安全備援資料：",
+      endpointLabel: "只讀 endpoint",
+      stateLabel: "契約狀態",
+      providerLabel: "Identity provider 邊界",
+      sessionBoundaryLabel: "Session 邊界",
+      tenantBoundaryLabel: "Tenant 邊界",
+      requiredClaimsLabel: "未來 session 必要 claims",
+      sessionLifecycleLabel: "必要 session lifecycle",
+      sessionValidationLabel: "Session validation 已啟用",
+      sessionAuditLabel: "需要 session audit",
+      roleLabel: "分離的未來 role",
+      requiresMfaLabel: "需要 MFA",
+      requiresDualReviewLabel: "需要雙人覆核",
+      livePermissionLabel: "實盤權限已授予",
+      futureMutationsLabel: "未來 paper-only mutations",
+      noneLabel: "無",
+      abacPoliciesLabel: "ABAC policy contracts",
+      enabledLabel: "已啟用",
+      blockedLabel: "真實 identity 建立前不可用",
+      implementationSequenceLabel: "導入順序",
+      safetyDefaultsLabel: "安全預設",
+      safetyFlagsLabel: "安全旗標",
+      warningLabel: "邊界警示",
+      providerLabels: {
+        provider_required: "需要 provider",
+        provider_selected: "Provider 已選定",
+        provider_name: "Provider 名稱",
+        real_login_enabled: "真實 login 已啟用",
+        customer_signup_enabled: "Customer signup 已啟用",
+        reviewer_login_enabled: "Reviewer login 已啟用",
+        session_issuance_enabled: "Session issuance 已啟用",
+        session_cookie_issued: "Session cookie 已發出",
+        mfa_required_for_privileged_roles: "Privileged roles 需要 MFA",
+        mfa_enabled: "MFA 已啟用",
+      },
+      tenantLabels: {
+        tenant_id_required_on_every_request: "每個 request 都需要 tenant_id",
+        tenant_id_required_on_every_record: "每筆 record 都需要 tenant_id",
+        membership_required: "需要 tenant membership",
+        cross_tenant_access_allowed: "允許跨 tenant 存取",
+        tenant_isolation_enforced: "Tenant isolation 已強制執行",
+        tenant_admin_role_required_for_membership_changes:
+          "Membership changes 需要 tenant admin",
+        local_sqlite_allowed_for_hosted_tenant_records:
+          "Hosted tenant records 可使用 local SQLite",
+      },
+      roleLabels: {
+        customer: "Customer",
+        reviewer: "Reviewer",
+        operator: "Operator",
+        admin: "Admin",
+      },
+      rolePurposeLabels: {
+        "Future tenant member who can read the customer's own paper workspace, paper evidence, and demo status.":
+          "未來 tenant member，只能讀取自己的 paper workspace、paper evidence 與 demo status。",
+        "Future paper-only reviewer for research and risk decisions inside one tenant boundary.":
+          "未來 paper-only reviewer，只能在單一 tenant boundary 內處理 research 與 risk decisions。",
+        "Future paper-only operator who can submit a paper workflow only after completed approval sequence.":
+          "未來 paper-only operator，只能在 approval sequence 完成後提交 paper workflow。",
+        "Future tenant administrator for paper-only tenant membership and configuration review.":
+          "未來 tenant administrator，負責 paper-only tenant membership 與 configuration review。",
+      },
+      permissionLabels: {
+        read_own_tenant_readiness: "讀取自己的 tenant readiness",
+        read_own_paper_records: "讀取自己的 paper records",
+        read_own_evidence: "讀取自己的 evidence",
+        read_tenant_readiness: "讀取 tenant readiness",
+        read_tenant_approval_queue: "讀取 tenant approval queue",
+        read_tenant_paper_records: "讀取 tenant paper records",
+        read_tenant_evidence: "讀取 tenant evidence",
+        read_completed_approval_requests: "讀取已完成 approval requests",
+        read_tenant_members: "讀取 tenant members",
+        read_tenant_audit_events: "讀取 tenant audit events",
+        record_research_review_decision: "記錄 research review decision",
+        record_risk_review_decision: "記錄 risk review decision",
+        submit_approved_paper_workflow: "提交已審批 paper workflow",
+        manage_tenant_members: "管理 tenant members",
+        rotate_tenant_reviewers: "輪替 tenant reviewers",
+        None: "無",
+      },
+      abacPolicyLabels: {
+        paper_only_mode: "Paper-only mode",
+        tenant_scope: "Tenant scope",
+        environment_scope: "Environment scope",
+        approval_state: "Approval state",
+      },
+      enforcementTargetLabels: {
+        "all hosted paper requests": "所有 hosted paper requests",
+        "all tenant record reads and future writes":
+          "所有 tenant record reads 與 future writes",
+        "hosted paper API routing": "hosted paper API routing",
+        "future paper workflow submission": "未來 paper workflow submission",
+      },
+      blockedLabels: {
+        "Hosted customer account login.": "Hosted customer account login。",
+        "Reviewer login and session issuance.": "Reviewer login 與 session issuance。",
+        "Tenant membership management.": "Tenant membership management。",
+        "RBAC enforcement for reviewer, admin, customer, and operator roles.":
+          "針對 reviewer、admin、customer、operator roles 強制 RBAC。",
+        "ABAC enforcement for paper-only mode, tenant scope, environment, and approval state.":
+          "針對 paper-only mode、tenant scope、environment 與 approval state 強制 ABAC。",
+        "Hosted paper approval mutations.": "Hosted paper approval mutations。",
+        "Hosted paper workflow submission.": "Hosted paper workflow submission。",
+        "Hosted tenant paper record queries backed by managed datastore.":
+          "由 managed datastore 支撐的 hosted tenant paper record queries。",
+      },
+      implementationLabels: {
+        "Select and security-review an authentication provider.":
+          "選擇並完成 authentication provider security review。",
+        "Implement tenant and membership datastore models.":
+          "實作 tenant 與 membership datastore models。",
+        "Implement real login, logout, session issue, session rotation, and session expiry.":
+          "實作真實 login、logout、session issue、session rotation 與 session expiry。",
+        "Attach tenant_id, roles, permissions, and attributes to every hosted request.":
+          "每個 hosted request 都附上 tenant_id、roles、permissions 與 attributes。",
+        "Enforce RBAC for reviewer, admin, customer, and operator permissions.":
+          "針對 reviewer、admin、customer、operator permissions 強制 RBAC。",
+        "Enforce ABAC for paper-only mode, tenant scope, environment, and approval state.":
+          "針對 paper-only mode、tenant scope、environment 與 approval state 強制 ABAC。",
+        "Add identity and authorization audit events.":
+          "加入 identity 與 authorization audit events。",
+        "Run security review before hosted customer pilot.":
+          "Hosted customer pilot 前執行 security review。",
+      },
+      safetyFlagLabels: {
+        paper_only: "paper_only",
+        read_only: "read_only",
+        live_trading_enabled: "live_trading_enabled",
+        broker_provider: "broker_provider",
+        auth_provider_enabled: "auth_provider_enabled",
+        real_login_enabled: "real_login_enabled",
+        customer_account_created: "customer_account_created",
+        reviewer_login_created: "reviewer_login_created",
+        admin_login_created: "admin_login_created",
+        operator_login_created: "operator_login_created",
+        session_cookie_issued: "session_cookie_issued",
+        rbac_enforced: "rbac_enforced",
+        abac_enforced: "abac_enforced",
+        tenant_isolation_enforced: "tenant_isolation_enforced",
+        hosted_datastore_written: "hosted_datastore_written",
+        external_db_written: "external_db_written",
+        credentials_collected: "credentials_collected",
+        broker_credentials_collected: "broker_credentials_collected",
+        broker_api_called: "broker_api_called",
+        order_created: "order_created",
+        production_trading_ready: "production_trading_ready",
+      },
+      warningLabels: {
+        "This is a read-only identity access contract, not a login system.":
+          "這是只讀 identity access contract，不是 login system。",
+        "No customer account, reviewer login, admin login, operator login, or session is created.":
+          "不建立 customer account、reviewer login、admin login、operator login 或 session。",
+        "RBAC and ABAC are required for hosted SaaS but are not enforced by this slice.":
+          "Hosted SaaS 需要 RBAC 與 ABAC，但本切片尚未強制執行。",
+        "No credentials are collected, no hosted datastore is written, no broker is called, and no order is created.":
+          "不收 credentials、不寫 hosted datastore、不呼叫券商，也不建立訂單。",
+        "Production Trading Platform remains NOT READY.":
+          "Production Trading Platform 仍為 NOT READY。",
+        "Live trading remains disabled by default.":
+          "Live trading remains disabled by default.",
       },
     },
     hostedPaperSession: {

@@ -109,6 +109,7 @@ for required_file in \
   docs/hosted-paper-managed-datastore-migration-plan.md \
   docs/hosted-paper-auth-boundary-spec.md \
   docs/hosted-paper-identity-rbac-tenant-readiness.md \
+  docs/hosted-paper-identity-access-contract.md \
   docs/hosted-paper-mock-session-contract.md \
   docs/hosted-paper-tenant-boundary-evidence-export.md \
   infra/hosted-backend/README.md \
@@ -129,6 +130,7 @@ for required_file in \
   scripts/hosted-backend-readiness-check.sh \
   scripts/hosted-paper-auth-boundary-check.sh \
   scripts/hosted-paper-identity-readiness-check.sh \
+  scripts/hosted-paper-identity-access-check.sh \
   scripts/hosted-paper-mock-session-check.sh \
   scripts/hosted-paper-datastore-migration-plan.py \
   scripts/paper-compliance-approval-readiness-check.sh \
@@ -139,13 +141,16 @@ for required_file in \
   backend/app/domain/hosted_backend_environment.py \
   backend/app/domain/hosted_paper_environment.py \
   backend/app/domain/hosted_paper_datastore.py \
+  backend/app/domain/hosted_paper_identity_access.py \
   backend/app/api/hosted_backend_routes.py \
   backend/tests/test_hosted_backend_environment_routes.py \
   backend/tests/test_hosted_paper_environment_routes.py \
   backend/tests/test_hosted_paper_datastore_readiness_routes.py \
   backend/tests/test_hosted_paper_datastore_migration_plan_script.py \
+  backend/tests/test_hosted_paper_identity_access_contract_routes.py \
   frontend/app/components/HostedPaperEnvironmentPanel.tsx \
   frontend/app/components/HostedPaperDatastoreReadinessPanel.tsx \
+  frontend/app/components/HostedPaperIdentityAccessContractPanel.tsx \
   frontend/scripts/check-paper-approval-ui-flow.mjs; do
   if [[ ! -f "${required_file}" ]]; then
     printf 'Missing required customer evaluation file: %s\n' "${required_file}" >&2
@@ -198,6 +203,11 @@ if [[ ! -x scripts/hosted-paper-identity-readiness-check.sh ]]; then
   missing_customer_eval_file=1
 fi
 
+if [[ ! -x scripts/hosted-paper-identity-access-check.sh ]]; then
+  printf 'scripts/hosted-paper-identity-access-check.sh must be executable.\n' >&2
+  missing_customer_eval_file=1
+fi
+
 if [[ ! -x scripts/hosted-paper-mock-session-check.sh ]]; then
   printf 'scripts/hosted-paper-mock-session-check.sh must be executable.\n' >&2
   missing_customer_eval_file=1
@@ -245,6 +255,7 @@ bash scripts/hosted-backend-readiness-check.sh
 bash scripts/hosted-paper-api-readiness-check.sh
 bash scripts/hosted-paper-auth-boundary-check.sh
 bash scripts/hosted-paper-identity-readiness-check.sh
+bash scripts/hosted-paper-identity-access-check.sh
 bash scripts/hosted-paper-mock-session-check.sh
 bash scripts/paper-compliance-approval-readiness-check.sh
 bash scripts/paper-audit-worm-readiness-check.sh
@@ -305,6 +316,7 @@ for required_file in \
   backend/app/domain/hosted_paper_environment.py \
   backend/app/domain/hosted_backend_environment.py \
   backend/app/domain/hosted_paper_identity.py \
+  backend/app/domain/hosted_paper_identity_access.py \
   backend/app/domain/hosted_paper_session.py \
   backend/app/domain/exposure.py \
   backend/app/services/risk_engine.py \

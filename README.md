@@ -153,6 +153,7 @@ hosted paper API readiness is tracked in
 `GET /api/hosted-paper/environment`, `GET /api/hosted-paper/readiness`,
 `GET /api/hosted-paper/datastore-readiness`,
 `GET /api/hosted-paper/identity-readiness`,
+`GET /api/hosted-paper/identity-access-contract`,
 `GET /api/hosted-paper/session`, and `GET /api/hosted-paper/tenants/current` as
 read-only environment, readiness, and mock contract responses only. The hosted
 paper SaaS foundation path is documented in
@@ -165,8 +166,10 @@ requirements without connecting to a hosted database or writing hosted records.
 Future hosted login, session, RBAC, ABAC, and tenant boundaries are specified in
 `docs/hosted-paper-auth-boundary-spec.md`; the identity/RBAC/tenant readiness
 contract is documented in
-`docs/hosted-paper-identity-rbac-tenant-readiness.md`; the read-only mock
-session contract is documented in `docs/hosted-paper-mock-session-contract.md`.
+`docs/hosted-paper-identity-rbac-tenant-readiness.md`; the identity access
+contract separating future customer, reviewer, operator, and admin roles is
+documented in `docs/hosted-paper-identity-access-contract.md`; the read-only
+mock session contract is documented in `docs/hosted-paper-mock-session-contract.md`.
 The current Paper Approval workflow is local scaffolding, not a formal
 compliance approval system; the readiness boundary is documented in
 `docs/paper-compliance-approval-readiness.md` and exposed as read-only metadata

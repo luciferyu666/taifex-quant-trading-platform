@@ -14,6 +14,8 @@ const files = {
   hostedPaperReadiness: "frontend/app/components/HostedPaperReadinessPanel.tsx",
   hostedPaperIdentityReadiness:
     "frontend/app/components/HostedPaperIdentityReadinessPanel.tsx",
+  hostedPaperIdentityAccess:
+    "frontend/app/components/HostedPaperIdentityAccessContractPanel.tsx",
   hostedPaperSession: "frontend/app/components/HostedPaperMockSessionPanel.tsx",
   hostedPaperTenantEvidence:
     "frontend/app/components/HostedPaperTenantBoundaryEvidencePanel.tsx",
@@ -237,6 +239,14 @@ requireContains("English local JSON loader copy exists", sourceByFile.i18n, "Sel
 requireContains("Traditional Chinese local JSON loader copy exists", sourceByFile.i18n, "選擇本地 .json");
 requireContains("English no-upload copy exists", sourceByFile.i18n, "The file was not uploaded");
 requireContains("Traditional Chinese no-upload copy exists", sourceByFile.i18n, "檔案未上傳");
+requireContains("English hosted identity access contract copy exists", sourceByFile.i18n, "Identity access contract");
+requireContains("Traditional Chinese hosted identity access contract copy exists", sourceByFile.i18n, "真實 login、session");
+requireContains("Hosted identity access contract component is implemented", sourceByFile.hostedPaperIdentityAccess, "HostedPaperIdentityAccessContractPanel");
+requireContains("Hosted identity access contract endpoint is mounted", sourceByFile.page, "/api/hosted-paper/identity-access-contract");
+requireContains("Hosted identity access separates customer role", sourceByFile.i18n, "customer");
+requireContains("Hosted identity access separates reviewer role", sourceByFile.i18n, "reviewer");
+requireContains("Hosted identity access separates operator role", sourceByFile.i18n, "operator");
+requireContains("Hosted identity access separates admin role", sourceByFile.i18n, "admin");
 requireContains("English demo guide copy exists", sourceByFile.i18n, "Customer Demo Guided Flow");
 requireContains("Traditional Chinese demo guide copy exists", sourceByFile.i18n, "客戶測試導覽流程");
 requireContains("Demo guide component is implemented", sourceByFile.demoGuide, "DemoGuidePanel");

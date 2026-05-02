@@ -14,6 +14,7 @@ The current implemented hosted paper endpoints are:
 ```text
 GET /api/hosted-paper/readiness
 GET /api/hosted-paper/identity-readiness
+GET /api/hosted-paper/identity-access-contract
 GET /api/hosted-paper/session
 GET /api/hosted-paper/tenants/current
 ```
@@ -21,8 +22,11 @@ GET /api/hosted-paper/tenants/current
 These endpoints are read-only. The readiness endpoint reports that hosted paper
 mode is not enabled. The identity readiness endpoint reports that real reviewer
 login, customer accounts, formal RBAC/ABAC, and tenant isolation are schema-only
-and not enabled. The session and tenant endpoints return mock contract metadata
-only; they do not authenticate users or create hosted sessions.
+and not enabled. The identity access contract endpoint separates future
+`customer`, `reviewer`, `operator`, and `admin` permissions, session boundary,
+tenant boundary, and ABAC policies without enabling real login or sessions. The
+session and tenant endpoints return mock contract metadata only; they do not
+authenticate users or create hosted sessions.
 
 ## Current Posture
 
@@ -153,6 +157,7 @@ The current mock contract endpoints are:
 
 ```text
 GET /api/hosted-paper/identity-readiness
+GET /api/hosted-paper/identity-access-contract
 GET /api/hosted-paper/session
 GET /api/hosted-paper/tenants/current
 ```
@@ -163,12 +168,21 @@ It does not create reviewer login, customer accounts, session cookies, tenant
 records, RBAC enforcement, ABAC enforcement, hosted datastore writes, broker
 calls, orders, credential collection, or live trading.
 
+`GET /api/hosted-paper/identity-access-contract` returns the future hosted paper
+identity contract for real login, customer accounts, tenant boundary, and
+RBAC/ABAC role separation. It defines `customer`, `reviewer`, `operator`, and
+`admin` boundaries but remains read-only metadata. It does not select an auth
+provider, create accounts, issue sessions, enforce RBAC/ABAC, write hosted
+records, collect credentials, call brokers, create orders, or enable live
+trading.
+
 They return schema samples for future session, tenant, roles, and permissions.
 They do not issue session cookies, write hosted datastore records, create paper
 workflow records, collect credentials, call brokers, or enable live trading.
 
 See [hosted-paper-mock-session-contract.md](hosted-paper-mock-session-contract.md).
 See [hosted-paper-identity-rbac-tenant-readiness.md](hosted-paper-identity-rbac-tenant-readiness.md).
+See [hosted-paper-identity-access-contract.md](hosted-paper-identity-access-contract.md).
 The Web Command Center may display this mock metadata as a read-only panel only.
 That UI must not create login buttons, hosted sessions, credential forms,
 database writes, broker calls, or paper workflow mutations.
@@ -225,6 +239,7 @@ Before any hosted paper auth implementation begins:
 - `ENABLE_LIVE_TRADING=false`
 - `BROKER_PROVIDER=paper`
 - `GET /api/hosted-paper/readiness` remains read-only
+- `GET /api/hosted-paper/identity-access-contract` remains a read-only role and tenant boundary contract
 - `GET /api/hosted-paper/session` remains a mock read-only contract
 - `GET /api/hosted-paper/tenants/current` remains a mock read-only contract
 - future session context requires `user_id`, `tenant_id`, and `session_id`
