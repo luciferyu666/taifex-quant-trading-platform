@@ -3607,6 +3607,82 @@ Safety boundary:
 - Production Trading Platform remains NOT READY.
 - Live trading remains disabled by default.
 
+## Browser-only Mock Demo Runtime Verification
+
+Verification date: 2026-05-03
+
+Change verified:
+
+- Commit: `4498472 Add browser-only mock demo runtime`
+- Scope:
+  - Added `frontend/app/components/browserOnlyMockRuntime.ts`.
+  - Added `frontend/app/components/BrowserOnlyMockDemoPanel.tsx`.
+  - Mounted the browser-only demo panel in the Web Command Center Paper OMS section.
+  - Added deterministic TX / MTX / TMF browser-only market ticks.
+  - Added signal-only browser strategy simulation.
+  - Added browser-local Paper Only order simulation.
+  - Added browser-local paper risk evaluation, simulated OMS timeline, simulated fill / partial fill / reject outcomes, and simulated portfolio / PnL summary.
+  - Added `docs/browser-only-mock-demo-runtime.md`.
+  - Added `make browser-only-mock-demo-check`.
+
+Validation:
+
+- GitHub Actions Release Readiness: passed
+- Run ID: `25280869128`
+- Vercel frontend production deployment: Ready
+- Vercel deployment ID: `dpl_HWx7esyFAhhaBC5WKA5L6weXa2hH`
+- Production alias: `https://taifex-quant-trading-platform-front.vercel.app`
+- Production smoke gate: passed
+- Local validation before commit:
+  - `make browser-only-mock-demo-check`
+  - `make frontend-i18n-check`
+  - `cd frontend && npm run typecheck`
+  - `cd frontend && npm run build`
+  - `make check`
+
+Customer-facing demo impact:
+
+- Customers can open the production Web App and operate a first-pass interactive demo without installing local backend services.
+- The browser-only panel supports:
+  - Generate next deterministic tick.
+  - Run mock strategy.
+  - Simulate Paper Only order.
+  - Inspect simulated Risk result.
+  - Inspect simulated OMS lifecycle.
+  - Inspect simulated paper position, equity, and PnL.
+  - Reset browser demo session.
+- Demo state is kept in browser local state / `localStorage`.
+- This does not replace the local backend + SQLite paper audit path for persisted OMS / audit record demonstrations.
+
+Safety boundary:
+
+- Browser-only runtime uses deterministic local browser state only.
+- Paper Only.
+- No local backend required.
+- No hosted backend required.
+- No SQLite access.
+- No hosted datastore writes.
+- No real broker connection.
+- No external market data download.
+- No credentials collected.
+- No real order creation.
+- No live trading path.
+- No investment advice.
+- No performance claim.
+- `paper_only=true`.
+- `browser_only=true`.
+- `mock_backend=true`.
+- `deterministic_data=true`.
+- `live_trading_enabled=false`.
+- `broker_api_called=false`.
+- `external_market_data_downloaded=false`.
+- `real_order_created=false`.
+- `credentials_collected=false`.
+- `database_written=false`.
+- `production_trading_ready=false`.
+- Production Trading Platform remains NOT READY.
+- Live trading remains disabled by default.
+
 ## Marketing Website Reachability
 
 Command:
