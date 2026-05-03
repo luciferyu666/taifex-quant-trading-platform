@@ -31,6 +31,10 @@ from app.domain.hosted_paper_readiness import (
     HostedPaperReadinessResponse,
     get_hosted_paper_readiness,
 )
+from app.domain.hosted_paper_security_operations import (
+    HostedPaperSecurityOperationsReadinessResponse,
+    get_hosted_paper_security_operations_readiness,
+)
 from app.domain.hosted_paper_session import (
     HostedPaperMockSessionResponse,
     HostedPaperTenantContext,
@@ -123,3 +127,13 @@ def hosted_paper_auth_provider_selection(
     settings: SettingsDep,
 ) -> HostedPaperAuthProviderSelectionResponse:
     return get_hosted_paper_auth_provider_selection(settings)
+
+
+@router.get(
+    "/security-operations/readiness",
+    response_model=HostedPaperSecurityOperationsReadinessResponse,
+)
+def hosted_paper_security_operations_readiness(
+    settings: SettingsDep,
+) -> HostedPaperSecurityOperationsReadinessResponse:
+    return get_hosted_paper_security_operations_readiness(settings)

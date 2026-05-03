@@ -43,6 +43,10 @@ import {
   type HostedPaperAuthProviderSelection,
 } from "./components/HostedPaperAuthProviderSelectionPanel";
 import {
+  HostedPaperSecurityOperationsPanel,
+  type HostedPaperSecurityOperationsReadiness,
+} from "./components/HostedPaperSecurityOperationsPanel";
+import {
   HostedPaperMockSessionPanel,
   type HostedPaperMockSession,
   type HostedPaperTenantContext,
@@ -1507,6 +1511,153 @@ const fallbackHostedWebCommandCenterReadiness: HostedWebCommandCenterReadiness =
   ],
 };
 
+const fallbackHostedPaperSecurityOperationsReadiness: HostedPaperSecurityOperationsReadiness = {
+  service: "hosted-paper-security-operations-readiness",
+  readiness_state: "readiness_contract_only_not_operational",
+  summary:
+    "Fallback security and operations readiness metadata. Required controls are documented for future hosted paper SaaS, but no secret store, rate limiter, audit monitor, observability pipeline, staging smoke gate, load test, abuse test, or auth boundary test is enabled.",
+  capabilities: {
+    secrets_management_enabled: false,
+    vault_or_managed_secret_store_enabled: false,
+    static_secret_scan_gate_enabled: true,
+    rate_limiting_enabled: false,
+    audit_monitoring_enabled: false,
+    observability_pipeline_enabled: false,
+    ci_release_readiness_gate_enabled: true,
+    production_smoke_gate_enabled: true,
+    staging_smoke_gate_enabled: false,
+    load_test_gate_enabled: false,
+    abuse_test_gate_enabled: false,
+    auth_boundary_test_gate_enabled: false,
+    incident_runbook_enabled: false,
+    production_operations_ready: false,
+  },
+  controls: [
+    {
+      control: "secrets_management",
+      purpose: "Store hosted credentials and signing material outside source code.",
+      current_status: "contract_only_no_secret_store_connected",
+      enabled: false,
+      required_before_hosted_customer_use: true,
+      required_before_production_trading: true,
+      notes: [],
+    },
+    {
+      control: "rate_limiting",
+      purpose: "Protect hosted paper endpoints from accidental or abusive traffic.",
+      current_status: "not_enabled_rate_limit_policy_required",
+      enabled: false,
+      required_before_hosted_customer_use: true,
+      required_before_production_trading: true,
+      notes: [],
+    },
+    {
+      control: "audit_monitoring",
+      purpose: "Alert on suspicious approval, OMS, audit, and integrity events.",
+      current_status: "not_enabled_monitoring_rules_required",
+      enabled: false,
+      required_before_hosted_customer_use: true,
+      required_before_production_trading: true,
+      notes: [],
+    },
+    {
+      control: "observability",
+      purpose: "Trace paper request flow and collect logs/metrics safely.",
+      current_status: "placeholder_only_no_hosted_pipeline",
+      enabled: false,
+      required_before_hosted_customer_use: true,
+      required_before_production_trading: true,
+      notes: [],
+    },
+    {
+      control: "ci_cd_deployment_gates",
+      purpose: "Block unsafe releases and verify production-facing safety copy.",
+      current_status: "release_readiness_and_production_smoke_gate_enabled",
+      enabled: true,
+      required_before_hosted_customer_use: false,
+      required_before_production_trading: true,
+      notes: [],
+    },
+    {
+      control: "staging_smoke_test",
+      purpose: "Verify a staging hosted backend before customer-facing rollout.",
+      current_status: "not_enabled_staging_backend_required",
+      enabled: false,
+      required_before_hosted_customer_use: true,
+      required_before_production_trading: true,
+      notes: [],
+    },
+    {
+      control: "basic_load_abuse_testing",
+      purpose: "Exercise rate limits, denial paths, and read-only endpoint resilience.",
+      current_status: "not_executed_test_plan_required",
+      enabled: false,
+      required_before_hosted_customer_use: true,
+      required_before_production_trading: true,
+      notes: [],
+    },
+    {
+      control: "auth_boundary_testing",
+      purpose: "Verify unauthenticated, cross-tenant, and role-denied paths.",
+      current_status: "not_enabled_real_auth_required",
+      enabled: false,
+      required_before_hosted_customer_use: true,
+      required_before_production_trading: true,
+      notes: [],
+    },
+  ],
+  required_next_slices: [
+    "Select managed secrets store and define rotation policy.",
+    "Add non-production rate limit middleware and denial evidence.",
+    "Define audit monitoring alerts for paper approval and OMS events.",
+    "Wire OpenTelemetry/log drain preview in staging only.",
+    "Add staging smoke test against a non-production hosted backend.",
+    "Add basic load and abuse tests against read-only endpoints.",
+    "Add auth boundary negative tests before any real login provider.",
+    "Create incident response and rollback runbooks.",
+  ],
+  safety_defaults: {
+    trading_mode: "paper",
+    enable_live_trading: false,
+    broker_provider: "paper",
+  },
+  safety_flags: {
+    paper_only: true,
+    read_only: true,
+    live_trading_enabled: false,
+    broker_provider: "paper",
+    secrets_stored: false,
+    credentials_collected: false,
+    broker_credentials_collected: false,
+    auth_provider_enabled: false,
+    customer_account_created: false,
+    hosted_datastore_written: false,
+    external_db_written: false,
+    broker_api_called: false,
+    order_created: false,
+    load_test_executed: false,
+    abuse_test_executed: false,
+    production_security_approval: false,
+    production_trading_ready: false,
+  },
+  docs: {
+    security_operations_readiness:
+      "docs/hosted-paper-security-operations-readiness.md",
+    security_vault_asvs: "docs/security-vault-asvs.md",
+    observability_dr_event_sourcing: "docs/observability-dr-event-sourcing.md",
+    hosted_backend_foundation: "docs/hosted-backend-api-deployment-foundation.md",
+    hosted_paper_saas_foundation: "docs/hosted-paper-saas-foundation-roadmap.md",
+  },
+  warnings: [
+    "Fallback security operations metadata. Backend is unavailable.",
+    "No real secret store, rate limiter, hosted audit monitor, or log drain is enabled.",
+    "No load, abuse, or real auth boundary test was executed by this endpoint.",
+    "Hosted paper SaaS remains NOT READY for customer production use.",
+    "Production Trading Platform remains NOT READY.",
+    "Live trading remains disabled by default.",
+  ],
+};
+
 const fallbackHostedPaperTenant: HostedPaperTenantContext = {
   tenant_id: "mock-tenant-paper-evaluation",
   tenant_name: "Mock Paper Evaluation Tenant",
@@ -2265,6 +2416,7 @@ export default async function Home({ searchParams }: HomeProps) {
     hostedPaperIdentityReadiness,
     hostedPaperIdentityAccessContract,
     hostedPaperAuthProviderSelection,
+    hostedPaperSecurityOperationsReadiness,
     hostedPaperMockSession,
     hostedPaperTenant,
     reviewPacket,
@@ -2371,6 +2523,10 @@ export default async function Home({ searchParams }: HomeProps) {
       fetchJson<HostedPaperAuthProviderSelection>(
         "/api/hosted-paper/auth-provider-selection",
         fallbackHostedPaperAuthProviderSelection,
+      ),
+      fetchJson<HostedPaperSecurityOperationsReadiness>(
+        "/api/hosted-paper/security-operations/readiness",
+        fallbackHostedPaperSecurityOperationsReadiness,
       ),
       fetchJson<HostedPaperMockSession>(
         "/api/hosted-paper/session",
@@ -2485,6 +2641,9 @@ export default async function Home({ searchParams }: HomeProps) {
     hostedWebCommandCenterReadiness.available
       ? undefined
       : `hosted Web Command Center: ${hostedWebCommandCenterReadiness.error}`,
+    hostedPaperSecurityOperationsReadiness.available
+      ? undefined
+      : `hosted paper security operations: ${hostedPaperSecurityOperationsReadiness.error}`,
     hostedPaperMockSession.available
       ? undefined
       : `hosted paper mock session: ${hostedPaperMockSession.error}`,
@@ -2656,6 +2815,16 @@ export default async function Home({ searchParams }: HomeProps) {
                   : hostedPaperAuthProviderSelection.error
               }
               selection={hostedPaperAuthProviderSelection.data}
+            />
+            <HostedPaperSecurityOperationsPanel
+              available={hostedPaperSecurityOperationsReadiness.available}
+              copy={copy.hostedPaperSecurityOperations}
+              error={
+                hostedPaperSecurityOperationsReadiness.available
+                  ? undefined
+                  : hostedPaperSecurityOperationsReadiness.error
+              }
+              readiness={hostedPaperSecurityOperationsReadiness.data}
             />
             <HostedPaperMockSessionPanel
               available={hostedPaperMockSession.available && hostedPaperTenant.available}

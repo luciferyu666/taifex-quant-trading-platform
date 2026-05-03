@@ -400,6 +400,131 @@ export const dashboardCopy = {
           "Live trading remains disabled by default.",
       },
     },
+    hostedPaperSecurityOperations: {
+      eyebrow: "Security / Operations",
+      title: "Hosted Paper security operations readiness",
+      description:
+        "Read-only security and operations boundary for a future hosted paper SaaS product. It documents secrets management, rate limiting, audit monitoring, observability, CI/CD gates, staging smoke tests, load/abuse tests, and auth boundary tests without enabling those systems.",
+      fallbackPrefix:
+        "Hosted paper security operations readiness unavailable. Rendering safe fallback:",
+      endpointLabel: "Read-only endpoint",
+      stateLabel: "Readiness state",
+      capabilitiesLabel: "Operations capabilities",
+      safetyDefaultsLabel: "Safety defaults",
+      safetyFlagsLabel: "Safety flags",
+      controlLabel: "Control",
+      currentStatusLabel: "Current status",
+      enabledLabel: "Enabled",
+      requiredBeforeHostedUseLabel: "Required before hosted customer use",
+      requiredNextSlicesLabel: "Required next slices",
+      warningLabel: "Boundary warnings",
+      capabilityLabels: {
+        secrets_management_enabled: "Secrets management enabled",
+        vault_or_managed_secret_store_enabled: "Vault or managed secret store enabled",
+        static_secret_scan_gate_enabled: "Static secret scan gate enabled",
+        rate_limiting_enabled: "Rate limiting enabled",
+        audit_monitoring_enabled: "Audit monitoring enabled",
+        observability_pipeline_enabled: "Observability pipeline enabled",
+        ci_release_readiness_gate_enabled: "CI release readiness gate enabled",
+        production_smoke_gate_enabled: "Production smoke gate enabled",
+        staging_smoke_gate_enabled: "Staging smoke gate enabled",
+        load_test_gate_enabled: "Load test gate enabled",
+        abuse_test_gate_enabled: "Abuse test gate enabled",
+        auth_boundary_test_gate_enabled: "Auth boundary test gate enabled",
+        incident_runbook_enabled: "Incident runbook enabled",
+        production_operations_ready: "Production operations ready",
+      },
+      safetyFlagLabels: {
+        paper_only: "paper_only",
+        read_only: "read_only",
+        live_trading_enabled: "live_trading_enabled",
+        broker_provider: "broker_provider",
+        secrets_stored: "secrets_stored",
+        credentials_collected: "credentials_collected",
+        broker_credentials_collected: "broker_credentials_collected",
+        auth_provider_enabled: "auth_provider_enabled",
+        customer_account_created: "customer_account_created",
+        hosted_datastore_written: "hosted_datastore_written",
+        external_db_written: "external_db_written",
+        broker_api_called: "broker_api_called",
+        order_created: "order_created",
+        load_test_executed: "load_test_executed",
+        abuse_test_executed: "abuse_test_executed",
+        production_security_approval: "production_security_approval",
+        production_trading_ready: "production_trading_ready",
+      },
+      controlLabels: {
+        secrets_management: "Secrets management",
+        rate_limiting: "Rate limiting",
+        audit_monitoring: "Audit monitoring",
+        observability: "Observability",
+        ci_cd_deployment_gates: "CI/CD deployment gates",
+        staging_smoke_test: "Staging smoke test",
+        basic_load_abuse_testing: "Basic load / abuse testing",
+        auth_boundary_testing: "Auth boundary testing",
+      },
+      purposeLabels: {
+        "Store hosted credentials and signing material outside source code.":
+          "Store hosted credentials and signing material outside source code.",
+        "Protect hosted paper endpoints from accidental or abusive traffic.":
+          "Protect hosted paper endpoints from accidental or abusive traffic.",
+        "Alert on suspicious approval, OMS, audit, and integrity events.":
+          "Alert on suspicious approval, OMS, audit, and integrity events.",
+        "Trace paper request flow and collect logs/metrics safely.":
+          "Trace paper request flow and collect logs/metrics safely.",
+        "Block unsafe releases and verify production-facing safety copy.":
+          "Block unsafe releases and verify production-facing safety copy.",
+        "Verify a staging hosted backend before customer-facing rollout.":
+          "Verify a staging hosted backend before customer-facing rollout.",
+        "Exercise rate limits, denial paths, and read-only endpoint resilience.":
+          "Exercise rate limits, denial paths, and read-only endpoint resilience.",
+        "Verify unauthenticated, cross-tenant, and role-denied paths.":
+          "Verify unauthenticated, cross-tenant, and role-denied paths.",
+      },
+      statusLabels: {
+        contract_only_no_secret_store_connected: "Contract only; no secret store connected",
+        not_enabled_rate_limit_policy_required: "Not enabled; rate limit policy required",
+        not_enabled_monitoring_rules_required: "Not enabled; monitoring rules required",
+        placeholder_only_no_hosted_pipeline: "Placeholder only; no hosted pipeline",
+        release_readiness_and_production_smoke_gate_enabled:
+          "Release readiness and production smoke gate enabled",
+        not_enabled_staging_backend_required: "Not enabled; staging backend required",
+        not_executed_test_plan_required: "Not executed; test plan required",
+        not_enabled_real_auth_required: "Not enabled; real auth required",
+      },
+      requiredNextSliceLabels: {
+        "Select managed secrets store and define rotation policy.":
+          "Select managed secrets store and define rotation policy.",
+        "Add non-production rate limit middleware and denial evidence.":
+          "Add non-production rate limit middleware and denial evidence.",
+        "Define audit monitoring alerts for paper approval and OMS events.":
+          "Define audit monitoring alerts for paper approval and OMS events.",
+        "Wire OpenTelemetry/log drain preview in staging only.":
+          "Wire OpenTelemetry/log drain preview in staging only.",
+        "Add staging smoke test against a non-production hosted backend.":
+          "Add staging smoke test against a non-production hosted backend.",
+        "Add basic load and abuse tests against read-only endpoints.":
+          "Add basic load and abuse tests against read-only endpoints.",
+        "Add auth boundary negative tests before any real login provider.":
+          "Add auth boundary negative tests before any real login provider.",
+        "Create incident response and rollback runbooks.":
+          "Create incident response and rollback runbooks.",
+      },
+      warningLabels: {
+        "This endpoint is read-only security and operations metadata only.":
+          "This endpoint is read-only security and operations metadata only.",
+        "No real secret store, rate limiter, hosted audit monitor, or log drain is enabled.":
+          "No real secret store, rate limiter, hosted audit monitor, or log drain is enabled.",
+        "No load, abuse, or real auth boundary test was executed by this endpoint.":
+          "No load, abuse, or real auth boundary test was executed by this endpoint.",
+        "Hosted paper SaaS remains NOT READY for customer production use.":
+          "Hosted paper SaaS remains NOT READY for customer production use.",
+        "Production Trading Platform remains NOT READY.":
+          "Production Trading Platform remains NOT READY.",
+        "Live trading remains disabled by default.":
+          "Live trading remains disabled by default.",
+      },
+    },
     hostedPaperReadiness: {
       eyebrow: "Hosted Paper API",
       title: "Hosted Paper API Readiness",
@@ -3106,6 +3231,131 @@ export const dashboardCopy = {
           "不建立真實 login、session cookie、customer account 或 tenant record。",
         "No hosted datastore is written and no broker API is called.":
           "不寫入 hosted datastore，也不呼叫 broker API。",
+        "Production Trading Platform remains NOT READY.":
+          "Production Trading Platform 仍為 NOT READY。",
+        "Live trading remains disabled by default.":
+          "Live trading remains disabled by default.",
+      },
+    },
+    hostedPaperSecurityOperations: {
+      eyebrow: "Security / Operations",
+      title: "Hosted Paper security operations 就緒狀態",
+      description:
+        "針對未來 hosted paper SaaS 的只讀 security 與 operations 邊界。此區塊文件化 secrets management、rate limiting、audit monitoring、observability、CI/CD gates、staging smoke tests、load / abuse tests 與 auth boundary tests，但不啟用這些系統。",
+      fallbackPrefix:
+        "Hosted paper security operations readiness 無法取得，正在顯示安全備援資料：",
+      endpointLabel: "只讀 endpoint",
+      stateLabel: "就緒狀態",
+      capabilitiesLabel: "Operations 能力",
+      safetyDefaultsLabel: "安全預設",
+      safetyFlagsLabel: "安全旗標",
+      controlLabel: "控制項",
+      currentStatusLabel: "目前狀態",
+      enabledLabel: "已啟用",
+      requiredBeforeHostedUseLabel: "Hosted customer use 前必要",
+      requiredNextSlicesLabel: "下一步必要切片",
+      warningLabel: "邊界警示",
+      capabilityLabels: {
+        secrets_management_enabled: "Secrets management 已啟用",
+        vault_or_managed_secret_store_enabled: "Vault 或 managed secret store 已啟用",
+        static_secret_scan_gate_enabled: "Static secret scan gate 已啟用",
+        rate_limiting_enabled: "Rate limiting 已啟用",
+        audit_monitoring_enabled: "Audit monitoring 已啟用",
+        observability_pipeline_enabled: "Observability pipeline 已啟用",
+        ci_release_readiness_gate_enabled: "CI release readiness gate 已啟用",
+        production_smoke_gate_enabled: "Production smoke gate 已啟用",
+        staging_smoke_gate_enabled: "Staging smoke gate 已啟用",
+        load_test_gate_enabled: "Load test gate 已啟用",
+        abuse_test_gate_enabled: "Abuse test gate 已啟用",
+        auth_boundary_test_gate_enabled: "Auth boundary test gate 已啟用",
+        incident_runbook_enabled: "Incident runbook 已啟用",
+        production_operations_ready: "Production operations ready",
+      },
+      safetyFlagLabels: {
+        paper_only: "paper_only",
+        read_only: "read_only",
+        live_trading_enabled: "live_trading_enabled",
+        broker_provider: "broker_provider",
+        secrets_stored: "secrets_stored",
+        credentials_collected: "credentials_collected",
+        broker_credentials_collected: "broker_credentials_collected",
+        auth_provider_enabled: "auth_provider_enabled",
+        customer_account_created: "customer_account_created",
+        hosted_datastore_written: "hosted_datastore_written",
+        external_db_written: "external_db_written",
+        broker_api_called: "broker_api_called",
+        order_created: "order_created",
+        load_test_executed: "load_test_executed",
+        abuse_test_executed: "abuse_test_executed",
+        production_security_approval: "production_security_approval",
+        production_trading_ready: "production_trading_ready",
+      },
+      controlLabels: {
+        secrets_management: "Secrets management",
+        rate_limiting: "Rate limiting",
+        audit_monitoring: "Audit monitoring",
+        observability: "Observability",
+        ci_cd_deployment_gates: "CI/CD deployment gates",
+        staging_smoke_test: "Staging smoke test",
+        basic_load_abuse_testing: "Basic load / abuse testing",
+        auth_boundary_testing: "Auth boundary testing",
+      },
+      purposeLabels: {
+        "Store hosted credentials and signing material outside source code.":
+          "將 hosted credentials 與 signing material 存放於 source code 外。",
+        "Protect hosted paper endpoints from accidental or abusive traffic.":
+          "保護 hosted paper endpoints，避免非預期或濫用流量。",
+        "Alert on suspicious approval, OMS, audit, and integrity events.":
+          "針對可疑 approval、OMS、audit 與 integrity events 觸發告警。",
+        "Trace paper request flow and collect logs/metrics safely.":
+          "安全追蹤 paper request flow 並收集 logs / metrics。",
+        "Block unsafe releases and verify production-facing safety copy.":
+          "阻擋不安全 release，並驗證 production-facing safety copy。",
+        "Verify a staging hosted backend before customer-facing rollout.":
+          "Customer-facing rollout 前先驗證 staging hosted backend。",
+        "Exercise rate limits, denial paths, and read-only endpoint resilience.":
+          "測試 rate limits、denial paths 與 read-only endpoint resilience。",
+        "Verify unauthenticated, cross-tenant, and role-denied paths.":
+          "驗證 unauthenticated、cross-tenant 與 role-denied paths。",
+      },
+      statusLabels: {
+        contract_only_no_secret_store_connected: "僅 contract；尚未連接 secret store",
+        not_enabled_rate_limit_policy_required: "尚未啟用；需要 rate limit policy",
+        not_enabled_monitoring_rules_required: "尚未啟用；需要 monitoring rules",
+        placeholder_only_no_hosted_pipeline: "僅 placeholder；沒有 hosted pipeline",
+        release_readiness_and_production_smoke_gate_enabled:
+          "Release readiness 與 production smoke gate 已啟用",
+        not_enabled_staging_backend_required: "尚未啟用；需要 staging backend",
+        not_executed_test_plan_required: "尚未執行；需要 test plan",
+        not_enabled_real_auth_required: "尚未啟用；需要 real auth",
+      },
+      requiredNextSliceLabels: {
+        "Select managed secrets store and define rotation policy.":
+          "選擇 managed secrets store 並定義 rotation policy。",
+        "Add non-production rate limit middleware and denial evidence.":
+          "加入 non-production rate limit middleware 與 denial evidence。",
+        "Define audit monitoring alerts for paper approval and OMS events.":
+          "定義 paper approval 與 OMS events 的 audit monitoring alerts。",
+        "Wire OpenTelemetry/log drain preview in staging only.":
+          "僅在 staging 串接 OpenTelemetry / log drain preview。",
+        "Add staging smoke test against a non-production hosted backend.":
+          "針對 non-production hosted backend 加入 staging smoke test。",
+        "Add basic load and abuse tests against read-only endpoints.":
+          "針對 read-only endpoints 加入 basic load 與 abuse tests。",
+        "Add auth boundary negative tests before any real login provider.":
+          "任何 real login provider 前先加入 auth boundary negative tests。",
+        "Create incident response and rollback runbooks.":
+          "建立 incident response 與 rollback runbooks。",
+      },
+      warningLabels: {
+        "This endpoint is read-only security and operations metadata only.":
+          "此 endpoint 僅為 security 與 operations 只讀 metadata。",
+        "No real secret store, rate limiter, hosted audit monitor, or log drain is enabled.":
+          "未啟用真實 secret store、rate limiter、hosted audit monitor 或 log drain。",
+        "No load, abuse, or real auth boundary test was executed by this endpoint.":
+          "此 endpoint 不執行 load、abuse 或 real auth boundary test。",
+        "Hosted paper SaaS remains NOT READY for customer production use.":
+          "Hosted paper SaaS 尚未達 customer production use 標準。",
         "Production Trading Platform remains NOT READY.":
           "Production Trading Platform 仍為 NOT READY。",
         "Live trading remains disabled by default.":

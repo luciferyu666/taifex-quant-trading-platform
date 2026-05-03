@@ -24,6 +24,7 @@ GET /api/hosted-paper/datastore-readiness
 GET /api/hosted-paper/production-datastore/readiness
 GET /api/hosted-paper/identity-access-contract
 GET /api/hosted-paper/auth-provider-selection
+GET /api/hosted-paper/security-operations/readiness
 ```
 
 `GET /api/hosted-backend/environment` and
@@ -110,6 +111,15 @@ needs. It remains a read-only selection matrix with
 or enable any provider, create accounts, issue sessions, add secrets, write
 hosted records, call brokers, or create orders.
 
+`GET /api/hosted-paper/security-operations/readiness` defines the security and
+operations boundary for future hosted paper SaaS. It lists secrets management,
+rate limiting, audit monitoring, observability, CI/CD gates, staging smoke
+tests, load/abuse tests, auth boundary tests, and incident runbooks as required
+controls. It keeps secret storage, runtime rate limiting, hosted audit
+monitoring, hosted observability, staging smoke, load/abuse/auth boundary test
+gates, customer accounts, hosted writes, broker calls, and live trading
+disabled.
+
 ## Required SaaS Foundation Path
 
 1. Hosted backend/API deployment foundation
@@ -122,6 +132,8 @@ hosted records, call brokers, or create orders.
 8. RBAC/ABAC enforcement
 9. Paper workflow persistence
 10. Hosted customer demo tenant
+11. Security / operations readiness controls
+12. Staging smoke, load, abuse, and auth boundary tests
 
 ## Environment Boundary
 
@@ -188,6 +200,11 @@ local machine only, and does not create hosted customer accounts.
 - `GET /api/hosted-paper/auth-provider-selection` returns
   `selection_matrix_only` and compares Clerk, Auth0, Descope, and Vercel OIDC /
   Sign in with Vercel without selecting or enabling any provider.
+- `GET /api/hosted-paper/security-operations/readiness` returns
+  `readiness_contract_only_not_operational`, marks CI release readiness and
+  production smoke gates enabled, and marks secrets management, rate limiting,
+  audit monitoring, observability pipeline, staging smoke, load, abuse, and auth
+  boundary gates not enabled.
 - Future hosted paper record models require `tenant_id`.
 - Migration apply remains disabled and no hosted database connection is
   attempted.

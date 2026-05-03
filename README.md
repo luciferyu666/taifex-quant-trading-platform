@@ -230,6 +230,14 @@ routing values only, not authentication or secrets. The UI can display login
 status, tenant, role, and permissions from the mock session contract, but real
 login, customer accounts, RBAC/ABAC enforcement, hosted datastore writes, broker
 access, hosted customer login, and live trading remain disabled.
+Hosted paper security and operations readiness is documented in
+`docs/hosted-paper-security-operations-readiness.md` and exposed as read-only
+metadata at `GET /api/hosted-paper/security-operations/readiness`. It lists
+secrets management, rate limiting, audit monitoring, observability, CI/CD gates,
+staging smoke tests, load/abuse tests, and auth boundary tests as required
+hosted SaaS controls while keeping secret storage, rate limiting, hosted audit
+monitoring, log drains, customer accounts, hosted writes, broker calls, and live
+trading disabled.
 
 ### Audit and Observability
 

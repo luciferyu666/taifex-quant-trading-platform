@@ -22,6 +22,8 @@ const files = {
     "frontend/app/components/HostedPaperIdentityAccessContractPanel.tsx",
   hostedPaperAuthProviderSelection:
     "frontend/app/components/HostedPaperAuthProviderSelectionPanel.tsx",
+  hostedPaperSecurityOperations:
+    "frontend/app/components/HostedPaperSecurityOperationsPanel.tsx",
   hostedPaperSession: "frontend/app/components/HostedPaperMockSessionPanel.tsx",
   hostedPaperTenantEvidence:
     "frontend/app/components/HostedPaperTenantBoundaryEvidencePanel.tsx",
@@ -296,6 +298,30 @@ requireNotContains("Hosted paper auth provider selection panel does not call wor
 requireNotContains("Hosted paper auth provider selection panel does not collect API keys", sourceByFile.hostedPaperAuthProviderSelection.toLowerCase(), "api_key");
 requireNotContains("Hosted paper auth provider selection panel does not collect account IDs", sourceByFile.hostedPaperAuthProviderSelection.toLowerCase(), "account_id");
 requireNotContains("Hosted paper auth provider selection panel does not collect certificates", sourceByFile.hostedPaperAuthProviderSelection.toLowerCase(), "certificate");
+requireContains("English hosted paper security operations copy exists", sourceByFile.i18n, "Hosted Paper security operations readiness");
+requireContains("Traditional Chinese hosted paper security operations copy exists", sourceByFile.i18n, "Hosted Paper security operations 就緒狀態");
+requireContains("Hosted paper security operations component is implemented", sourceByFile.hostedPaperSecurityOperations, "HostedPaperSecurityOperationsPanel");
+requireContains("Hosted paper security operations endpoint is fetched on page", sourceByFile.page, "/api/hosted-paper/security-operations/readiness");
+requireContains("Hosted paper security operations panel is mounted on page", sourceByFile.page, "HostedPaperSecurityOperationsPanel");
+requireContains("Hosted paper security operations shows secrets management flag", sourceByFile.hostedPaperSecurityOperations, "secrets_management_enabled");
+requireContains("Hosted paper security operations shows rate limiting flag", sourceByFile.hostedPaperSecurityOperations, "rate_limiting_enabled");
+requireContains("Hosted paper security operations shows audit monitoring flag", sourceByFile.hostedPaperSecurityOperations, "audit_monitoring_enabled");
+requireContains("Hosted paper security operations shows observability flag", sourceByFile.hostedPaperSecurityOperations, "observability_pipeline_enabled");
+requireContains("Hosted paper security operations shows CI gate flag", sourceByFile.hostedPaperSecurityOperations, "ci_release_readiness_gate_enabled");
+requireContains("Hosted paper security operations shows staging smoke flag", sourceByFile.hostedPaperSecurityOperations, "staging_smoke_gate_enabled");
+requireContains("Hosted paper security operations shows load test flag", sourceByFile.hostedPaperSecurityOperations, "load_test_gate_enabled");
+requireContains("Hosted paper security operations shows abuse test flag", sourceByFile.hostedPaperSecurityOperations, "abuse_test_gate_enabled");
+requireContains("Hosted paper security operations shows auth boundary flag", sourceByFile.hostedPaperSecurityOperations, "auth_boundary_test_gate_enabled");
+requireContains("Hosted paper security operations shows production operations false", sourceByFile.hostedPaperSecurityOperations, "production_operations_ready");
+requireContains("Hosted paper security operations shows secret safety flag", sourceByFile.hostedPaperSecurityOperations, "secrets_stored");
+requireContains("Hosted paper security operations shows credential safety flag", sourceByFile.hostedPaperSecurityOperations, "credentials_collected");
+requireContains("Hosted paper security operations shows broker safety flag", sourceByFile.hostedPaperSecurityOperations, "broker_api_called");
+requireContains("Hosted paper security operations shows order safety flag", sourceByFile.hostedPaperSecurityOperations, "order_created");
+requireNotContains("Hosted paper security operations panel does not fetch directly", sourceByFile.hostedPaperSecurityOperations, "fetch(");
+requireNotContains("Hosted paper security operations panel does not call workflow record", sourceByFile.hostedPaperSecurityOperations, "/api/paper-execution/workflow/record");
+requireNotContains("Hosted paper security operations panel does not collect API keys", sourceByFile.hostedPaperSecurityOperations.toLowerCase(), "api_key");
+requireNotContains("Hosted paper security operations panel does not collect account IDs", sourceByFile.hostedPaperSecurityOperations.toLowerCase(), "account_id");
+requireNotContains("Hosted paper security operations panel does not collect certificates", sourceByFile.hostedPaperSecurityOperations.toLowerCase(), "certificate");
 requireContains("English demo guide copy exists", sourceByFile.i18n, "Customer Demo Guided Flow");
 requireContains("Traditional Chinese demo guide copy exists", sourceByFile.i18n, "客戶測試導覽流程");
 requireContains("Demo guide component is implemented", sourceByFile.demoGuide, "DemoGuidePanel");
