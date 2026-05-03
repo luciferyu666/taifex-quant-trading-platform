@@ -3205,6 +3205,84 @@ Safety boundary:
 - Production Trading Platform remains NOT READY.
 - Live trading remains disabled by default.
 
+## Paper OMS Productionization Blueprint Verification
+
+Feature commit:
+
+```text
+c397634 Add Paper OMS productionization blueprint
+```
+
+Verification results:
+
+- GitHub Actions Release Readiness: passed.
+- GitHub Actions Run ID: `25266590931`.
+- Vercel production deployment: `dpl_5fXBVxTMfntKASgvABfx1aavS6bd`.
+- Production alias:
+  `https://taifex-quant-trading-platform-front.vercel.app`.
+- Production smoke gate: passed.
+- Local validation completed before commit:
+  - `make paper-oms-productionization-blueprint-check`
+  - `make paper-oms-production-readiness-check`
+  - `cd backend && .venv/bin/python -m pytest tests/test_paper_oms_production_readiness_routes.py tests/test_paper_oms_productionization_blueprint_routes.py`
+  - `make check`
+- Post-push verification completed:
+  - `gh run watch 25266590931 --exit-status`
+  - `cd frontend && vercel ls`
+  - `cd frontend && vercel inspect https://taifex-quant-trading-platform-front.vercel.app`
+  - `make frontend-production-smoke-check`
+  - `git status --short --branch`
+
+Scope verified:
+
+- Added read-only endpoint:
+  `GET /api/paper-execution/reliability/productionization-blueprint`.
+- Added `backend/app/domain/paper_oms_productionization_blueprint.py`.
+- Added `backend/tests/test_paper_oms_productionization_blueprint_routes.py`.
+- Added `docs/paper-oms-productionization-blueprint.md`.
+- Added `scripts/paper-oms-productionization-blueprint-check.sh`.
+- Added `make paper-oms-productionization-blueprint-check`.
+- Added blueprint coverage to `scripts/check.sh`.
+- Updated `README.md`, `docs/oms-state-machine.md`, and
+  `docs/phase-4-risk-oms-broker-gateway.md`.
+
+Blueprint scope:
+
+- Durable queue / outbox.
+- Asynchronous order processing.
+- Duplicate prevention across sessions.
+- Timeout handling productionization.
+- Execution report model.
+- Reconciliation loop.
+- Amend / replace / cancel lifecycle.
+- Partial-fill quantity accounting.
+
+Safety boundary:
+
+- The blueprint is read-only contract metadata.
+- No durable queue worker was started.
+- No async OMS processing was enabled.
+- No hosted database connection was attempted.
+- No database was written.
+- No broker API is called.
+- No order is created.
+- No credentials are collected.
+- `queue_worker_started=false`.
+- `async_processing_enabled=false`.
+- `hosted_database_connected=false`.
+- `database_written=false`.
+- `external_db_written=false`.
+- `broker_api_called=false`.
+- `order_created=false`.
+- `credentials_collected=false`.
+- `production_oms_enabled=false`.
+- `production_trading_ready=false`.
+- `paper_only=true`.
+- `live_trading_enabled=false`.
+- `broker_provider=paper`.
+- Production Trading Platform remains NOT READY.
+- Live trading remains disabled by default.
+
 ## Deployment Refresh Recording Policy
 
 Record-only documentation commits can trigger a new Vercel production
