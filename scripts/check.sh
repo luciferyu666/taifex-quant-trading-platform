@@ -93,6 +93,7 @@ for required_file in \
   docs/paper-demo-evidence-export.md \
   docs/paper-broker-simulation-evidence-export.md \
   docs/paper-broker-simulation-readiness.md \
+  docs/mock-backend-demo-mvp.md \
   docs/paper-risk-cross-account-readiness.md \
   docs/paper-risk-evidence-export.md \
   docs/paper-audit-integrity-preview.md \
@@ -314,6 +315,11 @@ if [[ ! -x scripts/paper-broker-simulation-readiness-check.sh ]]; then
   missing_customer_eval_file=1
 fi
 
+if [[ ! -x scripts/mock-backend-demo-check.sh ]]; then
+  printf 'scripts/mock-backend-demo-check.sh must be executable.\n' >&2
+  missing_customer_eval_file=1
+fi
+
 if [[ ! -x scripts/paper-risk-cross-account-readiness-check.sh ]]; then
   printf 'scripts/paper-risk-cross-account-readiness-check.sh must be executable.\n' >&2
   missing_customer_eval_file=1
@@ -344,6 +350,7 @@ bash scripts/paper-audit-compliance-trail-readiness-check.sh
 bash scripts/paper-oms-production-readiness-check.sh
 bash scripts/paper-oms-productionization-blueprint-check.sh
 bash scripts/paper-broker-simulation-readiness-check.sh
+bash scripts/mock-backend-demo-check.sh
 bash scripts/paper-risk-cross-account-readiness-check.sh
 
 printf 'Checking Facebook community launch content...\n'
@@ -414,6 +421,7 @@ for required_file in \
   scripts/seed-paper-execution-demo.py \
   scripts/export-paper-demo-evidence.py \
   scripts/export-paper-broker-simulation-evidence.py \
+  scripts/mock-backend-demo-check.sh \
   scripts/export-paper-risk-evidence.py \
   scripts/export-hosted-paper-tenant-boundary-evidence.py \
   scripts/verify-paper-audit-integrity.py \
@@ -441,6 +449,10 @@ for required_file in \
   backend/app/api/paper_risk_routes.py \
   backend/app/api/hosted_backend_routes.py \
   backend/app/api/hosted_paper_routes.py \
+  backend/app/api/mock_backend_routes.py \
+  backend/app/domain/mock_backend.py \
+  backend/tests/test_mock_backend_routes.py \
+  frontend/app/components/MockBackendDemoPanel.tsx \
   backend/app/api/roadmap_routes.py \
   data-pipeline/migrations/001_phase_2_data_platform.sql \
   data-pipeline/migrations/apply_local_migrations.py \
@@ -686,6 +698,9 @@ if [[ -x "${BACKEND_PYTHON}" ]]; then
 
   printf 'Running Paper Broker simulation evidence export dry-run...\n'
   "${BACKEND_PYTHON}" scripts/export-paper-broker-simulation-evidence.py >/dev/null
+
+  printf 'Running Mock Backend Demo MVP route tests...\n'
+  (cd backend && .venv/bin/python -m pytest tests/test_mock_backend_routes.py)
 
   printf 'Running Paper Risk evidence export dry-run...\n'
   "${BACKEND_PYTHON}" scripts/export-paper-risk-evidence.py >/dev/null

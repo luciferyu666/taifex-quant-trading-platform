@@ -31,6 +31,7 @@ const files = {
     "frontend/app/components/HostedPaperTenantBoundaryEvidencePanel.tsx",
   localBackendMode: "frontend/app/components/LocalBackendDemoModePanel.tsx",
   localDemoSetup: "frontend/app/components/LocalDemoSetupPanel.tsx",
+  mockBackendDemo: "frontend/app/components/MockBackendDemoPanel.tsx",
   paperComplianceApproval:
     "frontend/app/components/PaperComplianceApprovalReadinessPanel.tsx",
   paperApprovals: "frontend/app/components/PaperApprovalQueuePanel.tsx",
@@ -581,6 +582,29 @@ requireNotContains("Local demo setup does not call workflow record", sourceByFil
 requireNotContains("Local demo setup does not collect API keys", sourceByFile.localDemoSetup.toLowerCase(), "api_key");
 requireNotContains("Local demo setup does not collect account IDs", sourceByFile.localDemoSetup.toLowerCase(), "account_id");
 requireNotContains("Local demo setup does not collect certificates", sourceByFile.localDemoSetup.toLowerCase(), "certificate");
+requireContains("English mock backend demo copy exists", sourceByFile.i18n, "Mock Backend Demo MVP");
+requireContains("Traditional Chinese mock backend demo copy exists", sourceByFile.i18n, "模擬後端");
+requireContains("Mock backend demo component is implemented", sourceByFile.mockBackendDemo, "MockBackendDemoPanel");
+requireContains("Mock backend status endpoint is called", sourceByFile.mockBackendDemo, "/api/mock-backend/status");
+requireContains("Mock backend market data endpoint is called", sourceByFile.mockBackendDemo, "/api/mock-backend/market-data/preview");
+requireContains("Mock backend strategy endpoint is called", sourceByFile.mockBackendDemo, "/api/mock-backend/strategy/run");
+requireContains("Mock backend order endpoint is called", sourceByFile.mockBackendDemo, "/api/mock-backend/order/simulate");
+requireContains("Mock backend reset endpoint is called", sourceByFile.mockBackendDemo, "/api/mock-backend/demo-session/reset");
+requireContains("Mock backend panel checks paper_only", sourceByFile.mockBackendDemo, "paper_only");
+requireContains("Mock backend panel checks live disabled", sourceByFile.mockBackendDemo, "live_trading_enabled");
+requireContains("Mock backend panel checks broker flag", sourceByFile.mockBackendDemo, "broker_api_called");
+requireContains("Mock backend panel checks external data flag", sourceByFile.mockBackendDemo, "external_market_data_downloaded");
+requireContains("Mock backend panel checks real order flag", sourceByFile.mockBackendDemo, "real_order_created");
+requireContains("Mock backend panel checks credential flag", sourceByFile.mockBackendDemo, "credentials_collected");
+requireContains("Mock backend panel checks production readiness flag", sourceByFile.mockBackendDemo, "production_trading_ready");
+requireContains("Mock backend panel is mounted on page", sourceByFile.page, "MockBackendDemoPanel");
+requireContains("Mock backend copy keeps no real money language", sourceByFile.i18n, "No real money");
+requireContains("Mock backend copy keeps no broker language", sourceByFile.i18n, "No broker");
+requireContains("Mock backend copy keeps not investment advice language", sourceByFile.i18n, "Not investment advice");
+requireNotContains("Mock backend panel does not call paper workflow record", sourceByFile.mockBackendDemo, "/api/paper-execution/workflow/record");
+requireNotContains("Mock backend panel does not collect API keys", sourceByFile.mockBackendDemo.toLowerCase(), "api_key");
+requireNotContains("Mock backend panel does not collect account IDs", sourceByFile.mockBackendDemo.toLowerCase(), "account_id");
+requireNotContains("Mock backend panel does not collect certificates", sourceByFile.mockBackendDemo.toLowerCase(), "certificate");
 requireContains("English paper records copy exists", sourceByFile.i18n, "Persisted paper workflow records");
 requireContains("Traditional Chinese paper records copy exists", sourceByFile.i18n, "已持久化紙上流程紀錄");
 requireContains("English paper evidence copy exists", sourceByFile.i18n, "Paper demo evidence viewer");

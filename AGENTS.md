@@ -15,10 +15,14 @@ High-signal project rules for Codex. Treat this file as the default context and 
 - Keep `.env.example` safe: `TRADING_MODE=paper`, `ENABLE_LIVE_TRADING=false`, `BROKER_PROVIDER=paper`.
 - Never edit `.env`, commit secrets, collect credentials, or add broker API keys/account IDs/certificates.
 - Never enable live trading, live approval, broker login, real order submission, real account data, or investment advice.
+- Keep live trading disabled by default.
+- Do not write investment advice.
 - Strategies emit standardized signals only. They must never call broker SDKs.
 - Any order-like flow must go through Risk Engine -> OMS -> Paper Broker Gateway.
+- Risk Engine must approve before OMS/Broker Gateway.
 - Current broker path is paper-only. Real Shioaji/Fubon adapters are future work only.
 - Do not claim profitability, alpha, risk-free trading, production OMS, WORM audit compliance, or production trading readiness.
+- Do not claim guaranteed returns.
 
 ## Current Product Boundaries
 

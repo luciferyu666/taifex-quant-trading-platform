@@ -138,6 +138,14 @@ Broker SDK access must stay isolated behind `broker-gateway`. Strategies must ne
 
 The frontend is intended to become a command center for health, portfolio state, strategy status, paper trading, risk limits, and audit review.
 
+The Mock Backend Demo MVP is documented in `docs/mock-backend-demo-mvp.md`.
+It exposes deterministic paper-only endpoints under `/api/mock-backend/*` for
+mock TX / MTX / TMF market data, signal-only strategy simulation, paper order
+simulation through Risk Engine / OMS / Paper Broker Gateway, and paper-only
+portfolio summaries. It does not connect to brokers, download external market
+data, collect credentials, write production data, create real orders, or enable
+live trading.
+
 Production Vercel is a read-only presentation and evaluation surface. It cannot
 directly read a user's local SQLite paper records; actual paper OMS / audit
 records require local backend demo mode or a future controlled hosted API/data
