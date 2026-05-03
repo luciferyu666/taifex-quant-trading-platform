@@ -3283,6 +3283,78 @@ Safety boundary:
 - Production Trading Platform remains NOT READY.
 - Live trading remains disabled by default.
 
+## Paper Audit Compliance Trail Readiness Verification
+
+Feature commit:
+
+```text
+ba62803 Add paper audit compliance trail readiness
+```
+
+Verification results:
+
+- GitHub Actions Release Readiness: passed.
+- GitHub Actions Run ID: `25267375061`.
+- Vercel production deployment: `dpl_EDZMUFJrw7gzAMhokDggZrPeMyQj`.
+- Production alias:
+  `https://taifex-quant-trading-platform-front.vercel.app`.
+- Production smoke gate: passed.
+- Local validation completed before commit:
+  - `make paper-audit-compliance-trail-readiness-check`
+  - `cd backend && .venv/bin/python -m pytest tests/test_paper_audit_worm_readiness_routes.py tests/test_paper_audit_compliance_trail_routes.py`
+  - `git diff --check`
+  - `make check`
+- Post-push verification completed:
+  - `gh run watch 25267375061 --exit-status`
+  - `cd frontend && vercel ls`
+  - `cd frontend && vercel inspect https://taifex-quant-trading-platform-front.vercel.app`
+  - `make frontend-production-smoke-check`
+  - `git status --short --branch`
+
+Scope verified:
+
+- Added read-only endpoint:
+  `GET /api/paper-execution/audit-integrity/compliance-trail-readiness`.
+- Added `backend/app/domain/paper_audit_compliance_trail.py`.
+- Added `backend/tests/test_paper_audit_compliance_trail_routes.py`.
+- Added `docs/paper-audit-compliance-trail-readiness.md`.
+- Added `scripts/paper-audit-compliance-trail-readiness-check.sh`.
+- Added `make paper-audit-compliance-trail-readiness-check`.
+- Added compliance trail readiness coverage to `scripts/check.sh`.
+- Updated `README.md`, `docs/paper-audit-worm-readiness.md`, and
+  `docs/paper-shadow-live-boundary.md`.
+
+Readiness boundary:
+
+- Local SQLite audit records are demo/dev scaffolding only.
+- Local hash-chain metadata is tamper-evidence preview only.
+- No append-only audit service is enabled.
+- No immutable audit log or WORM storage is enabled.
+- No real reviewer login is enabled.
+- No RBAC / ABAC enforcement is enabled.
+- No immutable decision history is enabled.
+- No production retention, legal hold, or export policy is enforced.
+- No formal compliance claim is made.
+
+Safety boundary:
+
+- The readiness endpoint is read-only metadata.
+- No database was written by this readiness contract.
+- No external datastore was written.
+- No broker API is called.
+- No order is created.
+- No credentials are collected.
+- `paper_only=true`.
+- `read_only=true`.
+- `live_trading_enabled=false`.
+- `broker_provider=paper`.
+- `append_only_audit_service_enabled=false`.
+- `immutable_log_claim=false`.
+- `compliance_claim=false`.
+- `production_trading_ready=false`.
+- Production Trading Platform remains NOT READY.
+- Live trading remains disabled by default.
+
 ## Deployment Refresh Recording Policy
 
 Record-only documentation commits can trigger a new Vercel production
