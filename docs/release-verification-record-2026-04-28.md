@@ -3552,6 +3552,61 @@ Production Trading Platform: NOT READY
 Live trading: disabled by default
 ```
 
+## Mock Backend Demo MVP Verification
+
+Verification date: 2026-05-03
+
+Change verified:
+
+- Commit: `fb46ded Add mock backend demo MVP foundation`
+- Scope:
+  - Added deterministic Mock Backend Demo MVP APIs under `/api/mock-backend/*`.
+  - Added deterministic TX / MTX / TMF market data preview.
+  - Added signal-only mock strategy run.
+  - Added paper order simulation through Risk Engine, OMS lifecycle, and Paper Broker Gateway simulation.
+  - Added paper-only portfolio summary.
+  - Added Web Command Center `MockBackendDemoPanel`.
+  - Added `make mock-backend-demo-check`.
+
+Validation:
+
+- GitHub Actions Release Readiness: passed
+- Run ID: `25277802473`
+- Vercel frontend production deployment: Ready
+- Vercel deployment ID: `dpl_5WB7QMnjrtHMqXgcQBBpXYR6Wz8Z`
+- Production alias: `https://taifex-quant-trading-platform-front.vercel.app`
+- Production smoke gate: passed
+- Local validation before commit:
+  - `make mock-backend-demo-check`
+  - `cd backend && .venv/bin/python -m pytest tests/test_mock_backend_routes.py`
+  - `make frontend-i18n-check`
+  - `cd frontend && npm run typecheck`
+  - `cd frontend && npm run build`
+  - `make check`
+
+Safety boundary:
+
+- Mock Backend uses deterministic local demo data only.
+- Paper Only.
+- No real broker connection.
+- No external market data download.
+- No credentials collected.
+- No production database writes.
+- No real order creation.
+- No live trading path.
+- No investment advice or profitability claim.
+- `paper_only=true`.
+- `mock_backend=true`.
+- `deterministic_data=true`.
+- `live_trading_enabled=false`.
+- `broker_api_called=false`.
+- `external_market_data_downloaded=false`.
+- `real_order_created=false`.
+- `credentials_collected=false`.
+- `production_trading_ready=false`.
+- Production Trading Platform remains NOT READY.
+- Live trading remains disabled by default.
+
 ## Marketing Website Reachability
 
 Command:
