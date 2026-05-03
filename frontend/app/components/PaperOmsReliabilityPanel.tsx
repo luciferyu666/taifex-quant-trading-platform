@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 
+import { commandCenterApiBaseUrl } from "../apiBase";
 import type { DashboardCopy } from "../i18n";
 
 export type PaperOmsReliabilityStatus = {
@@ -115,7 +116,7 @@ type PaperOmsReliabilityPanelProps = {
   timeoutCandidates: PaperOrderTimeoutCandidate[];
 };
 
-const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL ?? "http://localhost:8000";
+const backendUrl = commandCenterApiBaseUrl;
 
 const trueIsSafe = new Set([
   "paper_only",

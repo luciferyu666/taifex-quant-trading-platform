@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 
+import { commandCenterApiBaseUrl } from "../apiBase";
 import type { DashboardCopy } from "../i18n";
 import {
   PaperAuditTimelinePanel,
@@ -37,7 +38,7 @@ type PaperExecutionRecordsPanelProps = {
   auditEvents: PaperAuditEventRecord[];
 };
 
-const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL ?? "http://localhost:8000";
+const backendUrl = commandCenterApiBaseUrl;
 
 export function PaperExecutionRecordsPanel({
   copy,

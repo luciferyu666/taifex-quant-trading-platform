@@ -36,6 +36,10 @@ from app.domain.hosted_paper_session import (
     HostedPaperTenantContext,
     get_hosted_paper_mock_session,
 )
+from app.domain.hosted_web_command_center import (
+    HostedWebCommandCenterReadinessResponse,
+    get_hosted_web_command_center_readiness,
+)
 
 router = APIRouter(prefix="/api/hosted-paper", tags=["hosted-paper"])
 SettingsDep = Annotated[Settings, Depends(get_settings)]
@@ -79,6 +83,16 @@ def hosted_paper_mock_session(settings: SettingsDep) -> HostedPaperMockSessionRe
 @router.get("/tenants/current", response_model=HostedPaperTenantContext)
 def hosted_paper_current_tenant(settings: SettingsDep) -> HostedPaperTenantContext:
     return get_hosted_paper_mock_session(settings).tenant
+
+
+@router.get(
+    "/web-command-center/readiness",
+    response_model=HostedWebCommandCenterReadinessResponse,
+)
+def hosted_web_command_center_readiness(
+    settings: SettingsDep,
+) -> HostedWebCommandCenterReadinessResponse:
+    return get_hosted_web_command_center_readiness(settings)
 
 
 @router.get(

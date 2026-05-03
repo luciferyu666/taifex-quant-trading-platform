@@ -19,6 +19,7 @@ GET /api/hosted-backend/environment
 GET /api/hosted-backend/readiness
 GET /api/hosted-paper/environment
 GET /api/hosted-paper/readiness
+GET /api/hosted-paper/web-command-center/readiness
 GET /api/hosted-paper/datastore-readiness
 GET /api/hosted-paper/production-datastore/readiness
 GET /api/hosted-paper/identity-access-contract
@@ -43,6 +44,16 @@ require tenant isolation, and keep live trading disabled.
 The endpoint is read-only metadata. It does not authenticate users, create
 sessions, write databases, create orders, call brokers, collect credentials, or
 enable live trading.
+
+`GET /api/hosted-paper/web-command-center/readiness` defines how the Production
+Vercel Web Command Center can resolve a future hosted paper backend API base
+URL without embedding secrets or enabling hosted SaaS operations. The frontend
+resolution order is `NEXT_PUBLIC_HOSTED_BACKEND_API_BASE_URL`,
+`NEXT_PUBLIC_BACKEND_URL`, then `http://localhost:8000`. These are public
+routing values only, not authentication. The UI can display mock login status,
+tenant, roles, and permissions from the existing mock session contract, while
+real login, customer accounts, RBAC/ABAC enforcement, managed datastore writes,
+broker access, and live trading remain disabled.
 
 `GET /api/hosted-paper/datastore-readiness` defines the future managed
 datastore contract for hosted paper records. It lists tenant-scoped record

@@ -5,9 +5,11 @@ const repoRoot = process.cwd();
 const files = {
   i18n: "frontend/app/i18n.ts",
   page: "frontend/app/page.tsx",
+  apiBase: "frontend/app/apiBase.ts",
   demoGuide: "frontend/app/components/DemoGuidePanel.tsx",
   commandTabs: "frontend/app/components/CommandCenterTabs.tsx",
   deploymentDataBoundary: "frontend/app/components/DeploymentDataBoundaryPanel.tsx",
+  hostedWebCommandCenter: "frontend/app/components/HostedWebCommandCenterPanel.tsx",
   hostedPaperEnvironment: "frontend/app/components/HostedPaperEnvironmentPanel.tsx",
   hostedPaperDatastore:
     "frontend/app/components/HostedPaperDatastoreReadinessPanel.tsx",
@@ -243,6 +245,26 @@ requireContains("English local JSON loader copy exists", sourceByFile.i18n, "Sel
 requireContains("Traditional Chinese local JSON loader copy exists", sourceByFile.i18n, "選擇本地 .json");
 requireContains("English no-upload copy exists", sourceByFile.i18n, "The file was not uploaded");
 requireContains("Traditional Chinese no-upload copy exists", sourceByFile.i18n, "檔案未上傳");
+requireContains("English hosted Web Command Center copy exists", sourceByFile.i18n, "Environment-aware hosted backend connection");
+requireContains("Traditional Chinese hosted Web Command Center copy exists", sourceByFile.i18n, "具環境感知的 hosted backend 連線");
+requireContains("Hosted Web Command Center component is implemented", sourceByFile.hostedWebCommandCenter, "HostedWebCommandCenterPanel");
+requireContains("Hosted Web Command Center API base resolver is implemented", sourceByFile.apiBase, "getCommandCenterApiConfig");
+requireContains("Hosted Web Command Center prefers hosted public env var", sourceByFile.apiBase, "NEXT_PUBLIC_HOSTED_BACKEND_API_BASE_URL");
+requireContains("Hosted Web Command Center keeps local fallback env var", sourceByFile.apiBase, "NEXT_PUBLIC_BACKEND_URL");
+requireContains("Hosted Web Command Center exposes API mode env var", sourceByFile.apiBase, "NEXT_PUBLIC_COMMAND_CENTER_API_MODE");
+requireContains("Hosted Web Command Center endpoint is fetched on page", sourceByFile.page, "/api/hosted-paper/web-command-center/readiness");
+requireContains("Hosted Web Command Center panel is mounted on page", sourceByFile.page, "HostedWebCommandCenterPanel");
+requireContains("Hosted Web Command Center displays login status", sourceByFile.hostedWebCommandCenter, "authenticated");
+requireContains("Hosted Web Command Center displays tenant context", sourceByFile.hostedWebCommandCenter, "tenant_id");
+requireContains("Hosted Web Command Center displays roles", sourceByFile.hostedWebCommandCenter, "roles");
+requireContains("Hosted Web Command Center displays permissions", sourceByFile.hostedWebCommandCenter, "grantedPermissions");
+requireContains("Hosted Web Command Center shows public API base is not auth", sourceByFile.i18n, "configuration, not authentication");
+requireContains("Hosted Web Command Center Chinese copy states public API base is not auth", sourceByFile.i18n, "公開 API base URL 只是設定，不是身份驗證");
+requireContains("Hosted Web Command Center displays credential safety flag", sourceByFile.i18n, "credentials_collected");
+requireNotContains("Hosted Web Command Center panel does not call workflow record", sourceByFile.hostedWebCommandCenter, "workflow/record");
+requireNotContains("Hosted Web Command Center panel does not collect API keys", sourceByFile.hostedWebCommandCenter, "apiKey");
+requireNotContains("Hosted Web Command Center panel does not collect account IDs", sourceByFile.hostedWebCommandCenter, "accountId");
+requireNotContains("Hosted Web Command Center panel does not collect certificates", sourceByFile.hostedWebCommandCenter, "certificate");
 requireContains("English hosted identity access contract copy exists", sourceByFile.i18n, "Identity access contract");
 requireContains("Traditional Chinese hosted identity access contract copy exists", sourceByFile.i18n, "真實 login、session");
 requireContains("Hosted identity access contract component is implemented", sourceByFile.hostedPaperIdentityAccess, "HostedPaperIdentityAccessContractPanel");

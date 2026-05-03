@@ -2,6 +2,7 @@
 
 import { useState, type FormEvent } from "react";
 
+import { commandCenterApiBaseUrl } from "../apiBase";
 import type { DashboardCopy } from "../i18n";
 import type {
   PaperApprovalHistory,
@@ -50,7 +51,7 @@ type PaperWorkflowResponse = {
   message: string;
 };
 
-const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL ?? "http://localhost:8000";
+const backendUrl = commandCenterApiBaseUrl;
 
 export function PaperSimulationSubmitPanel({
   approvalHistories,

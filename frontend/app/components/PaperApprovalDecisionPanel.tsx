@@ -2,6 +2,7 @@
 
 import { useState, type FormEvent } from "react";
 
+import { commandCenterApiBaseUrl } from "../apiBase";
 import type { DashboardCopy } from "../i18n";
 import type { PaperApprovalHistory } from "./PaperApprovalQueuePanel";
 
@@ -16,7 +17,7 @@ type PaperApprovalDecisionPanelProps = {
 
 type DecisionResponse = PaperApprovalHistory;
 
-const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL ?? "http://localhost:8000";
+const backendUrl = commandCenterApiBaseUrl;
 
 export function PaperApprovalDecisionPanel({
   available,

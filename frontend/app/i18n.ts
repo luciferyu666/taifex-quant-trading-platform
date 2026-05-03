@@ -280,6 +280,126 @@ export const dashboardCopy = {
         "If a customer must see real seeded paper OMS or audit records, use local backend demo mode. Production Vercel should be treated as a read-only presentation surface unless a future controlled backend/API is deployed.",
       safetyLabel: "Deployment data boundary safety flags",
     },
+    hostedWebCommandCenter: {
+      eyebrow: "Hosted Web Command Center",
+      title: "Environment-aware hosted backend connection",
+      description:
+        "Production Vercel can be configured to read a future hosted paper backend through a public API base URL. The current view displays mock login, tenant, role, and permission context only; it does not enable real login, hosted mutations, broker access, or live trading.",
+      fallbackPrefix: "Hosted Web Command Center readiness unavailable. Rendering safe fallback:",
+      endpointLabel: "Read-only endpoint",
+      connectionStateLabel: "Connection state",
+      connectionStates: {
+        hosted: "Hosted backend URL configured",
+        localOrFallback: "Local or fallback API path",
+      },
+      apiBaseLabel: "Environment-aware API base URL",
+      publicEnvLabel: "Public frontend environment variables",
+      identityLabel: "Login status and role display",
+      tenantLabel: "Tenant context display",
+      grantedPermissionsLabel: "Granted read permissions",
+      deniedMutationsLabel: "Denied mutation permissions",
+      endpointsLabel: "Hosted read endpoints",
+      safetyFlagsLabel: "Safety flags",
+      requiredBeforeUseLabel: "Required before hosted customer use",
+      warningLabel: "Boundary warnings",
+      notConfigured: "not configured",
+      fields: {
+        apiBaseUrl: "Resolved API base URL",
+        apiBaseSource: "Base URL source",
+        apiMode: "Command Center API mode",
+        hostedConfigured: "Hosted backend configured",
+        usesLocalDefault: "Uses local default",
+        authenticated: "Authenticated",
+        authenticationProvider: "Authentication provider",
+        authenticationMode: "Authentication mode",
+        roles: "Roles",
+        sessionAvailable: "Session endpoint available",
+        tenantId: "Tenant ID",
+        tenantMode: "Tenant mode",
+        tenantIsolation: "Tenant isolation required",
+        hostedDatastore: "Hosted datastore enabled",
+        tenantAvailable: "Tenant endpoint available",
+      },
+      sourceLabels: {
+        hosted_backend_public_env: "NEXT_PUBLIC_HOSTED_BACKEND_API_BASE_URL",
+        backend_public_env: "NEXT_PUBLIC_BACKEND_URL",
+        local_default: "local default http://localhost:8000",
+      },
+      permissionLabels: {
+        read_hosted_readiness: "Read hosted readiness",
+        read_mock_session: "Read mock session",
+        read_current_tenant: "Read current tenant",
+        create_paper_approval_request: "Create paper approval request",
+        record_paper_reviewer_decision: "Record paper reviewer decision",
+        submit_approved_paper_workflow: "Submit approved paper workflow",
+        enable_live_trading: "Live trading permission",
+        upload_broker_credentials: "Upload broker credentials",
+      },
+      endpointPurposeLabels: {
+        "Backend health and paper-safe runtime status.":
+          "Backend health and paper-safe runtime status.",
+        "Hosted backend dev/staging/production environment boundary.":
+          "Hosted backend dev/staging/production environment boundary.",
+        "Hosted backend readiness and missing SaaS capabilities.":
+          "Hosted backend readiness and missing SaaS capabilities.",
+        "Hosted paper API readiness boundary.": "Hosted paper API readiness boundary.",
+        "Mock session contract for login status, role, and permission display.":
+          "Mock session contract for login status, role, and permission display.",
+        "Mock tenant context for tenant boundary display.":
+          "Mock tenant context for tenant boundary display.",
+        "Web Command Center hosted backend connectivity contract.":
+          "Web Command Center hosted backend connectivity contract.",
+      },
+      safetyFlagLabels: {
+        paper_only: "paper_only",
+        read_only_contract: "read_only_contract",
+        live_trading_enabled: "live_trading_enabled",
+        broker_provider: "broker_provider",
+        broker_api_called: "broker_api_called",
+        order_created: "order_created",
+        credentials_collected: "credentials_collected",
+        broker_credentials_collected: "broker_credentials_collected",
+        auth_provider_enabled: "auth_provider_enabled",
+        session_cookie_issued: "session_cookie_issued",
+        customer_account_created: "customer_account_created",
+        hosted_datastore_written: "hosted_datastore_written",
+        external_db_written: "external_db_written",
+        live_approval_granted: "live_approval_granted",
+        production_trading_ready: "production_trading_ready",
+      },
+      requiredBeforeUseLabels: {
+        "Deploy a reviewed hosted backend runtime for paper-only staging.":
+          "Deploy a reviewed hosted backend runtime for paper-only staging.",
+        "Configure NEXT_PUBLIC_HOSTED_BACKEND_API_BASE_URL for the frontend deployment.":
+          "Configure NEXT_PUBLIC_HOSTED_BACKEND_API_BASE_URL for the frontend deployment.",
+        "Keep public API base URL values non-secret and HTTPS-only for hosted environments.":
+          "Keep public API base URL values non-secret and HTTPS-only for hosted environments.",
+        "Add real login, logout, session validation, and reviewer/customer identity.":
+          "Add real login, logout, session validation, and reviewer/customer identity.",
+        "Enforce tenant isolation on every hosted request and hosted record.":
+          "Enforce tenant isolation on every hosted request and hosted record.",
+        "Enforce RBAC/ABAC before any hosted mutation or paper workflow submit.":
+          "Enforce RBAC/ABAC before any hosted mutation or paper workflow submit.",
+        "Connect a managed datastore only after migration, backup, retention, and restore review.":
+          "Connect a managed datastore only after migration, backup, retention, and restore review.",
+        "Complete security and operations review before customer-hosted paper use.":
+          "Complete security and operations review before customer-hosted paper use.",
+      },
+      warningLabels: {
+        "This endpoint is read-only hosted Web Command Center metadata only.":
+          "This endpoint is read-only hosted Web Command Center metadata only.",
+        "A public API base URL is configuration, not authentication.":
+          "A public API base URL is configuration, not authentication.",
+        "No real login, session cookie, customer account, or tenant record is created.":
+          "No real login, session cookie, customer account, or tenant record is created.",
+        "No hosted datastore is written and no broker API is called.":
+          "No hosted datastore is written and no broker API is called.",
+        "Production Trading Platform remains NOT READY.":
+          "Production Trading Platform remains NOT READY.",
+        "Live trading remains disabled by default.":
+          "Live trading remains disabled by default.",
+      },
+    },
     hostedPaperReadiness: {
       eyebrow: "Hosted Paper API",
       title: "Hosted Paper API Readiness",
@@ -2871,6 +2991,126 @@ export const dashboardCopy = {
       operatorText:
         "若客戶需要看到已 seed 的真實 paper OMS 或 audit records，請使用本地後端 demo 模式。除非未來部署受控 backend/API，Production Vercel 應視為只讀展示介面。",
       safetyLabel: "部署資料邊界安全旗標",
+    },
+    hostedWebCommandCenter: {
+      eyebrow: "Hosted Web Command Center",
+      title: "具環境感知的 hosted backend 連線",
+      description:
+        "Production Vercel 可透過公開 API base URL 設定，讀取未來 hosted paper backend。目前只顯示 mock login、tenant、role 與 permission context；不啟用真實登入、hosted mutations、券商連線或實盤交易。",
+      fallbackPrefix: "Hosted Web Command Center readiness 無法取得，正在顯示安全備援資料：",
+      endpointLabel: "只讀 endpoint",
+      connectionStateLabel: "連線狀態",
+      connectionStates: {
+        hosted: "已設定 hosted backend URL",
+        localOrFallback: "本地或 fallback API 路徑",
+      },
+      apiBaseLabel: "具環境感知的 API base URL",
+      publicEnvLabel: "公開前端環境變數",
+      identityLabel: "登入狀態與角色顯示",
+      tenantLabel: "Tenant context 顯示",
+      grantedPermissionsLabel: "已授予只讀權限",
+      deniedMutationsLabel: "拒絕的 mutation 權限",
+      endpointsLabel: "Hosted read endpoints",
+      safetyFlagsLabel: "安全旗標",
+      requiredBeforeUseLabel: "Hosted customer use 前必要條件",
+      warningLabel: "邊界警示",
+      notConfigured: "未設定",
+      fields: {
+        apiBaseUrl: "解析後 API base URL",
+        apiBaseSource: "Base URL 來源",
+        apiMode: "Command Center API mode",
+        hostedConfigured: "已設定 hosted backend",
+        usesLocalDefault: "使用本地預設",
+        authenticated: "已登入",
+        authenticationProvider: "身份提供者",
+        authenticationMode: "身份模式",
+        roles: "角色",
+        sessionAvailable: "Session endpoint 可用",
+        tenantId: "Tenant ID",
+        tenantMode: "Tenant mode",
+        tenantIsolation: "需要 tenant isolation",
+        hostedDatastore: "Hosted datastore 已啟用",
+        tenantAvailable: "Tenant endpoint 可用",
+      },
+      sourceLabels: {
+        hosted_backend_public_env: "NEXT_PUBLIC_HOSTED_BACKEND_API_BASE_URL",
+        backend_public_env: "NEXT_PUBLIC_BACKEND_URL",
+        local_default: "本地預設 http://localhost:8000",
+      },
+      permissionLabels: {
+        read_hosted_readiness: "讀取 hosted readiness",
+        read_mock_session: "讀取 mock session",
+        read_current_tenant: "讀取 current tenant",
+        create_paper_approval_request: "建立 paper approval request",
+        record_paper_reviewer_decision: "記錄 paper reviewer decision",
+        submit_approved_paper_workflow: "提交已核准 paper workflow",
+        enable_live_trading: "啟用實盤交易",
+        upload_broker_credentials: "上傳 broker credentials",
+      },
+      endpointPurposeLabels: {
+        "Backend health and paper-safe runtime status.":
+          "Backend health 與 paper-safe runtime status。",
+        "Hosted backend dev/staging/production environment boundary.":
+          "Hosted backend dev / staging / production 環境邊界。",
+        "Hosted backend readiness and missing SaaS capabilities.":
+          "Hosted backend readiness 與缺少的 SaaS 能力。",
+        "Hosted paper API readiness boundary.": "Hosted paper API readiness 邊界。",
+        "Mock session contract for login status, role, and permission display.":
+          "用於顯示登入狀態、角色與權限的 mock session contract。",
+        "Mock tenant context for tenant boundary display.":
+          "用於 tenant boundary 顯示的 mock tenant context。",
+        "Web Command Center hosted backend connectivity contract.":
+          "Web Command Center hosted backend 連線契約。",
+      },
+      safetyFlagLabels: {
+        paper_only: "paper_only",
+        read_only_contract: "read_only_contract",
+        live_trading_enabled: "live_trading_enabled",
+        broker_provider: "broker_provider",
+        broker_api_called: "broker_api_called",
+        order_created: "order_created",
+        credentials_collected: "credentials_collected",
+        broker_credentials_collected: "broker_credentials_collected",
+        auth_provider_enabled: "auth_provider_enabled",
+        session_cookie_issued: "session_cookie_issued",
+        customer_account_created: "customer_account_created",
+        hosted_datastore_written: "hosted_datastore_written",
+        external_db_written: "external_db_written",
+        live_approval_granted: "live_approval_granted",
+        production_trading_ready: "production_trading_ready",
+      },
+      requiredBeforeUseLabels: {
+        "Deploy a reviewed hosted backend runtime for paper-only staging.":
+          "部署已 review 的 paper-only staging hosted backend runtime。",
+        "Configure NEXT_PUBLIC_HOSTED_BACKEND_API_BASE_URL for the frontend deployment.":
+          "為 frontend deployment 設定 NEXT_PUBLIC_HOSTED_BACKEND_API_BASE_URL。",
+        "Keep public API base URL values non-secret and HTTPS-only for hosted environments.":
+          "公開 API base URL 不得包含秘密，hosted environments 應使用 HTTPS。",
+        "Add real login, logout, session validation, and reviewer/customer identity.":
+          "加入真實 login、logout、session validation 與 reviewer/customer identity。",
+        "Enforce tenant isolation on every hosted request and hosted record.":
+          "每個 hosted request 與 hosted record 都必須強制 tenant isolation。",
+        "Enforce RBAC/ABAC before any hosted mutation or paper workflow submit.":
+          "任何 hosted mutation 或 paper workflow submit 前必須強制 RBAC/ABAC。",
+        "Connect a managed datastore only after migration, backup, retention, and restore review.":
+          "必須完成 migration、backup、retention 與 restore review 後，才能連接 managed datastore。",
+        "Complete security and operations review before customer-hosted paper use.":
+          "Customer-hosted paper use 前必須完成 security 與 operations review。",
+      },
+      warningLabels: {
+        "This endpoint is read-only hosted Web Command Center metadata only.":
+          "此 endpoint 僅為 hosted Web Command Center 只讀 metadata。",
+        "A public API base URL is configuration, not authentication.":
+          "公開 API base URL 只是設定，不是身份驗證。",
+        "No real login, session cookie, customer account, or tenant record is created.":
+          "不建立真實 login、session cookie、customer account 或 tenant record。",
+        "No hosted datastore is written and no broker API is called.":
+          "不寫入 hosted datastore，也不呼叫 broker API。",
+        "Production Trading Platform remains NOT READY.":
+          "Production Trading Platform 仍為 NOT READY。",
+        "Live trading remains disabled by default.":
+          "Live trading remains disabled by default.",
+      },
     },
     hostedPaperReadiness: {
       eyebrow: "Hosted Paper API",

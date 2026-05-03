@@ -6,11 +6,20 @@ This document defines the first hosted backend/API foundation slice for the Host
 
 The current customer-operable paper workflow still requires local backend + local SQLite. Production Vercel can display Web Command Center UI, fallback samples, readiness panels, and local JSON evidence viewers, but it cannot read local SQLite paper records.
 
+The Web Command Center now has an environment-aware API base URL contract. A
+future Production Vercel deployment can read a hosted paper backend when
+`NEXT_PUBLIC_HOSTED_BACKEND_API_BASE_URL` is configured. If that public value is
+not configured, the frontend falls back to `NEXT_PUBLIC_BACKEND_URL`, then
+`http://localhost:8000`. These values are public routing configuration only and
+must never contain secrets, broker credentials, account IDs, certificates, or
+tokens.
+
 ## Implemented API
 
 ```text
 GET /api/hosted-backend/environment
 GET /api/hosted-backend/readiness
+GET /api/hosted-paper/web-command-center/readiness
 ```
 
 These endpoints are read-only metadata. They do not authenticate users, create sessions, create tenants, write databases, write hosted records, call Risk Engine, call OMS, call Broker Gateway, call broker SDKs, collect credentials, create orders, or enable live trading.
@@ -93,10 +102,15 @@ make check
 
 - `GET /api/hosted-backend/environment` returns HTTP 200.
 - `GET /api/hosted-backend/readiness` returns HTTP 200.
+- `GET /api/hosted-paper/web-command-center/readiness` returns HTTP 200.
 - The response includes `current_environment`.
 - The response marks `managed_datastore_enabled=false`.
 - The response marks `local_sqlite_allowed_for_hosted=false`.
 - The response marks `tenant_isolation_required=true`.
+- The frontend supports `NEXT_PUBLIC_HOSTED_BACKEND_API_BASE_URL` as a public
+  hosted backend API base URL.
+- The Web Command Center displays mock login status, tenant, role, and
+  permission context without enabling real login or hosted mutations.
 - The response marks `live_trading_enabled=false`.
 - The response marks `broker_provider=paper`.
 - The response marks `production_trading_ready=false`.

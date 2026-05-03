@@ -2,6 +2,7 @@
 
 import { useMemo, useState, type FormEvent } from "react";
 
+import { commandCenterApiBaseUrl } from "../apiBase";
 import type { DashboardCopy } from "../i18n";
 
 type SymbolCode = "TX" | "MTX" | "TMF";
@@ -36,7 +37,7 @@ type PaperBrokerSimulationResult = {
   production_execution_model: boolean;
 };
 
-const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL ?? "http://localhost:8000";
+const backendUrl = commandCenterApiBaseUrl;
 
 export function PaperBrokerSimulationModelPanel({ copy }: { copy: DashboardCopy }) {
   const labels = copy.paperBrokerSimulation;

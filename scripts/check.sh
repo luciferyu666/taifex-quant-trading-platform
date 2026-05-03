@@ -103,6 +103,7 @@ for required_file in \
   docs/customer-self-service-paper-demo-roadmap.md \
   docs/customer-self-service-local-demo-launcher.md \
   docs/hosted-backend-api-deployment-foundation.md \
+  docs/hosted-web-command-center.md \
   docs/hosted-paper-saas-foundation-roadmap.md \
   docs/hosted-paper-backend-api-readiness.md \
   docs/hosted-paper-managed-datastore-readiness.md \
@@ -133,6 +134,7 @@ for required_file in \
   scripts/start-customer-demo.ps1 \
   scripts/hosted-paper-api-readiness-check.sh \
   scripts/hosted-backend-readiness-check.sh \
+  scripts/hosted-web-command-center-check.sh \
   scripts/hosted-paper-auth-boundary-check.sh \
   scripts/hosted-paper-auth-provider-selection-check.sh \
   scripts/hosted-paper-identity-readiness-check.sh \
@@ -149,6 +151,7 @@ for required_file in \
   scripts/paper-risk-cross-account-readiness-check.sh \
   scripts/export-hosted-paper-tenant-boundary-evidence.py \
   backend/app/domain/hosted_backend_environment.py \
+  backend/app/domain/hosted_web_command_center.py \
   backend/app/domain/hosted_paper_environment.py \
   backend/app/domain/hosted_paper_datastore.py \
   backend/app/domain/hosted_paper_production_datastore.py \
@@ -158,6 +161,7 @@ for required_file in \
   backend/app/domain/paper_audit_compliance_trail.py \
   backend/app/api/hosted_backend_routes.py \
   backend/tests/test_hosted_backend_environment_routes.py \
+  backend/tests/test_hosted_web_command_center_routes.py \
   backend/tests/test_hosted_paper_environment_routes.py \
   backend/tests/test_hosted_paper_datastore_readiness_routes.py \
   backend/tests/test_hosted_paper_production_datastore_readiness_routes.py \
@@ -167,6 +171,8 @@ for required_file in \
   backend/tests/test_hosted_paper_identity_access_contract_routes.py \
   backend/tests/test_paper_oms_productionization_blueprint_routes.py \
   backend/tests/test_paper_audit_compliance_trail_routes.py \
+  frontend/app/apiBase.ts \
+  frontend/app/components/HostedWebCommandCenterPanel.tsx \
   frontend/app/components/HostedPaperEnvironmentPanel.tsx \
   frontend/app/components/HostedPaperDatastoreReadinessPanel.tsx \
   frontend/app/components/HostedPaperProductionDatastoreReadinessPanel.tsx \
@@ -211,6 +217,11 @@ fi
 
 if [[ ! -x scripts/hosted-backend-readiness-check.sh ]]; then
   printf 'scripts/hosted-backend-readiness-check.sh must be executable.\n' >&2
+  missing_customer_eval_file=1
+fi
+
+if [[ ! -x scripts/hosted-web-command-center-check.sh ]]; then
+  printf 'scripts/hosted-web-command-center-check.sh must be executable.\n' >&2
   missing_customer_eval_file=1
 fi
 
@@ -298,6 +309,7 @@ bash scripts/check-customer-demo-env.sh
 bash scripts/self-service-paper-demo-check.sh
 bash scripts/launch-self-service-paper-demo.sh --check-only
 bash scripts/hosted-backend-readiness-check.sh
+bash scripts/hosted-web-command-center-check.sh
 bash scripts/hosted-paper-api-readiness-check.sh
 bash scripts/hosted-paper-auth-boundary-check.sh
 bash scripts/hosted-paper-auth-provider-selection-check.sh

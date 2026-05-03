@@ -218,9 +218,18 @@ The Web Command Center displays the mock session and tenant context as read-only
 contract metadata. Reviewers can export the same mock session and tenant
 boundary as local JSON evidence with
 `docs/hosted-paper-tenant-boundary-evidence-export.md` and
-`scripts/export-hosted-paper-tenant-boundary-evidence.py`; the Web Command
-Center can load that evidence read-only from an explicitly selected local JSON
-file. No hosted customer login is enabled yet.
+`scripts/export-hosted-paper-tenant-boundary-evidence.py` via
+`make hosted-paper-tenant-boundary-evidence-export`; the Web Command Center can
+load that evidence read-only from an explicitly selected local JSON file. The
+hosted Web Command Center API connection boundary is documented in
+`docs/hosted-web-command-center.md` and exposed as read-only metadata at
+`GET /api/hosted-paper/web-command-center/readiness`. The frontend resolves its
+API base URL from `NEXT_PUBLIC_HOSTED_BACKEND_API_BASE_URL`, then
+`NEXT_PUBLIC_BACKEND_URL`, then `http://localhost:8000`; these are public
+routing values only, not authentication or secrets. The UI can display login
+status, tenant, role, and permissions from the mock session contract, but real
+login, customer accounts, RBAC/ABAC enforcement, hosted datastore writes, broker
+access, hosted customer login, and live trading remain disabled.
 
 ### Audit and Observability
 

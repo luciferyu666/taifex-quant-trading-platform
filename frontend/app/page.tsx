@@ -27,6 +27,10 @@ import {
   type HostedPaperReadiness,
 } from "./components/HostedPaperReadinessPanel";
 import {
+  HostedWebCommandCenterPanel,
+  type HostedWebCommandCenterReadiness,
+} from "./components/HostedWebCommandCenterPanel";
+import {
   HostedPaperIdentityReadinessPanel,
   type HostedPaperIdentityReadiness,
 } from "./components/HostedPaperIdentityReadinessPanel";
@@ -94,6 +98,7 @@ import { PaperSimulationSubmitPanel } from "./components/PaperSimulationSubmitPa
 import { ResearchReviewPacketJsonLoader } from "./components/ResearchReviewPacketJsonLoader";
 import type { ResearchReviewPacket } from "./components/ResearchReviewPacketPanel";
 import { ReleaseBaselinePanel, type ReleaseBaseline } from "./components/ReleaseBaselinePanel";
+import { getCommandCenterApiConfig } from "./apiBase";
 import { dashboardCopy, resolveLanguage } from "./i18n";
 
 export const dynamic = "force-dynamic";
@@ -159,7 +164,8 @@ type PaperExecutionPersistenceStatus = {
 
 type LoadState<T> = { available: true; data: T } | { available: false; error: string; data: T };
 
-const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL ?? "http://localhost:8000";
+const commandCenterApiConfig = getCommandCenterApiConfig();
+const backendUrl = commandCenterApiConfig.apiBaseUrl;
 
 const fallbackHealth: HealthResponse = {
   status: "offline-safe",
@@ -1382,6 +1388,125 @@ const fallbackHostedPaperReadiness: HostedPaperReadiness = {
   ],
 };
 
+const fallbackHostedWebCommandCenterReadiness: HostedWebCommandCenterReadiness = {
+  service: "hosted-web-command-center-readiness",
+  readiness_state: "environment_aware_connection_contract_only",
+  summary:
+    "Fallback Web Command Center hosted backend connectivity metadata. The UI can use NEXT_PUBLIC_HOSTED_BACKEND_API_BASE_URL for a future hosted paper backend, but no real hosted auth, hosted datastore, broker access, or live trading is enabled.",
+  api_base_url_contract: {
+    primary_public_env_var: "NEXT_PUBLIC_HOSTED_BACKEND_API_BASE_URL",
+    local_fallback_public_env_var: "NEXT_PUBLIC_BACKEND_URL",
+    mode_public_env_var: "NEXT_PUBLIC_COMMAND_CENTER_API_MODE",
+    default_local_base_url: "http://localhost:8000",
+    server_side_fetch_supported: true,
+    browser_fetch_supported_for_read_only_panels: true,
+    hosted_backend_requires_https: true,
+    secrets_allowed_in_public_env: false,
+    broker_credentials_allowed_in_public_env: false,
+  },
+  identity_display: {
+    login_status_displayed: true,
+    tenant_displayed: true,
+    roles_displayed: true,
+    permissions_displayed: true,
+    current_identity_source: "mock_session_contract_only",
+    real_login_enabled: false,
+    customer_account_enabled: false,
+    reviewer_login_enabled: false,
+    rbac_abac_enforced: false,
+    tenant_isolation_enforced: false,
+  },
+  capabilities: {
+    environment_aware_api_base_url_supported: true,
+    production_vercel_hosted_backend_connectivity_configurable: true,
+    local_backend_fallback_supported: true,
+    fallback_sample_mode_supported: true,
+    hosted_backend_runtime_enabled: false,
+    hosted_paper_customer_workspace_enabled: false,
+    hosted_mutations_enabled: false,
+    real_auth_provider_enabled: false,
+    managed_datastore_enabled: false,
+    broker_api_enabled: false,
+    credential_collection_enabled: false,
+    production_trading_ready: false,
+  },
+  required_read_endpoints: [
+    {
+      path: "/health",
+      purpose: "Backend health and paper-safe runtime status.",
+      read_only: true,
+      requires_real_login_before_customer_use: false,
+      requires_tenant_isolation_before_customer_use: false,
+      mutation: false,
+    },
+    {
+      path: "/api/hosted-paper/session",
+      purpose: "Mock session contract for login status, role, and permission display.",
+      read_only: true,
+      requires_real_login_before_customer_use: true,
+      requires_tenant_isolation_before_customer_use: true,
+      mutation: false,
+    },
+    {
+      path: "/api/hosted-paper/tenants/current",
+      purpose: "Mock tenant context for tenant boundary display.",
+      read_only: true,
+      requires_real_login_before_customer_use: true,
+      requires_tenant_isolation_before_customer_use: true,
+      mutation: false,
+    },
+    {
+      path: "/api/hosted-paper/web-command-center/readiness",
+      purpose: "Web Command Center hosted backend connectivity contract.",
+      read_only: true,
+      requires_real_login_before_customer_use: true,
+      requires_tenant_isolation_before_customer_use: true,
+      mutation: false,
+    },
+  ],
+  safety_defaults: {
+    trading_mode: "paper",
+    enable_live_trading: false,
+    broker_provider: "paper",
+  },
+  safety_flags: {
+    paper_only: true,
+    read_only_contract: true,
+    live_trading_enabled: false,
+    broker_provider: "paper",
+    broker_api_called: false,
+    order_created: false,
+    credentials_collected: false,
+    broker_credentials_collected: false,
+    auth_provider_enabled: false,
+    session_cookie_issued: false,
+    customer_account_created: false,
+    hosted_datastore_written: false,
+    external_db_written: false,
+    live_approval_granted: false,
+    production_trading_ready: false,
+  },
+  required_before_customer_hosted_use: [
+    "Deploy a reviewed hosted backend runtime for paper-only staging.",
+    "Configure NEXT_PUBLIC_HOSTED_BACKEND_API_BASE_URL for the frontend deployment.",
+    "Add real login, logout, session validation, and reviewer/customer identity.",
+    "Enforce tenant isolation on every hosted request and hosted record.",
+    "Enforce RBAC/ABAC before any hosted mutation or paper workflow submit.",
+  ],
+  docs: {
+    hosted_web_command_center: "docs/hosted-web-command-center.md",
+    hosted_backend_foundation: "docs/hosted-backend-api-deployment-foundation.md",
+    hosted_paper_saas_foundation: "docs/hosted-paper-saas-foundation-roadmap.md",
+  },
+  warnings: [
+    "Fallback hosted Web Command Center metadata. Backend is unavailable.",
+    "A public API base URL is configuration, not authentication.",
+    "No real login, session cookie, customer account, or tenant record is created.",
+    "Production Trading Platform remains NOT READY.",
+    "Live trading remains disabled by default.",
+  ],
+};
+
 const fallbackHostedPaperTenant: HostedPaperTenantContext = {
   tenant_id: "mock-tenant-paper-evaluation",
   tenant_name: "Mock Paper Evaluation Tenant",
@@ -2136,6 +2261,7 @@ export default async function Home({ searchParams }: HomeProps) {
     hostedPaperDatastoreReadiness,
     hostedPaperProductionDatastoreReadiness,
     hostedPaperReadiness,
+    hostedWebCommandCenterReadiness,
     hostedPaperIdentityReadiness,
     hostedPaperIdentityAccessContract,
     hostedPaperAuthProviderSelection,
@@ -2229,6 +2355,10 @@ export default async function Home({ searchParams }: HomeProps) {
       fetchJson<HostedPaperReadiness>(
         "/api/hosted-paper/readiness",
         fallbackHostedPaperReadiness,
+      ),
+      fetchJson<HostedWebCommandCenterReadiness>(
+        "/api/hosted-paper/web-command-center/readiness",
+        fallbackHostedWebCommandCenterReadiness,
       ),
       fetchJson<HostedPaperIdentityReadiness>(
         "/api/hosted-paper/identity-readiness",
@@ -2352,6 +2482,9 @@ export default async function Home({ searchParams }: HomeProps) {
     hostedPaperReadiness.available
       ? undefined
       : `hosted paper readiness: ${hostedPaperReadiness.error}`,
+    hostedWebCommandCenterReadiness.available
+      ? undefined
+      : `hosted Web Command Center: ${hostedWebCommandCenterReadiness.error}`,
     hostedPaperMockSession.available
       ? undefined
       : `hosted paper mock session: ${hostedPaperMockSession.error}`,
@@ -2441,6 +2574,23 @@ export default async function Home({ searchParams }: HomeProps) {
               error={releaseBaseline.available ? undefined : releaseBaseline.error}
             />
             <DeploymentDataBoundaryPanel copy={copy.deploymentDataBoundary} />
+            <HostedWebCommandCenterPanel
+              apiConfig={commandCenterApiConfig}
+              backendAvailable={health.available}
+              backendError={health.available ? undefined : health.error}
+              copy={copy.hostedWebCommandCenter}
+              readiness={hostedWebCommandCenterReadiness.data}
+              readinessAvailable={hostedWebCommandCenterReadiness.available}
+              readinessError={
+                hostedWebCommandCenterReadiness.available
+                  ? undefined
+                  : hostedWebCommandCenterReadiness.error
+              }
+              session={hostedPaperMockSession.data}
+              sessionAvailable={hostedPaperMockSession.available}
+              tenant={hostedPaperTenant.data}
+              tenantAvailable={hostedPaperTenant.available}
+            />
             <HostedPaperEnvironmentPanel
               available={hostedPaperEnvironment.available}
               copy={copy.hostedPaperEnvironment}
