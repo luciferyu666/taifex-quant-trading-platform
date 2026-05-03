@@ -31,6 +31,8 @@ const files = {
     "frontend/app/components/HostedPaperTenantBoundaryEvidencePanel.tsx",
   localBackendMode: "frontend/app/components/LocalBackendDemoModePanel.tsx",
   localDemoSetup: "frontend/app/components/LocalDemoSetupPanel.tsx",
+  browserOnlyMockRuntime: "frontend/app/components/browserOnlyMockRuntime.ts",
+  browserOnlyMockDemo: "frontend/app/components/BrowserOnlyMockDemoPanel.tsx",
   mockBackendDemo: "frontend/app/components/MockBackendDemoPanel.tsx",
   paperComplianceApproval:
     "frontend/app/components/PaperComplianceApprovalReadinessPanel.tsx",
@@ -582,6 +584,29 @@ requireNotContains("Local demo setup does not call workflow record", sourceByFil
 requireNotContains("Local demo setup does not collect API keys", sourceByFile.localDemoSetup.toLowerCase(), "api_key");
 requireNotContains("Local demo setup does not collect account IDs", sourceByFile.localDemoSetup.toLowerCase(), "account_id");
 requireNotContains("Local demo setup does not collect certificates", sourceByFile.localDemoSetup.toLowerCase(), "certificate");
+requireContains("English browser-only mock demo copy exists", sourceByFile.i18n, "Browser-only Mock Runtime");
+requireContains("Traditional Chinese browser-only mock demo copy exists", sourceByFile.i18n, "瀏覽器內互動 Demo");
+requireContains("Browser-only mock runtime is implemented", sourceByFile.browserOnlyMockRuntime, "createInitialBrowserOnlyMockSession");
+requireContains("Browser-only mock runtime advances ticks", sourceByFile.browserOnlyMockRuntime, "advanceBrowserOnlyMockTick");
+requireContains("Browser-only mock runtime runs signal-only strategy", sourceByFile.browserOnlyMockRuntime, "runBrowserOnlyMockStrategy");
+requireContains("Browser-only mock runtime simulates paper order", sourceByFile.browserOnlyMockRuntime, "simulateBrowserOnlyPaperOrder");
+requireContains("Browser-only mock runtime keeps browser_only flag", sourceByFile.browserOnlyMockRuntime, "browser_only: true");
+requireContains("Browser-only mock runtime keeps live disabled", sourceByFile.browserOnlyMockRuntime, "live_trading_enabled: false");
+requireContains("Browser-only mock runtime keeps broker disabled", sourceByFile.browserOnlyMockRuntime, "broker_api_called: false");
+requireContains("Browser-only mock runtime keeps database write disabled", sourceByFile.browserOnlyMockRuntime, "database_written: false");
+requireContains("Browser-only mock demo component is implemented", sourceByFile.browserOnlyMockDemo, "BrowserOnlyMockDemoPanel");
+requireContains("Browser-only mock demo uses localStorage", sourceByFile.browserOnlyMockDemo, "localStorage");
+requireContains("Browser-only mock demo asserts safety", sourceByFile.browserOnlyMockDemo, "assertBrowserOnlySafety");
+requireContains("Browser-only mock demo panel is mounted on page", sourceByFile.page, "BrowserOnlyMockDemoPanel");
+requireContains("Browser-only mock copy keeps no backend language", sourceByFile.i18n, "No backend required");
+requireContains("Browser-only mock copy keeps Chinese no backend language", sourceByFile.i18n, "不需要後端");
+requireNotContains("Browser-only mock demo does not fetch backend", sourceByFile.browserOnlyMockDemo, "fetch(");
+requireNotContains("Browser-only mock demo does not call command API base", sourceByFile.browserOnlyMockDemo, "commandCenterApiBaseUrl");
+requireNotContains("Browser-only mock runtime does not call fetch", sourceByFile.browserOnlyMockRuntime, "fetch(");
+requireNotContains("Browser-only mock demo does not call paper workflow record", sourceByFile.browserOnlyMockDemo, "/api/paper-execution/workflow/record");
+requireNotContains("Browser-only mock demo does not collect API keys", sourceByFile.browserOnlyMockDemo.toLowerCase(), "api_key");
+requireNotContains("Browser-only mock demo does not collect account IDs", sourceByFile.browserOnlyMockDemo.toLowerCase(), "account_id");
+requireNotContains("Browser-only mock demo does not collect certificates", sourceByFile.browserOnlyMockDemo.toLowerCase(), "certificate");
 requireContains("English mock backend demo copy exists", sourceByFile.i18n, "Mock Backend Demo MVP");
 requireContains("Traditional Chinese mock backend demo copy exists", sourceByFile.i18n, "模擬後端");
 requireContains("Mock backend demo component is implemented", sourceByFile.mockBackendDemo, "MockBackendDemoPanel");

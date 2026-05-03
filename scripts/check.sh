@@ -94,6 +94,7 @@ for required_file in \
   docs/paper-broker-simulation-evidence-export.md \
   docs/paper-broker-simulation-readiness.md \
   docs/mock-backend-demo-mvp.md \
+  docs/browser-only-mock-demo-runtime.md \
   docs/paper-risk-cross-account-readiness.md \
   docs/paper-risk-evidence-export.md \
   docs/paper-audit-integrity-preview.md \
@@ -315,6 +316,11 @@ if [[ ! -x scripts/paper-broker-simulation-readiness-check.sh ]]; then
   missing_customer_eval_file=1
 fi
 
+if [[ ! -x scripts/browser-only-mock-demo-check.sh ]]; then
+  printf 'scripts/browser-only-mock-demo-check.sh must be executable.\n' >&2
+  missing_customer_eval_file=1
+fi
+
 if [[ ! -x scripts/mock-backend-demo-check.sh ]]; then
   printf 'scripts/mock-backend-demo-check.sh must be executable.\n' >&2
   missing_customer_eval_file=1
@@ -350,6 +356,7 @@ bash scripts/paper-audit-compliance-trail-readiness-check.sh
 bash scripts/paper-oms-production-readiness-check.sh
 bash scripts/paper-oms-productionization-blueprint-check.sh
 bash scripts/paper-broker-simulation-readiness-check.sh
+bash scripts/browser-only-mock-demo-check.sh
 bash scripts/mock-backend-demo-check.sh
 bash scripts/paper-risk-cross-account-readiness-check.sh
 
@@ -421,6 +428,7 @@ for required_file in \
   scripts/seed-paper-execution-demo.py \
   scripts/export-paper-demo-evidence.py \
   scripts/export-paper-broker-simulation-evidence.py \
+  scripts/browser-only-mock-demo-check.sh \
   scripts/mock-backend-demo-check.sh \
   scripts/export-paper-risk-evidence.py \
   scripts/export-hosted-paper-tenant-boundary-evidence.py \
@@ -452,6 +460,8 @@ for required_file in \
   backend/app/api/mock_backend_routes.py \
   backend/app/domain/mock_backend.py \
   backend/tests/test_mock_backend_routes.py \
+  frontend/app/components/browserOnlyMockRuntime.ts \
+  frontend/app/components/BrowserOnlyMockDemoPanel.tsx \
   frontend/app/components/MockBackendDemoPanel.tsx \
   backend/app/api/roadmap_routes.py \
   data-pipeline/migrations/001_phase_2_data_platform.sql \

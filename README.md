@@ -146,7 +146,17 @@ portfolio summaries. It does not connect to brokers, download external market
 data, collect credentials, write production data, create real orders, or enable
 live trading.
 
-Production Vercel is a read-only presentation and evaluation surface. It cannot
+The Browser-only Mock Demo Runtime is documented in
+`docs/browser-only-mock-demo-runtime.md`. It lets the production Web Command
+Center run deterministic TX / MTX / TMF ticks, signal-only strategy simulation,
+Paper Only order simulation, OMS timeline, and simulated portfolio/PnL entirely
+inside the browser with local state/localStorage. It does not require a local
+backend, hosted backend, SQLite, broker, credentials, external market data,
+database writes, real orders, or live trading.
+
+Production Vercel remains read-only with respect to backend systems and
+persistent data layers; the browser-only mock demo uses only client-side local
+state. Production Vercel cannot
 directly read a user's local SQLite paper records; actual paper OMS / audit
 records require local backend demo mode or a future controlled hosted API/data
 layer. See `docs/frontend-local-backend-demo-mode.md` and

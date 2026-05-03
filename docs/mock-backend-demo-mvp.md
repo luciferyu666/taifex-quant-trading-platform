@@ -72,6 +72,11 @@ The panel displays:
 - safety flags
 - warning copy
 
+For customers who should not install a local backend, the browser-only runtime is
+documented separately in `docs/browser-only-mock-demo-runtime.md`. It provides
+the same first-pass product walkthrough entirely in the browser with local
+state/localStorage and no backend dependency.
+
 ## Safety Boundary
 
 This MVP is explicitly not a trading system:

@@ -58,6 +58,7 @@ import {
 import { HostedPaperTenantBoundaryEvidencePanel } from "./components/HostedPaperTenantBoundaryEvidencePanel";
 import { LocalBackendDemoModePanel } from "./components/LocalBackendDemoModePanel";
 import { LocalDemoSetupPanel } from "./components/LocalDemoSetupPanel";
+import { BrowserOnlyMockDemoPanel } from "./components/BrowserOnlyMockDemoPanel";
 import { MockBackendDemoPanel } from "./components/MockBackendDemoPanel";
 import {
   PaperComplianceApprovalReadinessPanel,
@@ -3136,6 +3137,8 @@ export default async function Home({ searchParams }: HomeProps) {
               }
               readiness={paperRiskCrossAccountReadiness.data}
             />
+
+            <BrowserOnlyMockDemoPanel copy={copy.browserOnlyMockDemo} />
 
             <MockBackendDemoPanel copy={copy.mockBackendDemo} />
 
