@@ -86,6 +86,16 @@ Create a paper-only execution core where order intents are evaluated by Risk Eng
   - The endpoint is read-only and does not submit orders, mutate OMS state, write
     databases, call brokers, collect credentials, approve live trading, or claim
     production readiness.
+- Paper OMS productionization blueprint:
+  - `GET /api/paper-execution/reliability/productionization-blueprint` converts
+    the production OMS gaps into a reviewable blueprint.
+  - It covers durable queue/outbox, asynchronous processing, cross-session
+    duplicate prevention, timeout productionization, execution report modeling,
+    reconciliation loop, amend/replace/cancel lifecycle, and partial-fill
+    quantity accounting.
+  - The endpoint is read-only contract metadata. It does not start workers,
+    connect to hosted databases, write records, create orders, call brokers, or
+    enable production OMS behavior.
 - Controlled Paper Simulation UI:
   - The Web Command Center may call only
     `/api/paper-execution/workflow/record`.
@@ -146,6 +156,8 @@ Create a paper-only execution core where order intents are evaluated by Risk Eng
 - Do not treat explicit paper timeout mark as production timeout processing.
 - Do not treat the Paper OMS production readiness panel as production OMS
   enablement. It is a read-only gap statement.
+- Do not treat the Paper OMS productionization blueprint as production OMS
+  implementation. It is a read-only contract and delivery plan.
 - Do not treat deterministic or local quote-based Paper Broker simulation as real
   market matching, broker execution reports, or production execution modeling.
 - Do not implement amend/replace or reconciliation loops without a separate paper-only
@@ -166,17 +178,18 @@ make paper-execution-persistence-check
 make paper-oms-reliability-check
 make paper-oms-timeout-check
 make paper-oms-production-readiness-check
+make paper-oms-productionization-blueprint-check
 cd backend && pytest tests/test_exposure_allocator.py tests/test_risk_engine.py tests/test_roadmap_routes.py
 make check
 ```
 
 ## Next Implementation Notes
 
-Next safe slice: expose quote-based paper broker simulation model inputs in the Web
-Command Center as an explicit Paper Only demo control if needed. Do not add external
-market data downloads, asynchronous workers, external databases, live adapters,
-amend/replace, real broker execution reports, or reconciliation loops until the
-paper-only contracts and release readiness gates remain stable under tests.
+Next safe slice: review the Paper OMS productionization blueprint and select a
+staging-only durable queue/outbox architecture. Do not add external market data
+downloads, asynchronous workers, external databases, live adapters, amend/replace,
+real broker execution reports, or reconciliation loops until the paper-only
+contracts and release readiness gates remain stable under tests.
 
 ## Paper Risk Guardrail Expansion
 

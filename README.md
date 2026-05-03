@@ -201,7 +201,13 @@ exposed as read-only metadata at
 `GET /api/paper-execution/reliability/production-readiness`. Durable
 queue/outbox workers, asynchronous order processing, full timeout handling,
 amend/replace, broker execution report ingestion, and formal reconciliation
-remain unavailable.
+remain unavailable. The next production-grade Paper OMS blueprint is documented
+in `docs/paper-oms-productionization-blueprint.md` and exposed as read-only
+metadata at `GET /api/paper-execution/reliability/productionization-blueprint`.
+It converts durable queue/outbox, async processing, duplicate prevention,
+timeout handling, execution report, reconciliation, amend/replace/cancel, and
+partial-fill accounting gaps into a reviewable plan without starting workers,
+connecting databases, calling brokers, or creating orders.
 The Web Command Center displays the mock session and tenant context as read-only
 contract metadata. Reviewers can export the same mock session and tenant
 boundary as local JSON evidence with

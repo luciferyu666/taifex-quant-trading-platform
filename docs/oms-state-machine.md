@@ -113,6 +113,27 @@ paper-only designs, tests, and reviews are completed:
 This boundary does not submit orders, mutate OMS state, call brokers, collect
 credentials, approve live trading, or claim production trading readiness.
 
+## Productionization Blueprint
+
+`GET /api/paper-execution/reliability/productionization-blueprint` exposes a
+read-only blueprint for the work required before Paper OMS can approach
+production-grade hosted paper processing.
+
+The blueprint covers:
+
+- durable queue / outbox
+- asynchronous order processing
+- duplicate prevention across sessions
+- timeout handling productionization
+- execution report model
+- reconciliation loop
+- amend / replace / cancel lifecycle
+- partial-fill quantity accounting
+
+The blueprint is contract metadata only. It does not start workers, connect to a
+hosted database, write records, mutate OMS state, call brokers, create orders,
+approve live trading, or claim production OMS readiness.
+
 ## Acceptance Criteria
 
 - Invalid transitions raise an error.
@@ -135,4 +156,5 @@ make paper-execution-workflow-check
 make paper-execution-persistence-check
 make paper-oms-reliability-check
 make paper-oms-production-readiness-check
+make paper-oms-productionization-blueprint-check
 ```

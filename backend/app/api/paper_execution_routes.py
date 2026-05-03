@@ -29,6 +29,10 @@ from app.domain.paper_oms_production_readiness import (
     PaperOmsProductionReadinessResponse,
     get_paper_oms_production_readiness,
 )
+from app.domain.paper_oms_productionization_blueprint import (
+    PaperOmsProductionizationBlueprintResponse,
+    get_paper_oms_productionization_blueprint,
+)
 from app.domain.paper_oms_reliability import (
     PaperExecutionReport,
     PaperOmsOutboxItem,
@@ -189,6 +193,16 @@ def paper_execution_production_readiness(
     settings: SettingsDep,
 ) -> PaperOmsProductionReadinessResponse:
     return get_paper_oms_production_readiness(settings)
+
+
+@router.get(
+    "/reliability/productionization-blueprint",
+    response_model=PaperOmsProductionizationBlueprintResponse,
+)
+def paper_execution_productionization_blueprint(
+    settings: SettingsDep,
+) -> PaperOmsProductionizationBlueprintResponse:
+    return get_paper_oms_productionization_blueprint(settings)
 
 
 @router.get("/runs", response_model=list[PaperExecutionRunRecord])
