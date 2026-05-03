@@ -2391,6 +2391,9 @@ export const dashboardCopy = {
         runStrategy: "Run mock strategy",
         simulateOrder: "Simulate paper order",
         resetSession: "Reset browser demo",
+        clearState: "Clear browser state",
+        copySummary: "Copy demo summary",
+        copyEvidence: "Copy evidence JSON",
       },
       messages: {
         tickReady: "Next deterministic browser-only tick generated.",
@@ -2398,8 +2401,103 @@ export const dashboardCopy = {
         orderReady:
           "Paper order simulation completed in this browser. No backend, broker, DB, or real order was used.",
         resetReady: "Browser-only mock demo reset.",
+        clearReady: "Browser-only local state cleared and reset. No backend or database was touched.",
+        reviewOmsReady: "Review the simulated OMS lifecycle below. It is browser-only and not a broker confirmation.",
+        reviewPortfolioReady:
+          "Review the paper-only portfolio and simulated metrics below. This is not a performance claim.",
+        summaryCopied: "Demo summary copied to clipboard.",
+        evidenceCopied: "Browser-only evidence JSON copied to clipboard.",
+        copyFailed: "Copy failed. Copy the values manually from the panel.",
+      },
+      guide: {
+        eyebrow: "Guided Demo",
+        title: "Complete browser-only walkthrough",
+        description:
+          "Follow these steps to operate the demo from market tick to signal, Paper Only order, simulated OMS, and paper-only metrics. Every step stays inside this browser.",
+        stepListLabel: "Browser-only demo steps",
+        activeStepLabel: "Step",
+        expectedLabel: "Expected result",
+        safetyLabel: "Safety boundary",
+        nextLabel: "Next step",
+        previous: "Previous",
+        next: "Next",
+        sessionMetaLabel: "Browser-only session metadata",
+        sessionIdLabel: "Session",
+        seedLabel: "Seed",
+        paperOnlyLabel: "Paper Only",
+        browserOnlyLabel: "Browser-only",
+        steps: [
+          {
+            title: "Generate market tick",
+            actionLabel: "Generate next tick",
+            body:
+              "Create the next deterministic TX / MTX / TMF quote snapshot in this browser.",
+            expected:
+              "Bid, ask, last, quote age, quote size, and liquidity score update without external market data.",
+            safety:
+              "No backend, broker, external market feed, database write, or live trading path is used.",
+            next: "Run the signal-only mock strategy against the selected symbol.",
+          },
+          {
+            title: "Run mock strategy",
+            actionLabel: "Run mock strategy",
+            body:
+              "Generate a StrategySignal from the deterministic browser price path.",
+            expected:
+              "A StrategySignal appears with direction, target TX-equivalent exposure, confidence, and signals_only=true.",
+            safety:
+              "The strategy emits a signal only. It does not create an order or call Risk / OMS / Broker Gateway.",
+            next: "Convert the signal into a platform-owned PaperOrderIntent simulation.",
+          },
+          {
+            title: "Simulate Paper Only order",
+            actionLabel: "Simulate paper order",
+            body:
+              "Run the browser-local paper risk checks and simulated OMS / paper fill path.",
+            expected:
+              "The workflow shows risk approval or rejection, OMS status, fill quantity, fill price, and remaining quantity.",
+            safety:
+              "This creates no real order, no broker request, no database record, and no live approval.",
+            next: "Review the simulated OMS lifecycle.",
+          },
+          {
+            title: "Review OMS timeline",
+            actionLabel: "Review OMS timeline",
+            body:
+              "Inspect CREATE, RISK_CHECK, SUBMIT, ACCEPT, FILL, PARTIAL_FILL, or REJECT transitions.",
+            expected:
+              "The timeline explains how the paper workflow moved through simulated OMS states.",
+            safety:
+              "These events are browser-local demo events, not exchange or broker execution reports.",
+            next: "Review paper-only position and simulated PnL.",
+          },
+          {
+            title: "Review simulated position / PnL",
+            actionLabel: "Review simulated metrics",
+            body:
+              "Inspect paper position, average price, unrealized PnL, and paper equity.",
+            expected:
+              "The portfolio summary updates from deterministic mock fills and current browser tick marks.",
+            safety:
+              "Simulated PnL is product workflow output only. It is not investment advice or a performance claim.",
+            next: "Reset the demo session or copy the evidence JSON for reviewer notes.",
+          },
+          {
+            title: "Reset demo session",
+            actionLabel: "Reset browser demo",
+            body:
+              "Clear the browser-local session back to a safe initial state.",
+            expected:
+              "Tick, signal, order, OMS, position, and simulated metrics return to the initial paper-only state.",
+            safety:
+              "Reset affects only this browser's local demo state and does not delete backend or database records.",
+            next: "Start again with Generate market tick when the reviewer wants to repeat the demo.",
+          },
+        ],
       },
       sections: {
+        sessionKicker: "Session",
+        sessionTitle: "Browser-local demo state",
         marketKicker: "Market Data",
         marketTitle: "Deterministic browser price path",
         signalKicker: "Strategy",
@@ -2421,6 +2519,9 @@ export const dashboardCopy = {
         symbol: "Symbol",
         quantity: "Quantity",
         tick: "Tick",
+        sessionId: "Session ID",
+        mockSeed: "Deterministic mock seed",
+        storageKey: "localStorage key",
         bid: "Bid",
         ask: "Ask",
         last: "Last",
@@ -2446,6 +2547,11 @@ export const dashboardCopy = {
       emptyOrder: "Run a strategy, then simulate a paper order to see Risk / OMS / paper fill results.",
       readOnlyNote:
         "This runtime uses only browser local state and localStorage. It does not upload data, write a database, call a broker, or create a real order. Live trading stays disabled.",
+      summary: {
+        title: "Browser-only mock demo summary",
+        safetyLine:
+          "Paper Only; browser-only; no backend; no broker; no real money; no live trading; not investment advice; no performance claim.",
+      },
     },
     mockBackendDemo: {
       eyebrow: "Mock Backend",
@@ -5502,6 +5608,9 @@ export const dashboardCopy = {
         runStrategy: "執行模擬策略",
         simulateOrder: "模擬紙上訂單",
         resetSession: "重置瀏覽器 demo",
+        clearState: "清除瀏覽器狀態",
+        copySummary: "複製 demo 摘要",
+        copyEvidence: "複製 evidence JSON",
       },
       messages: {
         tickReady: "下一筆 deterministic browser-only tick 已產生。",
@@ -5509,8 +5618,104 @@ export const dashboardCopy = {
         orderReady:
           "紙上訂單模擬已在此瀏覽器完成。沒有使用後端、券商、資料庫或真實委託。",
         resetReady: "Browser-only mock demo 已重置。",
+        clearReady: "Browser-only 本地狀態已清除並重置。沒有碰觸後端或資料庫。",
+        reviewOmsReady:
+          "請檢視下方模擬 OMS lifecycle。這是 browser-only 結果，不是券商成交回報。",
+        reviewPortfolioReady:
+          "請檢視下方 paper-only 投組與模擬指標。這不是績效主張。",
+        summaryCopied: "Demo 摘要已複製到剪貼簿。",
+        evidenceCopied: "Browser-only evidence JSON 已複製到剪貼簿。",
+        copyFailed: "複製失敗，請從 panel 手動複製數值。",
+      },
+      guide: {
+        eyebrow: "互動導覽",
+        title: "完整 Browser-only 操作流程",
+        description:
+          "依序從行情 tick、策略 signal、Paper Only 訂單、模擬 OMS 到 paper-only 指標完成體驗。每一步都只留在此瀏覽器內。",
+        stepListLabel: "Browser-only demo steps",
+        activeStepLabel: "步驟",
+        expectedLabel: "預期結果",
+        safetyLabel: "安全邊界",
+        nextLabel: "下一步",
+        previous: "上一步",
+        next: "下一步",
+        sessionMetaLabel: "Browser-only session metadata",
+        sessionIdLabel: "Session",
+        seedLabel: "Seed",
+        paperOnlyLabel: "Paper Only",
+        browserOnlyLabel: "Browser-only",
+        steps: [
+          {
+            title: "產生行情 tick",
+            actionLabel: "產生下一筆行情",
+            body:
+              "在此瀏覽器內建立下一筆 deterministic TX / MTX / TMF quote snapshot。",
+            expected:
+              "Bid、ask、last、quote age、quote size 與 liquidity score 會更新，且不下載外部行情。",
+            safety:
+              "不使用後端、不連券商、不接外部行情、不寫資料庫，也不進入實盤路徑。",
+            next: "用選定契約執行僅輸出 signal 的模擬策略。",
+          },
+          {
+            title: "執行模擬策略",
+            actionLabel: "執行模擬策略",
+            body:
+              "根據 deterministic browser price path 產生 StrategySignal。",
+            expected:
+              "畫面會顯示 direction、target TX-equivalent exposure、confidence 與 signals_only=true。",
+            safety:
+              "策略只輸出 signal，不建立訂單，也不呼叫 Risk / OMS / Broker Gateway。",
+            next: "將 signal 轉成平台擁有的 PaperOrderIntent 模擬。",
+          },
+          {
+            title: "模擬 Paper Only 訂單",
+            actionLabel: "模擬紙上訂單",
+            body:
+              "執行瀏覽器本地 paper risk checks 與模擬 OMS / paper fill 路徑。",
+            expected:
+              "Workflow 會顯示 risk approval 或 rejection、OMS status、fill quantity、fill price 與 remaining quantity。",
+            safety:
+              "不建立真實委託、不送券商請求、不寫資料庫，也不產生 live approval。",
+            next: "檢視模擬 OMS lifecycle。",
+          },
+          {
+            title: "檢視 OMS 時間線",
+            actionLabel: "檢視 OMS 時間線",
+            body:
+              "檢查 CREATE、RISK_CHECK、SUBMIT、ACCEPT、FILL、PARTIAL_FILL 或 REJECT transitions。",
+            expected:
+              "Timeline 會說明 paper workflow 如何通過模擬 OMS 狀態。",
+            safety:
+              "這些是瀏覽器本地 demo events，不是交易所或券商 execution reports。",
+            next: "檢視 paper-only position 與 simulated PnL。",
+          },
+          {
+            title: "檢視模擬持倉 / PnL",
+            actionLabel: "檢視模擬指標",
+            body:
+              "檢查 paper position、average price、unrealized PnL 與 paper equity。",
+            expected:
+              "Portfolio summary 會根據 deterministic mock fills 與目前 browser tick 更新。",
+            safety:
+              "Simulated PnL 只用於產品 workflow 展示，不構成投資建議或績效主張。",
+            next: "重置 demo session，或複製 evidence JSON 供 reviewer 做筆記。",
+          },
+          {
+            title: "重置 demo session",
+            actionLabel: "重置瀏覽器 demo",
+            body:
+              "把瀏覽器本地 session 清回安全初始狀態。",
+            expected:
+              "Tick、signal、order、OMS、position 與模擬指標會回到初始 paper-only 狀態。",
+            safety:
+              "Reset 只影響此瀏覽器的本地 demo state，不刪除後端或資料庫紀錄。",
+            next: "Reviewer 若要重複體驗，可重新從產生行情 tick 開始。",
+          },
+        ],
       },
       sections: {
+        sessionKicker: "Session",
+        sessionTitle: "瀏覽器本地 demo state",
         marketKicker: "行情資料",
         marketTitle: "瀏覽器 deterministic 價格路徑",
         signalKicker: "策略",
@@ -5532,6 +5737,9 @@ export const dashboardCopy = {
         symbol: "契約",
         quantity: "數量",
         tick: "Tick",
+        sessionId: "Session ID",
+        mockSeed: "Deterministic mock seed",
+        storageKey: "localStorage key",
         bid: "Bid",
         ask: "Ask",
         last: "Last",
@@ -5557,6 +5765,11 @@ export const dashboardCopy = {
       emptyOrder: "執行策略後，再模擬紙上訂單，即可看到 Risk / OMS / paper fill 結果。",
       readOnlyNote:
         "此 runtime 只使用瀏覽器本地狀態與 localStorage。它不上傳資料、不寫資料庫、不呼叫券商、不建立真實委託，實盤維持關閉。",
+      summary: {
+        title: "Browser-only mock demo 摘要",
+        safetyLine:
+          "Paper Only；browser-only；不需要後端；無券商；無真實資金；實盤關閉；不構成投資建議；不是績效主張。",
+      },
     },
     mockBackendDemo: {
       eyebrow: "模擬後端",

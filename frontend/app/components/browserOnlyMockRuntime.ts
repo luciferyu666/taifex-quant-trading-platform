@@ -15,6 +15,7 @@ export type BrowserOnlySafetyFlags = {
   production_trading_ready: boolean;
   investment_advice: boolean;
   database_written: boolean;
+  performance_claim: boolean;
 };
 
 export type BrowserMockMarketDataPoint = {
@@ -113,6 +114,7 @@ export type BrowserMockTimelineEvent = {
 
 export type BrowserOnlyMockSession = {
   session_id: string;
+  mock_seed: string;
   current_tick: number;
   market_data: BrowserMockMarketDataPoint[];
   selected_symbol: BrowserMockSymbol;
@@ -140,9 +142,12 @@ const txEquivalentRatio: Record<BrowserMockSymbol, number> = {
 const maxTxEquivalentExposure = 0.25;
 const startingCashTwd = 1_000_000;
 
+export const browserOnlyMockSeed = "taifex-browser-only-seed-v1";
+
 export function createInitialBrowserOnlyMockSession(): BrowserOnlyMockSession {
   return {
     session_id: "browser-only-mock-demo-session",
+    mock_seed: browserOnlyMockSeed,
     current_tick: 0,
     market_data: marketDataForTick(0),
     selected_symbol: "TMF",
@@ -321,8 +326,10 @@ export function isBrowserOnlyMockSession(value: unknown): value is BrowserOnlyMo
     candidate.safety_flags.live_trading_enabled === false &&
     candidate.safety_flags.broker_api_called === false &&
     candidate.safety_flags.real_order_created === false &&
+    candidate.safety_flags.performance_claim !== true &&
     Array.isArray(candidate.market_data) &&
-    Array.isArray(candidate.timeline)
+    Array.isArray(candidate.timeline) &&
+    (candidate.mock_seed === browserOnlyMockSeed || candidate.mock_seed === undefined)
   );
 }
 
@@ -340,6 +347,7 @@ function browserOnlySafetyFlags(): BrowserOnlySafetyFlags {
     production_trading_ready: false,
     investment_advice: false,
     database_written: false,
+    performance_claim: false,
   };
 }
 

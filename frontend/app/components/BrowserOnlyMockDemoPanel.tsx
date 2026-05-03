@@ -4,7 +4,12 @@ import { useEffect, useMemo, useState } from "react";
 
 import type { DashboardCopy } from "../i18n";
 import {
+  BrowserOnlyMockDemoGuide,
+  type BrowserOnlyGuideAction,
+} from "./BrowserOnlyMockDemoGuide";
+import {
   advanceBrowserOnlyMockTick,
+  browserOnlyMockSeed,
   createInitialBrowserOnlyMockSession,
   isBrowserOnlyMockSession,
   resetBrowserOnlyMockSession,
@@ -27,6 +32,7 @@ export function BrowserOnlyMockDemoPanel({
   const [symbol, setSymbol] = useState<BrowserMockSymbol>("TMF");
   const [quantity, setQuantity] = useState(1);
   const [statusMessage, setStatusMessage] = useState<string>(copy.initialMessage);
+  const [activeGuideStep, setActiveGuideStep] = useState(0);
 
   useEffect(() => {
     const stored = loadStoredSession();
@@ -54,10 +60,12 @@ export function BrowserOnlyMockDemoPanel({
 
   function generateNextTick() {
     updateSession(advanceBrowserOnlyMockTick(session), copy.messages.tickReady);
+    setActiveGuideStep((current) => Math.max(current, 1));
   }
 
   function runMockStrategy() {
     updateSession(runBrowserOnlyMockStrategy(session, symbol), copy.messages.signalReady);
+    setActiveGuideStep((current) => Math.max(current, 2));
   }
 
   function simulatePaperOrder() {
@@ -65,6 +73,7 @@ export function BrowserOnlyMockDemoPanel({
       simulateBrowserOnlyPaperOrder(session, symbol, quantity),
       copy.messages.orderReady,
     );
+    setActiveGuideStep((current) => Math.max(current, 3));
   }
 
   function resetDemoSession() {
@@ -72,6 +81,61 @@ export function BrowserOnlyMockDemoPanel({
     window.localStorage.removeItem(storageKey);
     setSymbol(nextSession.selected_symbol);
     updateSession(nextSession, copy.messages.resetReady);
+    setActiveGuideStep(0);
+  }
+
+  function clearDemoState() {
+    const nextSession = createInitialBrowserOnlyMockSession();
+    window.localStorage.removeItem(storageKey);
+    setSymbol(nextSession.selected_symbol);
+    updateSession(nextSession, copy.messages.clearReady);
+    setActiveGuideStep(0);
+  }
+
+  function handleGuideAction(action: BrowserOnlyGuideAction) {
+    if (action === "next_tick") {
+      generateNextTick();
+      return;
+    }
+    if (action === "run_strategy") {
+      runMockStrategy();
+      return;
+    }
+    if (action === "simulate_order") {
+      simulatePaperOrder();
+      return;
+    }
+    if (action === "review_oms") {
+      setStatusMessage(copy.messages.reviewOmsReady);
+      setActiveGuideStep(4);
+      return;
+    }
+    if (action === "review_portfolio") {
+      setStatusMessage(copy.messages.reviewPortfolioReady);
+      setActiveGuideStep(5);
+      return;
+    }
+    resetDemoSession();
+  }
+
+  async function copyDemoSummary() {
+    try {
+      await navigator.clipboard.writeText(buildDemoSummary(session, copy));
+      setStatusMessage(copy.messages.summaryCopied);
+    } catch {
+      setStatusMessage(copy.messages.copyFailed);
+    }
+  }
+
+  async function copyEvidenceJson() {
+    try {
+      await navigator.clipboard.writeText(
+        JSON.stringify(buildEvidencePayload(session), null, 2),
+      );
+      setStatusMessage(copy.messages.evidenceCopied);
+    } catch {
+      setStatusMessage(copy.messages.copyFailed);
+    }
   }
 
   return (
@@ -91,6 +155,14 @@ export function BrowserOnlyMockDemoPanel({
         <span className="metric ok">{copy.badges.noLiveTrading}</span>
         <span className="metric ok">{copy.badges.notAdvice}</span>
       </div>
+
+      <BrowserOnlyMockDemoGuide
+        activeStep={activeGuideStep}
+        copy={copy.guide}
+        session={session}
+        onAction={handleGuideAction}
+        onStepChange={setActiveGuideStep}
+      />
 
       <div className="paper-submit-grid">
         <label>
@@ -121,21 +193,49 @@ export function BrowserOnlyMockDemoPanel({
       </div>
 
       <div className="button-row">
-        <button type="button" onClick={generateNextTick}>
+        <button className="action-button" type="button" onClick={generateNextTick}>
           {copy.actions.nextTick}
         </button>
-        <button type="button" onClick={runMockStrategy}>
+        <button className="action-button" type="button" onClick={runMockStrategy}>
           {copy.actions.runStrategy}
         </button>
-        <button type="button" onClick={simulatePaperOrder}>
+        <button className="action-button" type="button" onClick={simulatePaperOrder}>
           {copy.actions.simulateOrder}
         </button>
-        <button type="button" onClick={resetDemoSession}>
+        <button className="action-button secondary" type="button" onClick={resetDemoSession}>
           {copy.actions.resetSession}
+        </button>
+        <button className="action-button secondary" type="button" onClick={clearDemoState}>
+          {copy.actions.clearState}
+        </button>
+        <button className="action-button secondary" type="button" onClick={copyDemoSummary}>
+          {copy.actions.copySummary}
+        </button>
+        <button className="action-button secondary" type="button" onClick={copyEvidenceJson}>
+          {copy.actions.copyEvidence}
         </button>
       </div>
 
       <p className="notice">{statusMessage}</p>
+
+      <article className="paper-evidence-section browser-demo-session-card">
+        <p className="card-kicker">{copy.sections.sessionKicker}</p>
+        <h3>{copy.sections.sessionTitle}</h3>
+        <dl className="detail-list">
+          <div>
+            <dt>{copy.fields.sessionId}</dt>
+            <dd>{session.session_id}</dd>
+          </div>
+          <div>
+            <dt>{copy.fields.mockSeed}</dt>
+            <dd>{session.mock_seed}</dd>
+          </div>
+          <div>
+            <dt>{copy.fields.storageKey}</dt>
+            <dd>{storageKey}</dd>
+          </div>
+        </dl>
+      </article>
 
       <div className="paper-reliability-grid">
         <article className="paper-evidence-section">
@@ -324,7 +424,17 @@ function loadStoredSession(): BrowserOnlyMockSession | null {
       return null;
     }
     const parsed: unknown = JSON.parse(stored);
-    return isBrowserOnlyMockSession(parsed) ? parsed : null;
+    if (!isBrowserOnlyMockSession(parsed)) {
+      return null;
+    }
+    return {
+      ...parsed,
+      mock_seed: parsed.mock_seed ?? browserOnlyMockSeed,
+      safety_flags: {
+        ...parsed.safety_flags,
+        performance_claim: false,
+      },
+    };
   } catch {
     return null;
   }
@@ -356,4 +466,50 @@ function assertBrowserOnlySafety(session: BrowserOnlyMockSession) {
   if (flags.database_written !== false) {
     throw new Error("database_written must be false");
   }
+  if (flags.performance_claim !== false) {
+    throw new Error("performance_claim must be false");
+  }
+}
+
+function buildDemoSummary(
+  session: BrowserOnlyMockSession,
+  copy: DashboardCopy["browserOnlyMockDemo"],
+) {
+  return [
+    copy.summary.title,
+    `${copy.fields.sessionId}: ${session.session_id}`,
+    `${copy.fields.mockSeed}: ${session.mock_seed}`,
+    `${copy.fields.tick}: ${session.current_tick}`,
+    `${copy.fields.symbol}: ${session.selected_symbol}`,
+    `${copy.fields.signalId}: ${session.latest_signal?.signal_id ?? "N/A"}`,
+    `${copy.fields.orderId}: ${session.latest_order?.order_id ?? "N/A"}`,
+    `${copy.fields.omsStatus}: ${session.latest_order?.oms_status ?? "N/A"}`,
+    `${copy.fields.position}: ${session.portfolio.position_contracts}`,
+    `${copy.fields.unrealizedPnl}: ${session.performance.unrealized_pnl_twd}`,
+    `${copy.fields.equity}: ${session.performance.equity_twd}`,
+    copy.summary.safetyLine,
+  ].join("\n");
+}
+
+function buildEvidencePayload(session: BrowserOnlyMockSession) {
+  return {
+    evidence_id: `browser-only-evidence-${session.current_tick}`,
+    evidence_type: "browser_only_mock_demo",
+    generated_at: new Date().toISOString(),
+    session_id: session.session_id,
+    mock_seed: session.mock_seed,
+    current_tick: session.current_tick,
+    selected_symbol: session.selected_symbol,
+    market_data: session.market_data,
+    latest_signal: session.latest_signal,
+    latest_order: session.latest_order,
+    portfolio: session.portfolio,
+    performance: session.performance,
+    timeline: session.timeline,
+    safety_flags: session.safety_flags,
+    warnings: session.warnings,
+    persisted: false,
+    uploaded: false,
+    local_storage_only: true,
+  };
 }

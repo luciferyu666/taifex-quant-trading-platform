@@ -10,6 +10,7 @@ broker, reading local SQLite, or depending on any external market data source.
 The browser-only runtime lives in the frontend:
 
 - `frontend/app/components/browserOnlyMockRuntime.ts`
+- `frontend/app/components/BrowserOnlyMockDemoGuide.tsx`
 - `frontend/app/components/BrowserOnlyMockDemoPanel.tsx`
 
 It runs entirely in the browser and uses only local React state plus
@@ -26,6 +27,38 @@ The Web Command Center panel supports:
 5. Inspect the simulated OMS lifecycle.
 6. Inspect paper-only position, equity, and simulated PnL.
 7. Reset the browser demo session.
+
+## Guided UX Completion
+
+The Browser-only Mock Demo now includes a guided stepper so a customer can
+operate the flow without a local backend runbook:
+
+1. Generate market tick.
+2. Run mock strategy.
+3. Simulate Paper Only order.
+4. Review simulated OMS timeline.
+5. Review simulated position / PnL.
+6. Reset demo session.
+
+Each step shows:
+
+- the next operation button
+- expected result
+- safety boundary
+- next-step guidance
+
+The panel also exposes:
+
+- browser-local `session_id`
+- deterministic mock data seed
+- `localStorage` key
+- clear browser state action
+- copy demo summary action
+- copy browser-only evidence JSON action
+
+The copied evidence is for reviewer notes only. It is not uploaded, persisted to
+a backend, written to a database, or treated as a broker confirmation,
+performance report, investment advice, or live-trading approval.
 
 ## Simulated Capabilities
 

@@ -9,6 +9,7 @@ printf 'Checking Browser-only Mock Demo Runtime files...\n'
 missing=0
 for required_file in \
   frontend/app/components/browserOnlyMockRuntime.ts \
+  frontend/app/components/BrowserOnlyMockDemoGuide.tsx \
   frontend/app/components/BrowserOnlyMockDemoPanel.tsx \
   docs/browser-only-mock-demo-runtime.md; do
   if [[ ! -f "${required_file}" ]]; then
@@ -48,8 +49,13 @@ for needle in \
   'BrowserOnlyMockDemoPanel' \
   'localStorage' \
   'Generate next tick' \
+  'Complete browser-only walkthrough' \
+  'BrowserOnlyMockDemoGuide' \
   'runBrowserOnlyMockStrategy' \
   'simulateBrowserOnlyPaperOrder' \
+  'copyDemoSummary' \
+  'copyEvidenceJson' \
+  'clearDemoState' \
   'assertBrowserOnlySafety' \
   'browser_only' \
   'database_written'; do
@@ -82,6 +88,9 @@ for needle in \
   'No real money' \
   'No live trading' \
   'Not investment advice' \
+  'Copy evidence JSON' \
+  'Deterministic mock seed' \
+  '完整 Browser-only 操作流程' \
   '不需要後端' \
   '無券商' \
   '無真實資金' \

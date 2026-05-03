@@ -32,6 +32,7 @@ const files = {
   localBackendMode: "frontend/app/components/LocalBackendDemoModePanel.tsx",
   localDemoSetup: "frontend/app/components/LocalDemoSetupPanel.tsx",
   browserOnlyMockRuntime: "frontend/app/components/browserOnlyMockRuntime.ts",
+  browserOnlyMockGuide: "frontend/app/components/BrowserOnlyMockDemoGuide.tsx",
   browserOnlyMockDemo: "frontend/app/components/BrowserOnlyMockDemoPanel.tsx",
   mockBackendDemo: "frontend/app/components/MockBackendDemoPanel.tsx",
   paperComplianceApproval:
@@ -594,12 +595,22 @@ requireContains("Browser-only mock runtime keeps browser_only flag", sourceByFil
 requireContains("Browser-only mock runtime keeps live disabled", sourceByFile.browserOnlyMockRuntime, "live_trading_enabled: false");
 requireContains("Browser-only mock runtime keeps broker disabled", sourceByFile.browserOnlyMockRuntime, "broker_api_called: false");
 requireContains("Browser-only mock runtime keeps database write disabled", sourceByFile.browserOnlyMockRuntime, "database_written: false");
+requireContains("Browser-only mock runtime keeps performance claim disabled", sourceByFile.browserOnlyMockRuntime, "performance_claim: false");
+requireContains("Browser-only mock guide is implemented", sourceByFile.browserOnlyMockGuide, "BrowserOnlyMockDemoGuide");
+requireContains("Browser-only mock guide uses stepper actions", sourceByFile.browserOnlyMockGuide, "BrowserOnlyGuideAction");
+requireContains("Browser-only mock guide exposes session id", sourceByFile.browserOnlyMockGuide, "session_id");
+requireContains("Browser-only mock guide exposes mock seed", sourceByFile.browserOnlyMockGuide, "mock_seed");
 requireContains("Browser-only mock demo component is implemented", sourceByFile.browserOnlyMockDemo, "BrowserOnlyMockDemoPanel");
 requireContains("Browser-only mock demo uses localStorage", sourceByFile.browserOnlyMockDemo, "localStorage");
 requireContains("Browser-only mock demo asserts safety", sourceByFile.browserOnlyMockDemo, "assertBrowserOnlySafety");
+requireContains("Browser-only mock demo copies summary", sourceByFile.browserOnlyMockDemo, "copyDemoSummary");
+requireContains("Browser-only mock demo copies evidence", sourceByFile.browserOnlyMockDemo, "copyEvidenceJson");
+requireContains("Browser-only mock demo clears local state", sourceByFile.browserOnlyMockDemo, "clearDemoState");
 requireContains("Browser-only mock demo panel is mounted on page", sourceByFile.page, "BrowserOnlyMockDemoPanel");
 requireContains("Browser-only mock copy keeps no backend language", sourceByFile.i18n, "No backend required");
 requireContains("Browser-only mock copy keeps Chinese no backend language", sourceByFile.i18n, "不需要後端");
+requireContains("Browser-only mock copy includes guided demo", sourceByFile.i18n, "Complete browser-only walkthrough");
+requireContains("Browser-only mock copy includes Chinese guided demo", sourceByFile.i18n, "完整 Browser-only 操作流程");
 requireNotContains("Browser-only mock demo does not fetch backend", sourceByFile.browserOnlyMockDemo, "fetch(");
 requireNotContains("Browser-only mock demo does not call command API base", sourceByFile.browserOnlyMockDemo, "commandCenterApiBaseUrl");
 requireNotContains("Browser-only mock runtime does not call fetch", sourceByFile.browserOnlyMockRuntime, "fetch(");

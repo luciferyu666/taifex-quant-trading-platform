@@ -182,6 +182,24 @@ Show:
 - `ENABLE_LIVE_TRADING=false`.
 - `BROKER_PROVIDER=paper`.
 - Safety flags and read-only review components.
+- Browser-only Mock Demo Runtime:
+  - Open the Paper OMS tab and start with the guided Browser-only Mock Demo.
+  - Use the stepper in order:
+    1. Generate market tick.
+    2. Run mock strategy.
+    3. Simulate Paper Only order.
+    4. Review simulated OMS timeline.
+    5. Review simulated position / PnL.
+    6. Reset demo session.
+  - Confirm the panel displays `session_id`, deterministic mock seed, and
+    `localStorage` key.
+  - Use Copy demo summary for reviewer notes.
+  - Use Copy evidence JSON only as a browser-local handoff artifact. It is not
+    uploaded, not persisted to a backend, not a broker confirmation, not a
+    performance report, and not investment advice.
+  - Explain that this is the fastest customer path: it works directly in the
+    production browser without local backend, local SQLite, broker connectivity,
+    credentials, real orders, or live trading.
 - Paper OMS / Audit Query Viewer:
   - If `make seed-paper-execution-demo` was run locally, show the seeded
     `workflow_run_id`, order ID, OMS timeline, and audit timeline.

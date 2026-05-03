@@ -46,6 +46,17 @@ Customers may evaluate:
   - Safe Research Review Packet sample loading.
   - TX / MTX / TMF contract spec review.
   - Prohibited-action confirmation.
+- Browser-only Mock Demo Runtime:
+  - Customers can operate a complete first-pass interactive demo directly in the
+    production browser.
+  - The guided stepper covers deterministic market ticks, signal-only strategy
+    output, Paper Only order simulation, simulated OMS lifecycle, paper-only
+    position / PnL, and reset.
+  - The panel exposes `session_id`, deterministic mock seed, and `localStorage`
+    key so reviewer notes can identify the browser-local demo state.
+  - Copy demo summary and Copy evidence JSON are clipboard-only actions for
+    reviewer notes. They do not upload data, write databases, call brokers, create
+    real orders, or make performance claims.
 - Research review packet viewer behavior using approved local sample JSON fixtures.
 - Paper OMS / Audit Query Viewer behavior using an explicitly generated local paper
   demo seed record.
