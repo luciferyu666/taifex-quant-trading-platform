@@ -3129,6 +3129,82 @@ Safety boundary:
 - Production Trading Platform remains NOT READY.
 - Live trading remains disabled by default.
 
+## Hosted Paper Production Datastore Migration Plan v2 Verification
+
+Feature commit:
+
+```text
+b394b3b Add hosted paper production datastore migration plan v2
+```
+
+Verification results:
+
+- GitHub Actions Release Readiness: passed.
+- GitHub Actions Run ID: `25265646441`.
+- Vercel production deployment: `dpl_EX82EJ3T8eymg7DkR4QH8P8WfZM7`.
+- Production alias:
+  `https://taifex-quant-trading-platform-front.vercel.app`.
+- Production smoke gate: passed.
+- Local validation completed before commit:
+  - `make hosted-paper-production-datastore-migration-plan-v2`
+  - `cd backend && .venv/bin/python -m pytest tests/test_hosted_paper_production_datastore_migration_plan_v2_script.py`
+  - `make check`
+- Post-push verification completed:
+  - `gh run watch 25265646441 --exit-status`
+  - `cd frontend && vercel ls`
+  - `cd frontend && vercel inspect https://taifex-quant-trading-platform-front.vercel.app`
+  - `make frontend-production-smoke-check`
+  - `git status --short --branch`
+
+Scope verified:
+
+- Added dry-run only migration blueprint CLI:
+  `scripts/hosted-paper-production-datastore-migration-plan-v2.py`.
+- Added backend script coverage:
+  `backend/tests/test_hosted_paper_production_datastore_migration_plan_v2_script.py`.
+- Added reviewable migration blueprint documentation:
+  `docs/hosted-paper-production-datastore-migration-plan-v2.md`.
+- Added `make hosted-paper-production-datastore-migration-plan-v2`.
+- Added dry-run coverage to `scripts/check.sh`.
+- Updated production datastore readiness and SaaS foundation roadmap docs.
+- Blueprint output includes future hosted paper tables for approval requests,
+  approval decisions, workflow runs, paper orders, risk evaluations, OMS
+  events, execution reports, outbox events, audit events, audit integrity
+  snapshots, and evidence exports.
+
+Migration boundary:
+
+- This is a migration blueprint, not a migration runner.
+- `dry_run_only=true`.
+- `migration_apply_enabled=false`.
+- `automatic_apply_enabled=false`.
+- `database_url_read=false`.
+- `connection_attempted=false`.
+- `database_written=false`.
+- `external_db_written=false`.
+- `hosted_records_written=false`.
+- `local_sqlite_allowed_for_hosted=false`.
+- Every future hosted record requires `tenant_id`.
+- Backup, restore, retention, tenant isolation, and audit requirements are
+  documented as review requirements before any future staging datastore apply.
+
+Safety boundary:
+
+- No hosted database connection was attempted.
+- No `DATABASE_URL` was read.
+- No hosted records were written.
+- No customer account, tenant, reviewer login, session, or credential flow was
+  created.
+- No broker API is called.
+- No order is created.
+- `paper_only=true`.
+- `live_trading_enabled=false`.
+- `broker_provider=paper`.
+- `production_datastore_enabled=false`.
+- `production_trading_ready=false`.
+- Production Trading Platform remains NOT READY.
+- Live trading remains disabled by default.
+
 ## Deployment Refresh Recording Policy
 
 Record-only documentation commits can trigger a new Vercel production
