@@ -107,6 +107,7 @@ for required_file in \
   docs/hosted-paper-backend-api-readiness.md \
   docs/hosted-paper-managed-datastore-readiness.md \
   docs/hosted-paper-production-datastore-readiness.md \
+  docs/hosted-paper-production-datastore-migration-plan-v2.md \
   docs/hosted-paper-managed-datastore-migration-plan.md \
   docs/hosted-paper-auth-boundary-spec.md \
   docs/hosted-paper-auth-provider-selection-matrix.md \
@@ -137,6 +138,7 @@ for required_file in \
   scripts/hosted-paper-mock-session-check.sh \
   scripts/hosted-paper-production-datastore-readiness-check.sh \
   scripts/hosted-paper-datastore-migration-plan.py \
+  scripts/hosted-paper-production-datastore-migration-plan-v2.py \
   scripts/paper-compliance-approval-readiness-check.sh \
   scripts/paper-oms-production-readiness-check.sh \
   scripts/paper-broker-simulation-readiness-check.sh \
@@ -154,6 +156,7 @@ for required_file in \
   backend/tests/test_hosted_paper_datastore_readiness_routes.py \
   backend/tests/test_hosted_paper_production_datastore_readiness_routes.py \
   backend/tests/test_hosted_paper_datastore_migration_plan_script.py \
+  backend/tests/test_hosted_paper_production_datastore_migration_plan_v2_script.py \
   backend/tests/test_hosted_paper_auth_provider_selection_routes.py \
   backend/tests/test_hosted_paper_identity_access_contract_routes.py \
   frontend/app/components/HostedPaperEnvironmentPanel.tsx \
@@ -235,6 +238,11 @@ fi
 
 if [[ ! -x scripts/hosted-paper-datastore-migration-plan.py ]]; then
   printf 'scripts/hosted-paper-datastore-migration-plan.py must be executable.\n' >&2
+  missing_customer_eval_file=1
+fi
+
+if [[ ! -x scripts/hosted-paper-production-datastore-migration-plan-v2.py ]]; then
+  printf 'scripts/hosted-paper-production-datastore-migration-plan-v2.py must be executable.\n' >&2
   missing_customer_eval_file=1
 fi
 
@@ -642,6 +650,9 @@ if [[ -x "${BACKEND_PYTHON}" ]]; then
 
   printf 'Running Hosted Paper datastore migration plan dry-run...\n'
   "${BACKEND_PYTHON}" scripts/hosted-paper-datastore-migration-plan.py >/dev/null
+
+  printf 'Running Hosted Paper production datastore migration blueprint v2 dry-run...\n'
+  "${BACKEND_PYTHON}" scripts/hosted-paper-production-datastore-migration-plan-v2.py >/dev/null
 else
   printf 'backend/.venv/bin/python is missing; skipping backend runtime checks. Run bash scripts/bootstrap.sh.\n' >&2
 fi

@@ -72,6 +72,19 @@ review, and keeps migration apply, database connection, hosted writes, backup
 configuration, retention enforcement, and restore drill verification disabled
 until a formal datastore implementation slice is approved.
 
+The production datastore readiness contract can be converted into a more
+detailed dry-run migration blueprint:
+
+```bash
+make hosted-paper-production-datastore-migration-plan-v2
+```
+
+The v2 blueprint lists future production tables, column drafts, index drafts,
+constraint drafts, backup requirements, restore requirements, retention
+boundaries, and required controls before apply. It keeps
+`migration_apply_enabled=false`, `database_url_read=false`,
+`connection_attempted=false`, and `hosted_records_written=false`.
+
 `GET /api/hosted-paper/identity-access-contract` defines the future hosted
 paper identity, session, tenant, RBAC, and ABAC boundary. It separates
 `customer`, `reviewer`, `operator`, and `admin` responsibilities, but remains a
@@ -154,6 +167,10 @@ local machine only, and does not create hosted customer accounts.
   OMS event, and audit event production record groups, and keeps
   `database_url_read=false`, `connection_attempted=false`, `apply_enabled=false`,
   and `local_sqlite_allowed_for_production=false`.
+- `make hosted-paper-production-datastore-migration-plan-v2` emits a dry-run
+  migration blueprint for future production paper approval, paper order, OMS
+  event, and audit event tables without reading `DATABASE_URL`, connecting to a
+  database, applying migrations, or writing hosted records.
 - `GET /api/hosted-paper/identity-access-contract` returns
   `contract_only_not_implemented` and separates customer, reviewer, operator,
   and admin boundaries.
