@@ -194,7 +194,13 @@ at `GET /api/paper-execution/approvals/compliance-readiness`.
 SQLite audit persistence is also local paper scaffolding, not production WORM
 storage or an immutable audit ledger. The WORM readiness boundary is documented
 in `docs/paper-audit-worm-readiness.md` and exposed as read-only metadata at
-`GET /api/paper-execution/audit-integrity/worm-readiness`.
+`GET /api/paper-execution/audit-integrity/worm-readiness`. The broader formal
+audit/compliance trail readiness boundary is documented in
+`docs/paper-audit-compliance-trail-readiness.md` and exposed as read-only
+metadata at
+`GET /api/paper-execution/audit-integrity/compliance-trail-readiness`; it keeps
+append-only audit service, immutable audit log, reviewer identity, RBAC/ABAC,
+decision history immutability, retention policy, and export policy unenforced.
 Paper OMS is also local paper scaffolding, not a production OMS. The production
 readiness boundary is documented in `docs/paper-oms-production-readiness.md` and
 exposed as read-only metadata at

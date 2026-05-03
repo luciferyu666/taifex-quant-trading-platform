@@ -528,3 +528,29 @@ remain false:
 Any future WORM or immutable audit claim requires separate architecture,
 security, legal, compliance, and operational review. Live trading remains
 disabled by default.
+
+## Formal Audit / Compliance Trail Boundary
+
+Local SQLite hash-chain metadata is not a formal audit/compliance trail. The
+read-only readiness contract is:
+
+```text
+GET /api/paper-execution/audit-integrity/compliance-trail-readiness
+make paper-audit-compliance-trail-readiness-check
+```
+
+The following remain disabled:
+
+- `append_only_audit_service_enabled=false`
+- `immutable_audit_log_enabled=false`
+- `reviewer_identity_enforced=false`
+- `rbac_abac_enforced=false`
+- `decision_history_immutable=false`
+- `retention_policy_enforced=false`
+- `export_policy_enforced=false`
+- `compliance_claim=false`
+
+Any future formal audit/compliance trail must define reviewer identity, decision
+history, retention policy, export policy, tenant isolation, immutable storage,
+security review, legal review, and operational recovery before any production
+claim. Live trading remains disabled by default.

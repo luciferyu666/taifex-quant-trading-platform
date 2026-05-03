@@ -9,6 +9,10 @@ from app.domain.audit_integrity import (
     PaperAuditIntegrityStatus,
     PaperAuditIntegrityVerification,
 )
+from app.domain.paper_audit_compliance_trail import (
+    PaperAuditComplianceTrailReadinessResponse,
+    get_paper_audit_compliance_trail_readiness,
+)
 from app.domain.paper_audit_worm_readiness import (
     PaperAuditWormReadinessResponse,
     get_paper_audit_worm_readiness,
@@ -38,6 +42,16 @@ def paper_audit_worm_readiness(
     settings: SettingsDep,
 ) -> PaperAuditWormReadinessResponse:
     return get_paper_audit_worm_readiness(settings)
+
+
+@router.get(
+    "/audit-integrity/compliance-trail-readiness",
+    response_model=PaperAuditComplianceTrailReadinessResponse,
+)
+def paper_audit_compliance_trail_readiness(
+    settings: SettingsDep,
+) -> PaperAuditComplianceTrailReadinessResponse:
+    return get_paper_audit_compliance_trail_readiness(settings)
 
 
 @router.get("/audit-integrity/verify", response_model=PaperAuditIntegrityVerification)

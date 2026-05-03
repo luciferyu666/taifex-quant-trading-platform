@@ -122,6 +122,7 @@ for required_file in \
   docs/paper-approval-workflow.md \
   docs/paper-compliance-approval-readiness.md \
   docs/paper-audit-worm-readiness.md \
+  docs/paper-audit-compliance-trail-readiness.md \
   docs/paper-oms-production-readiness.md \
   docs/paper-oms-productionization-blueprint.md \
   scripts/customer-evaluation-check.sh \
@@ -143,6 +144,7 @@ for required_file in \
   scripts/paper-compliance-approval-readiness-check.sh \
   scripts/paper-oms-production-readiness-check.sh \
   scripts/paper-oms-productionization-blueprint-check.sh \
+  scripts/paper-audit-compliance-trail-readiness-check.sh \
   scripts/paper-broker-simulation-readiness-check.sh \
   scripts/paper-risk-cross-account-readiness-check.sh \
   scripts/export-hosted-paper-tenant-boundary-evidence.py \
@@ -153,6 +155,7 @@ for required_file in \
   backend/app/domain/hosted_paper_auth_provider_selection.py \
   backend/app/domain/hosted_paper_identity_access.py \
   backend/app/domain/paper_oms_productionization_blueprint.py \
+  backend/app/domain/paper_audit_compliance_trail.py \
   backend/app/api/hosted_backend_routes.py \
   backend/tests/test_hosted_backend_environment_routes.py \
   backend/tests/test_hosted_paper_environment_routes.py \
@@ -163,6 +166,7 @@ for required_file in \
   backend/tests/test_hosted_paper_auth_provider_selection_routes.py \
   backend/tests/test_hosted_paper_identity_access_contract_routes.py \
   backend/tests/test_paper_oms_productionization_blueprint_routes.py \
+  backend/tests/test_paper_audit_compliance_trail_routes.py \
   frontend/app/components/HostedPaperEnvironmentPanel.tsx \
   frontend/app/components/HostedPaperDatastoreReadinessPanel.tsx \
   frontend/app/components/HostedPaperProductionDatastoreReadinessPanel.tsx \
@@ -260,6 +264,11 @@ if [[ ! -x scripts/paper-audit-worm-readiness-check.sh ]]; then
   missing_customer_eval_file=1
 fi
 
+if [[ ! -x scripts/paper-audit-compliance-trail-readiness-check.sh ]]; then
+  printf 'scripts/paper-audit-compliance-trail-readiness-check.sh must be executable.\n' >&2
+  missing_customer_eval_file=1
+fi
+
 if [[ ! -x scripts/paper-oms-production-readiness-check.sh ]]; then
   printf 'scripts/paper-oms-production-readiness-check.sh must be executable.\n' >&2
   missing_customer_eval_file=1
@@ -298,6 +307,7 @@ bash scripts/hosted-paper-mock-session-check.sh
 bash scripts/hosted-paper-production-datastore-readiness-check.sh
 bash scripts/paper-compliance-approval-readiness-check.sh
 bash scripts/paper-audit-worm-readiness-check.sh
+bash scripts/paper-audit-compliance-trail-readiness-check.sh
 bash scripts/paper-oms-production-readiness-check.sh
 bash scripts/paper-oms-productionization-blueprint-check.sh
 bash scripts/paper-broker-simulation-readiness-check.sh

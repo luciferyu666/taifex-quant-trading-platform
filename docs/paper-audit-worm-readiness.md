@@ -63,6 +63,21 @@ trading.
 - Create audited export workflows and operational review procedures.
 - Complete security, legal, compliance, and disaster-recovery review.
 
+## Formal Compliance Trail Readiness
+
+The broader formal audit/compliance trail boundary is documented in
+`docs/paper-audit-compliance-trail-readiness.md` and exposed through:
+
+```text
+GET /api/paper-execution/audit-integrity/compliance-trail-readiness
+make paper-audit-compliance-trail-readiness-check
+```
+
+That contract covers append-only audit service requirements, immutable audit log
+or WORM storage, reviewer identity, RBAC/ABAC, immutable decision history,
+retention policy, legal hold, and export policy. It is read-only metadata only
+and does not enable production audit compliance.
+
 ## Web Command Center Boundary
 
 The Web Command Center may show the WORM readiness status as a read-only panel.
@@ -99,4 +114,3 @@ cd frontend && npm run typecheck
 cd frontend && npm run build
 make check
 ```
-
