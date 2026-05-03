@@ -3436,6 +3436,92 @@ Safety boundary:
 - Production Trading Platform remains NOT READY.
 - Live trading remains disabled by default.
 
+## Hosted Paper Security Operations Readiness Verification
+
+Verification date: 2026-05-03
+
+Commit verified:
+
+```text
+5da7db2 Add hosted paper security operations readiness
+```
+
+Verification results:
+
+- GitHub Actions Release Readiness: passed.
+- GitHub Actions Run ID: `25269698046`.
+- Vercel production deployment: `dpl_3LbBrAKQUdNHRSx3voRTdYT4dYRi`.
+- Production alias:
+  `https://taifex-quant-trading-platform-front.vercel.app`.
+- Production smoke gate: passed.
+- Local validation completed before commit:
+  - `make hosted-paper-security-operations-check`
+  - `cd backend && .venv/bin/python -m ruff check app/domain/hosted_paper_security_operations.py app/api/hosted_paper_routes.py tests/test_hosted_paper_security_operations_routes.py`
+  - `make frontend-i18n-check`
+  - `cd frontend && npm run typecheck`
+  - `cd frontend && npm run build`
+  - `make check`
+- Post-push verification completed:
+  - `gh run watch 25269698046 --exit-status`
+  - `cd frontend && vercel inspect https://taifex-quant-trading-platform-front.vercel.app`
+  - `make frontend-production-smoke-check`
+  - `git status --short --branch`
+
+Scope verified:
+
+- Added read-only endpoint:
+  `GET /api/hosted-paper/security-operations/readiness`.
+- Added `backend/app/domain/hosted_paper_security_operations.py`.
+- Added `backend/tests/test_hosted_paper_security_operations_routes.py`.
+- Added `frontend/app/components/HostedPaperSecurityOperationsPanel.tsx`.
+- Added `docs/hosted-paper-security-operations-readiness.md`.
+- Added `scripts/hosted-paper-security-operations-check.sh`.
+- Added `make hosted-paper-security-operations-check`.
+- Updated the Web Command Center to display security / operations readiness:
+  - secrets management
+  - rate limiting
+  - audit monitoring
+  - observability
+  - CI/CD deployment gates
+  - staging smoke tests
+  - load / abuse / auth boundary testing
+- Updated `scripts/check.sh`, frontend i18n checks, README, and hosted paper
+  SaaS roadmap references.
+
+Security / operations boundary:
+
+- This is a readiness contract and Web Command Center display only.
+- CI release readiness and production smoke gates are active.
+- Secret scanning is represented as a static safety gate; no managed secret
+  store is connected by this change.
+- Rate limiting is not enabled.
+- Hosted audit monitoring is not enabled.
+- Hosted observability/log drain pipeline is not enabled.
+- Staging hosted backend smoke testing is not enabled.
+- Load, abuse, and auth boundary tests are not executed by this change.
+- Incident response and rollback runbooks remain future work.
+
+Safety boundary:
+
+- The hosted paper security operations endpoint is read-only metadata.
+- No secret, token, API key, account ID, certificate, or credential is added.
+- No real login provider is enabled.
+- No customer account is created.
+- No hosted datastore is written.
+- No external database is written.
+- No broker API is called.
+- No broker credentials are collected.
+- No order is created.
+- `paper_only=true`.
+- `read_only=true`.
+- `live_trading_enabled=false`.
+- `broker_provider=paper`.
+- `production_operations_ready=false`.
+- `production_security_approval=false`.
+- `production_trading_ready=false`.
+- Production Trading Platform remains NOT READY.
+- Live trading remains disabled by default.
+
 ## Deployment Refresh Recording Policy
 
 Record-only documentation commits can trigger a new Vercel production
