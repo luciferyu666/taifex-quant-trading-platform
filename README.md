@@ -153,6 +153,7 @@ hosted paper API readiness is tracked in
 `GET /api/hosted-paper/environment`, `GET /api/hosted-paper/readiness`,
 `GET /api/hosted-paper/datastore-readiness`,
 `GET /api/hosted-paper/production-datastore/readiness`,
+`GET /api/hosted-paper/sandbox-tenant/onboarding-readiness`,
 `GET /api/hosted-paper/identity-readiness`,
 `GET /api/hosted-paper/identity-access-contract`,
 `GET /api/hosted-paper/auth-provider-selection`,
@@ -161,6 +162,13 @@ read-only environment, readiness, and mock contract responses only. The hosted
 paper SaaS foundation path is documented in
 `docs/hosted-paper-saas-foundation-roadmap.md`; Hosted Paper Mode is not enabled,
 and Local Demo Mode remains the primary customer path for actual paper records.
+The future browser-only customer sandbox tenant onboarding boundary is
+documented in `docs/hosted-paper-sandbox-tenant-onboarding-readiness.md` and
+exposed as read-only metadata at
+`GET /api/hosted-paper/sandbox-tenant/onboarding-readiness`. It makes the
+customer onboarding gap explicit: no online sandbox tenant, customer account,
+login, session, hosted datastore write, broker call, order creation, or live
+approval is enabled.
 The future managed datastore contract is documented in
 `docs/hosted-paper-managed-datastore-readiness.md`; it defines tenant-scoped
 record models, migration boundaries, retention requirements, and audit

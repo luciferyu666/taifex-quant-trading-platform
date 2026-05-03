@@ -21,6 +21,7 @@ GET /api/hosted-backend/environment
 GET /api/hosted-backend/readiness
 GET /api/hosted-paper/web-command-center/readiness
 GET /api/hosted-paper/security-operations/readiness
+GET /api/hosted-paper/sandbox-tenant/onboarding-readiness
 ```
 
 These endpoints are read-only metadata. They do not authenticate users, create sessions, create tenants, write databases, write hosted records, call Risk Engine, call OMS, call Broker Gateway, call broker SDKs, collect credentials, create orders, or enable live trading.
@@ -62,6 +63,8 @@ Production Trading Platform remains `NOT READY`. A hosted backend deployment doe
 8. Staging security and operations review.
 9. Secrets management, rate limiting, audit monitoring, observability, staging
    smoke, load/abuse, and auth boundary test gates.
+10. Browser-only sandbox tenant onboarding with guided demo data and Paper Only
+    labels.
 
 ## Explicit Non-Goals
 
@@ -99,6 +102,7 @@ make hosted-backend-readiness-check
 cd backend && .venv/bin/python -m pytest tests/test_hosted_backend_environment_routes.py
 make hosted-paper-api-readiness-check
 make hosted-paper-security-operations-check
+make hosted-paper-sandbox-onboarding-check
 make check
 ```
 
@@ -108,6 +112,7 @@ make check
 - `GET /api/hosted-backend/readiness` returns HTTP 200.
 - `GET /api/hosted-paper/web-command-center/readiness` returns HTTP 200.
 - `GET /api/hosted-paper/security-operations/readiness` returns HTTP 200.
+- `GET /api/hosted-paper/sandbox-tenant/onboarding-readiness` returns HTTP 200.
 - The response includes `current_environment`.
 - The response marks `managed_datastore_enabled=false`.
 - The response marks `local_sqlite_allowed_for_hosted=false`.
@@ -125,5 +130,9 @@ make check
   limiting, hosted audit monitoring, hosted observability, staging smoke,
   load/abuse tests, auth boundary tests, broker calls, hosted writes, and live
   trading disabled until reviewed implementation slices exist.
+- The sandbox tenant onboarding readiness response keeps online sandbox tenant
+  creation, customer accounts, login/session, hosted datastore writes, broker
+  calls, order creation, and live approval disabled while documenting future
+  guided demo data requirements.
 
 Live trading remains disabled by default.

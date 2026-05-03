@@ -599,6 +599,133 @@ export const dashboardCopy = {
           "Production Trading Platform remains NOT READY.",
       },
     },
+    hostedPaperSandboxOnboarding: {
+      eyebrow: "Customer Onboarding",
+      title: "Hosted Paper Sandbox Tenant Onboarding",
+      description:
+        "Read-only contract for the future browser-only customer sandbox tenant. It shows the gap between local demo setup and a SaaS onboarding flow without creating accounts, tenants, sessions, records, orders, or broker connections.",
+      fallbackPrefix:
+        "Hosted paper sandbox onboarding unavailable. Rendering safe fallback:",
+      endpointLabel: "Read-only endpoint",
+      goalLabel: "Target customer experience",
+      stateLabel: "Readiness state",
+      capabilitiesLabel: "Onboarding capabilities",
+      safetyDefaultsLabel: "Safety defaults",
+      safetyFlagsLabel: "Safety flags",
+      blockersLabel: "Current blockers",
+      guidedDemoLabel: "Guided demo data contract",
+      datasetStatusLabel: "Dataset status",
+      recordsLabel: "Future demo records",
+      requiredStepsLabel: "Required onboarding steps",
+      currentStatusLabel: "Current status",
+      requiredBeforeSelfServiceLabel: "Required before customer self-service",
+      demoWarningLabel: "Guided demo warnings",
+      warningLabel: "Boundary warnings",
+      capabilityLabels: {
+        online_sandbox_tenant_enabled: "Online sandbox tenant enabled",
+        browser_only_customer_onboarding_enabled:
+          "Browser-only customer onboarding enabled",
+        hosted_backend_enabled: "Hosted backend enabled",
+        managed_datastore_enabled: "Managed datastore enabled",
+        real_login_enabled: "Real login enabled",
+        tenant_isolation_enforced: "Tenant isolation enforced",
+        guided_demo_data_contract_defined: "Guided demo data contract defined",
+        guided_demo_data_hosted: "Guided demo data hosted",
+        paper_only_boundary_visible: "Paper Only boundary visible",
+        live_trading_controls_visible: "Live trading controls visible",
+      },
+      safetyFlagLabels: {
+        paper_only: "paper_only",
+        read_only: "read_only",
+        live_trading_enabled: "live_trading_enabled",
+        broker_provider: "broker_provider",
+        online_sandbox_tenant_created: "online_sandbox_tenant_created",
+        customer_account_created: "customer_account_created",
+        login_enabled: "login_enabled",
+        session_cookie_issued: "session_cookie_issued",
+        tenant_record_created: "tenant_record_created",
+        hosted_datastore_written: "hosted_datastore_written",
+        external_db_written: "external_db_written",
+        broker_api_called: "broker_api_called",
+        broker_credentials_collected: "broker_credentials_collected",
+        order_created: "order_created",
+        real_money_visible: "real_money_visible",
+        production_customer_onboarding_ready:
+          "production_customer_onboarding_ready",
+        production_trading_ready: "production_trading_ready",
+      },
+      blockerLabels: {
+        "No hosted sandbox tenant provisioning exists.":
+          "No hosted sandbox tenant provisioning exists.",
+        "No customer login or session provider is enabled.":
+          "No customer login or session provider is enabled.",
+        "No tenant-isolated managed datastore is connected.":
+          "No tenant-isolated managed datastore is connected.",
+        "No hosted paper approval, OMS, audit, or evidence records are written.":
+          "No hosted paper approval, OMS, audit, or evidence records are written.",
+        "Production Vercel remains a read-only UI surface unless connected to a reviewed hosted backend.":
+          "Production Vercel remains a read-only UI surface unless connected to a reviewed hosted backend.",
+      },
+      datasetStatusLabels: {
+        contract_only_not_hosted: "contract_only_not_hosted",
+      },
+      intentLabels: {
+        "Future guided customer demo data for paper approval requests, paper-only reviewer decisions, controlled paper submit, OMS timeline, audit timeline, risk evidence, and broker simulation evidence.":
+          "Future guided customer demo data for paper approval requests, paper-only reviewer decisions, controlled paper submit, OMS timeline, audit timeline, risk evidence, and broker simulation evidence.",
+      },
+      recordLabels: {
+        sample_paper_approval_request: "sample_paper_approval_request",
+        sample_reviewer_decisions: "sample_reviewer_decisions",
+        sample_paper_workflow_run: "sample_paper_workflow_run",
+        sample_oms_events: "sample_oms_events",
+        sample_audit_events: "sample_audit_events",
+        sample_risk_evaluation: "sample_risk_evaluation",
+        sample_broker_simulation_preview: "sample_broker_simulation_preview",
+        sample_readiness_evidence: "sample_readiness_evidence",
+      },
+      stepLabels: {
+        hosted_backend_staging: "Hosted backend staging",
+        managed_tenant_datastore: "Managed tenant datastore",
+        customer_login_session: "Customer login and session",
+        sandbox_tenant_provisioning: "Sandbox tenant provisioning",
+        guided_demo_data: "Guided demo data",
+        customer_browser_demo_flow: "Customer browser demo flow",
+        security_operations_gate: "Security and operations gate",
+      },
+      statusLabels: {
+        contract_only: "contract_only",
+        migration_plan_only: "migration_plan_only",
+        provider_not_selected: "provider_not_selected",
+        not_enabled: "not_enabled",
+        local_demo_required_today: "local_demo_required_today",
+        readiness_contract_only: "readiness_contract_only",
+      },
+      demoWarningLabels: {
+        "Guided demo data is a contract only and is not hosted by this release.":
+          "Guided demo data is a contract only and is not hosted by this release.",
+        "Future demo records must remain simulated, Paper Only, and clearly labeled.":
+          "Future demo records must remain simulated, Paper Only, and clearly labeled.",
+        "Future demo records must not contain broker credentials, real account data, or investment advice.":
+          "Future demo records must not contain broker credentials, real account data, or investment advice.",
+      },
+      warningLabels: {
+        "This endpoint is read-only onboarding readiness metadata only.":
+          "This endpoint is read-only onboarding readiness metadata only.",
+        "No online sandbox tenant is created.":
+          "No online sandbox tenant is created.",
+        "No customer account, reviewer account, login, or session is created.":
+          "No customer account, reviewer account, login, or session is created.",
+        "No hosted datastore is written.": "No hosted datastore is written.",
+        "No broker API is called and no broker credentials are collected.":
+          "No broker API is called and no broker credentials are collected.",
+        "No order is created and no live trading approval exists.":
+          "No order is created and no live trading approval exists.",
+        "Production Trading Platform remains NOT READY.":
+          "Production Trading Platform remains NOT READY.",
+        "Live trading remains disabled by default.":
+          "Live trading remains disabled by default.",
+      },
+    },
     hostedPaperEnvironment: {
       eyebrow: "SaaS Foundation",
       title: "Hosted Paper API Environment Contract",
@@ -3433,6 +3560,133 @@ export const dashboardCopy = {
           "它不驗證使用者、不寫入 records、不呼叫券商、不建立訂單，也不啟用實盤交易。",
         "Production Trading Platform remains NOT READY.":
           "Production Trading Platform 仍為 NOT READY。",
+      },
+    },
+    hostedPaperSandboxOnboarding: {
+      eyebrow: "Customer Onboarding",
+      title: "Hosted Paper Sandbox Tenant Onboarding",
+      description:
+        "未來 browser-only customer sandbox tenant 的只讀契約。它顯示 local demo setup 與 SaaS onboarding flow 之間的缺口，但不建立 account、tenant、session、record、order 或 broker connection。",
+      fallbackPrefix:
+        "Hosted paper sandbox onboarding 無法取得，正在顯示安全備援資料：",
+      endpointLabel: "只讀 endpoint",
+      goalLabel: "目標客戶體驗",
+      stateLabel: "就緒狀態",
+      capabilitiesLabel: "Onboarding capabilities",
+      safetyDefaultsLabel: "安全預設",
+      safetyFlagsLabel: "安全旗標",
+      blockersLabel: "目前 blockers",
+      guidedDemoLabel: "Guided demo data contract",
+      datasetStatusLabel: "Dataset status",
+      recordsLabel: "未來 demo records",
+      requiredStepsLabel: "必要 onboarding steps",
+      currentStatusLabel: "目前狀態",
+      requiredBeforeSelfServiceLabel: "Customer self-service 前必要",
+      demoWarningLabel: "Guided demo warnings",
+      warningLabel: "邊界警示",
+      capabilityLabels: {
+        online_sandbox_tenant_enabled: "Online sandbox tenant 已啟用",
+        browser_only_customer_onboarding_enabled:
+          "Browser-only customer onboarding 已啟用",
+        hosted_backend_enabled: "Hosted backend 已啟用",
+        managed_datastore_enabled: "Managed datastore 已啟用",
+        real_login_enabled: "Real login 已啟用",
+        tenant_isolation_enforced: "Tenant isolation 已強制",
+        guided_demo_data_contract_defined: "Guided demo data contract 已定義",
+        guided_demo_data_hosted: "Guided demo data 已 hosted",
+        paper_only_boundary_visible: "Paper Only 邊界可見",
+        live_trading_controls_visible: "Live trading controls 可見",
+      },
+      safetyFlagLabels: {
+        paper_only: "paper_only",
+        read_only: "read_only",
+        live_trading_enabled: "live_trading_enabled",
+        broker_provider: "broker_provider",
+        online_sandbox_tenant_created: "online_sandbox_tenant_created",
+        customer_account_created: "customer_account_created",
+        login_enabled: "login_enabled",
+        session_cookie_issued: "session_cookie_issued",
+        tenant_record_created: "tenant_record_created",
+        hosted_datastore_written: "hosted_datastore_written",
+        external_db_written: "external_db_written",
+        broker_api_called: "broker_api_called",
+        broker_credentials_collected: "broker_credentials_collected",
+        order_created: "order_created",
+        real_money_visible: "real_money_visible",
+        production_customer_onboarding_ready:
+          "production_customer_onboarding_ready",
+        production_trading_ready: "production_trading_ready",
+      },
+      blockerLabels: {
+        "No hosted sandbox tenant provisioning exists.":
+          "尚未有 hosted sandbox tenant provisioning。",
+        "No customer login or session provider is enabled.":
+          "尚未啟用 customer login 或 session provider。",
+        "No tenant-isolated managed datastore is connected.":
+          "尚未連接 tenant-isolated managed datastore。",
+        "No hosted paper approval, OMS, audit, or evidence records are written.":
+          "尚未寫入 hosted paper approval、OMS、audit 或 evidence records。",
+        "Production Vercel remains a read-only UI surface unless connected to a reviewed hosted backend.":
+          "除非連接經審查的 hosted backend，Production Vercel 仍是只讀 UI surface。",
+      },
+      datasetStatusLabels: {
+        contract_only_not_hosted: "contract_only_not_hosted",
+      },
+      intentLabels: {
+        "Future guided customer demo data for paper approval requests, paper-only reviewer decisions, controlled paper submit, OMS timeline, audit timeline, risk evidence, and broker simulation evidence.":
+          "未來 guided customer demo data 會涵蓋 paper approval requests、paper-only reviewer decisions、controlled paper submit、OMS timeline、audit timeline、risk evidence 與 broker simulation evidence。",
+      },
+      recordLabels: {
+        sample_paper_approval_request: "sample_paper_approval_request",
+        sample_reviewer_decisions: "sample_reviewer_decisions",
+        sample_paper_workflow_run: "sample_paper_workflow_run",
+        sample_oms_events: "sample_oms_events",
+        sample_audit_events: "sample_audit_events",
+        sample_risk_evaluation: "sample_risk_evaluation",
+        sample_broker_simulation_preview: "sample_broker_simulation_preview",
+        sample_readiness_evidence: "sample_readiness_evidence",
+      },
+      stepLabels: {
+        hosted_backend_staging: "Hosted backend staging",
+        managed_tenant_datastore: "Managed tenant datastore",
+        customer_login_session: "Customer login and session",
+        sandbox_tenant_provisioning: "Sandbox tenant provisioning",
+        guided_demo_data: "Guided demo data",
+        customer_browser_demo_flow: "Customer browser demo flow",
+        security_operations_gate: "Security and operations gate",
+      },
+      statusLabels: {
+        contract_only: "contract_only",
+        migration_plan_only: "migration_plan_only",
+        provider_not_selected: "provider_not_selected",
+        not_enabled: "not_enabled",
+        local_demo_required_today: "local_demo_required_today",
+        readiness_contract_only: "readiness_contract_only",
+      },
+      demoWarningLabels: {
+        "Guided demo data is a contract only and is not hosted by this release.":
+          "Guided demo data 只是 contract，本版本尚未 hosted。",
+        "Future demo records must remain simulated, Paper Only, and clearly labeled.":
+          "未來 demo records 必須維持 simulated、Paper Only，並清楚標示。",
+        "Future demo records must not contain broker credentials, real account data, or investment advice.":
+          "未來 demo records 不得包含 broker credentials、real account data 或 investment advice。",
+      },
+      warningLabels: {
+        "This endpoint is read-only onboarding readiness metadata only.":
+          "此 endpoint 只是只讀 onboarding readiness metadata。",
+        "No online sandbox tenant is created.":
+          "不建立 online sandbox tenant。",
+        "No customer account, reviewer account, login, or session is created.":
+          "不建立 customer account、reviewer account、login 或 session。",
+        "No hosted datastore is written.": "不寫入 hosted datastore。",
+        "No broker API is called and no broker credentials are collected.":
+          "不呼叫 broker API，也不收集 broker credentials。",
+        "No order is created and no live trading approval exists.":
+          "不建立 order，也不存在 live trading approval。",
+        "Production Trading Platform remains NOT READY.":
+          "Production Trading Platform 仍為 NOT READY。",
+        "Live trading remains disabled by default.":
+          "Live trading remains disabled by default.",
       },
     },
     hostedPaperEnvironment: {

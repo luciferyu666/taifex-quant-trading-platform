@@ -31,6 +31,10 @@ from app.domain.hosted_paper_readiness import (
     HostedPaperReadinessResponse,
     get_hosted_paper_readiness,
 )
+from app.domain.hosted_paper_sandbox_onboarding import (
+    HostedPaperSandboxOnboardingReadinessResponse,
+    get_hosted_paper_sandbox_onboarding_readiness,
+)
 from app.domain.hosted_paper_security_operations import (
     HostedPaperSecurityOperationsReadinessResponse,
     get_hosted_paper_security_operations_readiness,
@@ -137,3 +141,13 @@ def hosted_paper_security_operations_readiness(
     settings: SettingsDep,
 ) -> HostedPaperSecurityOperationsReadinessResponse:
     return get_hosted_paper_security_operations_readiness(settings)
+
+
+@router.get(
+    "/sandbox-tenant/onboarding-readiness",
+    response_model=HostedPaperSandboxOnboardingReadinessResponse,
+)
+def hosted_paper_sandbox_onboarding_readiness(
+    settings: SettingsDep,
+) -> HostedPaperSandboxOnboardingReadinessResponse:
+    return get_hosted_paper_sandbox_onboarding_readiness(settings)

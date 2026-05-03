@@ -47,6 +47,10 @@ import {
   type HostedPaperSecurityOperationsReadiness,
 } from "./components/HostedPaperSecurityOperationsPanel";
 import {
+  HostedPaperSandboxOnboardingPanel,
+  type HostedPaperSandboxOnboardingReadiness,
+} from "./components/HostedPaperSandboxOnboardingPanel";
+import {
   HostedPaperMockSessionPanel,
   type HostedPaperMockSession,
   type HostedPaperTenantContext,
@@ -1658,6 +1662,151 @@ const fallbackHostedPaperSecurityOperationsReadiness: HostedPaperSecurityOperati
   ],
 };
 
+const fallbackHostedPaperSandboxOnboardingReadiness: HostedPaperSandboxOnboardingReadiness = {
+  service: "hosted-paper-sandbox-onboarding-readiness",
+  readiness_state: "contract_only_no_online_sandbox_tenant",
+  summary:
+    "Fallback sandbox onboarding readiness metadata. Customer self-service should eventually use a browser-only Paper Only sandbox tenant with guided demo data, but no online sandbox tenant, login, hosted datastore, broker call, or live trading path is enabled.",
+  customer_onboarding_goal:
+    "Provide an online Paper Only sandbox tenant with guided demo data, visible safety boundaries, and no live-trading controls.",
+  current_blockers: [
+    "No hosted sandbox tenant provisioning exists.",
+    "No customer login or session provider is enabled.",
+    "No tenant-isolated managed datastore is connected.",
+    "No hosted paper approval, OMS, audit, or evidence records are written.",
+    "Production Vercel remains a read-only UI surface unless connected to a reviewed hosted backend.",
+  ],
+  capabilities: {
+    online_sandbox_tenant_enabled: false,
+    browser_only_customer_onboarding_enabled: false,
+    hosted_backend_enabled: false,
+    managed_datastore_enabled: false,
+    real_login_enabled: false,
+    tenant_isolation_enforced: false,
+    guided_demo_data_contract_defined: true,
+    guided_demo_data_hosted: false,
+    paper_only_boundary_visible: true,
+    live_trading_controls_visible: false,
+  },
+  guided_demo_dataset_contract: {
+    dataset_id: "hosted-paper-guided-demo-contract-v1",
+    dataset_status: "contract_only_not_hosted",
+    intended_use:
+      "Future guided customer demo data for paper approval requests, paper-only reviewer decisions, controlled paper submit, OMS timeline, audit timeline, risk evidence, and broker simulation evidence.",
+    records_included: [
+      "sample_paper_approval_request",
+      "sample_reviewer_decisions",
+      "sample_paper_workflow_run",
+      "sample_oms_events",
+      "sample_audit_events",
+      "sample_risk_evaluation",
+      "sample_broker_simulation_preview",
+      "sample_readiness_evidence",
+    ],
+    hosted_persistence_enabled: false,
+    generated_from_real_account: false,
+    external_market_data_downloaded: false,
+    warnings: [
+      "Guided demo data is a contract only and is not hosted by this release.",
+      "Future demo records must remain simulated, Paper Only, and clearly labeled.",
+      "Future demo records must not contain broker credentials, real account data, or investment advice.",
+    ],
+  },
+  required_onboarding_steps: [
+    {
+      sequence: 1,
+      step: "hosted_backend_staging",
+      current_status: "contract_only",
+      required_before_customer_self_service: true,
+      notes: [],
+    },
+    {
+      sequence: 2,
+      step: "managed_tenant_datastore",
+      current_status: "migration_plan_only",
+      required_before_customer_self_service: true,
+      notes: [],
+    },
+    {
+      sequence: 3,
+      step: "customer_login_session",
+      current_status: "provider_not_selected",
+      required_before_customer_self_service: true,
+      notes: [],
+    },
+    {
+      sequence: 4,
+      step: "sandbox_tenant_provisioning",
+      current_status: "not_enabled",
+      required_before_customer_self_service: true,
+      notes: [],
+    },
+    {
+      sequence: 5,
+      step: "guided_demo_data",
+      current_status: "contract_only",
+      required_before_customer_self_service: true,
+      notes: [],
+    },
+    {
+      sequence: 6,
+      step: "customer_browser_demo_flow",
+      current_status: "local_demo_required_today",
+      required_before_customer_self_service: true,
+      notes: [],
+    },
+    {
+      sequence: 7,
+      step: "security_operations_gate",
+      current_status: "readiness_contract_only",
+      required_before_customer_self_service: true,
+      notes: [],
+    },
+  ],
+  safety_defaults: {
+    trading_mode: "paper",
+    enable_live_trading: false,
+    broker_provider: "paper",
+  },
+  safety_flags: {
+    paper_only: true,
+    read_only: true,
+    live_trading_enabled: false,
+    broker_provider: "paper",
+    online_sandbox_tenant_created: false,
+    customer_account_created: false,
+    login_enabled: false,
+    session_cookie_issued: false,
+    tenant_record_created: false,
+    hosted_datastore_written: false,
+    external_db_written: false,
+    broker_api_called: false,
+    broker_credentials_collected: false,
+    order_created: false,
+    real_money_visible: false,
+    production_customer_onboarding_ready: false,
+    production_trading_ready: false,
+  },
+  docs: {
+    sandbox_onboarding_readiness:
+      "docs/hosted-paper-sandbox-tenant-onboarding-readiness.md",
+    hosted_paper_saas_foundation: "docs/hosted-paper-saas-foundation-roadmap.md",
+    hosted_paper_environment: "docs/hosted-backend-api-deployment-foundation.md",
+    customer_self_service_demo: "docs/customer-self-service-demo.md",
+    paper_shadow_live_boundary: "docs/paper-shadow-live-boundary.md",
+  },
+  warnings: [
+    "Fallback sandbox onboarding metadata. Backend is unavailable.",
+    "No online sandbox tenant is created.",
+    "No customer account, reviewer account, login, or session is created.",
+    "No hosted datastore is written.",
+    "No broker API is called and no broker credentials are collected.",
+    "No order is created and no live trading approval exists.",
+    "Production Trading Platform remains NOT READY.",
+    "Live trading remains disabled by default.",
+  ],
+};
+
 const fallbackHostedPaperTenant: HostedPaperTenantContext = {
   tenant_id: "mock-tenant-paper-evaluation",
   tenant_name: "Mock Paper Evaluation Tenant",
@@ -2417,6 +2566,7 @@ export default async function Home({ searchParams }: HomeProps) {
     hostedPaperIdentityAccessContract,
     hostedPaperAuthProviderSelection,
     hostedPaperSecurityOperationsReadiness,
+    hostedPaperSandboxOnboardingReadiness,
     hostedPaperMockSession,
     hostedPaperTenant,
     reviewPacket,
@@ -2527,6 +2677,10 @@ export default async function Home({ searchParams }: HomeProps) {
       fetchJson<HostedPaperSecurityOperationsReadiness>(
         "/api/hosted-paper/security-operations/readiness",
         fallbackHostedPaperSecurityOperationsReadiness,
+      ),
+      fetchJson<HostedPaperSandboxOnboardingReadiness>(
+        "/api/hosted-paper/sandbox-tenant/onboarding-readiness",
+        fallbackHostedPaperSandboxOnboardingReadiness,
       ),
       fetchJson<HostedPaperMockSession>(
         "/api/hosted-paper/session",
@@ -2644,6 +2798,9 @@ export default async function Home({ searchParams }: HomeProps) {
     hostedPaperSecurityOperationsReadiness.available
       ? undefined
       : `hosted paper security operations: ${hostedPaperSecurityOperationsReadiness.error}`,
+    hostedPaperSandboxOnboardingReadiness.available
+      ? undefined
+      : `hosted paper sandbox onboarding: ${hostedPaperSandboxOnboardingReadiness.error}`,
     hostedPaperMockSession.available
       ? undefined
       : `hosted paper mock session: ${hostedPaperMockSession.error}`,
@@ -2785,6 +2942,16 @@ export default async function Home({ searchParams }: HomeProps) {
               copy={copy.hostedPaperReadiness}
               error={hostedPaperReadiness.available ? undefined : hostedPaperReadiness.error}
               readiness={hostedPaperReadiness.data}
+            />
+            <HostedPaperSandboxOnboardingPanel
+              available={hostedPaperSandboxOnboardingReadiness.available}
+              copy={copy.hostedPaperSandboxOnboarding}
+              error={
+                hostedPaperSandboxOnboardingReadiness.available
+                  ? undefined
+                  : hostedPaperSandboxOnboardingReadiness.error
+              }
+              readiness={hostedPaperSandboxOnboardingReadiness.data}
             />
             <HostedPaperIdentityReadinessPanel
               available={hostedPaperIdentityReadiness.available}

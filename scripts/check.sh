@@ -113,6 +113,7 @@ for required_file in \
   docs/hosted-paper-auth-boundary-spec.md \
   docs/hosted-paper-auth-provider-selection-matrix.md \
   docs/hosted-paper-security-operations-readiness.md \
+  docs/hosted-paper-sandbox-tenant-onboarding-readiness.md \
   docs/hosted-paper-identity-rbac-tenant-readiness.md \
   docs/hosted-paper-identity-access-contract.md \
   docs/hosted-paper-mock-session-contract.md \
@@ -139,6 +140,7 @@ for required_file in \
   scripts/hosted-paper-auth-boundary-check.sh \
   scripts/hosted-paper-auth-provider-selection-check.sh \
   scripts/hosted-paper-security-operations-check.sh \
+  scripts/hosted-paper-sandbox-onboarding-check.sh \
   scripts/hosted-paper-identity-readiness-check.sh \
   scripts/hosted-paper-identity-access-check.sh \
   scripts/hosted-paper-mock-session-check.sh \
@@ -159,6 +161,7 @@ for required_file in \
   backend/app/domain/hosted_paper_production_datastore.py \
   backend/app/domain/hosted_paper_auth_provider_selection.py \
   backend/app/domain/hosted_paper_security_operations.py \
+  backend/app/domain/hosted_paper_sandbox_onboarding.py \
   backend/app/domain/hosted_paper_identity_access.py \
   backend/app/domain/paper_oms_productionization_blueprint.py \
   backend/app/domain/paper_audit_compliance_trail.py \
@@ -172,6 +175,7 @@ for required_file in \
   backend/tests/test_hosted_paper_production_datastore_migration_plan_v2_script.py \
   backend/tests/test_hosted_paper_auth_provider_selection_routes.py \
   backend/tests/test_hosted_paper_security_operations_routes.py \
+  backend/tests/test_hosted_paper_sandbox_onboarding_routes.py \
   backend/tests/test_hosted_paper_identity_access_contract_routes.py \
   backend/tests/test_paper_oms_productionization_blueprint_routes.py \
   backend/tests/test_paper_audit_compliance_trail_routes.py \
@@ -181,6 +185,7 @@ for required_file in \
   frontend/app/components/HostedPaperDatastoreReadinessPanel.tsx \
   frontend/app/components/HostedPaperProductionDatastoreReadinessPanel.tsx \
   frontend/app/components/HostedPaperAuthProviderSelectionPanel.tsx \
+  frontend/app/components/HostedPaperSandboxOnboardingPanel.tsx \
   frontend/app/components/HostedPaperIdentityAccessContractPanel.tsx \
   frontend/scripts/check-paper-approval-ui-flow.mjs; do
   if [[ ! -f "${required_file}" ]]; then
@@ -241,6 +246,11 @@ fi
 
 if [[ ! -x scripts/hosted-paper-security-operations-check.sh ]]; then
   printf 'scripts/hosted-paper-security-operations-check.sh must be executable.\n' >&2
+  missing_customer_eval_file=1
+fi
+
+if [[ ! -x scripts/hosted-paper-sandbox-onboarding-check.sh ]]; then
+  printf 'scripts/hosted-paper-sandbox-onboarding-check.sh must be executable.\n' >&2
   missing_customer_eval_file=1
 fi
 
@@ -320,6 +330,7 @@ bash scripts/launch-self-service-paper-demo.sh --check-only
 bash scripts/hosted-backend-readiness-check.sh
 bash scripts/hosted-web-command-center-check.sh
 bash scripts/hosted-paper-api-readiness-check.sh
+bash scripts/hosted-paper-sandbox-onboarding-check.sh
 bash scripts/hosted-paper-auth-boundary-check.sh
 bash scripts/hosted-paper-auth-provider-selection-check.sh
 bash scripts/hosted-paper-security-operations-check.sh

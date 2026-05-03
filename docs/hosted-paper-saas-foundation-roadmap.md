@@ -22,6 +22,7 @@ GET /api/hosted-paper/readiness
 GET /api/hosted-paper/web-command-center/readiness
 GET /api/hosted-paper/datastore-readiness
 GET /api/hosted-paper/production-datastore/readiness
+GET /api/hosted-paper/sandbox-tenant/onboarding-readiness
 GET /api/hosted-paper/identity-access-contract
 GET /api/hosted-paper/auth-provider-selection
 GET /api/hosted-paper/security-operations/readiness
@@ -97,6 +98,13 @@ boundaries, and required controls before apply. It keeps
 `migration_apply_enabled=false`, `database_url_read=false`,
 `connection_attempted=false`, and `hosted_records_written=false`.
 
+`GET /api/hosted-paper/sandbox-tenant/onboarding-readiness` defines the
+customer onboarding boundary for a future online sandbox tenant. It documents
+the target browser-only customer experience, guided demo data contract, and
+required onboarding steps while keeping sandbox tenant provisioning, customer
+accounts, login/session, hosted records, broker calls, order creation, and live
+trading disabled.
+
 `GET /api/hosted-paper/identity-access-contract` defines the future hosted
 paper identity, session, tenant, RBAC, and ABAC boundary. It separates
 `customer`, `reviewer`, `operator`, and `admin` responsibilities, but remains a
@@ -132,8 +140,10 @@ disabled.
 8. RBAC/ABAC enforcement
 9. Paper workflow persistence
 10. Hosted customer demo tenant
-11. Security / operations readiness controls
-12. Staging smoke, load, abuse, and auth boundary tests
+11. Browser-only sandbox tenant onboarding
+12. Guided demo data seeding
+13. Security / operations readiness controls
+14. Staging smoke, load, abuse, and auth boundary tests
 
 ## Environment Boundary
 
@@ -205,6 +215,12 @@ local machine only, and does not create hosted customer accounts.
   production smoke gates enabled, and marks secrets management, rate limiting,
   audit monitoring, observability pipeline, staging smoke, load, abuse, and auth
   boundary gates not enabled.
+- `GET /api/hosted-paper/sandbox-tenant/onboarding-readiness` returns
+  `contract_only_no_online_sandbox_tenant`, keeps
+  `online_sandbox_tenant_enabled=false`, `customer_account_created=false`,
+  `hosted_datastore_written=false`, `broker_api_called=false`,
+  `order_created=false`, and `live_trading_enabled=false`, and lists the future
+  guided demo data contract.
 - Future hosted paper record models require `tenant_id`.
 - Migration apply remains disabled and no hosted database connection is
   attempted.
@@ -225,5 +241,9 @@ BROKER_PROVIDER=paper
 - `make hosted-paper-production-datastore-readiness-check` validates the
   production datastore readiness API, Web Command Center panel, docs, and safety
   boundaries without reading `DATABASE_URL`.
+- `make hosted-paper-sandbox-onboarding-check` validates the sandbox tenant
+  onboarding readiness API, Web Command Center panel, docs, and safety
+  boundaries without creating tenants, accounts, sessions, records, orders, or
+  broker connections.
 
 Live trading remains disabled by default.

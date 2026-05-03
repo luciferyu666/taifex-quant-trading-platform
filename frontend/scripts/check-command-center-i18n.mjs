@@ -24,6 +24,8 @@ const files = {
     "frontend/app/components/HostedPaperAuthProviderSelectionPanel.tsx",
   hostedPaperSecurityOperations:
     "frontend/app/components/HostedPaperSecurityOperationsPanel.tsx",
+  hostedPaperSandboxOnboarding:
+    "frontend/app/components/HostedPaperSandboxOnboardingPanel.tsx",
   hostedPaperSession: "frontend/app/components/HostedPaperMockSessionPanel.tsx",
   hostedPaperTenantEvidence:
     "frontend/app/components/HostedPaperTenantBoundaryEvidencePanel.tsx",
@@ -322,6 +324,29 @@ requireNotContains("Hosted paper security operations panel does not call workflo
 requireNotContains("Hosted paper security operations panel does not collect API keys", sourceByFile.hostedPaperSecurityOperations.toLowerCase(), "api_key");
 requireNotContains("Hosted paper security operations panel does not collect account IDs", sourceByFile.hostedPaperSecurityOperations.toLowerCase(), "account_id");
 requireNotContains("Hosted paper security operations panel does not collect certificates", sourceByFile.hostedPaperSecurityOperations.toLowerCase(), "certificate");
+requireContains("English hosted paper sandbox onboarding copy exists", sourceByFile.i18n, "Hosted Paper Sandbox Tenant Onboarding");
+requireContains("Traditional Chinese hosted paper sandbox onboarding copy exists", sourceByFile.i18n, "目標客戶體驗");
+requireContains("Hosted paper sandbox onboarding component is implemented", sourceByFile.hostedPaperSandboxOnboarding, "HostedPaperSandboxOnboardingPanel");
+requireContains("Hosted paper sandbox onboarding endpoint is fetched on page", sourceByFile.page, "/api/hosted-paper/sandbox-tenant/onboarding-readiness");
+requireContains("Hosted paper sandbox onboarding panel is mounted on page", sourceByFile.page, "HostedPaperSandboxOnboardingPanel");
+requireContains("Hosted paper sandbox onboarding shows online tenant flag", sourceByFile.hostedPaperSandboxOnboarding, "online_sandbox_tenant_enabled");
+requireContains("Hosted paper sandbox onboarding shows browser-only flag", sourceByFile.hostedPaperSandboxOnboarding, "browser_only_customer_onboarding_enabled");
+requireContains("Hosted paper sandbox onboarding shows guided data contract flag", sourceByFile.hostedPaperSandboxOnboarding, "guided_demo_data_contract_defined");
+requireContains("Hosted paper sandbox onboarding shows guided data hosted flag", sourceByFile.hostedPaperSandboxOnboarding, "guided_demo_data_hosted");
+requireContains("Hosted paper sandbox onboarding shows Paper Only boundary", sourceByFile.hostedPaperSandboxOnboarding, "paper_only_boundary_visible");
+requireContains("Hosted paper sandbox onboarding shows live controls false", sourceByFile.hostedPaperSandboxOnboarding, "live_trading_controls_visible");
+requireContains("Hosted paper sandbox onboarding shows tenant creation safety flag", sourceByFile.hostedPaperSandboxOnboarding, "online_sandbox_tenant_created");
+requireContains("Hosted paper sandbox onboarding shows customer account safety flag", sourceByFile.hostedPaperSandboxOnboarding, "customer_account_created");
+requireContains("Hosted paper sandbox onboarding shows hosted datastore safety flag", sourceByFile.hostedPaperSandboxOnboarding, "hosted_datastore_written");
+requireContains("Hosted paper sandbox onboarding shows broker safety flag", sourceByFile.hostedPaperSandboxOnboarding, "broker_api_called");
+requireContains("Hosted paper sandbox onboarding shows order safety flag", sourceByFile.hostedPaperSandboxOnboarding, "order_created");
+requireContains("Hosted paper sandbox onboarding shows production customer onboarding false", sourceByFile.hostedPaperSandboxOnboarding, "production_customer_onboarding_ready");
+requireContains("Hosted paper sandbox onboarding shows future demo records", sourceByFile.hostedPaperSandboxOnboarding, "records_included");
+requireNotContains("Hosted paper sandbox onboarding panel does not fetch directly", sourceByFile.hostedPaperSandboxOnboarding, "fetch(");
+requireNotContains("Hosted paper sandbox onboarding panel does not call workflow record", sourceByFile.hostedPaperSandboxOnboarding, "/api/paper-execution/workflow/record");
+requireNotContains("Hosted paper sandbox onboarding panel does not collect API keys", sourceByFile.hostedPaperSandboxOnboarding.toLowerCase(), "api_key");
+requireNotContains("Hosted paper sandbox onboarding panel does not collect account IDs", sourceByFile.hostedPaperSandboxOnboarding.toLowerCase(), "account_id");
+requireNotContains("Hosted paper sandbox onboarding panel does not collect certificates", sourceByFile.hostedPaperSandboxOnboarding.toLowerCase(), "certificate");
 requireContains("English demo guide copy exists", sourceByFile.i18n, "Customer Demo Guided Flow");
 requireContains("Traditional Chinese demo guide copy exists", sourceByFile.i18n, "客戶測試導覽流程");
 requireContains("Demo guide component is implemented", sourceByFile.demoGuide, "DemoGuidePanel");
