@@ -3355,6 +3355,87 @@ Safety boundary:
 - Production Trading Platform remains NOT READY.
 - Live trading remains disabled by default.
 
+## Hosted Web Command Center Connection Contract Verification
+
+Verification date: 2026-05-03
+
+Commit verified:
+
+```text
+3781b47 Add hosted Web Command Center connection contract
+```
+
+Verification results:
+
+- GitHub Actions Release Readiness: passed.
+- GitHub Actions Run ID: `25268882706`.
+- Vercel production deployment: `dpl_JDQFYkWY8LAZFkRcVWdVPwGMKMq4`.
+- Production alias:
+  `https://taifex-quant-trading-platform-front.vercel.app`.
+- Production smoke gate: passed.
+- Local validation completed before commit:
+  - `make hosted-web-command-center-check`
+  - `make frontend-i18n-check`
+  - `cd frontend && npm run typecheck`
+  - `cd frontend && npm run build`
+  - `make check`
+- Post-push verification completed:
+  - `gh run watch 25268882706 --exit-status`
+  - `cd frontend && vercel inspect https://taifex-quant-trading-platform-frontend-ceu35gm1n.vercel.app`
+  - `make frontend-production-smoke-check`
+  - `git status --short --branch`
+
+Scope verified:
+
+- Added read-only endpoint:
+  `GET /api/hosted-paper/web-command-center/readiness`.
+- Added `backend/app/domain/hosted_web_command_center.py`.
+- Added `backend/tests/test_hosted_web_command_center_routes.py`.
+- Added `frontend/app/apiBase.ts`.
+- Added `frontend/app/components/HostedWebCommandCenterPanel.tsx`.
+- Added `docs/hosted-web-command-center.md`.
+- Added `scripts/hosted-web-command-center-check.sh`.
+- Added `make hosted-web-command-center-check`.
+- Updated the Web Command Center to resolve the API base URL from:
+  - `NEXT_PUBLIC_HOSTED_BACKEND_API_BASE_URL`
+  - `NEXT_PUBLIC_BACKEND_URL`
+  - `http://localhost:8000`
+- Updated read-only panels to use the shared API base URL resolver.
+- Updated frontend i18n and safety copy checks for hosted backend connection,
+  mock session, tenant, role, and permission display.
+
+Connection boundary:
+
+- Production Vercel can be configured to call a future hosted paper backend
+  through `NEXT_PUBLIC_HOSTED_BACKEND_API_BASE_URL`.
+- `NEXT_PUBLIC_*` values are public routing configuration only.
+- Public environment variables are not authentication, authorization, tenant
+  isolation, or credential storage.
+- Local backend fallback remains available through `NEXT_PUBLIC_BACKEND_URL`.
+- Default local fallback remains `http://localhost:8000`.
+
+Safety boundary:
+
+- The hosted Web Command Center readiness endpoint is read-only metadata.
+- No real login provider is enabled.
+- No session cookie is issued.
+- No customer account is created.
+- No reviewer login is enabled.
+- No RBAC / ABAC enforcement is enabled.
+- No tenant isolation is enforced.
+- No hosted datastore is written.
+- No mutation endpoint is enabled by this connection contract.
+- No broker API is called.
+- No broker credentials are collected.
+- No order is created.
+- `paper_only=true`.
+- `read_only_contract=true`.
+- `live_trading_enabled=false`.
+- `broker_provider=paper`.
+- `production_trading_ready=false`.
+- Production Trading Platform remains NOT READY.
+- Live trading remains disabled by default.
+
 ## Deployment Refresh Recording Policy
 
 Record-only documentation commits can trigger a new Vercel production
