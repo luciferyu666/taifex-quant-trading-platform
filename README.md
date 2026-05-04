@@ -30,6 +30,7 @@ Evaluation artifacts:
 - `docs/customer-evaluation-checklist.md`
 - `docs/customer-feedback-form.md`
 - `docs/customer-interactive-demo-trial.md`
+- `docs/customer-trial-feedback-workflow.md`
 - `docs/production-local-data-boundary.md`
 
 Pre-demo check:

@@ -91,6 +91,7 @@ for required_file in \
   docs/customer-evaluation-checklist.md \
   docs/customer-feedback-form.md \
   docs/customer-interactive-demo-trial.md \
+  docs/customer-trial-feedback-workflow.md \
   docs/paper-demo-evidence-export.md \
   docs/paper-broker-simulation-evidence-export.md \
   docs/paper-broker-simulation-readiness.md \

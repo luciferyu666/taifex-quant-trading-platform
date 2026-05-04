@@ -208,7 +208,8 @@ make paper-simulation-submit-check
     Evidence Viewer. This is client-side only and does not upload files, write
     databases, call brokers, collect credentials, or create orders.
 11. Explain what the current system does not do: no live trading, no broker integration, no customer execution.
-12. Collect structured feedback using `docs/customer-feedback-form.md`.
+12. Collect structured feedback using `docs/customer-feedback-form.md` and
+    classify it with `docs/customer-trial-feedback-workflow.md`.
 
 ## Success Criteria
 
@@ -225,6 +226,7 @@ A successful customer evaluation should produce:
 - Demo script: `docs/customer-demo-script.md`
 - Evaluation checklist: `docs/customer-evaluation-checklist.md`
 - Feedback form: `docs/customer-feedback-form.md`
+- Trial feedback workflow: `docs/customer-trial-feedback-workflow.md`
 - Release baseline: `docs/release-baseline-v0.1.0.md`
 - Release verification record: `docs/release-verification-record-2026-04-28.md`
 - Production verification runbook: `docs/frontend-command-center-deployment-verification.md`

@@ -13,6 +13,8 @@ for required_file in \
   docs/customer-demo-script.md \
   docs/customer-evaluation-checklist.md \
   docs/customer-feedback-form.md \
+  docs/customer-interactive-demo-trial.md \
+  docs/customer-trial-feedback-workflow.md \
   docs/paper-approval-ui-flow-smoke-drill.md \
   docs/local-backend-demo-browser-drill.md \
   docs/production-local-data-boundary.md \
@@ -42,8 +44,29 @@ for required_text in \
     docs/customer-evaluation-package.md \
     docs/customer-demo-script.md \
     docs/customer-evaluation-checklist.md \
-    docs/customer-feedback-form.md; then
+    docs/customer-feedback-form.md \
+    docs/customer-interactive-demo-trial.md \
+    docs/customer-trial-feedback-workflow.md; then
     printf 'Customer evaluation docs must contain required safety text: %s\n' "${required_text}" >&2
+    exit 1
+  fi
+done
+
+printf 'Checking customer trial feedback workflow categories...\n'
+for required_text in \
+  'Demo summary' \
+  'Evidence JSON' \
+  'ux_confusion' \
+  'missing_guidance' \
+  'demo_runtime_issue' \
+  'product_request' \
+  'safety_boundary_question' \
+  'out_of_scope_live_trading' \
+  'Broker credentials' \
+  'Broker account IDs' \
+  'Real trading records'; do
+  if ! grep -Fq "${required_text}" docs/customer-trial-feedback-workflow.md docs/customer-feedback-form.md; then
+    printf 'Customer trial feedback workflow must contain required text: %s\n' "${required_text}" >&2
     exit 1
   fi
 done

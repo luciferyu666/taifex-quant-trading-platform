@@ -143,6 +143,11 @@ Ask the customer to report:
 - Which workflow step was unclear?
 - Which capability should be added next for a hosted paper SaaS trial?
 
+Use [customer-trial-feedback-workflow.md](customer-trial-feedback-workflow.md)
+to classify and review feedback. The workflow defines the accepted feedback
+fields, internal review checklist, allowed categories, and out-of-scope handling
+for broker/live/credential requests.
+
 ## Operator Notes
 
 - Do not ask customers for broker credentials, API keys, account IDs,
