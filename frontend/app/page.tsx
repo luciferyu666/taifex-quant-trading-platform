@@ -105,6 +105,7 @@ import {
   type PaperRiskCrossAccountReadiness,
 } from "./components/PaperRiskCrossAccountReadinessPanel";
 import { PaperSimulationSubmitPanel } from "./components/PaperSimulationSubmitPanel";
+import { ProductValueAlignmentPanel } from "./components/ProductValueAlignmentPanel";
 import { ResearchReviewPacketJsonLoader } from "./components/ResearchReviewPacketJsonLoader";
 import type { ResearchReviewPacket } from "./components/ResearchReviewPacketPanel";
 import { ReleaseBaselinePanel, type ReleaseBaseline } from "./components/ReleaseBaselinePanel";
@@ -2876,6 +2877,8 @@ export default async function Home({ searchParams }: HomeProps) {
           </span>
         </article>
       </section>
+
+      <ProductValueAlignmentPanel copy={copy.productValueAlignment} />
 
       <DemoGuidePanel copy={copy.demoGuide} />
 

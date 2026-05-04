@@ -28,6 +28,23 @@ The Web Command Center panel supports:
 6. Inspect paper-only position, equity, and simulated PnL.
 7. Reset the browser demo session.
 
+## Information Architecture Alignment
+
+The production Web App now includes a product value alignment panel before the
+guided demo. It explains the first-stage positioning as a Taiwan index futures
+data analysis and Paper Trading research platform, then maps each surface to a
+specific user benefit:
+
+- Market Data Lab: understand TX / MTX / TMF quote data and exposure context.
+- Strategy Research: validate signal logic without creating orders directly.
+- Paper Trading Simulator: experience a simulated order workflow without broker
+  connectivity.
+- Portfolio Review: connect simulated paper actions to position and PnL changes.
+- Evidence Center: copy session metadata and evidence JSON for reviewer notes.
+
+The detailed IA contract is maintained in
+[interactive-demo-information-architecture.md](interactive-demo-information-architecture.md).
+
 ## Guided UX Completion
 
 The Browser-only Mock Demo now includes a guided stepper so a customer can

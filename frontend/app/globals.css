@@ -179,6 +179,113 @@ h3 {
   margin-top: 24px;
 }
 
+.product-value-panel {
+  display: grid;
+  gap: 16px;
+  margin-top: 28px;
+  border: 1px solid rgba(29, 78, 216, 0.16);
+  border-radius: 8px;
+  background: linear-gradient(180deg, rgba(29, 78, 216, 0.045), #ffffff 42%);
+  box-shadow: var(--shadow);
+  padding: 20px;
+}
+
+.product-value-panel .section-heading p:not(.eyebrow) {
+  max-width: 920px;
+  margin: 10px 0 0;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+.product-value-grid {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.product-value-card {
+  min-width: 0;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #ffffff;
+  padding: 14px;
+}
+
+.product-value-card h3 {
+  min-height: 2.5em;
+}
+
+.product-value-card dl {
+  display: grid;
+  gap: 10px;
+  margin: 14px 0 0;
+}
+
+.product-value-card dt {
+  margin-bottom: 4px;
+  color: var(--blue);
+  font-size: 0.72rem;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.product-value-card dd {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.88rem;
+  line-height: 1.5;
+}
+
+.product-value-flow,
+.product-value-safety {
+  display: grid;
+  gap: 12px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #ffffff;
+  padding: 16px;
+}
+
+.product-value-flow {
+  grid-template-columns: minmax(180px, 0.28fr) minmax(0, 1fr);
+  align-items: start;
+}
+
+.product-value-flow h3,
+.product-value-safety h3 {
+  margin: 0;
+}
+
+.product-value-flow ol,
+.product-value-safety ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.product-value-flow li,
+.product-value-safety li {
+  display: inline-flex;
+  min-height: 34px;
+  align-items: center;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 7px 10px;
+  background: #f8fafc;
+  color: var(--muted);
+  font-size: 0.82rem;
+  font-weight: 800;
+}
+
+.product-value-safety li {
+  border-color: rgba(180, 83, 9, 0.22);
+  background: rgba(180, 83, 9, 0.07);
+  color: #7c2d12;
+}
+
 .demo-guide {
   display: grid;
   gap: 16px;
@@ -1835,6 +1942,8 @@ dd {
   .demo-command,
   .hero,
   .summary-grid,
+  .product-value-grid,
+  .product-value-flow,
   .module-grid,
   .phase-grid,
   .dashboard-grid,

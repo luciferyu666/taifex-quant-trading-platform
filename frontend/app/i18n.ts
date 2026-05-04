@@ -36,6 +36,77 @@ export const dashboardCopy = {
         text: "Max daily loss and stale quote limits are visible before any future OMS workflow.",
       },
     },
+    productValueAlignment: {
+      eyebrow: "Product Positioning",
+      title: "Taiwan index futures data analysis and Paper Trading research platform",
+      description:
+        "This Web App turns the website promise into an interactive research workflow: users can inspect mock TX / MTX / TMF data, validate a strategy hypothesis, simulate a Paper Only order, review OMS events, and copy evidence without broker connectivity or real-money exposure.",
+      featureLabel: "Feature",
+      benefitLabel: "User benefit",
+      cards: [
+        {
+          kicker: "Market Data Lab",
+          title: "Understand TX / MTX / TMF data before trading decisions",
+          feature:
+            "Deterministic quote snapshots, bid / ask / last, quote age, spread, and contract exposure context.",
+          benefit:
+            "Users can learn how market data flows through the platform and compare contract sizing before testing a strategy.",
+        },
+        {
+          kicker: "Strategy Research",
+          title: "Validate signal logic without creating orders",
+          feature:
+            "A mock strategy emits a standardized StrategySignal with signals_only=true.",
+          benefit:
+            "Users can separate research judgment from execution and quickly see what a strategy would request before any paper order simulation.",
+        },
+        {
+          kicker: "Paper Trading Simulator",
+          title: "Experience order workflow without broker risk",
+          feature:
+            "PaperOrderIntent, paper risk checks, simulated OMS lifecycle, and browser-local paper fill outcomes.",
+          benefit:
+            "Users can practice the end-to-end workflow and understand why a simulated order is accepted, rejected, partially filled, or filled.",
+        },
+        {
+          kicker: "Portfolio Review",
+          title: "See simulated position and PnL impact",
+          feature:
+            "Paper-only position, average price, unrealized PnL, paper equity, and resettable session state.",
+          benefit:
+            "Users can connect each simulated action to position changes while keeping the output clearly marked as demo metrics, not performance claims.",
+        },
+        {
+          kicker: "Evidence Center",
+          title: "Keep demo results reviewable",
+          feature:
+            "Copy demo summary, evidence JSON, session id, deterministic seed, and localStorage key.",
+          benefit:
+            "Users and reviewers can reproduce the browser-local scenario, share feedback, and audit what was shown in the demo.",
+        },
+      ],
+      flowAriaLabel: "Interactive demo value flow",
+      flowKicker: "Research Workflow",
+      flowTitle: "From analysis to paper decision review",
+      flowSteps: [
+        "Market data preview",
+        "StrategySignal generation",
+        "Paper Only order simulation",
+        "OMS timeline review",
+        "Simulated position / PnL review",
+        "Evidence JSON handoff",
+      ],
+      safetyKicker: "Safety Boundary",
+      safetyTitle: "What this platform deliberately does not do",
+      safetyItems: [
+        "No real broker connection",
+        "No real order submission",
+        "No credential collection",
+        "No investment advice",
+        "No performance claim",
+        "Production Trading Platform remains NOT READY",
+      ],
+    },
     demoGuide: {
       ariaLabel: "Customer demo guided flow",
       eyebrow: "Demo Tour",
@@ -3277,6 +3348,77 @@ export const dashboardCopy = {
         title: "TX 等值曝險上限",
         text: "在任何未來 OMS 工作流之前，先清楚呈現每日虧損上限與 stale quote 限制。",
       },
+    },
+    productValueAlignment: {
+      eyebrow: "產品定位",
+      title: "台指期資料分析與 Paper Trading 研究平台",
+      description:
+        "這個 Web App 把官網主張轉成可操作研究流程：使用者可以檢視 TX / MTX / TMF 模擬資料、驗證策略假設、模擬 Paper Only 訂單、查看 OMS 事件，並複製 evidence；全程不連券商、不使用真實資金。",
+      featureLabel: "功能",
+      benefitLabel: "使用者利益",
+      cards: [
+        {
+          kicker: "Market Data Lab",
+          title: "先理解 TX / MTX / TMF 資料，再討論交易決策",
+          feature:
+            "Deterministic quote snapshot、bid / ask / last、quote age、spread 與合約曝險脈絡。",
+          benefit:
+            "使用者可以理解市場資料如何進入平台，並在測試策略前比較合約規格與曝險大小。",
+        },
+        {
+          kicker: "Strategy Research",
+          title: "驗證 signal 邏輯，但不建立訂單",
+          feature:
+            "Mock strategy 只輸出標準化 StrategySignal，且 signals_only=true。",
+          benefit:
+            "使用者可以把研究判斷與執行流程分開，先看策略想表達什麼，再進入紙上模擬。",
+        },
+        {
+          kicker: "Paper Trading Simulator",
+          title: "在無券商風險下體驗訂單流程",
+          feature:
+            "PaperOrderIntent、paper risk checks、模擬 OMS lifecycle 與 browser-local paper fill outcomes。",
+          benefit:
+            "使用者可以練習端到端流程，理解模擬訂單為何通過、拒絕、部分成交或成交。",
+        },
+        {
+          kicker: "Portfolio Review",
+          title: "查看模擬持倉與 PnL 影響",
+          feature:
+            "Paper-only position、average price、unrealized PnL、paper equity 與可重置 session state。",
+          benefit:
+            "使用者可以把每個模擬動作連到部位變化，同時清楚知道這只是 demo 指標，不是績效主張。",
+        },
+        {
+          kicker: "Evidence Center",
+          title: "讓 Demo 結果可回顧與回報",
+          feature:
+            "複製 demo summary、evidence JSON、session id、deterministic seed 與 localStorage key。",
+          benefit:
+            "使用者與 reviewer 可以重現 browser-local 情境、回傳問題，並稽核 demo 當下呈現的內容。",
+        },
+      ],
+      flowAriaLabel: "互動 demo 價值流程",
+      flowKicker: "研究流程",
+      flowTitle: "從資料分析到紙上決策檢視",
+      flowSteps: [
+        "市場資料預覽",
+        "StrategySignal 產生",
+        "Paper Only 訂單模擬",
+        "OMS 時間線檢視",
+        "模擬持倉 / PnL 檢視",
+        "Evidence JSON 交付",
+      ],
+      safetyKicker: "安全邊界",
+      safetyTitle: "本平台刻意不做的事",
+      safetyItems: [
+        "不連真實券商",
+        "不送真實委託",
+        "不收集憑證",
+        "不構成投資建議",
+        "不做績效主張",
+        "Production Trading Platform 仍為 NOT READY",
+      ],
     },
     demoGuide: {
       ariaLabel: "客戶 demo 導覽流程",

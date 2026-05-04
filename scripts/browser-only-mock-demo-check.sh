@@ -11,7 +11,9 @@ for required_file in \
   frontend/app/components/browserOnlyMockRuntime.ts \
   frontend/app/components/BrowserOnlyMockDemoGuide.tsx \
   frontend/app/components/BrowserOnlyMockDemoPanel.tsx \
-  docs/browser-only-mock-demo-runtime.md; do
+  frontend/app/components/ProductValueAlignmentPanel.tsx \
+  docs/browser-only-mock-demo-runtime.md \
+  docs/interactive-demo-information-architecture.md; do
   if [[ ! -f "${required_file}" ]]; then
     printf 'Missing required browser-only mock demo file: %s\n' "${required_file}" >&2
     missing=1
@@ -50,6 +52,11 @@ for needle in \
   'localStorage' \
   'Generate next tick' \
   'Complete browser-only walkthrough' \
+  'Taiwan index futures data analysis and Paper Trading research platform' \
+  'Market Data Lab' \
+  'Strategy Research' \
+  'Paper Trading Simulator' \
+  'User benefit' \
   'BrowserOnlyMockDemoGuide' \
   'runBrowserOnlyMockStrategy' \
   'simulateBrowserOnlyPaperOrder' \
@@ -80,6 +87,11 @@ if ! grep -q 'BrowserOnlyMockDemoPanel' frontend/app/page.tsx; then
   exit 1
 fi
 
+if ! grep -q 'ProductValueAlignmentPanel' frontend/app/page.tsx; then
+  printf 'ProductValueAlignmentPanel must be mounted in frontend/app/page.tsx.\n' >&2
+  exit 1
+fi
+
 if ! grep -q 'useState<TabKey>("paper")' frontend/app/components/CommandCenterTabs.tsx; then
   printf 'Command Center must open Paper OMS tab first for the browser-only guided demo.\n' >&2
   exit 1
@@ -94,6 +106,9 @@ fi
 printf 'Checking browser-only safety copy...\n'
 for needle in \
   'Browser-only Mock Runtime' \
+  '台指期資料分析與 Paper Trading 研究平台' \
+  '使用者利益' \
+  '不送真實委託' \
   'Paper OMS tab opens first' \
   'No backend required' \
   'No broker' \

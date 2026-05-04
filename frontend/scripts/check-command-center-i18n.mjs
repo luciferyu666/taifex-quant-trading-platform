@@ -8,6 +8,7 @@ const files = {
   apiBase: "frontend/app/apiBase.ts",
   demoGuide: "frontend/app/components/DemoGuidePanel.tsx",
   commandTabs: "frontend/app/components/CommandCenterTabs.tsx",
+  productValueAlignment: "frontend/app/components/ProductValueAlignmentPanel.tsx",
   deploymentDataBoundary: "frontend/app/components/DeploymentDataBoundaryPanel.tsx",
   hostedWebCommandCenter: "frontend/app/components/HostedWebCommandCenterPanel.tsx",
   hostedPaperEnvironment: "frontend/app/components/HostedPaperEnvironmentPanel.tsx",
@@ -212,6 +213,26 @@ requireContains("Page reads lang search param", sourceByFile.page, "searchParams
 requireContains("Page links English language view", sourceByFile.page, "/?lang=en");
 requireContains("Page links Traditional Chinese language view", sourceByFile.page, "/?lang=zh");
 requireContains("Page applies localized lang attribute", sourceByFile.page, "lang={copy.htmlLang}");
+requireContains("Product value alignment panel is implemented", sourceByFile.productValueAlignment, "ProductValueAlignmentPanel");
+requireContains("Product value alignment panel is mounted on page", sourceByFile.page, "ProductValueAlignmentPanel");
+requireContains("English product positioning copy exists", sourceByFile.i18n, "Taiwan index futures data analysis and Paper Trading research platform");
+requireContains("Chinese product positioning copy exists", sourceByFile.i18n, "台指期資料分析與 Paper Trading 研究平台");
+requireContains("Product value copy maps Feature to User benefit", sourceByFile.i18n, "User benefit");
+requireContains("Chinese product value copy maps features to benefits", sourceByFile.i18n, "使用者利益");
+requireContains("Product value copy names Market Data Lab", sourceByFile.i18n, "Market Data Lab");
+requireContains("Product value copy names Strategy Research", sourceByFile.i18n, "Strategy Research");
+requireContains("Product value copy names Paper Trading Simulator", sourceByFile.i18n, "Paper Trading Simulator");
+requireContains("Product value copy names Portfolio Review", sourceByFile.i18n, "Portfolio Review");
+requireContains("Product value copy names Evidence Center", sourceByFile.i18n, "Evidence Center");
+requireContains("Product value flow includes market data preview", sourceByFile.i18n, "Market data preview");
+requireContains("Product value flow includes StrategySignal generation", sourceByFile.i18n, "StrategySignal generation");
+requireContains("Product value flow includes Paper Only order simulation", sourceByFile.i18n, "Paper Only order simulation");
+requireContains("Product value safety keeps no investment advice", sourceByFile.i18n, "No investment advice");
+requireContains("Product value safety keeps production not ready", sourceByFile.i18n, "Production Trading Platform remains NOT READY");
+requireNotContains("Product value panel does not fetch backend", sourceByFile.productValueAlignment, "fetch(");
+requireNotContains("Product value panel does not collect API keys", sourceByFile.productValueAlignment.toLowerCase(), "api_key");
+requireNotContains("Product value panel does not collect account IDs", sourceByFile.productValueAlignment.toLowerCase(), "account_id");
+requireNotContains("Product value panel does not collect certificates", sourceByFile.productValueAlignment.toLowerCase(), "certificate");
 
 for (const needle of [
   "TRADING_MODE",

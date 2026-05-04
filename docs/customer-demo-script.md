@@ -187,6 +187,17 @@ Show:
 - `BROKER_PROVIDER=paper`.
 - Safety flags and read-only review components.
 - Browser-only Mock Demo Runtime:
+  - Start by reading the product value alignment panel. Confirm the customer
+    understands the Web App positioning as a Taiwan index futures data analysis
+    and Paper Trading research platform.
+  - Explain the feature-to-benefit mapping before pressing buttons:
+    - Market Data Lab helps users understand TX / MTX / TMF quote data and
+      exposure context.
+    - Strategy Research validates signal logic without creating orders directly.
+    - Paper Trading Simulator demonstrates a Paper Only workflow without broker
+      connectivity.
+    - Portfolio Review links simulated actions to position and PnL changes.
+    - Evidence Center supports reproducible reviewer notes.
   - Start with the guided Browser-only Mock Demo at the top of the Paper OMS tab.
   - Use the stepper in order:
     1. Generate market tick.

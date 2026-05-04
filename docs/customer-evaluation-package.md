@@ -49,6 +49,11 @@ Customers may evaluate:
 - Browser-only Mock Demo Runtime:
   - Customers can operate a complete first-pass interactive demo directly in the
     production browser.
+  - The first visible product-value section must make the platform positioning
+    explicit: Taiwan index futures data analysis plus Paper Trading research.
+  - The demo should translate features into user benefits: market data
+    understanding, signal validation, Paper Only workflow practice, simulated
+    position review, and reproducible evidence handoff.
   - The Web Command Center opens the Paper OMS tab first and places the
     Browser-only Mock Demo guided stepper as the first customer-facing surface.
   - The guided stepper covers deterministic market ticks, signal-only strategy
