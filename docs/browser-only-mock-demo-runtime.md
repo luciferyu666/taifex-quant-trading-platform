@@ -60,6 +60,24 @@ The copied evidence is for reviewer notes only. It is not uploaded, persisted to
 a backend, written to a database, or treated as a broker confirmation,
 performance report, investment advice, or live-trading approval.
 
+## Automatic Entry Behavior
+
+The Web Command Center opens the `Paper OMS` tab first. The Browser-only Mock
+Demo panel is mounted as the first surface in that tab, so a customer entering
+the production Web App immediately sees the guided stepper before any local
+backend, SQLite, approval queue, OMS audit, or hosted-readiness panels.
+
+This automatic entry path is intentionally browser-only:
+
+- it does not start a local backend
+- it does not read local SQLite
+- it does not call hosted paper APIs
+- it does not create paper approval records
+- it does not call Risk / OMS / Broker Gateway backend paths
+- it does not collect credentials
+- it does not connect brokers
+- it does not create real orders
+
 ## Simulated Capabilities
 
 Market data:

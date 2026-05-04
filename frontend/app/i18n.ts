@@ -143,7 +143,7 @@ export const dashboardCopy = {
       eyebrow: "Interaction Layer",
       title: "Read-only Command Center tools",
       description:
-        "Safe controls for refreshing status, switching views, inspecting local samples, selecting paper audit records, and copying IDs. These controls do not submit orders, write databases, or connect brokers.",
+        "The Paper OMS tab opens first so customers immediately enter the Browser-only Mock Demo stepper. Safe controls remain available for refreshing status, switching views, inspecting local samples, selecting paper audit records, and copying IDs. These controls do not submit real orders, write production databases, or connect brokers.",
       readOnlyBadge: "Read-only",
       refresh: "Refresh status",
       tabsLabel: "Command Center sections",
@@ -3370,7 +3370,7 @@ export const dashboardCopy = {
       eyebrow: "互動層",
       title: "只讀 Command Center 工具",
       description:
-        "安全控制項可用於重新整理狀態、切換區段、檢視本地樣本、選取紙上稽核紀錄與複製 ID。這些控制項不送出訂單、不寫資料庫，也不連接券商。",
+        "系統預設先開啟 Paper OMS 分頁，讓客戶立即進入 Browser-only Mock Demo stepper。仍可安全重新整理狀態、切換區段、檢視本地樣本、選取紙上稽核紀錄與複製 ID；這些控制項不送出真實委託、不寫 production database，也不連接券商。",
       readOnlyBadge: "只讀",
       refresh: "重新整理狀態",
       tabsLabel: "Command Center 區段",

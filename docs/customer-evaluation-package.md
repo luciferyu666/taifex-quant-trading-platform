@@ -49,6 +49,8 @@ Customers may evaluate:
 - Browser-only Mock Demo Runtime:
   - Customers can operate a complete first-pass interactive demo directly in the
     production browser.
+  - The Web Command Center opens the Paper OMS tab first and places the
+    Browser-only Mock Demo guided stepper as the first customer-facing surface.
   - The guided stepper covers deterministic market ticks, signal-only strategy
     output, Paper Only order simulation, simulated OMS lifecycle, paper-only
     position / PnL, and reset.

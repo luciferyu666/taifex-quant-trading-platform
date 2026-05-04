@@ -3018,6 +3018,8 @@ export default async function Home({ searchParams }: HomeProps) {
         }
         paper={
           <>
+            <BrowserOnlyMockDemoPanel copy={copy.browserOnlyMockDemo} />
+
             <section className="paper-workflow" aria-labelledby="paper-workflow-title">
               <div className="section-heading">
                 <p className="eyebrow">{copy.paperExecution.eyebrow}</p>
@@ -3137,8 +3139,6 @@ export default async function Home({ searchParams }: HomeProps) {
               }
               readiness={paperRiskCrossAccountReadiness.data}
             />
-
-            <BrowserOnlyMockDemoPanel copy={copy.browserOnlyMockDemo} />
 
             <MockBackendDemoPanel copy={copy.mockBackendDemo} />
 

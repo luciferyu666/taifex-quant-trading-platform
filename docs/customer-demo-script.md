@@ -133,6 +133,10 @@ Open:
 https://taifex-quant-trading-platform-front.vercel.app
 ```
 
+The Web Command Center should open directly into the `Paper OMS` tab. The first
+surface should be the Browser-only Mock Demo guided stepper. If a reviewer lands
+elsewhere, manually select `Paper OMS` and start from the Browser-only stepper.
+
 Set expectation before showing paper records:
 
 - Production Vercel cannot directly read the evaluator's local SQLite paper
@@ -183,7 +187,7 @@ Show:
 - `BROKER_PROVIDER=paper`.
 - Safety flags and read-only review components.
 - Browser-only Mock Demo Runtime:
-  - Open the Paper OMS tab and start with the guided Browser-only Mock Demo.
+  - Start with the guided Browser-only Mock Demo at the top of the Paper OMS tab.
   - Use the stepper in order:
     1. Generate market tick.
     2. Run mock strategy.

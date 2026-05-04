@@ -362,6 +362,7 @@ requireContains("Demo guide is mounted on page", sourceByFile.page, "DemoGuidePa
 requireContains("English read-only interaction copy exists", sourceByFile.i18n, "Read-only Command Center tools");
 requireContains("Traditional Chinese read-only interaction copy exists", sourceByFile.i18n, "只讀 Command Center 工具");
 requireContains("Command Center tabs are implemented", sourceByFile.commandTabs, "role=\"tablist\"");
+requireContains("Command Center opens Paper OMS tab first", sourceByFile.commandTabs, 'useState<TabKey>("paper")');
 requireContains("Command Center refresh action exists", sourceByFile.i18n, "Refresh status");
 requireContains("Command Center backend troubleshooting exists", sourceByFile.commandTabs, "troubleshooting-panel");
 requireContains("English local backend demo copy exists", sourceByFile.i18n, "Local Backend Demo Mode");
@@ -607,10 +608,13 @@ requireContains("Browser-only mock demo copies summary", sourceByFile.browserOnl
 requireContains("Browser-only mock demo copies evidence", sourceByFile.browserOnlyMockDemo, "copyEvidenceJson");
 requireContains("Browser-only mock demo clears local state", sourceByFile.browserOnlyMockDemo, "clearDemoState");
 requireContains("Browser-only mock demo panel is mounted on page", sourceByFile.page, "BrowserOnlyMockDemoPanel");
+requireContains("Browser-only mock demo is mounted before paper workflow", sourceByFile.page, "paper={\n          <>\n            <BrowserOnlyMockDemoPanel");
 requireContains("Browser-only mock copy keeps no backend language", sourceByFile.i18n, "No backend required");
 requireContains("Browser-only mock copy keeps Chinese no backend language", sourceByFile.i18n, "不需要後端");
 requireContains("Browser-only mock copy includes guided demo", sourceByFile.i18n, "Complete browser-only walkthrough");
 requireContains("Browser-only mock copy includes Chinese guided demo", sourceByFile.i18n, "完整 Browser-only 操作流程");
+requireContains("Command Center copy states Paper OMS opens first", sourceByFile.i18n, "Paper OMS tab opens first");
+requireContains("Chinese Command Center copy states Paper OMS opens first", sourceByFile.i18n, "預設先開啟 Paper OMS");
 requireNotContains("Browser-only mock demo does not fetch backend", sourceByFile.browserOnlyMockDemo, "fetch(");
 requireNotContains("Browser-only mock demo does not call command API base", sourceByFile.browserOnlyMockDemo, "commandCenterApiBaseUrl");
 requireNotContains("Browser-only mock runtime does not call fetch", sourceByFile.browserOnlyMockRuntime, "fetch(");

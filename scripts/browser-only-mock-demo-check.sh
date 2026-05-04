@@ -80,9 +80,21 @@ if ! grep -q 'BrowserOnlyMockDemoPanel' frontend/app/page.tsx; then
   exit 1
 fi
 
+if ! grep -q 'useState<TabKey>("paper")' frontend/app/components/CommandCenterTabs.tsx; then
+  printf 'Command Center must open Paper OMS tab first for the browser-only guided demo.\n' >&2
+  exit 1
+fi
+
+if ! grep -q 'paper={[[:space:]]*$' frontend/app/page.tsx || \
+   ! grep -q '<BrowserOnlyMockDemoPanel copy={copy.browserOnlyMockDemo} />' frontend/app/page.tsx; then
+  printf 'BrowserOnlyMockDemoPanel must be mounted as the first Paper OMS tab surface.\n' >&2
+  exit 1
+fi
+
 printf 'Checking browser-only safety copy...\n'
 for needle in \
   'Browser-only Mock Runtime' \
+  'Paper OMS tab opens first' \
   'No backend required' \
   'No broker' \
   'No real money' \
@@ -91,6 +103,7 @@ for needle in \
   'Copy evidence JSON' \
   'Deterministic mock seed' \
   '完整 Browser-only 操作流程' \
+  '預設先開啟 Paper OMS' \
   '不需要後端' \
   '無券商' \
   '無真實資金' \

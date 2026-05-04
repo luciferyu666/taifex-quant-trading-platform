@@ -28,7 +28,7 @@ export function CommandCenterTabs({
   packet,
   contracts,
 }: CommandCenterTabsProps) {
-  const [activeTab, setActiveTab] = useState<TabKey>("release");
+  const [activeTab, setActiveTab] = useState<TabKey>("paper");
   const [copyStatus, setCopyStatus] = useState<string>("");
 
   async function copyDemoSeedCommand() {
