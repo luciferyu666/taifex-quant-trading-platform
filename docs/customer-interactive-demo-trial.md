@@ -41,7 +41,21 @@ for TX / MTX / TMF workflows, not as a production trading system.
 
 ## Demo Flow
 
-Run the flow in the Web Command Center Paper OMS / Browser-only Demo section:
+Start with the Workflow Standardization panel, then run the flow in the Web
+Command Center Paper OMS / Browser-only Demo section. The learning layer helps
+customers connect each operation to the platform method in
+`docs/quant-workflow-standardization.md`:
+
+| Learning item | What the customer should understand |
+| --- | --- |
+| Data standardization | TX / MTX / TMF mock quotes need a common exposure language before strategy testing. |
+| StrategySignal standardization | Strategies emit signals only; platform workflow owns paper intent, risk, OMS, and audit. |
+| Backtest reproducibility | Session id, seed, and evidence JSON are used for reproducibility, not performance claims. |
+| Rollover data separation | Research-only continuous data must remain separate from executable contract mapping. |
+| PaperOrderIntent flow | Only the platform converts a signal into a Paper Only order intent. |
+| Risk Engine checks | Risk checks explain accept/reject outcomes before any OMS transition. |
+| OMS lifecycle | The timeline makes simulated order state visible and reviewable. |
+| Audit evidence | Demo summary and evidence JSON support reviewer handoff and feedback classification. |
 
 1. Generate market tick
    - Produces deterministic mock TX / MTX / TMF quote data.

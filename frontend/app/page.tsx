@@ -109,6 +109,7 @@ import { ProductValueAlignmentPanel } from "./components/ProductValueAlignmentPa
 import { ResearchReviewPacketJsonLoader } from "./components/ResearchReviewPacketJsonLoader";
 import type { ResearchReviewPacket } from "./components/ResearchReviewPacketPanel";
 import { ReleaseBaselinePanel, type ReleaseBaseline } from "./components/ReleaseBaselinePanel";
+import { WorkflowStandardizationPanel } from "./components/WorkflowStandardizationPanel";
 import { getCommandCenterApiConfig } from "./apiBase";
 import { dashboardCopy, resolveLanguage } from "./i18n";
 
@@ -2879,6 +2880,8 @@ export default async function Home({ searchParams }: HomeProps) {
       </section>
 
       <ProductValueAlignmentPanel copy={copy.productValueAlignment} />
+
+      <WorkflowStandardizationPanel copy={copy.workflowStandardization} />
 
       <DemoGuidePanel copy={copy.demoGuide} />
 

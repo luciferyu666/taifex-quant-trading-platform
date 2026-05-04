@@ -45,6 +45,30 @@ specific user benefit:
 The detailed IA contract is maintained in
 [interactive-demo-information-architecture.md](interactive-demo-information-architecture.md).
 
+## Workflow Standardization Learning Layer
+
+The production Web App also includes a `WorkflowStandardizationPanel` before the
+customer demo tour. It turns
+[quant-workflow-standardization.md](quant-workflow-standardization.md) into a
+read-only learning layer inside the Command Center.
+
+The panel maps the interactive browser demo to the standard workflow:
+
+| Standardized workflow item | Browser demo touchpoint |
+| --- | --- |
+| Data standardization | Generate market tick. |
+| StrategySignal standardization | Run mock strategy. |
+| Backtest reproducibility | Inspect session id, deterministic seed, and evidence JSON. |
+| Rollover data separation | Review TX / MTX / TMF contract context. |
+| PaperOrderIntent flow | Simulate Paper Only order. |
+| Risk Engine checks | Review risk approval result. |
+| OMS lifecycle | Review OMS timeline. |
+| Audit evidence | Copy demo summary or evidence JSON. |
+
+This layer is product education only. It does not fetch backend data, write
+databases, upload evidence, call brokers, create orders, collect credentials,
+provide investment advice, or approve production trading.
+
 ## Guided UX Completion
 
 The Browser-only Mock Demo now includes a guided stepper so a customer can

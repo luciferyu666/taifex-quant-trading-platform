@@ -107,6 +107,101 @@ export const dashboardCopy = {
         "Production Trading Platform remains NOT READY",
       ],
     },
+    workflowStandardization: {
+      eyebrow: "Workflow Standardization",
+      title: "How the demo maps to the quant operating workflow",
+      description:
+        "This learning layer connects the browser demo to the standardized method in docs/quant-workflow-standardization.md. It shows how data, strategy, backtest, rollover, Paper Trading, Risk Engine, OMS, and audit evidence fit together before any production trading path exists.",
+      demoActionLabel: "Demo action",
+      standardLabel: "Standardized control",
+      steps: [
+        {
+          kicker: "Data",
+          title: "Data standardization",
+          description:
+            "TX / MTX / TMF quote snapshots use a common exposure language before strategy logic runs.",
+          demoAction: "Generate market tick",
+          standard:
+            "Market data should carry symbol, bid, ask, last, quote age, session context, and TX-equivalent exposure meaning.",
+        },
+        {
+          kicker: "Signal",
+          title: "StrategySignal standardization",
+          description:
+            "The strategy emits a signal only; the platform owns all order-like workflow steps.",
+          demoAction: "Run mock strategy",
+          standard:
+            "StrategySignal stays signals_only=true and never calls broker, Risk Engine, OMS, or Broker Gateway directly.",
+        },
+        {
+          kicker: "Backtest",
+          title: "Backtest reproducibility",
+          description:
+            "Research outputs should be tied to data versions, code versions, parameters, costs, and review notes.",
+          demoAction: "Inspect session id, seed, and evidence JSON",
+          standard:
+            "Backtest and demo artifacts must remain reproducible metadata and must not be treated as performance claims.",
+        },
+        {
+          kicker: "Rollover",
+          title: "Rollover data separation",
+          description:
+            "Research can use adjusted continuous data, but paper and future execution mapping must reference real contracts.",
+          demoAction: "Review TX / MTX / TMF contract context",
+          standard:
+            "Rollover metadata separates research-only continuous futures from executable contract symbols and prices.",
+        },
+        {
+          kicker: "Paper intent",
+          title: "PaperOrderIntent flow",
+          description:
+            "Only the platform converts a StrategySignal into a Paper Only order intent.",
+          demoAction: "Simulate Paper Only order",
+          standard:
+            "PaperOrderIntent is platform-owned and cannot approve live trading, collect credentials, or create real orders.",
+        },
+        {
+          kicker: "Risk",
+          title: "Risk Engine checks",
+          description:
+            "Paper risk checks explain why a simulated workflow can proceed or must be rejected.",
+          demoAction: "Review risk approval result",
+          standard:
+            "Risk checks cover paper mode, live-disabled status, stale quotes, exposure, size, duplicate keys, and safety flags.",
+        },
+        {
+          kicker: "OMS",
+          title: "OMS lifecycle",
+          description:
+            "The simulated OMS timeline makes lifecycle transitions visible instead of hiding them in strategy code.",
+          demoAction: "Review OMS timeline",
+          standard:
+            "OMS owns order state, idempotency, terminal status, and future reconciliation boundaries.",
+        },
+        {
+          kicker: "Audit",
+          title: "Audit evidence",
+          description:
+            "Reviewer handoff requires a small evidence artifact that describes what happened and what stayed simulated.",
+          demoAction: "Copy demo summary or evidence JSON",
+          standard:
+            "Audit evidence must preserve safety flags and remain local/browser-only unless a future reviewed data layer exists.",
+        },
+      ],
+      safetyKicker: "Safety Boundary",
+      safetyTitle: "Learning layer only, not an execution path",
+      safetyDescription:
+        "This panel is read-only product education. It does not fetch backend data, upload evidence, write databases, call brokers, create orders, collect credentials, or provide investment advice.",
+      safetyItems: [
+        "Paper Only",
+        "Browser-only / mock demo where applicable",
+        "No broker",
+        "No real order",
+        "No credentials",
+        "Not investment advice",
+        "Production Trading Platform: NOT READY",
+      ],
+    },
     demoGuide: {
       ariaLabel: "Customer demo guided flow",
       eyebrow: "Demo Tour",
@@ -3418,6 +3513,101 @@ export const dashboardCopy = {
         "不構成投資建議",
         "不做績效主張",
         "Production Trading Platform 仍為 NOT READY",
+      ],
+    },
+    workflowStandardization: {
+      eyebrow: "流程標準化",
+      title: "Demo 如何對應量化交易標準作業流程",
+      description:
+        "這個導覽層把 browser demo 連到 docs/quant-workflow-standardization.md 的方法論，說明資料、策略、回測、換月、Paper Trading、Risk Engine、OMS 與 audit evidence 在正式交易路徑出現前如何串接。",
+      demoActionLabel: "Demo 操作",
+      standardLabel: "標準化控制",
+      steps: [
+        {
+          kicker: "資料",
+          title: "Data standardization",
+          description:
+            "TX / MTX / TMF quote snapshot 先使用共同曝險語言，再進入策略邏輯。",
+          demoAction: "Generate market tick",
+          standard:
+            "市場資料應包含 symbol、bid、ask、last、quote age、session context 與 TX-equivalent exposure 意義。",
+        },
+        {
+          kicker: "訊號",
+          title: "StrategySignal standardization",
+          description:
+            "策略只輸出 signal；所有類訂單流程都由平台負責。",
+          demoAction: "Run mock strategy",
+          standard:
+            "StrategySignal 維持 signals_only=true，不直接呼叫券商、Risk Engine、OMS 或 Broker Gateway。",
+        },
+        {
+          kicker: "回測",
+          title: "Backtest reproducibility",
+          description:
+            "研究輸出應綁定資料版本、程式版本、參數、成本與 review notes。",
+          demoAction: "檢視 session id、seed 與 evidence JSON",
+          standard:
+            "Backtest 與 demo artifact 只能作為可重現 metadata，不得被呈現為績效主張。",
+        },
+        {
+          kicker: "換月",
+          title: "Rollover data separation",
+          description:
+            "研究可使用 adjusted continuous data，但紙上與未來執行 mapping 必須參照真實合約。",
+          demoAction: "查看 TX / MTX / TMF 契約脈絡",
+          standard:
+            "Rollover metadata 必須分離 research-only continuous futures 與可執行合約代碼及價格。",
+        },
+        {
+          kicker: "紙上意圖",
+          title: "PaperOrderIntent flow",
+          description:
+            "只有平台能把 StrategySignal 轉成 Paper Only order intent。",
+          demoAction: "Simulate Paper Only order",
+          standard:
+            "PaperOrderIntent 由平台擁有，不核准實盤、不收集憑證，也不建立真實委託。",
+        },
+        {
+          kicker: "風控",
+          title: "Risk Engine checks",
+          description:
+            "紙上風控檢查會解釋模擬流程為何可以繼續或必須拒絕。",
+          demoAction: "查看 risk approval result",
+          standard:
+            "Risk checks 涵蓋 paper mode、實盤關閉、stale quote、exposure、size、duplicate key 與 safety flags。",
+        },
+        {
+          kicker: "OMS",
+          title: "OMS lifecycle",
+          description:
+            "模擬 OMS timeline 讓 lifecycle transitions 可見，而不是藏在策略程式碼中。",
+          demoAction: "Review OMS timeline",
+          standard:
+            "OMS 負責 order state、idempotency、terminal status 與未來 reconciliation 邊界。",
+        },
+        {
+          kicker: "稽核",
+          title: "Audit evidence",
+          description:
+            "Reviewer handoff 需要小型 evidence artifact，說明發生了什麼，以及哪些仍是模擬。",
+          demoAction: "複製 demo summary 或 evidence JSON",
+          standard:
+            "Audit evidence 必須保留 safety flags；除非未來有受審查資料層，否則維持本地 / browser-only。",
+        },
+      ],
+      safetyKicker: "安全邊界",
+      safetyTitle: "僅作為學習導覽，不是執行路徑",
+      safetyDescription:
+        "此面板是只讀產品教育內容；不讀取後端、不上傳 evidence、不寫資料庫、不呼叫券商、不建立訂單、不收集憑證，也不構成投資建議。",
+      safetyItems: [
+        "Paper Only",
+        "Browser-only / mock demo where applicable",
+        "不連券商",
+        "不建立真實委託",
+        "不收集憑證",
+        "不構成投資建議",
+        "Production Trading Platform: NOT READY",
       ],
     },
     demoGuide: {

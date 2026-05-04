@@ -9,6 +9,7 @@ const files = {
   demoGuide: "frontend/app/components/DemoGuidePanel.tsx",
   commandTabs: "frontend/app/components/CommandCenterTabs.tsx",
   productValueAlignment: "frontend/app/components/ProductValueAlignmentPanel.tsx",
+  workflowStandardization: "frontend/app/components/WorkflowStandardizationPanel.tsx",
   deploymentDataBoundary: "frontend/app/components/DeploymentDataBoundaryPanel.tsx",
   hostedWebCommandCenter: "frontend/app/components/HostedWebCommandCenterPanel.tsx",
   hostedPaperEnvironment: "frontend/app/components/HostedPaperEnvironmentPanel.tsx",
@@ -233,6 +234,30 @@ requireNotContains("Product value panel does not fetch backend", sourceByFile.pr
 requireNotContains("Product value panel does not collect API keys", sourceByFile.productValueAlignment.toLowerCase(), "api_key");
 requireNotContains("Product value panel does not collect account IDs", sourceByFile.productValueAlignment.toLowerCase(), "account_id");
 requireNotContains("Product value panel does not collect certificates", sourceByFile.productValueAlignment.toLowerCase(), "certificate");
+requireContains("Workflow standardization panel is implemented", sourceByFile.workflowStandardization, "WorkflowStandardizationPanel");
+requireContains("Workflow standardization panel is mounted on page", sourceByFile.page, "WorkflowStandardizationPanel");
+requireContains("Workflow standardization English copy exists", sourceByFile.i18n, "How the demo maps to the quant operating workflow");
+requireContains("Workflow standardization Chinese copy exists", sourceByFile.i18n, "Demo 如何對應量化交易標準作業流程");
+requireContains("Workflow standardization references docs guide", sourceByFile.i18n, "docs/quant-workflow-standardization.md");
+requireContains("Workflow standardization includes Data standardization", sourceByFile.i18n, "Data standardization");
+requireContains("Workflow standardization includes StrategySignal standardization", sourceByFile.i18n, "StrategySignal standardization");
+requireContains("Workflow standardization includes Backtest reproducibility", sourceByFile.i18n, "Backtest reproducibility");
+requireContains("Workflow standardization includes Rollover data separation", sourceByFile.i18n, "Rollover data separation");
+requireContains("Workflow standardization includes PaperOrderIntent flow", sourceByFile.i18n, "PaperOrderIntent flow");
+requireContains("Workflow standardization includes Risk Engine checks", sourceByFile.i18n, "Risk Engine checks");
+requireContains("Workflow standardization includes OMS lifecycle", sourceByFile.i18n, "OMS lifecycle");
+requireContains("Workflow standardization includes Audit evidence", sourceByFile.i18n, "Audit evidence");
+requireContains("Workflow standardization safety keeps Paper Only", sourceByFile.i18n, "Paper Only");
+requireContains("Workflow standardization safety keeps browser-only mock boundary", sourceByFile.i18n, "Browser-only / mock demo where applicable");
+requireContains("Workflow standardization safety keeps no broker", sourceByFile.i18n, "No broker");
+requireContains("Workflow standardization safety keeps no real order", sourceByFile.i18n, "No real order");
+requireContains("Workflow standardization safety keeps no credentials", sourceByFile.i18n, "No credentials");
+requireContains("Workflow standardization safety keeps not investment advice", sourceByFile.i18n, "Not investment advice");
+requireContains("Workflow standardization safety keeps production not ready", sourceByFile.i18n, "Production Trading Platform: NOT READY");
+requireNotContains("Workflow standardization panel does not fetch backend", sourceByFile.workflowStandardization, "fetch(");
+requireNotContains("Workflow standardization panel does not collect API keys", sourceByFile.workflowStandardization.toLowerCase(), "api_key");
+requireNotContains("Workflow standardization panel does not collect account IDs", sourceByFile.workflowStandardization.toLowerCase(), "account_id");
+requireNotContains("Workflow standardization panel does not collect certificates", sourceByFile.workflowStandardization.toLowerCase(), "certificate");
 
 for (const needle of [
   "TRADING_MODE",

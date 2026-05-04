@@ -286,6 +286,129 @@ h3 {
   color: #7c2d12;
 }
 
+.workflow-standardization-panel {
+  display: grid;
+  gap: 16px;
+  margin-top: 28px;
+  border: 1px solid rgba(4, 120, 87, 0.18);
+  border-radius: 8px;
+  background: linear-gradient(180deg, rgba(4, 120, 87, 0.05), #ffffff 44%);
+  box-shadow: var(--shadow);
+  padding: 20px;
+}
+
+.workflow-standardization-panel .section-heading p:not(.eyebrow) {
+  max-width: 960px;
+  margin: 10px 0 0;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+.workflow-standardization-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.workflow-standardization-card {
+  display: grid;
+  grid-template-columns: 34px minmax(0, 1fr);
+  gap: 12px;
+  min-width: 0;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #ffffff;
+  padding: 14px;
+}
+
+.workflow-standardization-index {
+  display: inline-flex;
+  width: 32px;
+  height: 32px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  background: rgba(4, 120, 87, 0.1);
+  color: var(--green);
+  font-weight: 900;
+}
+
+.workflow-standardization-card h3 {
+  min-height: 2.5em;
+}
+
+.workflow-standardization-card p:not(.card-kicker) {
+  margin: 10px 0 0;
+  color: var(--muted);
+  font-size: 0.88rem;
+  line-height: 1.5;
+}
+
+.workflow-standardization-card dl {
+  display: grid;
+  gap: 8px;
+  margin: 12px 0 0;
+}
+
+.workflow-standardization-card dt {
+  margin-bottom: 3px;
+  color: var(--green);
+  font-size: 0.72rem;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.workflow-standardization-card dd {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.84rem;
+  line-height: 1.45;
+}
+
+.workflow-standardization-safety {
+  display: grid;
+  grid-template-columns: minmax(220px, 0.36fr) minmax(0, 1fr);
+  gap: 14px;
+  border: 1px solid rgba(180, 83, 9, 0.2);
+  border-radius: 8px;
+  background: rgba(180, 83, 9, 0.06);
+  padding: 16px;
+}
+
+.workflow-standardization-safety h3,
+.workflow-standardization-safety p {
+  margin: 0;
+}
+
+.workflow-standardization-safety p:not(.card-kicker) {
+  margin-top: 8px;
+  color: #7c2d12;
+  line-height: 1.55;
+}
+
+.workflow-standardization-safety ul {
+  display: flex;
+  flex-wrap: wrap;
+  align-content: flex-start;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.workflow-standardization-safety li {
+  display: inline-flex;
+  min-height: 34px;
+  align-items: center;
+  border: 1px solid rgba(180, 83, 9, 0.24);
+  border-radius: 999px;
+  padding: 7px 10px;
+  background: #ffffff;
+  color: #7c2d12;
+  font-size: 0.82rem;
+  font-weight: 800;
+}
+
 .demo-guide {
   display: grid;
   gap: 16px;
@@ -1944,6 +2067,8 @@ dd {
   .summary-grid,
   .product-value-grid,
   .product-value-flow,
+  .workflow-standardization-grid,
+  .workflow-standardization-safety,
   .module-grid,
   .phase-grid,
   .dashboard-grid,
