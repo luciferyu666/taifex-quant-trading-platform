@@ -3756,6 +3756,59 @@ Safety boundary:
 - Production Trading Platform remains NOT READY.
 - Live trading remains disabled by default.
 
+## Workflow Standardization Learning Panel Verification
+
+Commit:
+
+- `970ac2b Add workflow standardization learning panel`
+
+Scope:
+
+- Added a Web Command Center learning layer that turns
+  `docs/quant-workflow-standardization.md` into an in-app guided explanation.
+- Shows how the browser-only Interactive Demo maps to the standardized quant
+  workflow:
+  - Data standardization
+  - StrategySignal standardization
+  - Backtest reproducibility
+  - Rollover data separation
+  - PaperOrderIntent flow
+  - Risk Engine checks
+  - OMS lifecycle
+  - Audit evidence
+- Updated the customer trial docs so reviewers can connect each operation to the
+  standardized data -> strategy -> backtest -> rollover -> paper trading -> risk
+  -> OMS -> audit workflow.
+
+Validation:
+
+- GitHub Actions Release Readiness: passed
+- Run ID: `25347289359`
+- Vercel frontend production deployment: Ready
+- Vercel deployment ID: `dpl_GaTzzjTN7UPoYxYELJo6ghq4jHUs`
+- Production alias: `https://taifex-quant-trading-platform-front.vercel.app`
+- Production smoke gate: passed
+- Interactive Demo conversion gate: passed
+- Local validation before commit:
+  - `make frontend-i18n-check`
+  - `make browser-only-mock-demo-check`
+  - `make interactive-demo-conversion-check`
+  - `cd frontend && npm run typecheck`
+  - `cd frontend && npm run build`
+  - `make check`
+
+Safety boundary:
+
+- Read-only learning layer.
+- No backend fetch.
+- No DB write.
+- No broker call.
+- No real order.
+- No credentials.
+- Not investment advice.
+- Production Trading Platform remains NOT READY.
+- Live trading remains disabled by default.
+
 ## Marketing Website Reachability
 
 Command:
