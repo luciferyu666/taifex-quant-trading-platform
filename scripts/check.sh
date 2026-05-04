@@ -95,6 +95,7 @@ for required_file in \
   docs/paper-broker-simulation-readiness.md \
   docs/mock-backend-demo-mvp.md \
   docs/browser-only-mock-demo-runtime.md \
+  docs/interactive-demo-conversion-qa.md \
   docs/paper-risk-cross-account-readiness.md \
   docs/paper-risk-evidence-export.md \
   docs/paper-audit-integrity-preview.md \
@@ -463,6 +464,7 @@ for required_file in \
   frontend/app/components/browserOnlyMockRuntime.ts \
   frontend/app/components/BrowserOnlyMockDemoPanel.tsx \
   frontend/app/components/MockBackendDemoPanel.tsx \
+  frontend/scripts/check-interactive-demo-conversion.mjs \
   backend/app/api/roadmap_routes.py \
   data-pipeline/migrations/001_phase_2_data_platform.sql \
   data-pipeline/migrations/apply_local_migrations.py \
@@ -765,6 +767,9 @@ if command -v node >/dev/null 2>&1; then
 
   printf 'Checking deployed frontend Customer Demo Guided Flow UI...\n'
   node frontend/scripts/check-customer-demo-ui.mjs
+
+  printf 'Checking deployed frontend Interactive Demo conversion UX...\n'
+  node frontend/scripts/check-interactive-demo-conversion.mjs
 
   printf 'Checking frontend Research Review Packet loader fixtures...\n'
   node --experimental-strip-types frontend/scripts/validate-research-review-packet-fixtures.mjs
