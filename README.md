@@ -141,6 +141,10 @@ Broker SDK access must stay isolated behind `broker-gateway`. Strategies must ne
 
 The frontend is intended to become a command center for health, portfolio state, strategy status, paper trading, risk limits, and audit review.
 
+The consolidated workflow method for TX / MTX / TMF strategy research,
+backtesting, rollover data, Paper Trading, risk, OMS, and audit review is
+documented in `docs/quant-workflow-standardization.md`.
+
 The Mock Backend Demo MVP is documented in `docs/mock-backend-demo-mvp.md`.
 It exposes deterministic paper-only endpoints under `/api/mock-backend/*` for
 mock TX / MTX / TMF market data, signal-only strategy simulation, paper order
