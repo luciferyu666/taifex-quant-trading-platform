@@ -29,6 +29,7 @@ Evaluation artifacts:
 - `docs/customer-demo-script.md`
 - `docs/customer-evaluation-checklist.md`
 - `docs/customer-feedback-form.md`
+- `docs/customer-interactive-demo-trial.md`
 - `docs/production-local-data-boundary.md`
 
 Pre-demo check:
@@ -36,6 +37,7 @@ Pre-demo check:
 ```bash
 make customer-evaluation-check
 make frontend-production-smoke-check
+make interactive-demo-conversion-check
 ```
 
 ## Facebook Community Launch Kit

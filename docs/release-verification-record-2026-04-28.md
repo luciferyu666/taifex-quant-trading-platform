@@ -3683,6 +3683,79 @@ Safety boundary:
 - Production Trading Platform remains NOT READY.
 - Live trading remains disabled by default.
 
+## Interactive Demo UX Evidence Record / Customer Trial Readiness
+
+Verification date: 2026-05-04
+
+Change verified:
+
+- Commit: `5f72245 Add interactive demo conversion smoke gate`
+- Scope:
+  - Added `frontend/scripts/check-interactive-demo-conversion.mjs`.
+  - Added `docs/interactive-demo-conversion-qa.md`.
+  - Added `make interactive-demo-conversion-check`.
+  - Added the Interactive Demo conversion QA gate to `make check`.
+  - Validated that the production Web App exposes product positioning,
+    feature-to-benefit mapping, Paper OMS / Browser-only Demo entry points,
+    interactive controls, bilingual copy, and safety copy.
+
+Customer trial artifact added after verification:
+
+- `docs/customer-interactive-demo-trial.md`
+- Purpose: provide a concise customer-facing trial entry point for the public
+  browser-only Interactive Demo.
+- Scope:
+  - Production Web App URL.
+  - Demo flow from market tick -> strategy -> Paper Only order -> OMS timeline
+    -> simulated position / PnL -> evidence JSON.
+  - Feature-to-benefit mapping.
+  - Passed QA gates.
+  - Known limits.
+  - Customer feedback checklist.
+
+Validation:
+
+- GitHub Actions Release Readiness: passed
+- Run ID: `25323301562`
+- Vercel frontend production deployment: Ready
+- Vercel deployment ID: `dpl_HGUNYzqovUyfGruwwhBL82iaK9uy`
+- Production alias: `https://taifex-quant-trading-platform-front.vercel.app`
+- Production smoke gate: passed
+- Interactive Demo conversion gate: passed
+- Local validation before commit:
+  - `make interactive-demo-conversion-check`
+  - `make frontend-production-smoke-check`
+  - `make frontend-i18n-check`
+  - `cd frontend && npm run typecheck`
+  - `cd frontend && npm run build`
+  - `make check`
+
+Customer-facing demo impact:
+
+- Customers can open the public Web App and understand that the first-stage
+  product is a Taiwan index futures data analysis and Paper Trading research
+  platform.
+- Customers can see how each function maps to a user benefit before operating
+  the demo.
+- Customers can run the browser-only flow without installing a local backend or
+  connecting to any broker.
+- Customers can copy demo summary / evidence JSON for feedback.
+
+Safety boundary:
+
+- Browser-only mock data only.
+- Paper Only.
+- No broker.
+- No real money.
+- No real order.
+- No broker credentials.
+- No external market data.
+- No hosted database write.
+- No investment advice.
+- No performance claim.
+- Production Trading Platform remains NOT READY.
+- Live trading remains disabled by default.
+
 ## Marketing Website Reachability
 
 Command:
