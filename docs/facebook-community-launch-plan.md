@@ -16,6 +16,12 @@ Facebook should be used for:
 - community discussion with explicit safety boundaries
 - routing interested users to the marketing website and controlled customer evaluation package
 
+Facebook is part of the four-entry growth strategy in
+[`web-app-growth-strategy.md`](web-app-growth-strategy.md). The Page should
+drive broad awareness and demo traffic; the Group should retain interested
+researchers through moderated discussion, polls, feedback, and safe Paper Only
+demo tasks.
+
 Facebook must not be used for:
 
 - investment advice

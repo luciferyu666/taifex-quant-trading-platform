@@ -34,6 +34,7 @@ for required_file in \
   docs/business-model.md \
   docs/pricing-strategy.md \
   docs/go-to-market.md \
+  docs/web-app-growth-strategy.md \
   docs/compliance-boundary.md \
   docs/partner-profit-sharing.md \
   .codex/prompts/18-business-operations-implementation.md \

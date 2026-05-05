@@ -31,6 +31,7 @@ Evaluation artifacts:
 - `docs/customer-feedback-form.md`
 - `docs/customer-interactive-demo-trial.md`
 - `docs/customer-trial-feedback-workflow.md`
+- `docs/web-app-growth-strategy.md`
 - `docs/production-local-data-boundary.md`
 
 Pre-demo check:
@@ -65,6 +66,12 @@ make facebook-launch-check
 ```
 
 The social media plan is educational and infrastructure-focused. It does not provide investment advice, real order instructions, broker login, credential collection, live trading approval, or profit claims.
+
+The four-entry growth strategy connecting the Web App, marketing website,
+Facebook Page, and Facebook Group is documented in
+`docs/web-app-growth-strategy.md`. The strategy keeps the Web App positioned as
+a browser-only Interactive Demo and Paper Trading research platform, not a
+production trading product.
 
 ## Executive Summary
 
@@ -461,6 +468,7 @@ Business artifacts:
 - `docs/business-model.md`
 - `docs/pricing-strategy.md`
 - `docs/go-to-market.md`
+- `docs/web-app-growth-strategy.md`
 - `docs/compliance-boundary.md`
 - `docs/partner-profit-sharing.md`
 

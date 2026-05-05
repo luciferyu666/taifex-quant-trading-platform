@@ -4,6 +4,18 @@
 
 The go-to-market motion should build trust from developer-first tools, expand through ecosystem participation, and mature into enterprise infrastructure. The platform should be sold as Taiwan futures quant infrastructure, not as a profit guarantee.
 
+The current four-entry growth motion is documented in
+`docs/web-app-growth-strategy.md`. It connects the marketing website, Web App
+Interactive Demo, Facebook Page, and Facebook Group into one loop:
+
+```text
+education content -> website trust -> browser-only Web App demo -> moderated community feedback -> product and content iteration
+```
+
+The Web App remains a browser-only Interactive Demo and Paper Trading research
+platform where applicable. It must not be positioned as a live trading surface,
+broker login flow, customer account system, or production trading product.
+
 ## 2. Phase 1: Tool-led Growth
 
 Goal: build credibility and user pipeline.
@@ -61,8 +73,13 @@ Content themes:
 Facebook execution assets:
 - `docs/facebook-community-launch-plan.md`
 - `docs/facebook-content-calendar.md`
+- `docs/web-app-growth-strategy.md`
 
 Facebook should be used as the broad education and community channel for Taiwan futures researchers. Keep the channel focused on data governance, backtesting discipline, Paper Only demos, and platform safety boundaries.
+
+The first activation milestone is completion of the browser-only demo and
+understanding why StrategySignal, Risk Engine, OMS, Paper Broker simulation, and
+evidence remain separate workflow stages.
 
 ## 7. Broker Partnership Motion
 

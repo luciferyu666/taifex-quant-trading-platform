@@ -27,6 +27,18 @@ https://taifex-quant-trading-platform-front.vercel.app/?lang=zh
 https://taifex-quant-trading-platform-front.vercel.app/?lang=en
 ```
 
+This Web App is one of four growth entry points documented in
+[`web-app-growth-strategy.md`](web-app-growth-strategy.md):
+
+- the marketing website builds trust and routes visitors to the demo
+- the Web App provides browser-only Interactive Demo activation
+- the Facebook Page provides public education and product updates
+- the Facebook Group provides moderated discussion and feedback
+
+The customer trial should therefore focus on completing the browser-only demo
+and understanding the Paper Trading research workflow, not on live execution,
+broker login, or account onboarding.
+
 ## Trial Positioning
 
 The first-stage product positioning is:
@@ -121,7 +133,7 @@ The production conversion QA validates:
   summary, and Copy evidence JSON controls are present.
 - English and Traditional Chinese copy are present.
 - Safety copy remains present.
-- Prohibited profit and risk-free claims are absent.
+- Prohibited profit and safety-minimizing claims are absent.
 
 ## Known Limits
 
