@@ -1,5 +1,7 @@
 #!/usr/bin/env node
 
+import { readFileSync } from "node:fs";
+
 const DEFAULT_PRODUCTION_URL =
   "https://taifex-quant-trading-platform-front.vercel.app";
 
@@ -9,6 +11,13 @@ const productionUrl = (
 
 const timeoutMs = Number(process.env.FRONTEND_PRODUCTION_TIMEOUT_MS || 15000);
 const fetchAttempts = Number(process.env.FRONTEND_PRODUCTION_FETCH_ATTEMPTS || 3);
+
+const localGuidedLearningSource = [
+  readFileSync(new URL("../app/i18n.ts", import.meta.url), "utf8"),
+  readFileSync(new URL("../app/components/browserOnlyMockRuntime.ts", import.meta.url), "utf8"),
+  readFileSync(new URL("../app/components/BrowserOnlyMockDemoPanel.tsx", import.meta.url), "utf8"),
+  readFileSync(new URL("../app/components/BrowserOnlyMockDemoGuide.tsx", import.meta.url), "utf8"),
+].join("\n");
 
 const checks = [];
 const failures = [];
@@ -191,6 +200,29 @@ const chineseDemoActions = [
   "複製 evidence JSON",
 ];
 
+const localMarketRealismMarkers = [
+  "BrowserMockMarketRegime",
+  "normal",
+  "trending",
+  "volatile",
+  "illiquid",
+  "stale_quote",
+  "Market Realism",
+  "Market regime",
+  "Spread",
+  "Liquidity score",
+  "Slippage estimate",
+  "Fill reason",
+  "市場真實度",
+  "市場狀態",
+  "價差",
+  "流動性分數",
+  "滑價估計",
+  "成交原因",
+  "Result explanation",
+  "結果說明",
+];
+
 const englishSafetyText = [
   "Paper Only",
   "Browser-only / mock demo",
@@ -282,6 +314,12 @@ const main = async () => {
   }
 
   const combinedHtml = `${rootResponse.text}\n${zhResponse.text}\n${enResponse.text}`;
+
+  requireAllContains(
+    "Local guided learning market realism source",
+    localGuidedLearningSource,
+    localMarketRealismMarkers,
+  );
 
   requireAllContains("Production shared safety copy", combinedHtml, sharedSafetyText);
 

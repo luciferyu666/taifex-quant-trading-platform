@@ -39,7 +39,15 @@ for needle in \
   'real_order_created: false' \
   'credentials_collected: false' \
   'database_written: false' \
-  'performance_claim: false'; do
+  'performance_claim: false' \
+  'BrowserMockMarketRegime' \
+  'market_regime' \
+  'spread_points' \
+  'liquidity_score' \
+  'slippage_points_estimate' \
+  'deterministic_spread_liquidity_v1' \
+  'stale_quote' \
+  'illiquid'; do
   if ! grep -q "${needle}" frontend/app/components/browserOnlyMockRuntime.ts; then
     printf 'Missing browser-only runtime marker: %s\n' "${needle}" >&2
     exit 1
@@ -64,6 +72,9 @@ for needle in \
   'copyEvidenceJson' \
   'clearDemoState' \
   'assertBrowserOnlySafety' \
+  'marketRegime' \
+  'fillReason' \
+  'market_realism' \
   'browser_only' \
   'database_written'; do
   if ! grep -q "${needle}" frontend/app/components/BrowserOnlyMockDemoPanel.tsx frontend/app/i18n.ts; then
@@ -117,6 +128,14 @@ for needle in \
   'Not investment advice' \
   'Copy evidence JSON' \
   'Deterministic mock seed' \
+  'Market Realism' \
+  'Market regime' \
+  'Fill reason' \
+  'Slippage estimate' \
+  '市場真實度' \
+  '市場狀態' \
+  '成交原因' \
+  '滑價估計' \
   '完整 Browser-only 操作流程' \
   '預設先開啟 Paper OMS' \
   '不需要後端' \

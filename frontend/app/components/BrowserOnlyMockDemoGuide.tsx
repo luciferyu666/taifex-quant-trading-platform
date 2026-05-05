@@ -86,6 +86,10 @@ export function BrowserOnlyMockDemoGuide({
               <p>{step.expected}</p>
             </div>
             <div>
+              <strong>{copy.resultLabel}</strong>
+              <p>{step.result}</p>
+            </div>
+            <div>
               <strong>{copy.safetyLabel}</strong>
               <p>{step.safety}</p>
             </div>

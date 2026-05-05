@@ -2540,7 +2540,7 @@ export const dashboardCopy = {
       eyebrow: "Browser-only Mock Runtime",
       title: "Interactive Demo in this browser",
       description:
-        "Runs deterministic TX / MTX / TMF market data, signal-only strategy simulation, PaperOrderIntent risk checks, OMS timeline, paper broker fill simulation, and simulated portfolio metrics entirely in the browser. It requires no local backend, no broker, no database, no real money, and no live trading.",
+        "Runs deterministic TX / MTX / TMF market data with market regime, spread, liquidity, quote age, and slippage estimates, plus signal-only strategy simulation, PaperOrderIntent risk checks, OMS timeline, paper broker fill simulation, and simulated portfolio metrics entirely in the browser. It requires no local backend, no broker, no database, no real money, and no live trading.",
       initialMessage: "Browser-only mock demo is ready. No backend is required.",
       restoredMessage: "Browser-only mock demo restored from this browser's local state.",
       badges: {
@@ -2583,6 +2583,7 @@ export const dashboardCopy = {
         stepListLabel: "Browser-only demo steps",
         activeStepLabel: "Step",
         expectedLabel: "Expected result",
+        resultLabel: "Result explanation",
         safetyLabel: "Safety boundary",
         nextLabel: "Next step",
         previous: "Previous",
@@ -2600,6 +2601,8 @@ export const dashboardCopy = {
               "Create the next deterministic TX / MTX / TMF quote snapshot in this browser.",
             expected:
               "Bid, ask, last, quote age, quote size, and liquidity score update without external market data.",
+            result:
+              "The tick also shows a deterministic market regime such as normal, trending, volatile, illiquid, or stale_quote, so spread and liquidity can change without live data.",
             safety:
               "No backend, broker, external market feed, database write, or live trading path is used.",
             next: "Run the signal-only mock strategy against the selected symbol.",
@@ -2611,6 +2614,8 @@ export const dashboardCopy = {
               "Generate a StrategySignal from the deterministic browser price path.",
             expected:
               "A StrategySignal appears with direction, target TX-equivalent exposure, confidence, and signals_only=true.",
+            result:
+              "The signal is based on the deterministic volatility path and remains a research signal, not an order instruction.",
             safety:
               "The strategy emits a signal only. It does not create an order or call Risk / OMS / Broker Gateway.",
             next: "Convert the signal into a platform-owned PaperOrderIntent simulation.",
@@ -2622,6 +2627,8 @@ export const dashboardCopy = {
               "Run the browser-local paper risk checks and simulated OMS / paper fill path.",
             expected:
               "The workflow shows risk approval or rejection, OMS status, fill quantity, fill price, and remaining quantity.",
+            result:
+              "The fill model uses spread, liquidity, quote age, and deterministic slippage to explain filled, partial, stale quote reject, or illiquid reject outcomes.",
             safety:
               "This creates no real order, no broker request, no database record, and no live approval.",
             next: "Review the simulated OMS lifecycle.",
@@ -2633,6 +2640,8 @@ export const dashboardCopy = {
               "Inspect CREATE, RISK_CHECK, SUBMIT, ACCEPT, FILL, PARTIAL_FILL, or REJECT transitions.",
             expected:
               "The timeline explains how the paper workflow moved through simulated OMS states.",
+            result:
+              "Each OMS event carries a reason, including whether the order filled because sufficient liquidity existed or was rejected by stale / illiquid conditions.",
             safety:
               "These events are browser-local demo events, not exchange or broker execution reports.",
             next: "Review paper-only position and simulated PnL.",
@@ -2644,6 +2653,8 @@ export const dashboardCopy = {
               "Inspect paper position, average price, unrealized PnL, and paper equity.",
             expected:
               "The portfolio summary updates from deterministic mock fills and current browser tick marks.",
+            result:
+              "The paper-only metrics reflect the current deterministic mark price and copied evidence can include market realism metadata.",
             safety:
               "Simulated PnL is product workflow output only. It is not investment advice or a performance claim.",
             next: "Reset the demo session or copy the evidence JSON for reviewer notes.",
@@ -2655,6 +2666,8 @@ export const dashboardCopy = {
               "Clear the browser-local session back to a safe initial state.",
             expected:
               "Tick, signal, order, OMS, position, and simulated metrics return to the initial paper-only state.",
+            result:
+              "The session returns to the same deterministic seed so the reviewer can repeat the market regime and fill model walkthrough.",
             safety:
               "Reset affects only this browser's local demo state and does not delete backend or database records.",
             next: "Start again with Generate market tick when the reviewer wants to repeat the demo.",
@@ -2666,10 +2679,13 @@ export const dashboardCopy = {
         sessionTitle: "Browser-local demo state",
         marketKicker: "Market Data",
         marketTitle: "Deterministic browser price path",
+        regimeLegend: "Market regimes: normal, trending, volatile, illiquid, stale_quote.",
         signalKicker: "Strategy",
         signalTitle: "Signal-only strategy output",
         orderKicker: "Paper Order",
         orderTitle: "Browser-only paper workflow result",
+        realismKicker: "Market Realism",
+        realismTitle: "Spread, liquidity, quote age, and slippage model",
         performanceKicker: "Simulated Metrics",
         performanceTitle: "Paper-only portfolio and PnL",
         omsKicker: "OMS",
@@ -2690,9 +2706,13 @@ export const dashboardCopy = {
         storageKey: "localStorage key",
         bid: "Bid",
         ask: "Ask",
+        marketRegime: "Market regime",
+        spread: "Spread",
         last: "Last",
         change: "Change",
         quoteAge: "Quote age",
+        liquidity: "Liquidity score",
+        volatility: "Volatility path",
         activeSnapshot: "Active snapshot",
         signalId: "Signal ID",
         direction: "Direction",
@@ -2703,6 +2723,10 @@ export const dashboardCopy = {
         riskApproved: "Risk approved",
         omsStatus: "OMS status",
         fillQuantity: "Simulated fill quantity",
+        fillPrice: "Simulated fill price",
+        remainingQuantity: "Remaining quantity",
+        slippage: "Slippage estimate",
+        fillReason: "Fill reason",
         position: "Position",
         averagePrice: "Average price",
         unrealizedPnl: "Unrealized PnL",
@@ -2716,7 +2740,7 @@ export const dashboardCopy = {
       summary: {
         title: "Browser-only mock demo summary",
         safetyLine:
-          "Paper Only; browser-only; no backend; no broker; no real money; no live trading; not investment advice; no performance claim.",
+          "Paper Only; browser-only; deterministic market realism; no external market data; no backend; no broker; no real money; no live trading; not investment advice; no performance claim.",
       },
     },
     mockBackendDemo: {
@@ -5923,7 +5947,7 @@ export const dashboardCopy = {
       eyebrow: "Browser-only Mock Runtime",
       title: "瀏覽器內互動 Demo",
       description:
-        "完全在瀏覽器內執行 deterministic TX / MTX / TMF 行情、signal-only 策略模擬、PaperOrderIntent 風控檢查、OMS 時間線、紙上券商成交模擬與模擬投組指標。它不需要本地後端、不連券商、不寫資料庫、不使用真實資金，也不啟用實盤交易。",
+        "完全在瀏覽器內執行 deterministic TX / MTX / TMF 行情，並顯示市場狀態、價差、流動性、quote age 與滑價估計，再串接 signal-only 策略模擬、PaperOrderIntent 風控檢查、OMS 時間線、紙上券商成交模擬與模擬投組指標。它不需要本地後端、不連券商、不寫資料庫、不使用真實資金，也不啟用實盤交易。",
       initialMessage: "Browser-only mock demo 已準備好，不需要後端。",
       restoredMessage: "已從此瀏覽器的本地狀態還原 browser-only mock demo。",
       badges: {
@@ -5967,6 +5991,7 @@ export const dashboardCopy = {
         stepListLabel: "Browser-only demo steps",
         activeStepLabel: "步驟",
         expectedLabel: "預期結果",
+        resultLabel: "結果說明",
         safetyLabel: "安全邊界",
         nextLabel: "下一步",
         previous: "上一步",
@@ -5984,6 +6009,8 @@ export const dashboardCopy = {
               "在此瀏覽器內建立下一筆 deterministic TX / MTX / TMF quote snapshot。",
             expected:
               "Bid、ask、last、quote age、quote size 與 liquidity score 會更新，且不下載外部行情。",
+            result:
+              "Tick 也會顯示 deterministic 市場狀態，例如 normal、trending、volatile、illiquid 或 stale_quote，讓價差與流動性可在不接真實行情下變化。",
             safety:
               "不使用後端、不連券商、不接外部行情、不寫資料庫，也不進入實盤路徑。",
             next: "用選定契約執行僅輸出 signal 的模擬策略。",
@@ -5995,6 +6022,8 @@ export const dashboardCopy = {
               "根據 deterministic browser price path 產生 StrategySignal。",
             expected:
               "畫面會顯示 direction、target TX-equivalent exposure、confidence 與 signals_only=true。",
+            result:
+              "Signal 來自 deterministic volatility path，仍只是研究訊號，不是下單指令。",
             safety:
               "策略只輸出 signal，不建立訂單，也不呼叫 Risk / OMS / Broker Gateway。",
             next: "將 signal 轉成平台擁有的 PaperOrderIntent 模擬。",
@@ -6006,6 +6035,8 @@ export const dashboardCopy = {
               "執行瀏覽器本地 paper risk checks 與模擬 OMS / paper fill 路徑。",
             expected:
               "Workflow 會顯示 risk approval 或 rejection、OMS status、fill quantity、fill price 與 remaining quantity。",
+            result:
+              "成交模型會使用價差、流動性、quote age 與 deterministic slippage 解釋 filled、partial、stale quote reject 或 illiquid reject。",
             safety:
               "不建立真實委託、不送券商請求、不寫資料庫，也不產生 live approval。",
             next: "檢視模擬 OMS lifecycle。",
@@ -6017,6 +6048,8 @@ export const dashboardCopy = {
               "檢查 CREATE、RISK_CHECK、SUBMIT、ACCEPT、FILL、PARTIAL_FILL 或 REJECT transitions。",
             expected:
               "Timeline 會說明 paper workflow 如何通過模擬 OMS 狀態。",
+            result:
+              "每個 OMS event 都會附上原因，包括是否因流動性足夠而成交，或因 stale / illiquid 條件被拒絕。",
             safety:
               "這些是瀏覽器本地 demo events，不是交易所或券商 execution reports。",
             next: "檢視 paper-only position 與 simulated PnL。",
@@ -6028,6 +6061,8 @@ export const dashboardCopy = {
               "檢查 paper position、average price、unrealized PnL 與 paper equity。",
             expected:
               "Portfolio summary 會根據 deterministic mock fills 與目前 browser tick 更新。",
+            result:
+              "Paper-only 指標會依目前 deterministic mark price 更新，複製 evidence 時也會包含 market realism metadata。",
             safety:
               "Simulated PnL 只用於產品 workflow 展示，不構成投資建議或績效主張。",
             next: "重置 demo session，或複製 evidence JSON 供 reviewer 做筆記。",
@@ -6039,6 +6074,8 @@ export const dashboardCopy = {
               "把瀏覽器本地 session 清回安全初始狀態。",
             expected:
               "Tick、signal、order、OMS、position 與模擬指標會回到初始 paper-only 狀態。",
+            result:
+              "Session 會回到同一個 deterministic seed，reviewer 可以重複檢查市場狀態與成交模型。",
             safety:
               "Reset 只影響此瀏覽器的本地 demo state，不刪除後端或資料庫紀錄。",
             next: "Reviewer 若要重複體驗，可重新從產生行情 tick 開始。",
@@ -6050,10 +6087,13 @@ export const dashboardCopy = {
         sessionTitle: "瀏覽器本地 demo state",
         marketKicker: "行情資料",
         marketTitle: "瀏覽器 deterministic 價格路徑",
+        regimeLegend: "市場狀態：normal、trending、volatile、illiquid、stale_quote。",
         signalKicker: "策略",
         signalTitle: "僅輸出 signal 的策略結果",
         orderKicker: "紙上訂單",
         orderTitle: "Browser-only 紙上 workflow 結果",
+        realismKicker: "市場真實度",
+        realismTitle: "價差、流動性、quote age 與滑價模型",
         performanceKicker: "模擬指標",
         performanceTitle: "Paper-only 投組與 PnL",
         omsKicker: "OMS",
@@ -6074,9 +6114,13 @@ export const dashboardCopy = {
         storageKey: "localStorage key",
         bid: "Bid",
         ask: "Ask",
+        marketRegime: "市場狀態",
+        spread: "價差",
         last: "Last",
         change: "變動",
         quoteAge: "Quote age",
+        liquidity: "流動性分數",
+        volatility: "波動路徑",
         activeSnapshot: "目前 snapshot",
         signalId: "Signal ID",
         direction: "方向",
@@ -6087,6 +6131,10 @@ export const dashboardCopy = {
         riskApproved: "Risk approved",
         omsStatus: "OMS status",
         fillQuantity: "模擬成交數量",
+        fillPrice: "模擬成交價格",
+        remainingQuantity: "剩餘數量",
+        slippage: "滑價估計",
+        fillReason: "成交原因",
         position: "持倉",
         averagePrice: "平均價格",
         unrealizedPnl: "未實現 PnL",
@@ -6100,7 +6148,7 @@ export const dashboardCopy = {
       summary: {
         title: "Browser-only mock demo 摘要",
         safetyLine:
-          "Paper Only；browser-only；不需要後端；無券商；無真實資金；實盤關閉；不構成投資建議；不是績效主張。",
+          "Paper Only；browser-only；deterministic market realism；不下載外部行情；不需要後端；無券商；無真實資金；實盤關閉；不構成投資建議；不是績效主張。",
       },
     },
     mockBackendDemo: {

@@ -241,27 +241,34 @@ export function BrowserOnlyMockDemoPanel({
         <article className="paper-evidence-section">
           <p className="card-kicker">{copy.sections.marketKicker}</p>
           <h3>{copy.sections.marketTitle}</h3>
+          <p className="read-only-note">{copy.sections.regimeLegend}</p>
           <div className="paper-table-wrapper">
             <table className="paper-record-table">
               <thead>
                 <tr>
                   <th>{copy.fields.symbol}</th>
+                  <th>{copy.fields.marketRegime}</th>
                   <th>{copy.fields.bid}</th>
                   <th>{copy.fields.ask}</th>
+                  <th>{copy.fields.spread}</th>
                   <th>{copy.fields.last}</th>
                   <th>{copy.fields.change}</th>
                   <th>{copy.fields.quoteAge}</th>
+                  <th>{copy.fields.liquidity}</th>
                 </tr>
               </thead>
               <tbody>
                 {session.market_data.map((snapshot) => (
                   <tr key={snapshot.symbol}>
                     <td>{snapshot.symbol}</td>
+                    <td>{snapshot.market_regime ?? "normal"}</td>
                     <td>{snapshot.bid}</td>
                     <td>{snapshot.ask}</td>
+                    <td>{snapshot.spread_points ?? snapshot.ask - snapshot.bid}</td>
                     <td>{snapshot.last}</td>
                     <td>{snapshot.change_points}</td>
                     <td>{snapshot.quote_age_seconds}</td>
+                    <td>{snapshot.liquidity_score}</td>
                   </tr>
                 ))}
               </tbody>
@@ -269,7 +276,11 @@ export function BrowserOnlyMockDemoPanel({
           </div>
           {activeSnapshot ? (
             <p className="read-only-note">
-              {copy.fields.activeSnapshot}: {activeSnapshot.symbol} {activeSnapshot.last}
+              {copy.fields.activeSnapshot}: {activeSnapshot.symbol} {activeSnapshot.last} ·{" "}
+              {copy.fields.marketRegime}: {activeSnapshot.market_regime ?? "normal"} ·{" "}
+              {copy.fields.spread}: {activeSnapshot.spread_points ?? activeSnapshot.ask - activeSnapshot.bid} ·{" "}
+              {copy.fields.liquidity}: {activeSnapshot.liquidity_score} ·{" "}
+              {copy.fields.quoteAge}: {activeSnapshot.quote_age_seconds}
             </p>
           ) : null}
         </article>
@@ -326,10 +337,73 @@ export function BrowserOnlyMockDemoPanel({
                 <dt>{copy.fields.fillQuantity}</dt>
                 <dd>{session.latest_order.simulated_fill_quantity}</dd>
               </div>
+              <div>
+                <dt>{copy.fields.fillPrice}</dt>
+                <dd>{session.latest_order.simulated_fill_price ?? "N/A"}</dd>
+              </div>
+              <div>
+                <dt>{copy.fields.remainingQuantity}</dt>
+                <dd>{session.latest_order.remaining_quantity}</dd>
+              </div>
+              <div>
+                <dt>{copy.fields.slippage}</dt>
+                <dd>{session.latest_order.simulated_slippage_points ?? "N/A"}</dd>
+              </div>
+              <div>
+                <dt>{copy.fields.fillReason}</dt>
+                <dd>{session.latest_order.reason}</dd>
+              </div>
             </dl>
           ) : (
             <p>{copy.emptyOrder}</p>
           )}
+        </article>
+
+        <article className="paper-evidence-section">
+          <p className="card-kicker">{copy.sections.realismKicker}</p>
+          <h3>{copy.sections.realismTitle}</h3>
+          <dl className="detail-list">
+            <div>
+              <dt>{copy.fields.marketRegime}</dt>
+              <dd>
+                {session.latest_order?.market_realism?.market_regime ??
+                  activeSnapshot?.market_regime ??
+                  "normal"}
+              </dd>
+            </div>
+            <div>
+              <dt>{copy.fields.spread}</dt>
+              <dd>
+                {session.latest_order?.market_realism?.spread_points ??
+                  activeSnapshot?.spread_points ??
+                  "N/A"}
+              </dd>
+            </div>
+            <div>
+              <dt>{copy.fields.liquidity}</dt>
+              <dd>
+                {session.latest_order?.market_realism?.liquidity_score ??
+                  activeSnapshot?.liquidity_score ??
+                  "N/A"}
+              </dd>
+            </div>
+            <div>
+              <dt>{copy.fields.volatility}</dt>
+              <dd>{activeSnapshot?.volatility_points ?? "N/A"}</dd>
+            </div>
+            <div>
+              <dt>{copy.fields.slippage}</dt>
+              <dd>
+                {session.latest_order?.market_realism?.slippage_points_estimate ??
+                  activeSnapshot?.slippage_points_estimate ??
+                  "N/A"}
+              </dd>
+            </div>
+            <div>
+              <dt>{copy.fields.fillReason}</dt>
+              <dd>{session.latest_order?.market_realism?.fill_reason ?? copy.emptyOrder}</dd>
+            </div>
+          </dl>
         </article>
 
         <article className="paper-evidence-section">
@@ -475,15 +549,38 @@ function buildDemoSummary(
   session: BrowserOnlyMockSession,
   copy: DashboardCopy["browserOnlyMockDemo"],
 ) {
+  const selectedSnapshot =
+    session.market_data.find((snapshot) => snapshot.symbol === session.selected_symbol) ?? null;
   return [
     copy.summary.title,
     `${copy.fields.sessionId}: ${session.session_id}`,
     `${copy.fields.mockSeed}: ${session.mock_seed}`,
     `${copy.fields.tick}: ${session.current_tick}`,
     `${copy.fields.symbol}: ${session.selected_symbol}`,
+    `${copy.fields.marketRegime}: ${
+      session.latest_order?.market_realism?.market_regime ??
+      selectedSnapshot?.market_regime ??
+      "N/A"
+    }`,
+    `${copy.fields.spread}: ${
+      session.latest_order?.market_realism?.spread_points ??
+      selectedSnapshot?.spread_points ??
+      "N/A"
+    }`,
+    `${copy.fields.liquidity}: ${
+      session.latest_order?.market_realism?.liquidity_score ??
+      selectedSnapshot?.liquidity_score ??
+      "N/A"
+    }`,
+    `${copy.fields.slippage}: ${
+      session.latest_order?.market_realism?.slippage_points_estimate ??
+      selectedSnapshot?.slippage_points_estimate ??
+      "N/A"
+    }`,
     `${copy.fields.signalId}: ${session.latest_signal?.signal_id ?? "N/A"}`,
     `${copy.fields.orderId}: ${session.latest_order?.order_id ?? "N/A"}`,
     `${copy.fields.omsStatus}: ${session.latest_order?.oms_status ?? "N/A"}`,
+    `${copy.fields.fillReason}: ${session.latest_order?.reason ?? "N/A"}`,
     `${copy.fields.position}: ${session.portfolio.position_contracts}`,
     `${copy.fields.unrealizedPnl}: ${session.performance.unrealized_pnl_twd}`,
     `${copy.fields.equity}: ${session.performance.equity_twd}`,
@@ -492,6 +589,8 @@ function buildDemoSummary(
 }
 
 function buildEvidencePayload(session: BrowserOnlyMockSession) {
+  const selectedSnapshot =
+    session.market_data.find((snapshot) => snapshot.symbol === session.selected_symbol) ?? null;
   return {
     evidence_id: `browser-only-evidence-${session.current_tick}`,
     evidence_type: "browser_only_mock_demo",
@@ -500,6 +599,14 @@ function buildEvidencePayload(session: BrowserOnlyMockSession) {
     mock_seed: session.mock_seed,
     current_tick: session.current_tick,
     selected_symbol: session.selected_symbol,
+    market_realism: {
+      selected_snapshot: selectedSnapshot,
+      latest_order_realism: session.latest_order?.market_realism ?? null,
+      deterministic_fill_model: "deterministic_spread_liquidity_v1",
+      supported_regimes: ["normal", "trending", "volatile", "illiquid", "stale_quote"],
+      external_market_data_downloaded: false,
+      production_execution_model: false,
+    },
     market_data: session.market_data,
     latest_signal: session.latest_signal,
     latest_order: session.latest_order,

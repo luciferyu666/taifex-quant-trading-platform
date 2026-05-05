@@ -1,6 +1,12 @@
 export type BrowserMockSymbol = "TX" | "MTX" | "TMF";
 export type BrowserMockDirection = "LONG" | "SHORT" | "FLAT";
 export type BrowserMockSide = "BUY" | "SELL";
+export type BrowserMockMarketRegime =
+  | "normal"
+  | "trending"
+  | "volatile"
+  | "illiquid"
+  | "stale_quote";
 
 export type BrowserOnlySafetyFlags = {
   paper_only: boolean;
@@ -21,15 +27,19 @@ export type BrowserOnlySafetyFlags = {
 export type BrowserMockMarketDataPoint = {
   symbol: BrowserMockSymbol;
   tick: number;
+  market_regime: BrowserMockMarketRegime;
   bid: number;
   ask: number;
   last: number;
   previous_last: number;
   change_points: number;
+  spread_points: number;
   bid_size: number;
   ask_size: number;
   quote_age_seconds: number;
   liquidity_score: number;
+  volatility_points: number;
+  slippage_points_estimate: number;
   paper_only: boolean;
   external_market_data_downloaded: boolean;
 };
@@ -58,6 +68,17 @@ export type BrowserMockOmsEvent = {
   reason: string;
 };
 
+export type BrowserMockMarketRealism = {
+  market_regime: BrowserMockMarketRegime;
+  spread_points: number;
+  liquidity_score: number;
+  quote_age_seconds: number;
+  available_size: number;
+  slippage_points_estimate: number;
+  fill_model: string;
+  fill_reason: string;
+};
+
 export type BrowserMockOrderSimulation = {
   workflow_run_id: string;
   order_id: string;
@@ -73,10 +94,22 @@ export type BrowserMockOrderSimulation = {
   simulation_outcome: "FILLED" | "PARTIALLY_FILLED" | "REJECTED";
   simulated_fill_quantity: number;
   simulated_fill_price: number | null;
+  simulated_slippage_points: number;
   remaining_quantity: number;
+  market_realism: BrowserMockMarketRealism;
   reason: string;
   paper_only: boolean;
   real_order_created: boolean;
+};
+
+type BrowserMockFillResult = {
+  outcome: "FILLED" | "PARTIALLY_FILLED" | "REJECTED";
+  fillQuantity: number;
+  fillPrice: number | null;
+  slippagePoints: number;
+  remainingQuantity: number;
+  marketRealism: BrowserMockMarketRealism;
+  reason: string;
 };
 
 export type BrowserMockPortfolio = {
@@ -263,7 +296,9 @@ export function simulateBrowserOnlyPaperOrder(
         outcome: "REJECTED" as const,
         fillQuantity: 0,
         fillPrice: null,
+        slippagePoints: 0,
         remainingQuantity: boundedQuantity,
+        marketRealism: buildMarketRealism(snapshot, side, boundedQuantity, riskEvaluation.reason),
         reason: riskEvaluation.reason,
       };
   const omsTimeline = buildOmsTimeline(orderId, riskEvaluation, fill);
@@ -282,7 +317,9 @@ export function simulateBrowserOnlyPaperOrder(
     simulation_outcome: fill.outcome,
     simulated_fill_quantity: fill.fillQuantity,
     simulated_fill_price: fill.fillPrice,
+    simulated_slippage_points: fill.slippagePoints,
     remaining_quantity: fill.remainingQuantity,
+    market_realism: fill.marketRealism,
     reason: fill.reason,
     paper_only: true,
     real_order_created: false,
@@ -365,31 +402,136 @@ function marketDataForTick(tick: number): BrowserMockMarketDataPoint[] {
 
 function marketSnapshot(symbol: BrowserMockSymbol, tick: number): BrowserMockMarketDataPoint {
   const safeTick = Math.max(0, tick);
-  const base = 20_000;
-  const drift = Math.floor(safeTick / 6) * 1.5;
-  const wave = [0, 4, 7.5, 3, -2.5, -5][safeTick % 6] ?? 0;
   const previousTick = Math.max(0, safeTick - 1);
-  const previousDrift = Math.floor(previousTick / 6) * 1.5;
-  const previousWave = [0, 4, 7.5, 3, -2.5, -5][previousTick % 6] ?? 0;
-  const symbolOffset = { TX: 0, MTX: -1, TMF: -1.5 }[symbol];
-  const spread = { TX: 1, MTX: 0.5, TMF: 0.2 }[symbol];
-  const last = round2(base + drift + wave + symbolOffset);
-  const previousLast = round2(base + previousDrift + previousWave + symbolOffset);
+  const marketRegime = marketRegimeForTick(safeTick);
+  const config = marketRegimeConfig[marketRegime];
+  const baseSpread = { TX: 1, MTX: 0.5, TMF: 0.2 }[symbol];
+  const last = lastPriceForTick(symbol, safeTick);
+  const previousLast = lastPriceForTick(symbol, previousTick);
+  const spread = round2(baseSpread * config.spreadMultiplier + baseSpread * ((safeTick % 3) * 0.15));
+  const bidSize = Math.max(0, config.bidSizeBase + (safeTick % 3) - (symbol === "TX" ? 1 : 0));
+  const askSize = Math.max(0, config.askSizeBase + ((safeTick + 1) % 3) - (symbol === "TX" ? 1 : 0));
+  const liquidityScore = round2(
+    Math.max(0.04, Math.min(0.95, config.liquidityBase - (symbol === "TX" ? 0.04 : 0))),
+  );
+  const slippageEstimate = round2(spread * (1 - liquidityScore) * config.slippageMultiplier);
   return {
     symbol,
     tick: safeTick,
+    market_regime: marketRegime,
     bid: round2(last - spread / 2),
     ask: round2(last + spread / 2),
     last,
     previous_last: previousLast,
     change_points: round2(last - previousLast),
-    bid_size: 2 + (safeTick % 4),
-    ask_size: 2 + ((safeTick + 1) % 4),
-    quote_age_seconds: safeTick % 3,
-    liquidity_score: round2(0.35 + (safeTick % 5) * 0.15),
+    spread_points: spread,
+    bid_size: bidSize,
+    ask_size: askSize,
+    quote_age_seconds: config.quoteAgeSeconds + (marketRegime === "stale_quote" ? safeTick % 2 : 0),
+    liquidity_score: liquidityScore,
+    volatility_points: config.volatilityPoints,
+    slippage_points_estimate: slippageEstimate,
     paper_only: true,
     external_market_data_downloaded: false,
   };
+}
+
+const marketRegimeOrder: BrowserMockMarketRegime[] = [
+  "normal",
+  "trending",
+  "normal",
+  "volatile",
+  "illiquid",
+  "stale_quote",
+  "trending",
+  "volatile",
+];
+
+const marketRegimeConfig: Record<
+  BrowserMockMarketRegime,
+  {
+    wave: number[];
+    driftStep: number;
+    spreadMultiplier: number;
+    bidSizeBase: number;
+    askSizeBase: number;
+    quoteAgeSeconds: number;
+    liquidityBase: number;
+    volatilityPoints: number;
+    slippageMultiplier: number;
+  }
+> = {
+  normal: {
+    wave: [0, 2.5, 4, 1.5, -1.5, -3],
+    driftStep: 1.2,
+    spreadMultiplier: 1,
+    bidSizeBase: 7,
+    askSizeBase: 8,
+    quoteAgeSeconds: 1,
+    liquidityBase: 0.82,
+    volatilityPoints: 4,
+    slippageMultiplier: 0.35,
+  },
+  trending: {
+    wave: [0, 4.5, 8, 10.5, 13, 15],
+    driftStep: 2.1,
+    spreadMultiplier: 1.25,
+    bidSizeBase: 5,
+    askSizeBase: 6,
+    quoteAgeSeconds: 1,
+    liquidityBase: 0.68,
+    volatilityPoints: 9,
+    slippageMultiplier: 0.55,
+  },
+  volatile: {
+    wave: [0, 11, -7, 14, -11, 6],
+    driftStep: 1.4,
+    spreadMultiplier: 2.6,
+    bidSizeBase: 3,
+    askSizeBase: 3,
+    quoteAgeSeconds: 2,
+    liquidityBase: 0.42,
+    volatilityPoints: 18,
+    slippageMultiplier: 0.8,
+  },
+  illiquid: {
+    wave: [0, 1.2, -0.8, 2.2, -1.4, 0.5],
+    driftStep: 0.5,
+    spreadMultiplier: 4.2,
+    bidSizeBase: 0,
+    askSizeBase: 1,
+    quoteAgeSeconds: 2,
+    liquidityBase: 0.12,
+    volatilityPoints: 3,
+    slippageMultiplier: 1,
+  },
+  stale_quote: {
+    wave: [0, -1, -1, -0.5, -0.5, -1.5],
+    driftStep: 0.2,
+    spreadMultiplier: 3.2,
+    bidSizeBase: 2,
+    askSizeBase: 2,
+    quoteAgeSeconds: 8,
+    liquidityBase: 0.22,
+    volatilityPoints: 2,
+    slippageMultiplier: 0.9,
+  },
+};
+
+function marketRegimeForTick(tick: number): BrowserMockMarketRegime {
+  return marketRegimeOrder[Math.max(0, tick) % marketRegimeOrder.length] ?? "normal";
+}
+
+function lastPriceForTick(symbol: BrowserMockSymbol, tick: number): number {
+  const safeTick = Math.max(0, tick);
+  const base = 20_000;
+  const regime = marketRegimeForTick(safeTick);
+  const config = marketRegimeConfig[regime];
+  const drift = Math.floor(safeTick / 6) * config.driftStep;
+  const wave = config.wave[safeTick % config.wave.length] ?? 0;
+  const volatilityPulse = ((safeTick % 4) - 1.5) * (config.volatilityPoints / 12);
+  const symbolOffset = { TX: 0, MTX: -1, TMF: -1.5 }[symbol];
+  return round2(base + drift + wave + volatilityPulse + symbolOffset);
 }
 
 function snapshotForSymbol(
@@ -432,55 +574,107 @@ function evaluateRisk(
   const failed = Object.entries(checks).find(([, passed]) => !passed)?.[0];
   return {
     approved: failed === undefined,
-    reason: failed ? `Rejected by browser-only paper risk check: ${failed}` : "Approved by browser-only paper risk guardrails.",
+    reason: failed
+      ? riskReasonForFailedCheck(failed)
+      : "Approved by browser-only paper risk guardrails.",
     checks,
   };
+}
+
+function riskReasonForFailedCheck(check: string): string {
+  if (check === "quote_not_stale") {
+    return "Rejected due to stale quote in deterministic browser-only market realism layer.";
+  }
+  if (check === "price_reasonability") {
+    return "Rejected due to wide spread in deterministic browser-only market realism layer.";
+  }
+  return `Rejected by browser-only paper risk check: ${check}`;
 }
 
 function simulateFill(
   snapshot: BrowserMockMarketDataPoint,
   side: BrowserMockSide,
   quantity: number,
-): {
-  outcome: "FILLED" | "PARTIALLY_FILLED" | "REJECTED";
-  fillQuantity: number;
-  fillPrice: number | null;
-  remainingQuantity: number;
-  reason: string;
-} {
+): BrowserMockFillResult {
   const availableQuantity = side === "BUY" ? snapshot.ask_size : snapshot.bid_size;
-  const fillQuantity = Math.min(quantity, availableQuantity);
-  if (fillQuantity <= 0) {
+  if (snapshot.market_regime === "stale_quote" || snapshot.quote_age_seconds > 3) {
+    const reason = "Rejected due to stale quote in deterministic browser-only market realism layer.";
     return {
       outcome: "REJECTED",
       fillQuantity: 0,
       fillPrice: null,
+      slippagePoints: 0,
       remainingQuantity: quantity,
-      reason: "Rejected by browser-only liquidity model.",
+      marketRealism: buildMarketRealism(snapshot, side, quantity, reason),
+      reason,
     };
   }
+  if (snapshot.market_regime === "illiquid" || snapshot.liquidity_score < 0.2) {
+    const reason = "Rejected due to illiquid deterministic quote snapshot.";
+    return {
+      outcome: "REJECTED",
+      fillQuantity: 0,
+      fillPrice: null,
+      slippagePoints: 0,
+      remainingQuantity: quantity,
+      marketRealism: buildMarketRealism(snapshot, side, quantity, reason),
+      reason,
+    };
+  }
+  const fillQuantity = Math.min(quantity, availableQuantity);
+  if (fillQuantity <= 0) {
+    const reason = "Rejected due to no available browser-only quote size.";
+    return {
+      outcome: "REJECTED",
+      fillQuantity: 0,
+      fillPrice: null,
+      slippagePoints: 0,
+      remainingQuantity: quantity,
+      marketRealism: buildMarketRealism(snapshot, side, quantity, reason),
+      reason,
+    };
+  }
+  const slippagePoints = snapshot.slippage_points_estimate;
+  const fillPrice = round2(
+    side === "BUY" ? snapshot.ask + slippagePoints : snapshot.bid - slippagePoints,
+  );
+  const reason =
+    fillQuantity === quantity
+      ? "Filled because sufficient deterministic liquidity was available."
+      : "Partially filled due to limited bid/ask size in deterministic liquidity model.";
   return {
     outcome: fillQuantity === quantity ? "FILLED" : "PARTIALLY_FILLED",
     fillQuantity,
-    fillPrice: side === "BUY" ? snapshot.ask : snapshot.bid,
+    fillPrice,
+    slippagePoints,
     remainingQuantity: quantity - fillQuantity,
-    reason:
-      fillQuantity === quantity
-        ? "Filled by deterministic browser-only quote snapshot."
-        : "Partially filled by deterministic browser-only quote size.",
+    marketRealism: buildMarketRealism(snapshot, side, quantity, reason),
+    reason,
+  };
+}
+
+function buildMarketRealism(
+  snapshot: BrowserMockMarketDataPoint,
+  side: BrowserMockSide,
+  quantity: number,
+  reason: string,
+): BrowserMockMarketRealism {
+  return {
+    market_regime: snapshot.market_regime ?? "normal",
+    spread_points: snapshot.spread_points ?? round2(snapshot.ask - snapshot.bid),
+    liquidity_score: snapshot.liquidity_score,
+    quote_age_seconds: snapshot.quote_age_seconds,
+    available_size: side === "BUY" ? snapshot.ask_size : snapshot.bid_size,
+    slippage_points_estimate: snapshot.slippage_points_estimate ?? 0,
+    fill_model: "deterministic_spread_liquidity_v1",
+    fill_reason: reason || `Evaluated ${quantity} contracts with browser-only quote size.`,
   };
 }
 
 function buildOmsTimeline(
   orderId: string,
   riskEvaluation: BrowserMockRiskEvaluation,
-  fill: {
-    outcome: "FILLED" | "PARTIALLY_FILLED" | "REJECTED";
-    fillQuantity: number;
-    fillPrice: number | null;
-    remainingQuantity: number;
-    reason: string;
-  },
+  fill: BrowserMockFillResult,
 ): BrowserMockOmsEvent[] {
   const base = [
     omsEvent(orderId, "CREATE", "PENDING", "PaperOrderIntent created by platform, not by strategy."),

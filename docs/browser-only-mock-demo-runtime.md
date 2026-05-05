@@ -96,10 +96,21 @@ The panel also exposes:
 - clear browser state action
 - copy demo summary action
 - copy browser-only evidence JSON action
+- market regime, spread, liquidity, quote age, and deterministic slippage
+- fill reason for filled, partial, stale quote reject, and illiquid reject
 
 The copied evidence is for reviewer notes only. It is not uploaded, persisted to
 a backend, written to a database, or treated as a broker confirmation,
 performance report, investment advice, or live-trading approval.
+
+The evidence JSON also includes `market_realism` metadata:
+
+- selected quote snapshot
+- latest order realism metadata
+- deterministic fill model id
+- supported regimes
+- `external_market_data_downloaded=false`
+- `production_execution_model=false`
 
 ## Automatic Entry Behavior
 
@@ -124,10 +135,15 @@ This automatic entry path is intentionally browser-only:
 Market data:
 
 - TX / MTX / TMF deterministic price path
+- market regime: `normal`, `trending`, `volatile`, `illiquid`,
+  `stale_quote`
 - bid / ask / last
+- dynamic spread
 - quote age
 - quote size
 - local liquidity score
+- deterministic volatility path
+- deterministic slippage estimate
 - no external market data download
 
 Strategy simulation:
@@ -144,6 +160,7 @@ Paper order simulation:
 - evaluates paper-only risk guardrails
 - advances a simulated OMS lifecycle
 - applies a deterministic browser-only fill / partial fill / reject model
+  based on spread, liquidity, quote age, and slippage estimate
 - never creates a real order
 
 Portfolio simulation:
@@ -155,6 +172,46 @@ Portfolio simulation:
 - unrealized PnL
 - realized PnL placeholder
 - paper-only account equity
+
+## Market Realism Layer
+
+The demo now includes a deterministic market realism layer. It is designed to
+make the browser-only experience more credible without connecting external
+market data, a broker, or any hosted execution path.
+
+The runtime cycles through five local regimes:
+
+| Regime | Demo behavior |
+| --- | --- |
+| `normal` | Narrower spread, healthier bid / ask size, low quote age. |
+| `trending` | Directional deterministic price path and moderate spread. |
+| `volatile` | Wider spread, higher volatility path, lower liquidity score. |
+| `illiquid` | Very low liquidity score and limited bid / ask size. |
+| `stale_quote` | Quote age exceeds the paper risk threshold and is rejected. |
+
+Every quote snapshot includes:
+
+- `market_regime`
+- `spread_points`
+- `bid_size`
+- `ask_size`
+- `quote_age_seconds`
+- `liquidity_score`
+- `volatility_points`
+- `slippage_points_estimate`
+
+The paper fill model is deterministic and intentionally conservative:
+
+- fills when the selected side has sufficient local quote size
+- partially fills when bid / ask size is smaller than order quantity
+- rejects stale quote snapshots
+- rejects illiquid snapshots
+- estimates fill price from the spread plus deterministic slippage
+- records a fill reason in the OMS timeline and evidence JSON
+
+This is not a market-matching engine, exchange replay, broker execution report
+model, or performance simulation. It is a product demo layer for showing how
+spread, liquidity, quote age, and slippage can affect a paper-only workflow.
 
 ## Production Vercel Behavior
 
