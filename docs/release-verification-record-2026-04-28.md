@@ -3854,6 +3854,58 @@ Observed result:
 ## main...origin/main
 ```
 
+## Facebook Growth Operations Verification
+
+Commit:
+
+- `a4c3677 Add Facebook growth operations system`
+
+Scope:
+
+- Added the high-frequency Facebook growth operations system for promoting the
+  Web App Interactive Demo, official website, Facebook Page, and Facebook Group.
+- Added strategy, SOP, content pillar, 30-day queue, reusable template, growth
+  loop, compliance checklist, performance tracking, operator quickstart, CSV
+  queue, published log, daily pack generator, manual workspace opener, status
+  script, social content guard, Makefile targets, README links, AGENTS rules, and
+  future Codex prompt.
+- The system prepares human-reviewed content and workflow assets only. It does
+  not perform Facebook login, posting, scraping, engagement automation, or
+  credential handling.
+
+Validation:
+
+- GitHub Actions Release Readiness push run was cancelled after it remained
+  stuck at `Install system utilities`:
+  - Cancelled run ID: `25363878208`
+- GitHub Actions Release Readiness workflow_dispatch rerun: passed
+  - Successful rerun ID: `25364836643`
+- Vercel frontend production deployment: Ready
+- Vercel deployment ID: `dpl_9LXS2Bv7BtBLc1T3gYJaPgzbLvHf`
+- Production alias: `https://taifex-quant-trading-platform-front.vercel.app`
+- `make social-content-check`: passed
+- `make frontend-production-smoke-check`: passed
+- Git clean state:
+  - `## main...origin/main`
+
+Safety boundary:
+
+- No Facebook login.
+- No auto-posting.
+- No Facebook scraping.
+- No stored Facebook credentials, cookies, sessions, tokens, passwords, or API
+  keys.
+- No broker credentials, account IDs, certificates, or secrets.
+- Content generation, daily queues, daily packs, UTM links, checklists, and
+  operator runbooks only.
+- Manual account-owner review and publishing only.
+- Paper Only.
+- 不構成投資建議.
+- `ENABLE_LIVE_TRADING=false`.
+- No investment advice, profit promises, copy trading, managed accounts, signal
+  services, or production trading readiness claims.
+- Live trading remains disabled by default.
+
 ## Safety Conclusion
 
 - Live trading remains disabled by default.
