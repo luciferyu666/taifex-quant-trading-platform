@@ -18,6 +18,7 @@ const localGuidedLearningSource = [
   readFileSync(new URL("../app/components/BrowserOnlyMockDemoPanel.tsx", import.meta.url), "utf8"),
   readFileSync(new URL("../app/components/BrowserOnlyMockDemoGuide.tsx", import.meta.url), "utf8"),
   readFileSync(new URL("../app/components/BrowserOnlyMockVisualizationPanel.tsx", import.meta.url), "utf8"),
+  readFileSync(new URL("../app/components/MarketRealismVisualizationPanel.tsx", import.meta.url), "utf8"),
 ].join("\n");
 
 const checks = [];
@@ -228,6 +229,15 @@ const localMarketRealismMarkers = [
   "microstructure-list",
   "order-outcome-rail",
   "Market path, microstructure, order outcome, and paper PnL",
+  "MarketRealismVisualizationPanel",
+  "market-regime-timeline",
+  "market-quality-meter",
+  "fill-explanation-box",
+  "Regime, spread, liquidity, slippage, and fill reason",
+  "市場狀態、價差、流動性、滑價與成交原因",
+  "Quote Quality",
+  "Fill Explanation",
+  "成交說明",
 ];
 
 const englishSafetyText = [

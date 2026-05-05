@@ -8,6 +8,7 @@ import {
   type BrowserOnlyGuideAction,
 } from "./BrowserOnlyMockDemoGuide";
 import { BrowserOnlyMockVisualizationPanel } from "./BrowserOnlyMockVisualizationPanel";
+import { MarketRealismVisualizationPanel } from "./MarketRealismVisualizationPanel";
 import {
   advanceBrowserOnlyMockTick,
   browserOnlyMockSeed,
@@ -167,6 +168,12 @@ export function BrowserOnlyMockDemoPanel({
 
       <BrowserOnlyMockVisualizationPanel
         copy={copy.visualization}
+        session={session}
+        symbol={symbol}
+      />
+
+      <MarketRealismVisualizationPanel
+        copy={copy.marketRealismVisualization}
         session={session}
         symbol={symbol}
       />

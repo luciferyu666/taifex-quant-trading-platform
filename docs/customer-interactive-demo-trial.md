@@ -83,21 +83,29 @@ customers connect each operation to the platform method in
    - Demonstrates paper risk checks, OMS lifecycle, and simulated broker outcome.
    - Does not create a real order.
 
-4. Review OMS timeline
+4. Review market realism visualization
+   - Shows market regime, spread, liquidity score, quote age, slippage estimate,
+     bid / ask size, and volatility path.
+   - Explains why the Paper Only order filled, partially filled, or was rejected
+     under the deterministic browser model.
+   - Helps customers understand order outcome mechanics without relying on real
+     market data or broker execution reports.
+
+5. Review OMS timeline
    - Shows the simulated order lifecycle.
    - Helps customers understand acknowledgement, fill, partial fill, reject, and
      terminal order-state concepts.
 
-5. Review simulated position / PnL
+6. Review simulated position / PnL
    - Shows paper-only position, average price, realized PnL, unrealized PnL, and
      account-style summary.
    - Values are simulated and are not investment performance.
 
-6. Copy demo summary / evidence JSON
+7. Copy demo summary / evidence JSON
    - Copies a small local evidence payload for review or feedback.
    - Evidence is generated in the browser and is not uploaded automatically.
 
-7. Reset demo session
+8. Reset demo session
    - Clears the demo flow and returns the browser state to the initial trial
      state.
 
@@ -109,6 +117,7 @@ customers connect each operation to the platform method in
 | Strategy Research | Shows how a strategy emits a standardized signal instead of directly creating orders. |
 | Paper Trading Simulator | Lets users practice the signal-to-order workflow without real money or broker connectivity. |
 | OMS Timeline | Makes order lifecycle states visible, so users can understand what happened after a simulated order. |
+| Market Realism Visualization | Explains spread, liquidity, quote age, slippage, and fill reason so users can understand why a paper order filled, partially filled, or rejected. |
 | Portfolio / PnL Review | Helps users see how simulated fills affect paper-only position and PnL state. |
 | Evidence JSON | Provides a repeatable artifact for demo review, bug reports, and internal feedback. |
 | Safety Flags | Keeps Paper Only, no broker, no live trading, and not investment advice boundaries visible. |

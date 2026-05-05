@@ -37,6 +37,8 @@ const files = {
   browserOnlyMockGuide: "frontend/app/components/BrowserOnlyMockDemoGuide.tsx",
   browserOnlyMockVisualization:
     "frontend/app/components/BrowserOnlyMockVisualizationPanel.tsx",
+  marketRealismVisualization:
+    "frontend/app/components/MarketRealismVisualizationPanel.tsx",
   browserOnlyMockDemo: "frontend/app/components/BrowserOnlyMockDemoPanel.tsx",
   mockBackendDemo: "frontend/app/components/MockBackendDemoPanel.tsx",
   paperComplianceApproval:
@@ -662,6 +664,12 @@ requireContains("Browser-only visualization renders SVG price path", sourceByFil
 requireContains("Browser-only visualization renders market regime strip", sourceByFile.browserOnlyMockVisualization, "regime-strip");
 requireContains("Browser-only visualization renders microstructure bars", sourceByFile.browserOnlyMockVisualization, "microstructure-list");
 requireContains("Browser-only visualization renders order outcome rail", sourceByFile.browserOnlyMockVisualization, "order-outcome-rail");
+requireContains("Market realism visualization panel is implemented", sourceByFile.marketRealismVisualization, "MarketRealismVisualizationPanel");
+requireContains("Market realism visualization uses runtime data", sourceByFile.marketRealismVisualization, "buildBrowserOnlyVisualizationData");
+requireContains("Market realism visualization renders regime timeline", sourceByFile.marketRealismVisualization, "market-regime-timeline");
+requireContains("Market realism visualization renders quality meters", sourceByFile.marketRealismVisualization, "market-quality-meter");
+requireContains("Market realism visualization renders fill explanation", sourceByFile.marketRealismVisualization, "fill-explanation-box");
+requireContains("Market realism visualization renders safety badges", sourceByFile.marketRealismVisualization, "copy.safety.map");
 requireContains("Browser-only mock demo component is implemented", sourceByFile.browserOnlyMockDemo, "BrowserOnlyMockDemoPanel");
 requireContains("Browser-only mock demo uses localStorage", sourceByFile.browserOnlyMockDemo, "localStorage");
 requireContains("Browser-only mock demo asserts safety", sourceByFile.browserOnlyMockDemo, "assertBrowserOnlySafety");
@@ -671,6 +679,7 @@ requireContains("Browser-only mock demo clears local state", sourceByFile.browse
 requireContains("Browser-only mock demo shows market regime", sourceByFile.browserOnlyMockDemo, "marketRegime");
 requireContains("Browser-only mock demo shows fill reason", sourceByFile.browserOnlyMockDemo, "fillReason");
 requireContains("Browser-only mock demo mounts visualization panel", sourceByFile.browserOnlyMockDemo, "BrowserOnlyMockVisualizationPanel");
+requireContains("Browser-only mock demo mounts market realism visualization panel", sourceByFile.browserOnlyMockDemo, "MarketRealismVisualizationPanel");
 requireContains("Browser-only mock demo panel is mounted on page", sourceByFile.page, "BrowserOnlyMockDemoPanel");
 requireContains("Browser-only mock demo is mounted before paper workflow", sourceByFile.page, "paper={\n          <>\n            <BrowserOnlyMockDemoPanel");
 requireContains("Browser-only mock copy keeps no backend language", sourceByFile.i18n, "No backend required");
@@ -687,6 +696,9 @@ requireContains("Browser-only mock copy includes Chinese visualization layer", s
 requireContains("Browser-only mock copy includes price path", sourceByFile.i18n, "Price Path");
 requireContains("Browser-only mock copy includes microstructure", sourceByFile.i18n, "Microstructure");
 requireContains("Browser-only mock copy includes order outcome", sourceByFile.i18n, "Order Outcome");
+requireContains("Browser-only mock copy includes market realism visualization title", sourceByFile.i18n, "Regime, spread, liquidity, slippage, and fill reason");
+requireContains("Browser-only mock copy includes Chinese market realism visualization title", sourceByFile.i18n, "市場狀態、價差、流動性、滑價與成交原因");
+requireContains("Browser-only mock copy includes quote quality", sourceByFile.i18n, "Quote Quality");
 requireContains("Command Center copy states Paper OMS opens first", sourceByFile.i18n, "Paper OMS tab opens first");
 requireContains("Chinese Command Center copy states Paper OMS opens first", sourceByFile.i18n, "預設先開啟 Paper OMS");
 requireNotContains("Browser-only mock demo does not fetch backend", sourceByFile.browserOnlyMockDemo, "fetch(");
@@ -695,6 +707,8 @@ requireNotContains("Browser-only mock runtime does not call fetch", sourceByFile
 requireNotContains("Browser-only mock demo does not call paper workflow record", sourceByFile.browserOnlyMockDemo, "/api/paper-execution/workflow/record");
 requireNotContains("Browser-only visualization does not fetch backend", sourceByFile.browserOnlyMockVisualization, "fetch(");
 requireNotContains("Browser-only visualization does not call command API base", sourceByFile.browserOnlyMockVisualization, "commandCenterApiBaseUrl");
+requireNotContains("Market realism visualization does not fetch backend", sourceByFile.marketRealismVisualization, "fetch(");
+requireNotContains("Market realism visualization does not call command API base", sourceByFile.marketRealismVisualization, "commandCenterApiBaseUrl");
 requireNotContains("Browser-only mock demo does not collect API keys", sourceByFile.browserOnlyMockDemo.toLowerCase(), "api_key");
 requireNotContains("Browser-only mock demo does not collect account IDs", sourceByFile.browserOnlyMockDemo.toLowerCase(), "account_id");
 requireNotContains("Browser-only mock demo does not collect certificates", sourceByFile.browserOnlyMockDemo.toLowerCase(), "certificate");

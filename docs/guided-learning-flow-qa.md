@@ -78,6 +78,14 @@ It then checks that both language views include:
   - `regime-strip`.
   - `microstructure-list`.
   - `order-outcome-rail`.
+- Market realism visualization markers:
+  - Market Realism Visualization.
+  - regime, spread, liquidity, slippage, and fill reason.
+  - Quote Quality.
+  - Fill Explanation.
+  - `market-regime-timeline`.
+  - `market-quality-meter`.
+  - `fill-explanation-box`.
 
 ## Safety Boundary
 

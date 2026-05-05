@@ -19,6 +19,7 @@ It runs entirely in the browser and uses only local React state plus
 The visualization layer lives in:
 
 - `frontend/app/components/BrowserOnlyMockVisualizationPanel.tsx`
+- `frontend/app/components/MarketRealismVisualizationPanel.tsx`
 
 ## Interactive Flow
 
@@ -103,6 +104,8 @@ The panel also exposes:
 - copy browser-only evidence JSON action
 - market regime, spread, liquidity, quote age, and deterministic slippage
 - fill reason for filled, partial, stale quote reject, and illiquid reject
+- market realism visualization for regime sequence, quote quality, fill reason,
+  and paper PnL context
 
 The copied evidence is for reviewer notes only. It is not uploaded, persisted to
 a backend, written to a database, or treated as a broker confirmation,
@@ -217,6 +220,31 @@ The paper fill model is deterministic and intentionally conservative:
 This is not a market-matching engine, exchange replay, broker execution report
 model, or performance simulation. It is a product demo layer for showing how
 spread, liquidity, quote age, and slippage can affect a paper-only workflow.
+
+## Market Realism Visualization Layer
+
+The Web App now separates the market realism explanation into a dedicated
+visualization panel:
+
+- market regime timeline across the deterministic lookback window
+- regime legend for `normal`, `trending`, `volatile`, `illiquid`, and
+  `stale_quote`
+- quote quality meters for spread, liquidity score, quote age, and slippage
+  estimate
+- bid size, ask size, and volatility path context
+- fill explanation for `FILLED`, `PARTIALLY_FILLED`, or `REJECTED` paper order
+  outcomes
+- paper-only position and mark-to-market context
+- safety badges for Browser-only, Paper Only, no external market data, no
+  broker, no real order, no credentials, and not investment advice
+
+The intent is to make the demo easier to understand at the moment of operation:
+customers can see how a changing market regime affects quote quality and why the
+paper fill model produced a fill, partial fill, stale quote reject, or illiquid
+reject result. The panel remains deterministic and browser-only. It does not
+download market data, call a backend, write a database, call a broker, collect
+credentials, create a real order, provide investment advice, or make a
+performance claim.
 
 ## Visualization Layer
 

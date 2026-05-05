@@ -11,6 +11,7 @@ for required_file in \
   frontend/app/components/browserOnlyMockRuntime.ts \
   frontend/app/components/BrowserOnlyMockDemoGuide.tsx \
   frontend/app/components/BrowserOnlyMockVisualizationPanel.tsx \
+  frontend/app/components/MarketRealismVisualizationPanel.tsx \
   frontend/app/components/BrowserOnlyMockDemoPanel.tsx \
   frontend/app/components/ProductValueAlignmentPanel.tsx \
   docs/browser-only-mock-demo-runtime.md \
@@ -69,6 +70,7 @@ for needle in \
   'User benefit' \
   'BrowserOnlyMockDemoGuide' \
   'BrowserOnlyMockVisualizationPanel' \
+  'MarketRealismVisualizationPanel' \
   'runBrowserOnlyMockStrategy' \
   'simulateBrowserOnlyPaperOrder' \
   'copyDemoSummary' \
@@ -99,6 +101,24 @@ for needle in \
   'No real order'; do
   if ! grep -q "${needle}" frontend/app/components/BrowserOnlyMockVisualizationPanel.tsx frontend/app/i18n.ts; then
     printf 'Missing browser-only visualization marker: %s\n' "${needle}" >&2
+    exit 1
+  fi
+done
+
+printf 'Checking market realism visualization layer behavior...\n'
+for needle in \
+  'MarketRealismVisualizationPanel' \
+  'buildBrowserOnlyVisualizationData' \
+  'market-regime-timeline' \
+  'market-quality-meter' \
+  'fill-explanation-box' \
+  'Regime, spread, liquidity, slippage, and fill reason' \
+  'Quote Quality' \
+  'Fill Explanation' \
+  '市場狀態、價差、流動性、滑價與成交原因' \
+  '成交說明'; do
+  if ! grep -q "${needle}" frontend/app/components/MarketRealismVisualizationPanel.tsx frontend/app/i18n.ts; then
+    printf 'Missing market realism visualization marker: %s\n' "${needle}" >&2
     exit 1
   fi
 done
@@ -157,11 +177,17 @@ for needle in \
   'Microstructure' \
   'Order Outcome' \
   'Market path, microstructure, order outcome, and paper PnL' \
+  'Market Realism Visualization' \
+  'Regime, spread, liquidity, slippage, and fill reason' \
+  'Quote Quality' \
+  'Fill Explanation' \
   '市場真實度' \
   '市場狀態' \
   '成交原因' \
   '滑價估計' \
   '市場路徑、微結構、訂單結果與紙上 PnL' \
+  '市場真實度視覺化' \
+  '市場狀態、價差、流動性、滑價與成交原因' \
   '完整 Browser-only 操作流程' \
   '預設先開啟 Paper OMS' \
   '不需要後端' \
@@ -179,6 +205,7 @@ if grep -Eiq 'guaranteed profit|risk-free|保證獲利|零風險|live trading en
   frontend/app/components/browserOnlyMockRuntime.ts \
   frontend/app/components/BrowserOnlyMockDemoPanel.tsx \
   frontend/app/components/BrowserOnlyMockVisualizationPanel.tsx \
+  frontend/app/components/MarketRealismVisualizationPanel.tsx \
   docs/browser-only-mock-demo-runtime.md; then
   printf 'Unsafe browser-only mock demo copy found.\n' >&2
   exit 1
