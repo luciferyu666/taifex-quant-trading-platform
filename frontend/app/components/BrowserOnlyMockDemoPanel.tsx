@@ -7,6 +7,7 @@ import {
   BrowserOnlyMockDemoGuide,
   type BrowserOnlyGuideAction,
 } from "./BrowserOnlyMockDemoGuide";
+import { BrowserOnlyMockVisualizationPanel } from "./BrowserOnlyMockVisualizationPanel";
 import {
   advanceBrowserOnlyMockTick,
   browserOnlyMockSeed,
@@ -162,6 +163,12 @@ export function BrowserOnlyMockDemoPanel({
         session={session}
         onAction={handleGuideAction}
         onStepChange={setActiveGuideStep}
+      />
+
+      <BrowserOnlyMockVisualizationPanel
+        copy={copy.visualization}
+        session={session}
+        symbol={symbol}
       />
 
       <div className="paper-submit-grid">

@@ -69,6 +69,15 @@ It then checks that both language views include:
   - spread, liquidity score, quote age, volatility path, and slippage estimate.
   - fill reason for filled, partial, stale quote reject, and illiquid reject.
   - bilingual result explanation copy in the guided stepper.
+- Browser-only visualization markers:
+  - Visualization Layer.
+  - Price Path.
+  - Microstructure.
+  - Order Outcome.
+  - `browser-price-chart`.
+  - `regime-strip`.
+  - `microstructure-list`.
+  - `order-outcome-rail`.
 
 ## Safety Boundary
 

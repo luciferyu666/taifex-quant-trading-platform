@@ -160,6 +160,24 @@ export type BrowserOnlyMockSession = {
   warnings: string[];
 };
 
+export type BrowserOnlyVisualizationSnapshot = BrowserMockMarketDataPoint & {
+  is_current_tick: boolean;
+};
+
+export type BrowserOnlyVisualizationData = {
+  symbol: BrowserMockSymbol;
+  current_tick: number;
+  price_path: BrowserOnlyVisualizationSnapshot[];
+  latest_snapshot: BrowserOnlyVisualizationSnapshot;
+  latest_order: BrowserMockOrderSimulation | null;
+  portfolio: BrowserMockPortfolio;
+  performance: BrowserMockPerformanceSummary;
+  safety_flags: BrowserOnlySafetyFlags;
+  no_external_market_data: boolean;
+  no_broker: boolean;
+  no_real_order: boolean;
+};
+
 const pointValueTwd: Record<BrowserMockSymbol, number> = {
   TX: 200,
   MTX: 50,
@@ -350,6 +368,42 @@ export function simulateBrowserOnlyPaperOrder(
 
 export function resetBrowserOnlyMockSession(): BrowserOnlyMockSession {
   return createInitialBrowserOnlyMockSession();
+}
+
+export function buildBrowserOnlyVisualizationData(
+  session: BrowserOnlyMockSession,
+  symbol: BrowserMockSymbol,
+  lookbackTicks = 12,
+): BrowserOnlyVisualizationData {
+  const boundedLookback = Math.max(4, Math.min(24, Math.trunc(lookbackTicks || 12)));
+  const startTick = Math.max(0, session.current_tick - boundedLookback + 1);
+  const pricePath = Array.from({ length: session.current_tick - startTick + 1 }, (_, index) => {
+    const tick = startTick + index;
+    return {
+      ...snapshotForSymbol(marketDataForTick(tick), symbol),
+      is_current_tick: tick === session.current_tick,
+    };
+  });
+  const latestSnapshot =
+    pricePath[pricePath.length - 1] ??
+    ({
+      ...snapshotForSymbol(session.market_data, symbol),
+      is_current_tick: true,
+    } as BrowserOnlyVisualizationSnapshot);
+
+  return {
+    symbol,
+    current_tick: session.current_tick,
+    price_path: pricePath,
+    latest_snapshot: latestSnapshot,
+    latest_order: session.latest_order?.symbol === symbol ? session.latest_order : null,
+    portfolio: session.portfolio,
+    performance: session.performance,
+    safety_flags: session.safety_flags,
+    no_external_market_data: session.safety_flags.external_market_data_downloaded === false,
+    no_broker: session.safety_flags.broker_api_called === false,
+    no_real_order: session.safety_flags.real_order_created === false,
+  };
 }
 
 export function isBrowserOnlyMockSession(value: unknown): value is BrowserOnlyMockSession {

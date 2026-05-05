@@ -17,6 +17,7 @@ const localGuidedLearningSource = [
   readFileSync(new URL("../app/components/browserOnlyMockRuntime.ts", import.meta.url), "utf8"),
   readFileSync(new URL("../app/components/BrowserOnlyMockDemoPanel.tsx", import.meta.url), "utf8"),
   readFileSync(new URL("../app/components/BrowserOnlyMockDemoGuide.tsx", import.meta.url), "utf8"),
+  readFileSync(new URL("../app/components/BrowserOnlyMockVisualizationPanel.tsx", import.meta.url), "utf8"),
 ].join("\n");
 
 const checks = [];
@@ -221,6 +222,12 @@ const localMarketRealismMarkers = [
   "成交原因",
   "Result explanation",
   "結果說明",
+  "Visualization Layer",
+  "browser-price-chart",
+  "regime-strip",
+  "microstructure-list",
+  "order-outcome-rail",
+  "Market path, microstructure, order outcome, and paper PnL",
 ];
 
 const englishSafetyText = [

@@ -10,6 +10,7 @@ missing=0
 for required_file in \
   frontend/app/components/browserOnlyMockRuntime.ts \
   frontend/app/components/BrowserOnlyMockDemoGuide.tsx \
+  frontend/app/components/BrowserOnlyMockVisualizationPanel.tsx \
   frontend/app/components/BrowserOnlyMockDemoPanel.tsx \
   frontend/app/components/ProductValueAlignmentPanel.tsx \
   docs/browser-only-mock-demo-runtime.md \
@@ -30,6 +31,7 @@ for needle in \
   'advanceBrowserOnlyMockTick' \
   'runBrowserOnlyMockStrategy' \
   'simulateBrowserOnlyPaperOrder' \
+  'buildBrowserOnlyVisualizationData' \
   'resetBrowserOnlyMockSession' \
   'paper_only: true' \
   'browser_only: true' \
@@ -66,6 +68,7 @@ for needle in \
   'Paper Trading Simulator' \
   'User benefit' \
   'BrowserOnlyMockDemoGuide' \
+  'BrowserOnlyMockVisualizationPanel' \
   'runBrowserOnlyMockStrategy' \
   'simulateBrowserOnlyPaperOrder' \
   'copyDemoSummary' \
@@ -79,6 +82,23 @@ for needle in \
   'database_written'; do
   if ! grep -q "${needle}" frontend/app/components/BrowserOnlyMockDemoPanel.tsx frontend/app/i18n.ts; then
     printf 'Missing browser-only panel marker: %s\n' "${needle}" >&2
+    exit 1
+  fi
+done
+
+printf 'Checking browser-only visualization layer behavior...\n'
+for needle in \
+  'BrowserOnlyMockVisualizationPanel' \
+  'buildBrowserOnlyVisualizationData' \
+  'browser-price-chart' \
+  'regime-strip' \
+  'microstructure-list' \
+  'order-outcome-rail' \
+  'No external market data' \
+  'No broker' \
+  'No real order'; do
+  if ! grep -q "${needle}" frontend/app/components/BrowserOnlyMockVisualizationPanel.tsx frontend/app/i18n.ts; then
+    printf 'Missing browser-only visualization marker: %s\n' "${needle}" >&2
     exit 1
   fi
 done
@@ -132,10 +152,16 @@ for needle in \
   'Market regime' \
   'Fill reason' \
   'Slippage estimate' \
+  'Visualization Layer' \
+  'Price Path' \
+  'Microstructure' \
+  'Order Outcome' \
+  'Market path, microstructure, order outcome, and paper PnL' \
   '市場真實度' \
   '市場狀態' \
   '成交原因' \
   '滑價估計' \
+  '市場路徑、微結構、訂單結果與紙上 PnL' \
   '完整 Browser-only 操作流程' \
   '預設先開啟 Paper OMS' \
   '不需要後端' \
@@ -152,6 +178,7 @@ done
 if grep -Eiq 'guaranteed profit|risk-free|保證獲利|零風險|live trading enabled|approve live|核准實盤' \
   frontend/app/components/browserOnlyMockRuntime.ts \
   frontend/app/components/BrowserOnlyMockDemoPanel.tsx \
+  frontend/app/components/BrowserOnlyMockVisualizationPanel.tsx \
   docs/browser-only-mock-demo-runtime.md; then
   printf 'Unsafe browser-only mock demo copy found.\n' >&2
   exit 1

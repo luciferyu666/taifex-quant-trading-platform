@@ -16,6 +16,10 @@ The browser-only runtime lives in the frontend:
 It runs entirely in the browser and uses only local React state plus
 `localStorage` for the current demo session.
 
+The visualization layer lives in:
+
+- `frontend/app/components/BrowserOnlyMockVisualizationPanel.tsx`
+
 ## Interactive Flow
 
 The Web Command Center panel supports:
@@ -93,6 +97,7 @@ The panel also exposes:
 - browser-local `session_id`
 - deterministic mock data seed
 - `localStorage` key
+- browser-only visualization layer
 - clear browser state action
 - copy demo summary action
 - copy browser-only evidence JSON action
@@ -212,6 +217,33 @@ The paper fill model is deterministic and intentionally conservative:
 This is not a market-matching engine, exchange replay, broker execution report
 model, or performance simulation. It is a product demo layer for showing how
 spread, liquidity, quote age, and slippage can affect a paper-only workflow.
+
+## Visualization Layer
+
+The Web App now renders the browser-only demo as a visual workflow, not just a
+table of values.
+
+The visualization layer shows:
+
+- deterministic price path line
+- bid / ask band
+- market regime strip
+- spread bar
+- liquidity score bar
+- quote age bar
+- slippage estimate bar
+- paper order outcome rail
+- fill / partial / reject reason
+- paper position and simulated PnL snapshot
+
+The visualization layer uses only `buildBrowserOnlyVisualizationData(...)` from
+the browser-only runtime. It does not fetch a backend, call hosted APIs, read
+local SQLite, write a database, download market data, connect to a broker,
+collect credentials, create a real order, or provide investment advice.
+
+The purpose is product comprehension: customers can see how market state,
+liquidity, spread, quote age, and slippage affect a Paper Only workflow while
+remaining in a deterministic mock environment.
 
 ## Production Vercel Behavior
 
