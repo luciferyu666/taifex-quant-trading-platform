@@ -67,6 +67,20 @@ If dependencies are unavailable, report the exact failed command and reason. Do 
 - Facebook public actions must be manual by the authorized account owner; Codex only prepares runbooks/content.
 - Avoid infinite docs-only deployment refresh loops. Record feature verification once; only add deployment refresh entries when explicitly requested.
 
+## Facebook Growth Operations Rules
+
+- Do not automate Facebook login or posting.
+- Do not scrape Facebook.
+- Do not request or store Facebook credentials, cookies, sessions, tokens, passwords, or API keys.
+- Content generation, content queues, UTM links, manual runbooks, and daily packs are allowed.
+- Chrome tab opening for manual review is allowed; it must not click, submit, scrape, or publish.
+- Manual account-owner publishing only.
+- Avoid spam and repetitive content.
+- Respect third-party group rules before posting.
+- Preserve Paper Only, 不構成投資建議, and `ENABLE_LIVE_TRADING=false`.
+- Never promise profit.
+- Never offer signals, copy trading, managed accounts, or investment advice.
+
 ## Response Rules
 
 - Be concise and factual.

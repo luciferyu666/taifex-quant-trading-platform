@@ -47,6 +47,10 @@ logs/
 *.sqlite3
 *.db
 data/
+!data/
+data/*
+!data/social/
+!data/social/*.csv
 data-pipeline/reports/*
 !data-pipeline/reports/.gitkeep
 !data-pipeline/reports/README.md

@@ -81,6 +81,39 @@ The first activation milestone is completion of the browser-only demo and
 understanding why StrategySignal, Risk Engine, OMS, Paper Broker simulation, and
 evidence remain separate workflow stages.
 
+## Facebook High-Frequency Growth System
+
+The high-frequency Facebook operating system is documented in:
+
+- `docs/facebook-growth-ops-strategy.md`
+- `docs/facebook-daily-publishing-sop.md`
+- `docs/facebook-content-pillars.md`
+- `docs/facebook-30-day-content-queue.md`
+- `docs/facebook-daily-post-template.md`
+- `docs/facebook-growth-loop-playbook.md`
+- `docs/facebook-posting-compliance-checklist.md`
+- `docs/facebook-performance-tracking.md`
+- `docs/facebook-operator-quickstart.md`
+
+Operating model:
+
+- Publish 4 to 6 human-reviewed posts per day across the Page and Group.
+- Use approved related topic groups only after manually reviewing group rules.
+- Keep the Web App Interactive Demo as the primary activation asset.
+- Route readers from content to website trust, browser-only demo completion,
+  community discussion, waitlist/interview interest, and product feedback.
+- Vary hook, body, CTA, and visual to avoid repetitive posting.
+- Track impressions, reach, comments, link clicks, demo_start, demo_complete,
+  evidence_copy, group_join, waitlist_signup, and demo_request.
+
+Compliance-safe posting rules:
+
+- Use Paper Only, 不構成投資建議, and `ENABLE_LIVE_TRADING=false` framing.
+- Do not publish investment advice, account operation help, broker credential
+  requests, real order instructions, artificial engagement instructions, or
+  production trading readiness claims.
+- The account owner must manually review and publish every Facebook post.
+
 ## 7. Broker Partnership Motion
 
 Broker partnerships should start as infrastructure or integration discussions. Any fee-sharing, referral, signal, or order-routing revenue requires legal and regulatory review.

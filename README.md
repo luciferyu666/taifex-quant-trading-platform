@@ -73,6 +73,40 @@ Facebook Page, and Facebook Group is documented in
 a browser-only Interactive Demo and Paper Trading research platform, not a
 production trading product.
 
+## Facebook Growth Operations
+
+The repo now includes a repeatable high-frequency Facebook growth operations
+system. It prepares content, queue files, daily copy-paste packs, UTM links,
+operator SOPs, compliance checks, and metric tracking. It does not publish to
+Facebook or automate account actions.
+
+Artifacts:
+
+- `docs/facebook-growth-ops-strategy.md`
+- `docs/facebook-daily-publishing-sop.md`
+- `docs/facebook-content-pillars.md`
+- `docs/facebook-30-day-content-queue.md`
+- `docs/facebook-daily-post-template.md`
+- `docs/facebook-growth-loop-playbook.md`
+- `docs/facebook-posting-compliance-checklist.md`
+- `docs/facebook-performance-tracking.md`
+- `docs/facebook-operator-quickstart.md`
+- `data/social/facebook-post-queue.csv`
+- `data/social/facebook-published-log.csv`
+
+Commands:
+
+```bash
+make social-daily-pack
+make social-open
+make social-content-check
+make social-growth-status
+```
+
+Facebook publishing is a public external action. This repo prepares content and
+workflow assets only. The account owner must manually review and publish posts
+on Facebook.
+
 ## Executive Summary
 
 Taifex Quant Trading Platform is a Web-based quantitative trading infrastructure platform for Taiwan Index Futures, focused on TX, MTX, and TMF workflows. It is not a simple trading bot. The platform vision is to combine data governance, strategy research, backtesting, paper trading, shadow trading, risk controls, OMS discipline, broker gateway isolation, monitoring, and enterprise controls into a coherent trading operating system for Taiwan futures quant teams.
