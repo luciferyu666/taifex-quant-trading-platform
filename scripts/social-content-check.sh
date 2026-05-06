@@ -20,6 +20,7 @@ required_files=(
   "data/social/facebook-post-queue.csv"
   "data/social/facebook-published-log.csv"
   "scripts/social/generate_daily_facebook_pack.py"
+  "scripts/social/generate_4_post_facebook_pack.py"
   "scripts/social/open_facebook_workspace.sh"
   "scripts/social/social_content_guard.py"
   "scripts/social-growth-status.sh"
@@ -38,6 +39,7 @@ grep -Fxq 'BROKER_PROVIDER=paper' .env.example
 
 python3 scripts/social/social_content_guard.py
 python3 scripts/social/generate_daily_facebook_pack.py >/dev/null
+python3 scripts/social/generate_4_post_facebook_pack.py >/dev/null
 
 printf 'Facebook growth operations safety check passed.\n'
 printf 'Safety defaults: TRADING_MODE=paper, ENABLE_LIVE_TRADING=false, BROKER_PROVIDER=paper.\n'

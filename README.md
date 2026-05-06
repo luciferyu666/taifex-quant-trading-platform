@@ -80,6 +80,10 @@ system. It prepares content, queue files, daily copy-paste packs, UTM links,
 operator SOPs, compliance checks, and metric tracking. It does not publish to
 Facebook or automate account actions.
 
+The 4-post manual pack is designed for conversion: two Page posts and two Group
+posts that route readers toward the official website, Web App Interactive Demo,
+and moderated community discussion with one CTA per post.
+
 Artifacts:
 
 - `docs/facebook-growth-ops-strategy.md`
@@ -98,6 +102,7 @@ Commands:
 
 ```bash
 make social-daily-pack
+make social-4-post-pack
 make social-open
 make social-content-check
 make social-growth-status
