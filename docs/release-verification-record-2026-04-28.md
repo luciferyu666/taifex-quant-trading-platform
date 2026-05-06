@@ -3906,6 +3906,54 @@ Safety boundary:
   services, or production trading readiness claims.
 - Live trading remains disabled by default.
 
+## Facebook 4-Post Manual Publishing Pack Verification
+
+Commit:
+
+- `e329445 Add conversion-focused Facebook four-post pack`
+
+Scope:
+
+- Added a conversion-focused manual publishing pack generator for Facebook.
+- Generates exactly two Facebook Page posts and two Facebook Group posts.
+- Routes Page readers toward official website awareness and Web App Interactive
+  Demo starts.
+- Routes Group readers toward community discussion, checklist requests, and
+  Paper Only demo starts.
+- Adds UTM-tagged links, conversion objectives, landing targets, primary
+  conversion events, click-through notes, and manual publishing checklists.
+- Adds `make social-4-post-pack` and includes the generator in
+  `make social-content-check`.
+
+Validation:
+
+- GitHub Actions Release Readiness: passed
+  - Run ID: `25417474605`
+- Vercel frontend production deployment: Ready
+- Vercel deployment ID: `dpl_9JvrMoANayqhSieXMyd9YbUrq33M`
+- Production alias: `https://taifex-quant-trading-platform-front.vercel.app`
+- `make social-content-check`: passed
+- `make frontend-production-smoke-check`: passed
+- Production smoke gate confirmed deployment ID:
+  - `dpl_9JvrMoANayqhSieXMyd9YbUrq33M`
+- Git clean state:
+  - `## main...origin/main`
+
+Safety boundary:
+
+- No Facebook login.
+- No auto-posting.
+- No Facebook scraping.
+- No stored credentials, cookies, sessions, tokens, passwords, or API keys.
+- Human account-owner review and publishing only.
+- One CTA per post.
+- Paper Only.
+- 不構成投資建議.
+- `ENABLE_LIVE_TRADING=false`.
+- No broker credentials, real orders, live trading, investment advice, or profit
+  promises.
+- Live trading remains disabled by default.
+
 ## Safety Conclusion
 
 - Live trading remains disabled by default.
